@@ -2,12 +2,6 @@
 
 define('THEME_DIRECTORY', get_template_directory());
 
-/*
-Disable the theme editor
-- stop clients from breaking their website
- */
-define('DISALLOW_FILE_EDIT', true);
-
 
 /*
 Thumbnails
