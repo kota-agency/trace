@@ -12,6 +12,9 @@ web/.htaccess
 # Logs
 *.log
 
+# Lock files
+*.lock
+
 # Dotenv
 .env
 .env.*
