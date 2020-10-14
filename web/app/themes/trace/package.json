@@ -52,8 +52,5 @@
     "stickyfilljs": "^2.1.0",
     "swiper": "^6.0.2",
     "xmlhttprequest": "^1.8.0"
-  },
-  "optionalDependencies": {
-    "@fortawesome/fontawesome-pro": "^5.13.0"
   }
 }
