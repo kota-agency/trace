@@ -1,0 +1,66 @@
+@import "variables";
+@import "bootstrap";
+@import "base";
+@import "mixins";
+@import "utilities";
+@import "fonts";
+
+
+//Plugins
+@import "../../node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css";
+@import "node_modules/aos/dist/aos";
+//@import "node_modules/dropkickjs/dist/dropkick";
+
+$slick-font-path: "../fonts/";
+$slick-loader-path: "../images/";
+@import "node_modules/slick-carousel/slick/slick-theme.scss";
+@import "node_modules/slick-carousel/slick/slick.scss";
+
+
+
+@import "typography";
+@import "general-styles";
+@import "form";
+
+//Structure
+@import "structure/header";
+@import "structure/footer";
+
+//Components
+@import "components/burger";
+@import "components/mobile-navigation";
+@import "components/pagination";
+@import "components/sector-tab";
+@import "components/card";
+@import "components/card-wide";
+@import "components/page-link";
+@import "components/post-heading";
+@import "components/filter";
+@import "components/cookie-banner";
+
+//Templates
+@import "templates/error-block";
+
+//Blocks
+@import "blocks/hero";
+@import "blocks/image-content";
+@import "blocks/family";
+@import "blocks/sectors";
+@import "blocks/video";
+@import "blocks/testimonials";
+@import "blocks/content-video";
+@import "blocks/cta";
+@import "blocks/news";
+@import "blocks/form";
+@import "blocks/page-header";
+@import "blocks/page-links";
+@import "blocks/heading-columns";
+@import "blocks/split-content";
+@import "blocks/text-layout";
+@import "blocks/half-width-content";
+@import "blocks/signposts";
+@import "blocks/post-loop";
+@import "blocks/timeline";
+@import "blocks/contact-details";
+@import "blocks/content-modals";
+

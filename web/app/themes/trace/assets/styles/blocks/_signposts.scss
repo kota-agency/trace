@@ -1,0 +1,25 @@
+.signposts {
+
+    &--top-border {
+
+        hr {
+            border-top: 2px solid $color-border-primary;
+            margin-bottom: 65px;
+        }
+    }
+
+
+    &__col {
+        margin-bottom: 30px;
+
+        @include media-breakpoint-down(sm) {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &__heading {
+        margin-bottom: 50px;
+    }
+}

@@ -1,0 +1,180 @@
+p,
+li {
+    font-size: 1.8rem;
+    color: $white;
+}
+
+.copy-s {
+    font-size: 1.5rem;
+
+    p,li {
+        font-size: 1.5rem;
+    }
+}
+
+.copy-xs {
+    line-height: 2;
+    font-size: 1.4rem;
+
+    p,li {
+        font-size: 1.4rem;
+    }
+}
+
+.copy-l {
+    font-size: 2rem;
+
+    p,li {
+        font-size: 2rem;
+    }
+}
+
+.copy-xl {
+    font-size: 2.5rem;
+
+    p,li {
+        font-size: 2.5rem;
+    }
+}
+
+.copy-xxl {
+    line-height: 1.166;
+    font-size: 3rem;
+
+    p,li {
+        font-size: 3rem;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 15px;
+    line-height: normal;
+    font-weight: 400;
+    color: $white;
+}
+
+h1 {
+    line-height: 1;
+    font-size: 10.4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+
+    @include media-breakpoint-down(lg) {
+        font-size: 8rem;
+    }
+
+    @include media-breakpoint-down(md) {
+        font-size: 7rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+        font-size: 5rem;
+    }
+
+    @include media-breakpoint-down(xs) {
+        font-size: 4rem;
+    }
+
+    @media only screen and (max-width: 360px) {
+        font-size: 3.5rem;
+    }
+}
+
+h2 {
+    line-height: 1;
+    font-size: 8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+
+    @include media-breakpoint-down(md) {
+        font-size: 6rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+        font-size: 4.5rem;
+    }
+
+    @include media-breakpoint-down(xs) {
+        font-size: 3rem;
+    }
+}
+
+h3 {
+    line-height: 1;
+    font-size: 5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+
+    @include media-breakpoint-down(md) {
+        font-size: 4rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+        font-size: 3.2rem;
+    }
+
+    @include media-breakpoint-down(xs) {
+        font-size: 2.6rem;
+    }
+
+    &.larger {
+        font-size: 6rem;
+
+        @include media-breakpoint-down(md) {
+            font-size: 5rem;
+        }
+
+        @include media-breakpoint-down(sm) {
+            font-size: 4rem;
+        }
+
+        @include media-breakpoint-down(xs) {
+            font-size: 2.8rem;
+        }
+    }
+}
+
+h4 {
+    line-height: 1.166;
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+
+    @include media-breakpoint-down(sm) {
+        font-size: 2.8rem;
+    }
+
+    @include media-breakpoint-down(xs) {
+        font-size: 2.4rem;
+    }
+}
+
+h5 {
+    font-size: 2rem;
+    font-weight: 900;
+}
+
+h6 {
+    font-size: 1.8rem;
+}
+
+.base {
+    font-size: 1.6rem;
+}
+
+.milli {
+    font-size: 1.4rem;
+}
+
+.micro {
+    font-size: 1.2rem;
+}
+
+.nano {
+    font-size: 1rem;
+}

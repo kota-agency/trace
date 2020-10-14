@@ -1,0 +1,17 @@
+.news {
+
+    &__items {
+        max-width: 825px;
+        padding-top: 60px;
+        margin: 0 auto;
+
+        @include media-breakpoint-down(sm) {
+            padding-top: 10px;
+        }
+    }
+
+
+    .btn {
+        min-width: 0;
+    }
+}

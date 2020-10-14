@@ -1,0 +1,235 @@
+.timeline {
+    position: relative;
+    margin-bottom: 40px;
+
+    &__inner {
+        position: relative;
+        padding-top: 330px;
+
+        @include media-breakpoint-down(lg) {
+            padding-top: 30vw;
+        }
+    }
+
+    &__heading {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        font-size: 23rem;
+        transform: translateX(-50%);
+
+        @include media-breakpoint-down(lg) {
+            font-size: 16vw;
+        }
+    }
+
+    .milestone {
+        padding: 15px 0;
+        cursor: pointer;
+
+        &.active {
+            padding: 60px 0;
+
+            &:first-child {
+                padding-top: 0;
+
+                .milestone__image {
+                    &:before {
+                        top: 50%;
+                        height: calc(50% + 61px);
+                        transform: translateY(0) translateX(-50%);
+                    }
+                }
+            }
+
+            //&:last-child {
+            //    padding-top: 60px;
+            //    .milestone__image {
+            //        &:before {
+            //            top: 50%;
+            //            height: calc(50% + 61px);
+            //            transform: translateY(-100%) translateX(-50%);
+            //        }
+            //    }
+            //}
+
+
+            .milestone__inner {
+                align-items: center;
+            }
+
+            .milestone__year {
+                span {
+                    display: inline-block;
+                    font-size: 5rem;
+                    transform: rotate(-90deg) translateY(-50%);
+
+                    @include media-breakpoint-down(sm) {
+                        font-size: 3.6rem;
+                    }
+
+                    @include media-breakpoint-down(xs) {
+                        font-size: 2.6rem;
+                    }
+
+                    @media only screen and (max-width: 375px) {
+                        font-size: 2.2rem;
+                    }
+                }
+            }
+
+            .milestone__image {
+                &:after {
+                    top: 50%;
+                }
+
+                &:before {
+                    top: 50%;
+                    height: calc(100% + 121px);
+                }
+
+                img {
+                    display: block;
+                    top: 50%;
+                }
+            }
+
+            .milestone__copy {
+                padding-left: 25px;
+                line-height: 1.1;
+
+                @include media-breakpoint-down(xs) {
+                    padding-left: 15px;
+                }
+                p,li {
+                    font-size: 4rem;
+
+                    @include media-breakpoint-down(sm) {
+                        font-size: 2.6rem;
+                    }
+
+                    @include media-breakpoint-down(xs) {
+                        font-size: 2.2rem;
+                    }
+
+                    @media only screen and (max-width: 375px) {
+                        font-size: 1.9rem;
+                    }
+                }
+            }
+        }
+
+        &:first-child {
+            padding-top: 0;
+            .milestone__image {
+                &:before {
+                    top: calc(50% + 22px);
+                }
+            }
+        }
+
+        //&:last-child {
+        //    padding-bottom: 0;
+        //    .milestone__image {
+        //        &:before {
+        //            top: 11px;
+        //            height: 50%;
+        //            transform: translateY(-100%) translateX(-50%);
+        //        }
+        //    }
+        //}
+
+        &__inner {
+            display: flex;
+            flex-wrap: wrap;
+
+            margin: 0 -15px;
+
+            > * {
+                padding: 0 15px;
+
+                @include media-breakpoint-down(sm) {
+                    padding: 0 10px;
+                }
+            }
+        }
+
+        &__year {
+            flex: 0 0 85px;
+            max-width: 85px;
+            font-weight: 900;
+
+            @include media-breakpoint-down(xs) {
+                flex: 0 0 60px;
+                max-width: 60px;
+            }
+        }
+
+        &__image {
+            position: relative;
+            flex: 0 0 100px;
+            max-width: 100px;
+            align-self: stretch;
+
+            @include media-breakpoint-down(xs) {
+                flex: 0 0 65px;
+                max-width: 65px;
+            }
+
+            @media only screen and (max-width: 375px) {
+                flex: 0 0 50px;
+                max-width: 50px;
+            }
+
+
+            img {
+                display: none;
+                position: absolute;
+                top: 11px;
+                left: 50%;
+                z-index: 2;
+                border-radius: 50%;
+                transform: translateY(-50%) translateX(-50%);
+
+            }
+
+            &:before {
+                content: '';
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 4px;
+                height: calc(100% + 31px);
+                background: $color-tertiary;
+                transform: translateX(-50%) translateY(-50%);
+            }
+
+            &:after {
+                content: '';
+                display: block;
+                position: absolute;
+                top: 11px;
+                left: 50%;
+                z-index: 1;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background: $white;
+                transform: translateX(-50%) translateY(-50%);
+            }
+        }
+
+        &__copy {
+            flex: 1 0;
+
+
+            p,li {
+
+                @include media-breakpoint-down(xs) {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
+}

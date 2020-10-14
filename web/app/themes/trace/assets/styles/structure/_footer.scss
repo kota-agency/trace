@@ -1,0 +1,215 @@
+.mastfoot {
+    position: relative;
+    z-index: 1;
+    padding: 85px 0 70px;
+    background: $color-quinary;
+
+    @include media-breakpoint-down(xs) {
+        padding: 40px 0;
+    }
+
+    &__logo {
+        font-size: 2.8rem;
+        letter-spacing: -0.027em;
+        margin-bottom: 55px;
+    }
+
+    &__nav {
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+
+
+
+            li {
+                margin-bottom: 15px;
+                font-weight: 600;
+
+                a {
+                    &:after {
+                        content: '\f061';
+                        margin-left: 25px;
+                        font-family: 'Font Awesome 5 Pro';
+                        font-size: 1.4rem;
+                        color: rgba($white, 0.5);
+                        transition: $transition;
+                    }
+
+                    &:hover, &:focus {
+                        &:after {
+                            color: $color-quaternary;
+                        }
+                    }
+                }
+
+                a[href="#"] {
+                    color: $white;
+
+                    &:after {
+                        color: rgba($white, 0.5);
+                    }
+
+                }
+            }
+        }
+
+        > ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 0 ($grid-gutter-width / 2 * -1);
+
+            > li {
+                padding: 0 ($grid-gutter-width / 2);
+
+
+                > a {
+                    display: inline-block;
+                    margin-bottom: 25px;
+                    font-size: 1.4rem;
+                    font-weight: 400;
+
+                    @include media-breakpoint-down(md) {
+                        font-size: 1.6rem;
+                    }
+
+
+                    &:after {
+                        display: none;
+                    }
+                }
+
+                > ul {
+                    @include media-breakpoint-up(lg) {
+                        display: block!important;
+                        height: auto!important;
+                    }
+                }
+            }
+        }
+
+        &--main {
+            max-width: 850px;
+
+            > ul {
+                @include media-breakpoint-down(xs) {
+                    margin: 0 -20px;
+                }
+
+                > li {
+
+
+                    @include media-breakpoint-down(md) {
+                        flex: 0 0 100%;
+                        max-width: 100%;
+                        border-bottom: 2px solid $color-border-primary;
+
+                        > ul {
+                            display: none;
+                            padding-bottom: 20px;
+                        }
+
+                        &.active {
+                            > a {
+                                &:before {
+                                    content: '\f068';
+                                }
+                            }
+                        }
+                    }
+
+                    @include media-breakpoint-down(xs) {
+                        padding: 0 20px;
+                    }
+
+                    > a {
+
+                        @include media-breakpoint-down(md) {
+                            display: block;
+                            padding-top: 5px;
+                            position: relative;
+                            font-size: 1.8rem;
+                            font-weight: 600;
+                            padding-right: 40px;
+
+                            &:before {
+                                content: '\f067';
+                                display: block;
+                                position: absolute;
+                                top: 50%;
+                                right: 10px;
+                                font-family: 'Font Awesome 5 Pro';
+                                font-size: 2.2rem;
+                                font-weight: 400;
+                                transform: translateY(-50%);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    &__accreditations {
+        max-width: 100%;
+        font-size: 0;
+        padding-top: 40px;
+        margin: 0 -10px;
+
+    }
+
+    &__accreditation {
+        display: inline-block;
+        padding: 0 10px;
+        margin-bottom: 20px;
+
+        @include media-breakpoint-down(md) {
+            padding: 0 5px;
+        }
+    }
+
+    &__agency {
+        display: inline-block;
+        margin-top: 100px;
+        color: $white!important;
+        span {
+            margin-right: 10px;
+        }
+
+        @include media-breakpoint-down(md) {
+            display: block;
+            padding-top: 30px;
+        }
+    }
+
+    &__bottom {
+        padding-top: 20px;
+    }
+
+    &__copyright {
+        padding-top: 4px;
+    }
+
+    &__extra {
+        @include media-breakpoint-down(md) {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            margin: 0 -15px;
+
+            > * {
+                padding: 0 15px;
+            }
+
+            li {
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,39 @@
+.contact-details {
+
+    &__inner {
+        border-top: 1px solid $color-border-primary;
+        border-bottom: 1px solid $color-border-primary;
+    }
+
+    &__col {
+        padding-top: 70px;
+        padding-bottom: 70px;
+
+        &:first-child {
+            border-right: 1px solid $color-border-primary;
+            @include media-breakpoint-down(sm) {
+                border-right: none;
+                border-bottom: 1px solid $color-border-primary;
+            }
+
+            .contact-details__content {
+                padding-left: 0;
+            }
+        }
+    }
+
+    &__content {
+        max-width: 510px;
+        padding: 0 30px;
+        margin: 0 auto;
+
+        @include media-breakpoint-down(sm) {
+            padding: 0;
+            max-width: 100%;
+        }
+
+        .copy-l {
+            line-height: 1.75;
+        }
+    }
+}

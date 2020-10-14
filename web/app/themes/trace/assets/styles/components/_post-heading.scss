@@ -1,0 +1,17 @@
+.post-heading {
+    padding-top: 160px;
+    padding-bottom: 40px;
+
+    &__image {
+        padding-top: 60px;
+
+        @include media-breakpoint-down(sm) {
+            padding-top: 10px;
+        }
+    }
+
+    .btn-wrap {
+        padding: 60px 0 0;
+        text-align: center;
+    }
+}

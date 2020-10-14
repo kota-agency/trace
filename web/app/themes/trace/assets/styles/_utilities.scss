@@ -1,0 +1,207 @@
+.full-width {
+    width: calc(100vw);
+    margin-left: calc((100% - 100vw) / 2);
+}
+
+.block-space {
+    padding-top: 100px;
+    padding-bottom: 100px;
+
+    @include media-breakpoint-down(sm) {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    &--no-top {
+        padding-top: 0!important;
+    }
+
+    &--no-bottom {
+        padding-bottom: 0!important;
+    }
+}
+
+.bg-cover {
+    @include bg-cover;
+}
+
+.bg-white {
+    background: $white;
+}
+
+.bg-grey {
+    background: $lightgrey;
+}
+
+.bg-black {
+    background: $black;
+}
+
+.theme-dark {
+    color: $white;
+
+    h1, h2, h3, h4, h5, h6, p, li {
+        color: $white;
+    }
+
+    a {
+        &:not(.btn) {
+            color: $white;
+
+            &:hover, &:focus {
+                color: rgba($white, 0.75);
+            }
+        }
+    }
+}
+
+.theme-primary {
+    color: $white;
+
+    h1, h2, h3, h4, h5, h6, p, li {
+        color: $white;
+    }
+
+    a {
+        &:not(.btn) {
+            color: $white;
+
+            &:hover, &:focus {
+                color: rgba($white, 0.75);
+            }
+        }
+    }
+
+    .btn {
+        border-color: $black;
+        background: $black;
+
+        &:hover, &:focus {
+            border-color: $white;
+            background: $white;
+        }
+    }
+}
+
+.theme-secondary {
+    color: $white;
+
+    h1, h2, h3, h4, h5, h6, p, li {
+        color: $white;
+    }
+
+    a {
+        &:not(.btn) {
+            color: $white;
+
+            &:hover, &:focus {
+                color: rgba($white, 0.75);
+            }
+        }
+    }
+
+    .btn {
+        border-color: $color-primary;
+        background: $color-primary;
+
+        &:hover, &:focus {
+            border-color: $color-quaternary;
+            background: $color-quaternary;
+            color: $white;
+        }
+    }
+
+
+    .arrow-to-btn {
+
+        &__arrow {
+            background: $color-primary;
+        }
+
+        &__text {
+            background: $color-primary;
+        }
+    }
+}
+
+.remove-underlines {
+    text-decoration: none !important;
+
+    * {
+        text-decoration: none !important;
+    }
+}
+
+.remove-bullets {
+    li {
+        &:before {
+            display: none;
+        }
+    }
+}
+
+.last-margin {
+    > * {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+/* Text meant only for screen readers. */
+.screen-reader-text {
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+    background-color: #eee;
+    clip: auto !important;
+    clip-path: none;
+    color: #444;
+    display: block;
+    font-size: 1em;
+    height: auto;
+    left: 5px;
+    line-height: normal;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    top: 5px;
+    width: auto;
+    z-index: 100000; /* Above WP toolbar. */
+}
+
+.desktop-copy {
+    @include media-breakpoint-down(xs) {
+        display: none;
+    }
+}
+
+.no-padding {
+    padding: 0!important;
+}
+
+.no-margin {
+    margin: 0!important;
+}
+
+
+.font-weight-demi {
+    font-weight: 600;
+}
+
+.font-weight-black {
+    font-weight: 900;
+}
+
+.text-tertiary {
+    color: $color-tertiary!important;
+}

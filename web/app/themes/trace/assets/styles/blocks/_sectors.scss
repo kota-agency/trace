@@ -1,0 +1,71 @@
+.sectors {
+    position: relative;
+
+    &__logos {
+        display: none;
+    }
+
+    &__col {
+        position: static;
+
+        &:after, &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: $color-border-primary;
+        }
+
+
+        @include media-breakpoint-up(md) {
+            + .sectors__col {
+                border-left: 1px solid $color-border-primary;
+            }
+
+            &:nth-child(2n + 1) {
+                border-left: none;
+            }
+        }
+
+        @include media-breakpoint-up(lg) {
+            + .sectors__col {
+                border-left: 1px solid $color-border-primary;
+            }
+
+            &:nth-child(3n + 4) {
+                border-left: none;
+            }
+        }
+
+        &:nth-child(5n + 2), &:nth-child(5n + 5) {
+            .sector-tab__top {
+                &:after {
+                    transform: rotate(-4deg) translateX(-50%) translateY(-10%);
+                }
+            }
+            .sector-tab__bottom {
+                &:before {
+                    background: url(../images/sector-mask-1.svg) center no-repeat;
+                    background-size: contain;
+                }
+            }
+        }
+    }
+
+    .btn-wrap {
+        padding-top: 30px;
+    }
+
+    &__footnote {
+        max-width: 700px;
+        padding-bottom: 60px;
+        margin: 0 auto;
+
+        @include media-breakpoint-down(sm) {
+            padding-bottom: 40px;
+        }
+    }
+
+}

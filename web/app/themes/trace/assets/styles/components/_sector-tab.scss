@@ -1,0 +1,170 @@
+.sector-tab {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    min-height: 290px;
+    text-align: center;
+    padding: 30px 0 55px;
+    transition: $transition;
+
+    @include media-breakpoint-down(sm) {
+        min-height: 200px;
+        padding: 5px 0 30px;
+    }
+
+    &.active {
+        z-index: 3;
+
+
+        .arrow {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+
+        .sector-tab__bottom {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .sector-tab__top {
+            transform: translateY(-50%);
+
+            &:after {
+                opacity: 1;
+                visibility: visible;
+                box-shadow: 0 3px 26px rgba($black, 0.16);
+
+            }
+        }
+    }
+
+    &--desktop {
+        &:hover {
+            z-index: 3;
+
+
+            .arrow {
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(20px);
+            }
+
+            .sector-tab__bottom {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+            }
+
+            .sector-tab__top {
+                transform: translateY(-50%);
+
+                &:after {
+                    opacity: 1;
+                    visibility: visible;
+                    box-shadow: 0 3px 26px rgba($black, 0.16);
+
+                }
+            }
+        }
+    }
+
+    &__top {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 25px 35px 10px;
+        transition: $transition;
+
+        @include media-breakpoint-down(sm) {
+            padding: 20px 20px 0;
+
+            * {
+                margin: 0;
+            }
+        }
+
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            z-index: 1;
+            width: 100%;
+            height: 200%;
+            min-height: 200px;
+            background: $color-secondary;
+            transform: rotate(4deg) translateX(-50%);
+            transition: $transition;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+
+            @include media-breakpoint-down(sm) {
+                width: calc(100% + 60px);
+            }
+        }
+    }
+
+    &__heading {
+        position: relative;
+        top: 0;
+        z-index: 2;
+        max-width: 250px;
+        margin: 0 auto;
+        transition: $transition;
+    }
+
+    &__bottom {
+        position: absolute;
+        top: 37%;
+        left: 0;
+        z-index: 1;
+        right: 0;
+        width: auto;
+        padding: 30px 50px;
+        margin: 0 -55px;
+        opacity: 0;
+        transition: $transition;
+        pointer-events: none;
+
+        @include media-breakpoint-down(sm) {
+            padding: 50px 30px;
+            margin: 0 -30px;
+        }
+
+        &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            background: url('../images/sector-mask-2.svg') center no-repeat;
+        }
+
+    }
+
+    &__logos {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+
+        @include media-breakpoint-down(sm) {
+            padding-bottom: 20px;
+        }
+
+        > * {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 10px;
+        }
+    }
+}

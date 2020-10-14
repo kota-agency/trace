@@ -1,0 +1,125 @@
+.page-link {
+    a {
+        position: relative;
+        display: block;
+        padding: 90px 40px;
+
+        @include media-breakpoint-down(sm) {
+            padding: 50px 0;
+        }
+
+
+        h3 {
+            @include media-breakpoint-down(lg) {
+                font-size: 4rem;
+            }
+
+            @include media-breakpoint-down(xs) {
+                font-size: 3rem;
+            }
+        }
+
+        &:hover, &:focus {
+            .page-link__overlay {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+            }
+
+            .arrow-to-btn {
+
+                &__text {
+                    transform: translateX(0);
+                }
+
+
+            }
+        }
+    }
+
+    &__copy {
+        max-width: 420px;
+    }
+
+    &__overlay {
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        padding: 200px 140px 280px;
+        margin: 0 -60px -200px;
+        visibility: hidden;
+        pointer-events: none;
+        transition: $transition;
+
+        @include media-breakpoint-down(lg) {
+            display: none;
+            padding: 100px;
+            margin: 0 -60px -20px;
+        }
+
+        @include media-breakpoint-down(md) {
+            padding: 80px 30px 120px;
+            margin: 0 -60px -70px;
+        }
+
+
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            background: url(../images/page-link-bottom.svg) center no-repeat;
+            background-size: 100% 100%;
+        }
+    }
+
+    .btn-wrap {
+        padding-top: 10px;
+    }
+}
+
+
+.page-links__col {
+    .page-link {
+        @include media-breakpoint-up(lg) {
+            .page-link__overlay {
+                left: -40px;
+            }
+        }
+    }
+    &:nth-child(2n + 2) {
+        .page-link {
+            .page-link__overlay {
+                left: 0;
+            }
+        }
+    }
+
+    &:nth-last-child(2) {
+        .page-link {
+            .page-link__overlay {
+                &:after {
+                    background: url(../images/page-link-right.svg) center no-repeat;
+                    background-size: 100% 100%;
+                }
+            }
+        }
+    }
+
+    &:last-child {
+        .page-link {
+            .page-link__overlay {
+                &:after {
+                    background: url(../images/page-link-left.svg) center no-repeat;
+                    background-size: 100% 100%;
+                }
+            }
+        }
+    }
+}

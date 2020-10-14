@@ -1,0 +1,50 @@
+/* Main column width */
+.wp-block {
+    max-width: 1080px;
+}
+
+/* Width of "wide" blocks */
+.wp-block[data-align="wide"] {
+    max-width: 1280px;
+}
+
+/* Width of "full-wide" blocks */
+.wp-block[data-align="full"] {
+    max-width: none;
+}
+
+.wp-block::before{
+    content: attr(aria-label) !important;
+    display: block;
+    position: static !important;
+    z-index: 1;
+    top: 0 !important;
+    width: 100%;
+    height: 25% !important;
+    padding: 10px 10px 10px !important;
+    margin-top: 30px;
+    border-top: 1px solid rgba(0,0,0,0.1) !important;
+    font-size: 14px !important;
+}
+
+@media only screen and (max-width: 768px){
+    .wp-block::before{
+        font-size: 12px !important;
+    }
+}
+
+.wp-block::after{
+    content: "";
+    position: absolute;
+    z-index: 0;
+    right: -14px;
+    left: -14px;
+    top: -14px;
+    bottom: -14px;
+    border: 1px solid transparent;
+    border-left: none;
+    box-shadow: none;
+    pointer-events: none;
+    transition: border-color .1s linear,border-style .1s linear,box-shadow .1s linear;
+    outline: 1px solid transparent;
+}

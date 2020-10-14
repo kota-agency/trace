@@ -1,0 +1,84 @@
+@mixin bg-cover {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@mixin no-list-format {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+@mixin indent {
+    text-transform: capitalize;
+    text-align: left;
+    text-indent: -99999px;
+}
+
+@mixin clearfix {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+@mixin descending-z-index($count: 50) {
+    position: relative;
+    .row {
+        position: relative;
+        $target: 0;
+        $index: $count;
+        @while $index > 0 {
+            &:nth-child(#{$target}) {
+                z-index: #{$index};
+            }
+            $target: $target + 1;
+            $index: $index - 1;
+        }
+    }
+}
+
+@mixin descending-order($count: 50) {
+    $target: $count;
+    $index: 0;
+    @while $index < $target {
+        &:nth-child(#{$index}) {
+            order: #{$index};
+        }
+        $target: $target - 1;
+        $index: $index + 1;
+    }
+}
+
+@mixin increment-delay($start: 0, $count: 100) {
+    $target: $count;
+    $index: 0;
+    @while $start < $target {
+        &:nth-child(#{$index}) {
+            transition-delay: #{$start * 100}ms;
+        }
+        $target: $target - 1;
+        $index: $index + 1;
+        $start: $start + 1;
+    }
+}
+
+@mixin one-word-per-line {
+    width: min-intrinsic;
+    width: -webkit-min-content;
+    width: -moz-min-content;
+    width: min-content;
+    display: table-caption;
+    display: -ms-grid;
+    -ms-grid-columns: min-content;
+}
+
+@mixin letter-spacing($font-size, $letter-spacing) {
+    letter-spacing: #{$letter-spacing / $font-size}em;
+}
+

@@ -1,0 +1,25 @@
+.filter {
+    padding: 50px 0;
+
+    @include media-breakpoint-down(sm) {
+        padding: 25px 0;
+    }
+
+    ul {
+        margin: 0 -10px;
+        @include media-breakpoint-down(sm) {
+            margin: 0 -5px;
+        }
+    }
+
+    li {
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 10px;
+        margin-bottom: 15px;
+
+        @include media-breakpoint-down(sm) {
+            padding: 0 5px;
+        }
+    }
+}

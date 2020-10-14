@@ -1,0 +1,68 @@
+.hero {
+    position: relative;
+    z-index: 1;
+    padding: 200px 0;
+
+    @include media-breakpoint-down(md) {
+        padding-bottom: 100px;
+    }
+
+    @include media-breakpoint-down(sm) {
+        padding: 150px 0 100px;
+    }
+
+    @include media-breakpoint-down(xs) {
+        padding: 125px 0 80px;
+    }
+
+    &__content {
+        position: relative;
+        z-index: 2;
+    }
+
+    &__image {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 0;
+        max-width: 50%;
+
+        @include media-breakpoint-down(md) {
+            top: 100px;
+            max-width: 35%;
+        }
+
+        @include media-breakpoint-down(xs) {
+            max-width: 200px;
+        }
+    }
+
+    .background-text {
+        position: absolute;
+        top: 0;
+        left: 45%;
+        width: 1310px;
+        transform: rotate(-90deg) translateY(-100%) translateX(-15%);
+        opacity: 0;
+        animation: fade-text-up 1s forwards;
+        animation-delay: 1.5s;
+
+        @include media-breakpoint-down(lg) {
+            display: none;
+        }
+
+    }
+
+    @keyframes fade-text-up {
+        0% {
+            transform: rotate(-90deg) translateY(-100%) translateX(-15%);
+            opacity: 0;
+        }
+        100% {
+            opacity: 0.34;
+            transform: rotate(-90deg) translateY(-100%) translateX(-8%);
+        }
+    }
+
+
+}

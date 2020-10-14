@@ -1,0 +1,85 @@
+.card {
+
+    a {
+        &:hover, &:focus {
+
+            .card__image-el {
+                transform: scale(1.1);
+            }
+
+            .card__content {
+                &:before {
+                    transform: translateY(80%) rotate(-1deg);
+                }
+            }
+        }
+    }
+
+    &__heading {
+        transition: $transition;
+    }
+
+    &__image-el {
+        width: 100%;
+        height: 100%;
+        transition: $transition;
+    }
+
+    &__image {
+        position: relative;
+        overflow: hidden;
+        height: 300px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        transition: $transition;
+
+        @include media-breakpoint-down(sm) {
+            height: 190px;
+        }
+    }
+
+    &__content {
+        position: relative;
+        padding: 40px 40px 80px;
+        margin-bottom: 25px;
+        min-height: 120px;
+        background: $color-secondary;
+
+        @include media-breakpoint-down(sm) {
+            padding: 25px 20px 55px;
+        }
+
+
+        &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 25px;
+            background: url(../images/paper-texture.svg) center no-repeat;
+            background-size: 100% 100%;
+            transform: translateY(100%);
+            transition: $transition;
+        }
+
+        &:after {
+            content: '\f061';
+            display: block;
+            position: absolute;
+            right: 40px;
+            bottom: 15px;
+            z-index: 2;
+            font-family: 'Font Awesome 5 Pro';
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: $white;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 2.5rem;
+                right: 30px;
+            }
+        }
+    }
+}

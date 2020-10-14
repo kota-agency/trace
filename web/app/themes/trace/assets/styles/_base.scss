@@ -1,0 +1,129 @@
+/* base styles: opinionated defaults */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: $color-primary;
+}
+
+html {
+  color: $white;
+  font-size: 62.5%;
+
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+  font-size: 1.8em;
+  font-weight: 400;
+  font-family: $font-body;
+  line-height: 1.55;
+  color: $white;
+}
+
+::-moz-selection {
+  background: $selection;
+  text-shadow: none;
+}
+
+::selection {
+  background: $selection;
+  text-shadow: none;
+}
+
+::placeholder {
+  color: $white;
+  opacity: 1;
+}
+
+:-ms-input-placeholder {
+  color: $white;
+}
+
+::-ms-input-placeholder {
+  color: $white;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid $color-border-primary;
+  margin: 15px 0;
+  padding: 0;
+}
+
+audio,
+canvas,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+a,
+input[type="submit"],
+a span,
+.button {
+  transition: 300ms;
+  border-radius: 0;
+}
+
+
+p {
+  margin: 0 0 20px;
+}
+
+ul,
+ol {
+  padding-left: 18px;
+  margin: 0 0 20px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+a,
+ul,
+li {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+strong {
+  font-weight: 700;
+}
+
+blockquote {
+  padding: 20px 0;
+  line-height: 1.166;
+
+  p {
+    font-size: 3rem;
+  }
+
+  .copy-s {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+  }
+}

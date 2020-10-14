@@ -1,0 +1,124 @@
+.page-header {
+    position: relative;
+    z-index: 1;
+
+    &.block-space {
+        padding: 160px 0;
+
+        @include media-breakpoint-down(sm) {
+            padding-bottom: 60px;
+        }
+
+        @include media-breakpoint-down(xs) {
+            padding-bottom: 30px;
+        }
+
+        &--no-top {
+            padding-top: 0;
+        }
+
+        &--no-bottom {
+            padding-bottom: 0;
+        }
+    }
+
+    &__copy {
+        padding-top: 25px;
+        @include media-breakpoint-down(md) {
+            padding-top: 180px;
+        }
+
+        @include media-breakpoint-down(sm) {
+            padding-top: 120px;
+        }
+
+        @include media-breakpoint-down(xs) {
+            padding-top: 60px;
+        }
+    }
+
+    &__image {
+        position: absolute;
+        top: -70px;
+        right: -25px;
+        z-index: -1;
+        max-width: 50%;
+
+        @include media-breakpoint-down(md) {
+            top: 100px;
+            max-width: 45%;
+        }
+
+        @include media-breakpoint-down(xs) {
+            max-width: 225px;
+        }
+
+        //@media only screen and (max-width: 400px) {
+        //    top: 0;
+        //}
+    }
+
+    .gform_wrapper {
+        margin: 0;
+        padding-top: 40px;
+
+        @include media-breakpoint-down(md) {
+            padding-top: 180px;
+        }
+
+        @include media-breakpoint-down(sm) {
+            padding-top: 120px;
+        }
+
+        @include media-breakpoint-down(xs) {
+            padding-top: 60px;
+        }
+    }
+
+    &__side-quote {
+        position: absolute;
+        top: 80%;
+        right: -25px;
+        width: 45%;
+        max-width: 750px;
+        padding: 120px;
+        background: url(../images/paper-texture-left.svg) center no-repeat;
+        background-size: 100% 100%;
+        transform: translateY(-50%);
+
+        @include media-breakpoint-down(lg) {
+            padding: 90px;
+        }
+
+        @include media-breakpoint-down(md) {
+            width: calc(100% + 100px);
+            max-width: calc(100% + 100px);
+            padding: 80px 130px 80px 80px;
+            margin: 0 auto 40px;
+            position: relative;
+            top: 0;
+            transform: translateY(0) translateX(0);
+        }
+
+        @include media-breakpoint-down(xs) {
+            padding: 60px 200px 60px 55px;
+            left: -20px;
+            width: calc(100% + 220px);
+            max-width: calc(100% + 220px);
+
+            p {
+                font-size: 2.2rem;
+
+                &.copy-s {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+
+        blockquote {
+            padding: 0;
+            margin-bottom: 0;
+        }
+    }
+
+}

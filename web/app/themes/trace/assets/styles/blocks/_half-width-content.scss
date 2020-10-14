@@ -1,0 +1,128 @@
+.half-width-content {
+    position: relative;
+
+    &.block-space {
+        padding-top: 60px;
+        padding-bottom: 60px;
+
+        @include media-breakpoint-down(sm) {
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        &--no-top {
+            padding-top: 0;
+        }
+
+        &--no-bottom {
+            padding-bottom: 0;
+        }
+    }
+
+    .wp-caption {
+        padding: 30px 0;
+        max-width: 100%;
+
+        img {
+            border-radius: 10px;
+        }
+
+        .wp-caption-text {
+            padding-top: 10px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+    }
+
+    p {
+        + h1, + h2, + h3, + h4, + h5, + ul, + ol {
+            padding-top: 20px;
+            margin-bottom: 35px;
+        }
+    }
+
+    p {
+        .btn {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+    }
+
+
+    &__image {
+        position: absolute;
+        top: 50%;
+        right: -70px;
+        transform: translateY(-50%);
+
+        @include media-breakpoint-down(lg) {
+            transform: translateY(-50%);
+        }
+
+        @include media-breakpoint-down(md) {
+            max-width: 400px;
+            margin: 0 auto 40px;
+            position: relative;
+            top: 0;
+            transform: translateY(0) translateX(0);
+        }
+    }
+
+
+    &__btn {
+        padding-bottom: 50px;
+        text-align: center;
+    }
+
+    &__side-quote {
+        position: absolute;
+        top: 50%;
+        right: -25px;
+        width: 45%;
+        max-width: 750px;
+        padding: 120px;
+        background: url(../images/paper-texture-left.svg) center no-repeat;
+        background-size: 100% 100%;
+        transform: translateY(-50%);
+
+        @include media-breakpoint-down(lg) {
+            padding: 90px;
+        }
+
+        @include media-breakpoint-down(md) {
+            width: calc(100% + 100px);
+            max-width: calc(100% + 100px);
+            padding: 80px 130px 80px 80px;
+            margin: 0 auto 40px;
+            position: relative;
+            top: 0;
+            transform: translateY(0) translateX(0);
+        }
+
+        @include media-breakpoint-down(xs) {
+            padding: 60px 200px 60px 55px;
+            left: -20px;
+            width: calc(100% + 220px);
+            max-width: calc(100% + 220px);
+
+            p {
+                font-size: 2.2rem;
+
+                &.copy-s {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+
+        blockquote {
+            padding: 0;
+            margin-bottom: 0;
+        }
+    }
+}
+
+.quote {
+    blockquote {
+
+    }
+}
