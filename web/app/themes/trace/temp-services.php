@@ -18,7 +18,7 @@ $form_id = get_field('form_id');
 
 ?>
 
-<section <?= block_id(); ?> class="page-header <?= implode(' ', $classes); ?>">
+<section <?= block_id(); ?> class="page-header services-hero-mobile-position <?= implode(' ', $classes); ?>">
 	<div class="container" data-aos="fade">
 		<div class="row">
 			<div class="col-12 col-lg-9">
@@ -92,7 +92,7 @@ if($intro_copy2) {
 
 ?>
 
-<section class="text-layout <?= implode(' ', $classes2); ?>">
+<section class="text-layout section-two-image-position <?= implode(' ', $classes2); ?>">
 	<div class="container" data-aos="fade">
 		<?php if ($background_text2) : ?>
 			<h2 class="background-text background-text--large"><?= $background_text2; ?></h2>
@@ -543,7 +543,7 @@ if($intro_copy5) {
 
 ?>
 
-<section class="text-layout <?= implode(' ', $classes5); ?>" style="padding-bottom: 0;">
+<section class="text-layout section-five-image-postion <?= implode(' ', $classes5); ?>" style="padding-bottom: 0;">
 	<div class="container" data-aos="fade">
 		<?php if ($background_text5) : ?>
 			<h2 class="background-text background-text--large"><?= $background_text5; ?></h2>

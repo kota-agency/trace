@@ -26,7 +26,7 @@ $image = wp_get_attachment_image(get_field('image'), 'full');
 ?>
 
 
-<section <?= block_id(); ?> class="contact-details <?= implode(' ', $classes); ?>">
+<section <?= block_id(); ?> class="contact-details contact-hero-mobile-position <?= implode(' ', $classes); ?>">
     <?php if ($image) : ?>
         <div class="contact-details__image">
             <div data-aos="fade-down-left">

@@ -15,7 +15,7 @@ $background_text = get_field('background_text');
 $image = wp_get_attachment_image(get_field('image'), 'full');
 ?>
 
-<section class="hero <?= implode(' ', $classes); ?>">
+<section class="hero home-hero-mobile-position <?= implode(' ', $classes); ?>">
     <div class="container">
         <?php if ($background_text) : ?>
             <h2 class="background-text"><?= $background_text; ?></h2>

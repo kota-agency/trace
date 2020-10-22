@@ -124,4 +124,42 @@
             }
         }
     }
+
+    &.mojo-hero-mobile-position,
+    &.our-story-hero-mobile-position,
+    &.services-hero-mobile-position,
+    &.product-hero-mobile-position {
+        @include media-breakpoint-down(sm) {
+            padding-top: 500px;
+            .page-header__image {
+                max-width: 450px;
+                top: 65px;
+            }
+        }
+    }
+}
+
+.hero {
+    &.home-hero-mobile-position {
+        @include media-breakpoint-down(sm) {
+            padding-top: 500px;
+            .hero__image {
+                max-width: 450px;
+                top: 65px;
+            }
+        }
+    }
+}
+
+.contact-hero-mobile-position {
+    @include media-breakpoint-down(sm) {
+        .contact-details__inner {
+            padding-top: 425px;
+        }
+
+        .contact-details__image {
+            max-width: 450px;
+            top: 65px;
+        }
+    }
 }

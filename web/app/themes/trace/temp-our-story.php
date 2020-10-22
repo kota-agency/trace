@@ -18,7 +18,7 @@ $form_id = get_field('form_id');
 
 ?>
 
-<section <?= block_id(); ?> class="page-header <?= implode(' ', $classes); ?>">
+<section <?= block_id(); ?> class="page-header our-story-hero-mobile-position <?= implode(' ', $classes); ?>">
 	<div class="container">
 		<div class="row">
 			<div class="col-12" data-aos="fade">
