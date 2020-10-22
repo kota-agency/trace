@@ -3,6 +3,10 @@
         border-top: 1px solid $color-border-primary;
         border-bottom: 1px solid $color-border-primary;
 
+        @include media-breakpoint-down(sm) {
+            border-top: 0;
+        }
+
         .header-title-pos {
             position: relative;
             z-index: 1;
