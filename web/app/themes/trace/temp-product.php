@@ -418,5 +418,10 @@ if ($item_count4 <= 2) {
 	</div>
 <?php endif; ?>
 
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
+
 
 <?php get_footer();?>

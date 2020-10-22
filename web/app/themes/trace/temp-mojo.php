@@ -420,7 +420,7 @@ $graphics4 = get_field('content_modals_graphics');
 
 							?>
 							<div class="content-modals__item" data-item="<?= $i; ?>">
-								<?php if ($heading) : ?>
+								<?php if ($item_heading) : ?>
 									<span class="d-block font-weight-demi"><?= $item_heading; ?></span>
 								<?php endif; ?>
 								<?php if ($snippet) : ?>
@@ -530,6 +530,11 @@ $graphics4 = get_field('content_modals_graphics');
 		<?php endwhile; ?>
 	</div>
 <?php endif; ?>
+
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
 
 
 <?php get_footer();?>

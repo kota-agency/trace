@@ -874,7 +874,7 @@ if ($offset_graphics7) {
 
 ?>
 
-<section class="heading-columns <?= implode(' ', $classes7); ?>">
+<section class="heading-columns specific-graphic-position <?= implode(' ', $classes7); ?>">
 	<div class="container">
 		<?php if ($vertical_heading7) : ?>
 			<?php if ($background_text7) : ?>
@@ -1125,6 +1125,11 @@ if($intro_copy8) {
 		</div>
 	</div>
 </section><!-- .services -->
+
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
 
 
 <?php get_footer();?>

@@ -125,5 +125,10 @@ $classes2 = ['full-width', padding_classes()];
 	</div>
 <?php endif; ?>
 
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
+
 
 <?php get_footer();?>

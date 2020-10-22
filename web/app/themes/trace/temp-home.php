@@ -763,4 +763,10 @@ $form_id11 = get_field('form_form_id');
 </section><!-- .form -->
 
 
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
+
+
 <?php get_footer(); ?>
