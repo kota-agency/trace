@@ -27,7 +27,7 @@ $heading = get_field('heading');
                                 $copy = get_sub_field('copy');
 
                                 ?>
-                                <div class="milestone <?= $i === 0 ? 'active' : '' ?>">
+                                <div class="milestone <?= $i === 0 ? 'active' : '' ?> ">
                                     <div class="milestone__inner">
                                         <?php if ($year) : ?>
                                             <div class="milestone__year"><span><?= $year; ?></span></div>

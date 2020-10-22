@@ -39,6 +39,7 @@
     "core-js": "^3.6.5",
     "dropkickjs": "^2.2.4",
     "google-maps-infobox": "^1.1.15",
+    "gsap": "^3.5.1",
     "imagesloaded": "^4.1.4",
     "in-viewport": "^3.6.0",
     "infinite-scroll": "^3.0.6",
