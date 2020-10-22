@@ -89,7 +89,7 @@
                 }
 
                 img {
-                    transform: translateY(-50%) translateX(-50%) scale(1);
+                    display: block;
                     top: 50%;
                 }
             }
@@ -166,7 +166,7 @@
             }
 
             span {
-                transition: font-size 0.4s ease-in-out;
+                // transition: font-size 0.4s ease-in-out;
             }
         }
 
@@ -187,14 +187,14 @@
             }
 
             img {
-                // display: none;
+                display: none;
                 position: absolute;
                 top: 11px;
                 left: 50%;
                 z-index: 2;
                 border-radius: 50%;
-                transform: translateY(-50%) translateX(-50%) scale(0);
-                transition: transform 0.4s ease;
+                transform: translateY(-50%) translateX(-50%);
+                // transition: transform 0.4s ease;
             }
 
             &:before {
@@ -235,7 +235,7 @@
             }
 
             p {
-                transition: font-size 0.4s ease-in-out;
+                // transition: font-size 0.4s ease-in-out;
             }
         }
     }
