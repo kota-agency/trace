@@ -65,4 +65,8 @@
 
 .page-template-temp-contact .header-title-pos {
     border-right: 0;
+
+    @include media-breakpoint-down(sm) {
+        border-bottom: 0;
+    }
 }
