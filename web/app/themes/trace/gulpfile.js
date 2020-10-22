@@ -48,7 +48,7 @@ const paths = {
 // BrowserSync
 function browserSync(done) {
   browsersync.init({
-    proxy: 'http://localhost:8000'
+    proxy: 'http://trace.test'
   })
   done()
 }

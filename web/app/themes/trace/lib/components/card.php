@@ -8,7 +8,7 @@ $_post = get_query_var('data');
 
 $thumbnail = get_the_post_thumbnail_url($_post->ID, 'card');
 $heading = get_the_title($_post->ID);
-$excerpt = excerpt(30, $_post->ID);
+$excerpt = get_the_excerpt($_post->ID);
 
 ?>
 
@@ -20,6 +20,9 @@ $excerpt = excerpt(30, $_post->ID);
         <div class="card__content">
             <?php if ($heading) : ?>
                 <h4 class="card__heading"><?= $heading; ?></h4>
+            <?php endif; ?>
+            <?php if ($excerpt) : ?>
+                <p class="card__excerpt"><?= $excerpt; ?></p>
             <?php endif; ?>
         </div>
     </a>

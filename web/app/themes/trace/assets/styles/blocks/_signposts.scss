@@ -1,13 +1,10 @@
 .signposts {
-
     &--top-border {
-
         hr {
-            border-top: 2px solid $color-border-primary;
+            border-top: 3px solid $color-border-secondary;
             margin-bottom: 65px;
         }
     }
-
 
     &__col {
         margin-bottom: 30px;

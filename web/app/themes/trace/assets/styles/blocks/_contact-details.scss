@@ -1,8 +1,33 @@
 .contact-details {
-
     &__inner {
         border-top: 1px solid $color-border-primary;
         border-bottom: 1px solid $color-border-primary;
+
+        .header-title-pos {
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    &__image {
+        position: absolute;
+        top: -100px;
+        right: -25px;
+        z-index: 0;
+        max-width: 45%;
+
+        @include media-breakpoint-down(md) {
+            top: 100px;
+            max-width: 45%;
+        }
+
+        @include media-breakpoint-down(xs) {
+            max-width: 225px;
+        }
+
+        //@media only screen and (max-width: 400px) {
+        //    top: 0;
+        //}
     }
 
     &__col {

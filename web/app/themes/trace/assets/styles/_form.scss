@@ -134,12 +134,23 @@
   }
 }
 
-
 .gform_confirmation_wrapper {
   padding: 30px 0;
-  text-align: center;
+  text-align: left;
   font-size: 1.8rem;
   color: $white;
+  max-width: 600px;
+}
+
+.modal__inner {
+  .gform_confirmation_wrapper {
+    padding: 30px 0;
+    text-align: left;
+    font-size: 1.8rem;
+    color: $white;
+    max-width: 600px;
+    margin: 0 auto;
+  }
 }
 
 .gform_ajax_spinner {
@@ -190,7 +201,6 @@ textarea {
   &::-ms-input-placeholder {
     color: $black;
   }
-
 }
 
 input[type="radio"] {
@@ -241,7 +251,6 @@ input[type="radio"] {
         border-radius: 50%;
         vertical-align: middle;
       }
-
     }
   }
 }
@@ -294,11 +303,9 @@ input[type="checkbox"] {
 
         transform: rotate(45deg);
       }
-
     }
   }
 }
-
 
 select {
   padding: 0 25px 0 0;
@@ -323,7 +330,6 @@ select {
   option {
     color: $black;
   }
-
 }
 
 select::-ms-expand {

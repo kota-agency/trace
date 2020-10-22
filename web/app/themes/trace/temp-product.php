@@ -190,6 +190,7 @@ $heading3 = get_field('heading_&_columns_heading');
 $background_text3 = get_field('heading_&_columns_background_text');
 $intro_text3 = get_field('heading_&_columns_intro_copy');
 $vertical_heading3 = get_field('heading_&_columns_vertical_heading');
+$section_id = get_field('heading_&_columns_id');
 $cover_graphic3 = get_field('heading_&_columns_cover_bottom_graphic');
 $graphics3 = get_field('heading_&_columns_graphics');
 $offset_graphics3 = get_field('heading_&_columns_offset_graphics');
@@ -209,7 +210,7 @@ if ($offset_graphics3) {
 
 ?>
 
-<section class="heading-columns <?= implode(' ', $classes3); ?>">
+<section class="heading-columns <?= implode(' ', $classes3); ?> " <?= $section_id ? 'id="' . $section_id . '"' : ''; ?>>
 	<div class="container">
 		<?php if ($vertical_heading3) : ?>
 			<?php if ($background_text3) : ?>

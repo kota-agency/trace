@@ -35,7 +35,13 @@
     }
 
     p {
-        + h1, + h2, + h3, + h4, + h5, + ul, + ol {
+        + h1,
+        + h2,
+        + h3,
+        + h4,
+        + h5,
+        + ul,
+        + ol {
             padding-top: 20px;
             margin-bottom: 35px;
         }
@@ -47,7 +53,6 @@
             margin-bottom: 30px;
         }
     }
-
 
     &__image {
         position: absolute;
@@ -67,7 +72,6 @@
             transform: translateY(0) translateX(0);
         }
     }
-
 
     &__btn {
         padding-bottom: 50px;
@@ -123,6 +127,9 @@
 
 .quote {
     blockquote {
-
     }
+}
+
+.single-post .half-width-content .container a {
+    color: $color-quaternary;
 }
