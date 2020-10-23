@@ -130,9 +130,25 @@
     &.services-hero-mobile-position,
     &.product-hero-mobile-position {
         @include media-breakpoint-down(sm) {
-            padding-top: 500px;
+            padding-top: 400px;
             .page-header__image {
-                max-width: 450px;
+                max-width: 350px;
+                top: 65px;
+            }
+        }
+
+        @media only screen and (max-width: 414px) {
+            padding-top: 450px;
+            .hero__image {
+                max-width: 350px;
+                top: 65px;
+            }
+        }
+
+        @media only screen and (max-width: 375px) {
+            padding-top: 400px;
+            .hero__image {
+                max-width: 300px;
                 top: 65px;
             }
         }
@@ -142,9 +158,25 @@
 .hero {
     &.home-hero-mobile-position {
         @include media-breakpoint-down(sm) {
-            padding-top: 500px;
+            padding-top: 400px;
             .hero__image {
-                max-width: 450px;
+                max-width: 350px;
+                top: 65px;
+            }
+        }
+
+        @media only screen and (max-width: 414px) {
+            padding-top: 450px;
+            .hero__image {
+                max-width: 350px;
+                top: 65px;
+            }
+        }
+
+        @media only screen and (max-width: 375px) {
+            padding-top: 400px;
+            .hero__image {
+                max-width: 300px;
                 top: 65px;
             }
         }
@@ -159,6 +191,28 @@
 
         .contact-details__image {
             max-width: 450px;
+            top: 65px;
+        }
+    }
+
+    @media only screen and (max-width: 414px) {
+        .contact-details__inner {
+            padding-top: 425px;
+        }
+
+        .contact-details__image {
+            max-width: 350px;
+            top: 65px;
+        }
+    }
+
+    @media only screen and (max-width: 375px) {
+        .contact-details__inner {
+            padding-top: 350px;
+        }
+
+        .contact-details__image {
+            max-width: 300px;
             top: 65px;
         }
     }
