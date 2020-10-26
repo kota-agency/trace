@@ -192,16 +192,25 @@ $logos3 = get_field('family_logos');
 
             <?php if ($logos3) : ?>
                 <div class="family__logos">
+                <?php $index = 0; ?>
                     <?php foreach ($logos3 as $logo_id) : ?>
                         <?php $logo = wp_get_attachment_image($logo_id, 'logo'); ?>
                         <?php if ($logo) : ?>
-                            <div class="family__logo">
+                            <div class="
+                            family__logo family__logo<?php echo $index ?>" data-logo-index="<?php echo $index ?>">
                                 <?= $logo; ?>
                             </div>
                         <?php endif; ?>
+                        <?php $index++; ?>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+        </div>
+        <div class="family__path">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 1395.4 558.7" xml:space="preserve">
+            <path class="st0" id="path-anim" d="M698.9,0.5c0,0-698.4,15.3-698.4,279.8s698.4,277.9,698.4,277.9s696,1.6,696-277.9S698.9,0.5,698.9,0.5z"/>
+            </svg>
         </div>
     </div>
 </section><!-- .family -->
