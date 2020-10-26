@@ -16,7 +16,7 @@ function General() {
     gsap.set(".family__logo2", { autoAlpha: 1});
 
     const familyLogoLength =  Array.from(document.querySelectorAll('.family__logo')).length;
-    const duration = 20;
+    const duration = 30;
     const startPoint = 1/familyLogoLength;
 
     const logoZero = document.querySelector('.family__logo0');
