@@ -888,7 +888,7 @@ if ($offset_graphics7) {
 				</div>
 				<div class="col col-lg-6">
 					<?php if ($intro_text7) : ?>
-						<div class="heading-columns__intro-text" data-aos="fade-up">
+						<div class="heading-columns__intro-text copy-xxl" data-aos="fade-up">
 							<?= $intro_text7; ?>
 						</div>
 					<?php endif; ?>
