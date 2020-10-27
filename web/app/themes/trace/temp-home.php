@@ -207,9 +207,17 @@ $logos3 = get_field('family_logos');
             <?php endif; ?>
         </div>
         <div class="family__path">
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+
+
+            <!-- <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 1395.4 558.7" xml:space="preserve">
             <path class="st0" id="path-anim" d="M698.9,0.5c0,0-698.4,15.3-698.4,279.8s698.4,277.9,698.4,277.9s696,1.6,696-277.9S698.9,0.5,698.9,0.5z"/>
+            </svg> -->
+
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 1395.4 500.3" xml:space="preserve">
+            <path class="st0" id="path-anim" d="M698.9,0.7c0,0-698.5-11.5-698.4,250.3c0.1,248.2,698.4,248.6,698.4,248.6s696.5,15.6,696-248.6
+                C1394.3-16.8,698.9,0.7,698.9,0.7z"/>
             </svg>
         </div>
     </div>
@@ -755,6 +763,7 @@ $classes11 = ['full-width', padding_classes()];
 
 $heading11 = get_field('form_heading');
 $form_id11 = get_field('form_form_id');
+$home_copy_form = get_field('home_copy_form');
 
 ?>
 
@@ -762,6 +771,9 @@ $form_id11 = get_field('form_form_id');
     <div class="container">
         <?php if ($heading11) : ?>
             <h1 class="heading-width text-center"><?= $heading11; ?></h1>
+            <div class="form-copy">
+                <?= $home_copy_form; ?>
+            </div>
         <?php endif; ?>
         <?php if ($form_id11) : ?>
             <div class="form__wrapper">

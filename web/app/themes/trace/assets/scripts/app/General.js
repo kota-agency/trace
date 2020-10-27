@@ -4,7 +4,7 @@ import AOS from "aos";
 import Cookies from 'js-cookie';
 import inViewport from 'in-viewport';
 
-import { gsap } from "gsap";
+import { gsap, Linear } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { MotionPathHelper } from "gsap/MotionPathHelper";
 
@@ -13,11 +13,13 @@ gsap.registerPlugin(MotionPathPlugin, MotionPathHelper);
 
 function General() {
     
-    gsap.set(".family__logo2", { autoAlpha: 1});
+    // gsap.set(".family__logo2", { autoAlpha: 1});
 
     const familyLogoLength =  Array.from(document.querySelectorAll('.family__logo')).length;
     const duration = 30;
     const startPoint = 1/familyLogoLength;
+
+    console.log(startPoint);
 
     const logoZero = document.querySelector('.family__logo0');
     const logoOne = document.querySelector('.family__logo1');
@@ -29,8 +31,10 @@ function General() {
     const logoSeven = document.querySelector('.family__logo7');
     const logoEight = document.querySelector('.family__logo8');
 
+    const tl = gsap.timeline({defaults: { ease: "none" }})
+
     if (logoZero) {
-        gsap.to(logoZero, {
+        tl.to(logoZero, {
             duration: duration, 
             repeat: -1,
             ease: "none",
@@ -39,14 +43,14 @@ function General() {
               path: '#path-anim',
               align: '#path-anim',
               alignOrigin: [0.5, 0.5],
-              start: 0 + (startPoint*logoZero.dataset.logoIndex),
+              start: (startPoint*logoZero.dataset.logoIndex),
               end: 1 + (startPoint*logoZero.dataset.logoIndex),
             },
         });
     }
 
     if (logoOne) {
-        gsap.to(logoOne, {
+        tl.to(logoOne, {
             duration: duration, 
             repeat: -1,
             ease: "none",
@@ -55,14 +59,14 @@ function General() {
               path: '#path-anim',
               align: '#path-anim',
               alignOrigin: [0.5, 0.5],
-              start: 0 + (startPoint*logoOne.dataset.logoIndex),
+              start: (startPoint*logoOne.dataset.logoIndex),
               end: 1 + (startPoint*logoOne.dataset.logoIndex),
             },
-        });
+        },`-=${30*logoOne.dataset.logoIndex}`);
     }
 
     if (logoTwo) {
-        gsap.to(logoTwo, {
+        tl.to(logoTwo, {
             duration: duration, 
             repeat: -1,
             ease: "none",
@@ -71,14 +75,14 @@ function General() {
               path: '#path-anim',
               align: '#path-anim',
               alignOrigin: [0.5, 0.5],
-              start: 0 + (startPoint*logoTwo.dataset.logoIndex),
+              start: (startPoint*logoTwo.dataset.logoIndex),
               end: 1 + (startPoint*logoTwo.dataset.logoIndex),
             }
-        });
+        },`-=${30*logoOne.dataset.logoIndex}`);
     }
 
     if (logoThree) {
-        gsap.to(logoThree, {
+        tl.to(logoThree, {
             duration: duration, 
             repeat: -1,
             ease: "none",
@@ -87,14 +91,14 @@ function General() {
               path: '#path-anim',
               align: '#path-anim',
               alignOrigin: [0.5, 0.5],
-              start: 0 + (startPoint*logoThree.dataset.logoIndex),
+              start: (startPoint*logoThree.dataset.logoIndex),
               end: 1 + (startPoint*logoThree.dataset.logoIndex),
             }
-        });
+        }, `-=${30*logoOne.dataset.logoIndex}`);
     }
 
     if (logoFour) {
-        gsap.to(logoFour, {
+        tl.to(logoFour, {
             duration: duration, 
             repeat: -1,
             ease: "none",
@@ -103,14 +107,14 @@ function General() {
               path: '#path-anim',
               align: '#path-anim',
               alignOrigin: [0.5, 0.5],
-              start: 0 + (startPoint*logoFour.dataset.logoIndex),
+              start: (startPoint*logoFour.dataset.logoIndex),
               end: 1 + (startPoint*logoFour.dataset.logoIndex),
             }
-        });
+        }, `-=${30*logoOne.dataset.logoIndex}`);
     }
 
     if (logoFive) {        
-        gsap.to(logoFive, {
+        tl.to(logoFive, {
             duration: duration, 
             repeat: -1,
             ease: "none",
@@ -119,14 +123,14 @@ function General() {
               path: '#path-anim',
               align: '#path-anim',
               alignOrigin: [0.5, 0.5],
-              start: 0 + (startPoint*logoFive.dataset.logoIndex),
+              start: (startPoint*logoFive.dataset.logoIndex),
               end: 1 + (startPoint*logoFive.dataset.logoIndex),
             }
-        });
+        },`-=${30*logoOne.dataset.logoIndex}`);
     }
 
     if (logoSix) {
-        gsap.to(logoSix, {
+        tl.to(logoSix, {
             duration: duration, 
             repeat: -1,
             ease: "none",
@@ -138,11 +142,11 @@ function General() {
               start: 0 + (startPoint*logoSix.dataset.logoIndex),
               end: 1 + (startPoint*logoSix.dataset.logoIndex),
             }
-        });
+        },`-=${30*logoOne.dataset.logoIndex}`);
     }
 
     if (logoSeven) {
-        gsap.to(logoSeven, {
+        tl.to(logoSeven, {
             duration: duration, 
             repeat: -1,
             ease: "none",
@@ -151,15 +155,15 @@ function General() {
               path: '#path-anim',
               align: '#path-anim',
               alignOrigin: [0.5, 0.5],
-              start: 0 + (startPoint*logoSeven.dataset.logoIndex),
+              start: (startPoint*logoSeven.dataset.logoIndex),
               end: 1 + (startPoint*logoSeven.dataset.logoIndex),
             }
-        });
+        }, `-=${30*logoOne.dataset.logoIndex}`);
     }
 
 
     if (logoEight) {
-        gsap.to(logoEight, {
+        tl.to(logoEight, {
             duration: duration, 
             repeat: -1,
             ease: "none",
@@ -168,7 +172,7 @@ function General() {
               path: '#path-anim',
               align: '#path-anim',
               alignOrigin: [0.5, 0.5],
-              start: 0 + (startPoint*logoEight.dataset.logoIndex),
+              start: (startPoint*logoEight.dataset.logoIndex),
               end: 1 + (startPoint*logoEight.dataset.logoIndex),
             }
         });
