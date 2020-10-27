@@ -786,7 +786,7 @@ $home_copy_form = get_field('home_copy_form');
 
 <?php
 /** Get in touch component, data comming from site settings tab  **/
-    get_component('get-in-touch');
+    // get_component('get-in-touch');
 ?>
 
 
