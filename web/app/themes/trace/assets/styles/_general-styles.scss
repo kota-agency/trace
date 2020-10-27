@@ -884,3 +884,18 @@ div.dataTables_wrapper {
     margin: 0 auto 30px;
     text-align: center;
 }
+
+.page-template-temp-mojo .content-modals .content-modals__column .btn-wrap .link {
+    display: flex;
+    align-items: center;
+
+    .arrow-link {
+        display: flex;
+        align-items: center;
+        margin-left: 8px;
+    }
+}
+
+.split-content {
+    padding-bottom: 0;
+}

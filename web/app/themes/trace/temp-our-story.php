@@ -91,7 +91,7 @@ $heading2 = get_field('timeline_heading');
 	<div class="timeline__inner">
 		<div class="container">
 			<?php if ($heading2) : ?>
-				<h1 class="timeline__heading"><?= $heading2; ?></h1>
+				<h2 class="timeline__heading"><?= $heading2; ?></h2>
 			<?php endif; ?>
 			<div class="row">
 				<div class="col-lg-8">
@@ -164,7 +164,7 @@ if ($larger_text3) {
 		<div class="cta__heading-wrapper">
 			<?php if ($heading3) : ?>
 				<?php if ($larger_text3) : ?>
-					<h1><?= $heading3; ?></h1>
+					<2><?= $heading3; ?></h2>
 				<?php else : ?>
 					<h2><?= $heading3; ?></h2>
 				<?php endif; ?>

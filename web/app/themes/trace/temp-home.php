@@ -618,7 +618,7 @@ if ($larger_text9) {
         <div class="cta__heading-wrapper">
             <?php if ($heading9) : ?>
                 <?php if ($larger_text9) : ?>
-                    <h1><?= $heading9; ?></h1>
+                    <h2><?= $heading9; ?></h2>
                 <?php else : ?>
                     <h2><?= $heading9; ?></h2>
                 <?php endif; ?>
@@ -770,7 +770,7 @@ $home_copy_form = get_field('home_copy_form');
 <section class="form <?= implode(' ', $classes11); ?>" data-aos="fade">
     <div class="container">
         <?php if ($heading11) : ?>
-            <h1 class="heading-width text-center"><?= $heading11; ?></h1>
+            <h2 class="heading-width text-center"><?= $heading11; ?></h2>
             <div class="form-copy">
                 <?= $home_copy_form; ?>
             </div>

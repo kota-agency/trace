@@ -73,13 +73,29 @@
             @include media-breakpoint-down(lg) {
                 transform: translateX(0);
                 right: -35px;
-
             }
 
             @include media-breakpoint-down(sm) {
                 top: 0;
             }
-
         }
     }
+}
+
+.page-template-temp-mojo .cta {
+    position: relative;
+    z-index: 100 !important;
+
+    // &:before {
+    //     content: "";
+    //     display: block;
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     width: 100%;
+    //     height: 45px;
+    //     transform: translateY(-100%) scaleY(-1) scaleX(-1);
+    //     background: url(../images/paper-texture-primary.svg) center no-repeat;
+    //     background-size: 100% 100%;
+    // }
 }

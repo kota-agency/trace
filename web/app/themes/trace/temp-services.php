@@ -290,7 +290,7 @@ if ($offset_graphics3) {
 		<?php else : ?>
 			<div class="heading-columns__heading-wrapper" data-aos="fade-up">
 				<?php if ($heading3) : ?>
-					<h1 class="heading-columns__heading"><?= $heading3; ?></h1>
+					<h2 class="heading-columns__heading"><?= $heading3; ?></h2>
 				<?php endif; ?>
 				<?php if ($background_text3) : ?>
 					<h2 class="background-text background-text--large"><?= $background_text3; ?></h2>
@@ -911,7 +911,7 @@ if ($offset_graphics7) {
 		<?php else : ?>
 			<div class="heading-columns__heading-wrapper" data-aos="fade-up">
 				<?php if ($heading7) : ?>
-					<h1 class="heading-columns__heading"><?= $heading7; ?></h1>
+					<h2 class="heading-columns__heading"><?= $heading7; ?></h2>
 				<?php endif; ?>
 				<?php if ($background_text7) : ?>
 					<h2 class="background-text background-text--large"><?= $background_text7; ?></h2>
