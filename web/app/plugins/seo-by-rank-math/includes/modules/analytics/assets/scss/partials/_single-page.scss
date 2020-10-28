@@ -28,7 +28,7 @@
             }
 
             &-post-link {
-                font-size: .825rem;
+                font-size: 0.825rem;
                 font-weight: normal;
 
                 display: inline-block;
@@ -46,16 +46,16 @@
                 }
 
                 &:after {
-                    font-family: 'dashicons';
+                    font-family: "dashicons";
                     font-size: 1rem;
 
                     margin-left: 5px;
 
-                    content: '\f504';
+                    content: "\f504";
                     vertical-align: -3px;
 
                     fill: #7f868d;
-                    -webkit-text-stroke: .5px white;
+                    -webkit-text-stroke: 0.5px white;
                 }
             }
         }
