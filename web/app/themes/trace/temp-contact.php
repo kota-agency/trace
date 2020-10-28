@@ -2,6 +2,12 @@
 //Template Name: Contact
 get_header();?>
 
+<style>
+	.page-header.page-header.page-header{
+		padding-top: 0;
+	}
+</style>
+
 <?php
 
 /**

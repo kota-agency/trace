@@ -4,4 +4,4 @@ path: web/wp
 @staging:
   ssh: forge@178.62.99.195/home/forge/trace.in-beta.link
 @production:
-  ssh: forge@xx.xxx.xx.xx/home/forge/www.tracesolutions.co.uk
+  ssh: forge@178.62.121.111/home/forge/www.tracesolutions.co.uk

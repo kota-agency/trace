@@ -6,8 +6,8 @@ DEVSITE="http://trace.test"
 STAGDIR="forge@178.62.99.195:/home/forge/trace.in-beta.link/web/app/uploads/"
 STAGSITE="https://trace.in-beta.link"
 
-PRODDIR="forge@xx.xx.xx.xx:/home/forge/www.tracesolutions.co.uk/web/app/uploads/"
-PRODSITE="https://www.tracesolutions.co.uk"
+PRODDIR="forge@178.62.121.111:/home/forge/www.tracesolutions.co.uk/web/app/uploads/"
+PRODSITE="http://www.tracesolutions.co.uk"
 
 FROM=$1
 TO=$2
