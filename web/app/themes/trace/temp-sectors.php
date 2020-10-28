@@ -2,6 +2,12 @@
 //Template Name: Sectors
 get_header();?>
 
+<style>
+	.split-content{
+		padding-bottom: 0;
+	}
+</style>
+
 <?php
 
 /**
