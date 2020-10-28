@@ -6,6 +6,15 @@
     <title><?php wp_title(); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-5740928-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-5740928-1');
+    </script>
+
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -13,6 +22,36 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-TLL3QZN');</script>
     <!-- End Google Tag Manager -->
+
+    <!-- A1 script -->
+    <script>
+    var cid = 6596;
+    (function() {
+    window.a1wObj = 'a1w';
+    window.a1w = window.a1w || function(){
+    (window.a1w.q = window.ga.q || []).push(arguments)
+    },
+    window.a1w.l = 1 * new Date();
+    var a = document.createElement('script');
+    var m = document.getElementsByTagName('script')[0];
+    a.async = 1;
+    a.src = "https://api1.websuccess-data.com/tracker.js";
+    m.parentNode.insertBefore(a,m)
+    })()
+    </script>
+    <!-- End A1 script -->
+
+    <!-- Lucky orange script -->
+    <script type='text/javascript'>
+    window.__lo_site_id = 177182;
+
+    (function() {
+    var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+    wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+    })();
+    </script>
+    <!-- End Lucky orange script -->
 
     <?php wp_head(); ?>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.14.0/css/all.css"
