@@ -18,7 +18,7 @@ $form_id = get_field('form_id');
 
 ?>
 
-<section <?= block_id(); ?> class="page-header <?= implode(' ', $classes); ?>">
+<section <?= block_id(); ?> class="page-header mojo-hero-mobile-position <?= implode(' ', $classes); ?>">
 	<div class="container" data-aos="fade">
 		<div class="row">
 			<div class="col-12">
@@ -420,7 +420,7 @@ $graphics4 = get_field('content_modals_graphics');
 
 							?>
 							<div class="content-modals__item" data-item="<?= $i; ?>">
-								<?php if ($heading) : ?>
+								<?php if ($item_heading) : ?>
 									<span class="d-block font-weight-demi"><?= $item_heading; ?></span>
 								<?php endif; ?>
 								<?php if ($snippet) : ?>
@@ -429,7 +429,19 @@ $graphics4 = get_field('content_modals_graphics');
 									</div>
 								<?php endif; ?>
 								<div class="btn-wrap">
-									<span class="link"><?= __('Discover more'); ?></span>
+									<span class="link">
+										<?= __('Discover more'); ?>
+										<span class="arrow-link">
+										<svg xmlns="http://www.w3.org/2000/svg" width="11.247" height="10.296" viewBox="0 0 11.247 10.296">
+											<g id="Btn_SecondaryWithArrow" transform="translate(-106.001 3.158)">
+												<g id="Group_250" data-name="Group 250" transform="translate(106.001 -2.451)">
+													<line id="Line_23" data-name="Line 23" x2="9.515" transform="translate(0 4.441)" fill="none" stroke="#ffcb39" stroke-width="2"/>
+													<path id="Path_158" data-name="Path 158" d="M682.556,3376.6l4.441,4.441-4.441,4.441" transform="translate(-677.164 -3376.596)" fill="none" stroke="#ffcb39" stroke-width="2"/>
+												</g>
+											</g>
+										</svg>
+										</span>
+									</span>
 								</div>
 
 							</div>
@@ -455,7 +467,19 @@ $graphics4 = get_field('content_modals_graphics');
 									</div>
 								<?php endif; ?>
 								<div class="btn-wrap">
-									<span class="link"><?= __('Discover more'); ?></span>
+									<span class="link">
+										<?= __('Discover more'); ?>
+										<span class="arrow-link">
+											<svg xmlns="http://www.w3.org/2000/svg" width="11.247" height="10.296" viewBox="0 0 11.247 10.296">
+												<g id="Btn_SecondaryWithArrow" transform="translate(-106.001 3.158)">
+													<g id="Group_250" data-name="Group 250" transform="translate(106.001 -2.451)">
+														<line id="Line_23" data-name="Line 23" x2="9.515" transform="translate(0 4.441)" fill="none" stroke="#ffcb39" stroke-width="2"/>
+														<path id="Path_158" data-name="Path 158" d="M682.556,3376.6l4.441,4.441-4.441,4.441" transform="translate(-677.164 -3376.596)" fill="none" stroke="#ffcb39" stroke-width="2"/>
+													</g>
+												</g>
+											</svg>
+										</span>
+									</span>
 								</div>
 								<?php
 
@@ -530,6 +554,11 @@ $graphics4 = get_field('content_modals_graphics');
 		<?php endwhile; ?>
 	</div>
 <?php endif; ?>
+
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
 
 
 <?php get_footer();?>

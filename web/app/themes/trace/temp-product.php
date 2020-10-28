@@ -18,7 +18,7 @@ $form_id = get_field('form_id');
 
 ?>
 
-<section <?= block_id(); ?> class="page-header <?= implode(' ', $classes); ?>">
+<section <?= block_id(); ?> class="page-header product-hero-mobile-position <?= implode(' ', $classes); ?>">
 	<div class="container" data-aos="fade">
 		<div class="row">
 			<div class="col-12">
@@ -190,6 +190,7 @@ $heading3 = get_field('heading_&_columns_heading');
 $background_text3 = get_field('heading_&_columns_background_text');
 $intro_text3 = get_field('heading_&_columns_intro_copy');
 $vertical_heading3 = get_field('heading_&_columns_vertical_heading');
+$section_id = get_field('heading_&_columns_id');
 $cover_graphic3 = get_field('heading_&_columns_cover_bottom_graphic');
 $graphics3 = get_field('heading_&_columns_graphics');
 $offset_graphics3 = get_field('heading_&_columns_offset_graphics');
@@ -209,7 +210,7 @@ if ($offset_graphics3) {
 
 ?>
 
-<section class="heading-columns <?= implode(' ', $classes3); ?>">
+<section class="heading-columns <?= implode(' ', $classes3); ?> " <?= $section_id ? 'id="' . $section_id . '"' : ''; ?>>
 	<div class="container">
 		<?php if ($vertical_heading3) : ?>
 			<?php if ($background_text3) : ?>
@@ -246,7 +247,7 @@ if ($offset_graphics3) {
 		<?php else : ?>
 			<div class="heading-columns__heading-wrapper" data-aos="fade-up">
 				<?php if ($heading3) : ?>
-					<h1 class="heading-columns__heading"><?= $heading3; ?></h1>
+					<h2 class="heading-columns__heading"><?= $heading3; ?></h2>
 				<?php endif; ?>
 				<?php if ($background_text3) : ?>
 					<h2 class="background-text background-text--large"><?= $background_text3; ?></h2>
@@ -416,6 +417,11 @@ if ($item_count4 <= 2) {
 		<?php endwhile; ?>
 	</div>
 <?php endif; ?>
+
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
 
 
 <?php get_footer();?>

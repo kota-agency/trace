@@ -2,12 +2,6 @@
 //Template Name: Sectors
 get_header();?>
 
-<style>
-	.split-content{
-		padding-bottom: 0;
-	}
-</style>
-
 <?php
 
 /**
@@ -73,10 +67,11 @@ $classes2 = ['full-width', padding_classes()];
 		<?php while (have_rows('split_content_rows')) : the_row(); ?>
 			<?php
 
-            $id = get_sub_field('id');
+      $id = get_sub_field('id');
 			$heading = get_sub_field('heading');
 			$copy = get_sub_field('copy');
 			$image = wp_get_attachment_image(get_sub_field('image'), 'full');
+			$link = get_sub_field('button');
 
 			?>
 			<div <?= $id ? 'id="' . $id . '"' : ''; ?> class="split-content__item <?= $i % 2 === 0 ? 'tear-border bg-secondary theme-secondary' : ''; ?>" data-aos="fade">
@@ -100,7 +95,12 @@ $classes2 = ['full-width', padding_classes()];
 									</div>
 								<?php endif; ?>
 								<div class="btn-wrap">
-									<a href="#" class="btn"><?= __('Find out more', 'trace'); ?></a>
+									<a class="btn" 
+										href="<?= $link['url'] ? $link['url'] : "#" ?>" 
+										<?= $link['target'] ? 'target="_blank"' : ''; ?>
+									>
+									<?= $link['title'] ? $link['title'] : __('Find out more', 'trace'); ?>
+								</a>
 								</div>
 							</div>
 
@@ -118,6 +118,11 @@ $classes2 = ['full-width', padding_classes()];
 		<?php endwhile; ?>
 	</div>
 <?php endif; ?>
+
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
 
 
 <?php get_footer();?>

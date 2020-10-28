@@ -4,8 +4,184 @@ import AOS from "aos";
 import Cookies from 'js-cookie';
 import inViewport from 'in-viewport';
 
+import { gsap, Linear } from "gsap";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { MotionPathHelper } from "gsap/MotionPathHelper";
+
+gsap.registerPlugin(MotionPathPlugin, MotionPathHelper);
+
 
 function General() {
+    
+    // gsap.set(".family__logo2", { autoAlpha: 1});
+
+    const familyLogoLength =  Array.from(document.querySelectorAll('.family__logo')).length;
+    const duration = 30;
+    const startPoint = 1/familyLogoLength;
+
+    console.log(startPoint);
+
+    const logoZero = document.querySelector('.family__logo0');
+    const logoOne = document.querySelector('.family__logo1');
+    const logoTwo = document.querySelector('.family__logo2');
+    const logoThree = document.querySelector('.family__logo3');
+    const logoFour = document.querySelector('.family__logo4');
+    const logoFive = document.querySelector('.family__logo5');
+    const logoSix = document.querySelector('.family__logo6');
+    const logoSeven = document.querySelector('.family__logo7');
+    const logoEight = document.querySelector('.family__logo8');
+
+    const tl = gsap.timeline({defaults: { ease: "none" }})
+
+    if (logoZero) {
+        tl.to(logoZero, {
+            duration: duration, 
+            repeat: -1,
+            ease: "none",
+            immediateRender: true,
+            motionPath: {
+              path: '#path-anim',
+              align: '#path-anim',
+              alignOrigin: [0.5, 0.5],
+              start: (startPoint*logoZero.dataset.logoIndex),
+              end: 1 + (startPoint*logoZero.dataset.logoIndex),
+            },
+        });
+    }
+
+    if (logoOne) {
+        tl.to(logoOne, {
+            duration: duration, 
+            repeat: -1,
+            ease: "none",
+            immediateRender: true,
+            motionPath: {
+              path: '#path-anim',
+              align: '#path-anim',
+              alignOrigin: [0.5, 0.5],
+              start: (startPoint*logoOne.dataset.logoIndex),
+              end: 1 + (startPoint*logoOne.dataset.logoIndex),
+            },
+        },`-=${30*logoOne.dataset.logoIndex}`);
+    }
+
+    if (logoTwo) {
+        tl.to(logoTwo, {
+            duration: duration, 
+            repeat: -1,
+            ease: "none",
+            immediateRender: true,
+            motionPath: {
+              path: '#path-anim',
+              align: '#path-anim',
+              alignOrigin: [0.5, 0.5],
+              start: (startPoint*logoTwo.dataset.logoIndex),
+              end: 1 + (startPoint*logoTwo.dataset.logoIndex),
+            }
+        },`-=${30*logoOne.dataset.logoIndex}`);
+    }
+
+    if (logoThree) {
+        tl.to(logoThree, {
+            duration: duration, 
+            repeat: -1,
+            ease: "none",
+            immediateRender: true,
+            motionPath: {
+              path: '#path-anim',
+              align: '#path-anim',
+              alignOrigin: [0.5, 0.5],
+              start: (startPoint*logoThree.dataset.logoIndex),
+              end: 1 + (startPoint*logoThree.dataset.logoIndex),
+            }
+        }, `-=${30*logoOne.dataset.logoIndex}`);
+    }
+
+    if (logoFour) {
+        tl.to(logoFour, {
+            duration: duration, 
+            repeat: -1,
+            ease: "none",
+            immediateRender: true,
+            motionPath: {
+              path: '#path-anim',
+              align: '#path-anim',
+              alignOrigin: [0.5, 0.5],
+              start: (startPoint*logoFour.dataset.logoIndex),
+              end: 1 + (startPoint*logoFour.dataset.logoIndex),
+            }
+        }, `-=${30*logoOne.dataset.logoIndex}`);
+    }
+
+    if (logoFive) {        
+        tl.to(logoFive, {
+            duration: duration, 
+            repeat: -1,
+            ease: "none",
+            immediateRender: true,
+            motionPath: {
+              path: '#path-anim',
+              align: '#path-anim',
+              alignOrigin: [0.5, 0.5],
+              start: (startPoint*logoFive.dataset.logoIndex),
+              end: 1 + (startPoint*logoFive.dataset.logoIndex),
+            }
+        },`-=${30*logoOne.dataset.logoIndex}`);
+    }
+
+    if (logoSix) {
+        tl.to(logoSix, {
+            duration: duration, 
+            repeat: -1,
+            ease: "none",
+            immediateRender: true,
+            motionPath: {
+              path: '#path-anim',
+              align: '#path-anim',
+              alignOrigin: [0.5, 0.5],
+              start: 0 + (startPoint*logoSix.dataset.logoIndex),
+              end: 1 + (startPoint*logoSix.dataset.logoIndex),
+            }
+        },`-=${30*logoOne.dataset.logoIndex}`);
+    }
+
+    if (logoSeven) {
+        tl.to(logoSeven, {
+            duration: duration, 
+            repeat: -1,
+            ease: "none",
+            immediateRender: true,
+            motionPath: {
+              path: '#path-anim',
+              align: '#path-anim',
+              alignOrigin: [0.5, 0.5],
+              start: (startPoint*logoSeven.dataset.logoIndex),
+              end: 1 + (startPoint*logoSeven.dataset.logoIndex),
+            }
+        }, `-=${30*logoOne.dataset.logoIndex}`);
+    }
+
+
+    if (logoEight) {
+        tl.to(logoEight, {
+            duration: duration, 
+            repeat: -1,
+            ease: "none",
+            immediateRender: true,
+            motionPath: {
+              path: '#path-anim',
+              align: '#path-anim',
+              alignOrigin: [0.5, 0.5],
+              start: (startPoint*logoEight.dataset.logoIndex),
+              end: 1 + (startPoint*logoEight.dataset.logoIndex),
+            }
+        });
+    }
+
+    // MotionPathHelper.create(".family__logo2");
+
+
+
     let animating = false;
 
     $('.mh').matchHeight();

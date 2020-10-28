@@ -18,10 +18,10 @@ $form_id = get_field('form_id');
 
 ?>
 
-<section <?= block_id(); ?> class="page-header <?= implode(' ', $classes); ?>">
+<section <?= block_id(); ?> class="page-header services-hero-mobile-position <?= implode(' ', $classes); ?>">
 	<div class="container" data-aos="fade">
 		<div class="row">
-			<div class="col-12">
+			<div class="col-12 col-lg-9">
 				<?php if ($label) : ?>
 					<h6 class="label"><?= $label; ?></h6>
 				<?php endif; ?>
@@ -92,7 +92,7 @@ if($intro_copy2) {
 
 ?>
 
-<section class="text-layout <?= implode(' ', $classes2); ?>">
+<section class="text-layout section-two-image-position <?= implode(' ', $classes2); ?>">
 	<div class="container" data-aos="fade">
 		<?php if ($background_text2) : ?>
 			<h2 class="background-text background-text--large"><?= $background_text2; ?></h2>
@@ -290,7 +290,7 @@ if ($offset_graphics3) {
 		<?php else : ?>
 			<div class="heading-columns__heading-wrapper" data-aos="fade-up">
 				<?php if ($heading3) : ?>
-					<h1 class="heading-columns__heading"><?= $heading3; ?></h1>
+					<h2 class="heading-columns__heading"><?= $heading3; ?></h2>
 				<?php endif; ?>
 				<?php if ($background_text3) : ?>
 					<h2 class="background-text background-text--large"><?= $background_text3; ?></h2>
@@ -543,7 +543,7 @@ if($intro_copy5) {
 
 ?>
 
-<section class="text-layout <?= implode(' ', $classes5); ?>" style="padding-bottom: 0;">
+<section class="text-layout section-five-image-postion <?= implode(' ', $classes5); ?>" style="padding-bottom: 0;">
 	<div class="container" data-aos="fade">
 		<?php if ($background_text5) : ?>
 			<h2 class="background-text background-text--large"><?= $background_text5; ?></h2>
@@ -874,7 +874,7 @@ if ($offset_graphics7) {
 
 ?>
 
-<section class="heading-columns <?= implode(' ', $classes7); ?>">
+<section class="heading-columns specific-graphic-position <?= implode(' ', $classes7); ?>">
 	<div class="container">
 		<?php if ($vertical_heading7) : ?>
 			<?php if ($background_text7) : ?>
@@ -888,7 +888,7 @@ if ($offset_graphics7) {
 				</div>
 				<div class="col col-lg-6">
 					<?php if ($intro_text7) : ?>
-						<div class="heading-columns__intro-text" data-aos="fade-up">
+						<div class="heading-columns__intro-text copy-xxl" data-aos="fade-up">
 							<?= $intro_text7; ?>
 						</div>
 					<?php endif; ?>
@@ -911,7 +911,7 @@ if ($offset_graphics7) {
 		<?php else : ?>
 			<div class="heading-columns__heading-wrapper" data-aos="fade-up">
 				<?php if ($heading7) : ?>
-					<h1 class="heading-columns__heading"><?= $heading7; ?></h1>
+					<h2 class="heading-columns__heading"><?= $heading7; ?></h2>
 				<?php endif; ?>
 				<?php if ($background_text7) : ?>
 					<h2 class="background-text background-text--large"><?= $background_text7; ?></h2>
@@ -1125,6 +1125,11 @@ if($intro_copy8) {
 		</div>
 	</div>
 </section><!-- .services -->
+
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
 
 
 <?php get_footer();?>

@@ -26,7 +26,6 @@ a:focus {
     cursor: pointer;
     transition: $transition;
 
-
     span {
         transition: none;
     }
@@ -67,15 +66,14 @@ a:focus {
             background: transparent;
             color: $white;
 
-            &:hover, &:focus {
+            &:hover,
+            &:focus {
                 border-color: $black;
                 background: $black;
                 color: $white;
             }
         }
     }
-
-
 }
 
 .link {
@@ -93,7 +91,8 @@ a:focus {
     cursor: pointer;
     transition: $transition;
 
-    span, i {
+    span,
+    i {
         margin-left: 0;
         transition: none;
     }
@@ -171,7 +170,6 @@ a:focus {
         padding: 50px 10px;
     }
 
-
     &__inner {
         position: relative;
         max-width: 1300px;
@@ -216,8 +214,9 @@ a:focus {
             right: 20px;
         }
 
-        &:before, &:after {
-            content: '';
+        &:before,
+        &:after {
+            content: "";
             display: block;
             position: absolute;
             top: 50%;
@@ -234,9 +233,10 @@ a:focus {
             transform: translateX(-50%) translateY(-50%) rotate(45deg);
         }
 
-        &:hover, &:focus {
-
-            &:before, &:after {
+        &:hover,
+        &:focus {
+            &:before,
+            &:after {
                 background: $color-tertiary;
             }
         }
@@ -270,7 +270,6 @@ a:focus {
 .inner {
     max-width: $content-width;
     margin: 0 auto;
-
 }
 
 .plus {
@@ -282,8 +281,9 @@ a:focus {
     height: 20px;
     transform: translateY(-50%);
 
-    &:before, &:after {
-        content: '';
+    &:before,
+    &:after {
+        content: "";
         display: block;
         position: absolute;
         top: 50%;
@@ -300,7 +300,6 @@ a:focus {
         height: 2px;
     }
 }
-
 
 .no-results {
     padding: 60px 0;
@@ -319,7 +318,6 @@ a:focus {
     max-width: inherit !important;
 }
 
-
 .background-text {
     z-index: -1;
     line-height: 1;
@@ -330,7 +328,6 @@ a:focus {
     -webkit-text-stroke: 1px $white;
     opacity: 0.2;
     pointer-events: none;
-
 
     @include media-breakpoint-down(lg) {
         font-size: 16rem;
@@ -347,13 +344,11 @@ a:focus {
             font-size: 20rem;
         }
 
-
         @include media-breakpoint-down(xs) {
             font-size: 11rem;
         }
     }
 }
-
 
 h1 {
     del {
@@ -399,11 +394,9 @@ h1 {
             transition: 200ms;
             transition-delay: 1s;
             transform: translateX(100%);
-
         }
     }
 }
-
 
 .icon-list {
     margin-bottom: 40px;
@@ -453,7 +446,6 @@ h1 {
     }
 }
 
-
 .arrow {
     display: inline-block;
     position: relative;
@@ -470,9 +462,7 @@ h1 {
     color: $white;
     cursor: pointer;
     transition: $transition;
-
 }
-
 
 .slick-arrow {
     width: 50px;
@@ -485,7 +475,7 @@ h1 {
     }
 
     &:before {
-        content: '';
+        content: "";
         display: block;
         width: 50px;
         height: 20px;
@@ -502,10 +492,10 @@ h1 {
     }
 }
 
-
 .play {
-    &:after, &:before {
-        content: '';
+    &:after,
+    &:before {
+        content: "";
         display: block;
         position: absolute;
         top: 50%;
@@ -536,7 +526,8 @@ h1 {
         pointer-events: none;
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         &:after {
             opacity: 0;
             visibility: hidden;
@@ -551,7 +542,6 @@ h1 {
     }
 }
 
-
 .tear-border {
     position: relative;
 
@@ -560,9 +550,9 @@ h1 {
         margin: 50px 0;
     }
 
-
-    &:before, &:after {
-        content: '';
+    &:before,
+    &:after {
+        content: "";
         display: block;
         position: absolute;
         top: 0;
@@ -575,7 +565,7 @@ h1 {
     }
 
     &:before {
-        transform: scaleY(-1)  scaleX(-1) translateY(100%);
+        transform: scaleY(-1) scaleX(-1) translateY(100%);
     }
 
     &:after {
@@ -590,7 +580,6 @@ h1 {
     }
 }
 
-
 .heading-width {
     max-width: 800px;
     margin: 0 auto 30px;
@@ -603,7 +592,6 @@ h1 {
     color: $color-tertiary;
 }
 
-
 .arrow-to-btn {
     position: relative;
     z-index: 1;
@@ -612,8 +600,7 @@ h1 {
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
-    border-radius: 23px!important;
-
+    border-radius: 23px !important;
 
     &__arrow {
         display: inline-block;
@@ -642,7 +629,6 @@ h1 {
         top: 50%;
         left: 50%;
         transform: translateX(-50%) translateY(-50%);
-
     }
 
     &__text {
@@ -662,17 +648,15 @@ h1 {
         cursor: pointer;
         transition: $transition;
         transform: translateX(-100%);
-
     }
 
-    &:hover, &:focus {
-
+    &:hover,
+    &:focus {
         .arrow-to-btn__text {
             transform: translateX(0);
         }
     }
 }
-
 
 .scroll-top {
     display: flex;
@@ -710,7 +694,8 @@ h1 {
         bottom: 20px;
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         background: $black;
 
         i {
@@ -718,7 +703,6 @@ h1 {
         }
     }
 }
-
 
 .round-image {
     border-radius: 10px;
@@ -742,22 +726,22 @@ h1 {
     }
 }
 
-
-table.tablepress, div.dataTables_wrapper {
+table.tablepress,
+div.dataTables_wrapper {
     margin: 40px 0;
 
     thead {
         th {
-
             font-weight: 900;
             background: none;
         }
     }
 
-    th,td {
+    th,
+    td {
         padding-bottom: 20px;
         min-width: 160px;
-        vertical-align: top!important;
+        vertical-align: top !important;
 
         &:first-child {
             padding-left: 0;
@@ -767,9 +751,7 @@ table.tablepress, div.dataTables_wrapper {
             padding-right: 0;
         }
     }
-
 }
-
 
 .error-block {
     padding-top: 140px;
@@ -792,7 +774,6 @@ table.tablepress, div.dataTables_wrapper {
     }
 }
 
-
 .container {
     @include media-breakpoint-down(md) {
         max-width: 92%;
@@ -813,8 +794,9 @@ table.tablepress, div.dataTables_wrapper {
     border-radius: 50%;
     background: $black;
 
-    &:before, &:after {
-        content: '';
+    &:before,
+    &:after {
+        content: "";
         display: block;
         position: absolute;
         top: 50%;
@@ -841,7 +823,7 @@ table.tablepress, div.dataTables_wrapper {
     background: $black;
 
     &:before {
-        content: '';
+        content: "";
         display: block;
         position: absolute;
         top: 50%;
@@ -855,23 +837,65 @@ table.tablepress, div.dataTables_wrapper {
     }
 }
 
-
-.aligncenter,.alignleft,.alignright {
+.aligncenter,
+.alignleft,
+.alignright {
     display: block;
     padding: 0;
 }
 
 .aligncenter {
     float: none;
-    margin: .5em auto 1em;
+    margin: 0.5em auto 1em;
 }
 
 .alignright {
     float: right;
-    margin: .5em 0 1em 1em;
+    margin: 0.5em 0 1em 1em;
 }
 
 .alignleft {
     float: left;
-    margin: .5em 1em 1em 0;
+    margin: 0.5em 1em 1em 0;
+}
+
+.link-rss-feed {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-end;
+
+    svg {
+        width: 20px;
+        height: auto;
+        margin-right: 10px;
+        fill: $color-tertiary;
+    }
+
+    span {
+        padding: 0;
+        font-size: 16px;
+        line-height: 1;
+    }
+}
+
+.form-copy {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
+.page-template-temp-mojo .content-modals .content-modals__column .btn-wrap .link {
+    display: flex;
+    align-items: center;
+
+    .arrow-link {
+        display: flex;
+        align-items: center;
+        margin-left: 8px;
+    }
+}
+
+.split-content {
+    padding-bottom: 0;
 }

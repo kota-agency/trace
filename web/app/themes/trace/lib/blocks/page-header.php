@@ -14,7 +14,7 @@ $form_id = get_sub_field('form_id');
 
 if(is_home() || is_archive()) {
     $label = __('News', 'trace');
-    $title = __('Our Latest News & Insights', 'trace');
+    $title = __('News & Insights', 'trace');
 
     $classes[] = 'block-space--no-bottom';
 }

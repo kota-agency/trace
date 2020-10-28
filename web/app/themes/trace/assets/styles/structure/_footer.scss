@@ -20,23 +20,22 @@
             margin: 0;
             list-style: none;
 
-
-
             li {
                 margin-bottom: 15px;
                 font-weight: 600;
 
                 a {
                     &:after {
-                        content: '\f061';
+                        content: "\f061";
                         margin-left: 25px;
-                        font-family: 'Font Awesome 5 Pro';
+                        font-family: "Font Awesome 5 Pro";
                         font-size: 1.4rem;
                         color: rgba($white, 0.5);
                         transition: $transition;
                     }
 
-                    &:hover, &:focus {
+                    &:hover,
+                    &:focus {
                         &:after {
                             color: $color-quaternary;
                         }
@@ -49,7 +48,6 @@
                     &:after {
                         color: rgba($white, 0.5);
                     }
-
                 }
             }
         }
@@ -63,7 +61,6 @@
             > li {
                 padding: 0 ($grid-gutter-width / 2);
 
-
                 > a {
                     display: inline-block;
                     margin-bottom: 25px;
@@ -74,7 +71,6 @@
                         font-size: 1.6rem;
                     }
 
-
                     &:after {
                         display: none;
                     }
@@ -82,8 +78,8 @@
 
                 > ul {
                     @include media-breakpoint-up(lg) {
-                        display: block!important;
-                        height: auto!important;
+                        display: block !important;
+                        height: auto !important;
                     }
                 }
             }
@@ -98,8 +94,6 @@
                 }
 
                 > li {
-
-
                     @include media-breakpoint-down(md) {
                         flex: 0 0 100%;
                         max-width: 100%;
@@ -113,7 +107,7 @@
                         &.active {
                             > a {
                                 &:before {
-                                    content: '\f068';
+                                    content: "\f068";
                                 }
                             }
                         }
@@ -124,7 +118,6 @@
                     }
 
                     > a {
-
                         @include media-breakpoint-down(md) {
                             display: block;
                             padding-top: 5px;
@@ -134,18 +127,17 @@
                             padding-right: 40px;
 
                             &:before {
-                                content: '\f067';
+                                content: "\f067";
                                 display: block;
                                 position: absolute;
                                 top: 50%;
                                 right: 10px;
-                                font-family: 'Font Awesome 5 Pro';
+                                font-family: "Font Awesome 5 Pro";
                                 font-size: 2.2rem;
                                 font-weight: 400;
                                 transform: translateY(-50%);
                             }
                         }
-
                     }
                 }
             }
@@ -157,7 +149,6 @@
         font-size: 0;
         padding-top: 40px;
         margin: 0 -10px;
-
     }
 
     &__accreditation {
@@ -173,7 +164,21 @@
     &__agency {
         display: inline-block;
         margin-top: 100px;
-        color: $white!important;
+        color: $white !important;
+        span {
+            margin-right: 10px;
+        }
+
+        @include media-breakpoint-down(md) {
+            display: block;
+            padding-top: 30px;
+        }
+    }
+
+    &__art {
+        display: inline-block;
+        margin-top: 10px;
+        color: $white !important;
         span {
             margin-right: 10px;
         }

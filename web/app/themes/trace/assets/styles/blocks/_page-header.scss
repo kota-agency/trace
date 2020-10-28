@@ -118,7 +118,102 @@
         blockquote {
             padding: 0;
             margin-bottom: 0;
+
+            p {
+                line-height: 1.3;
+            }
         }
     }
 
+    &.mojo-hero-mobile-position,
+    &.our-story-hero-mobile-position,
+    &.services-hero-mobile-position,
+    &.product-hero-mobile-position {
+        @include media-breakpoint-down(sm) {
+            padding-top: 400px;
+            .page-header__image {
+                max-width: 350px;
+                top: 65px;
+            }
+        }
+
+        @media only screen and (max-width: 414px) {
+            padding-top: 450px;
+            .hero__image {
+                max-width: 350px;
+                top: 65px;
+            }
+        }
+
+        @media only screen and (max-width: 375px) {
+            padding-top: 400px;
+            .hero__image {
+                max-width: 300px;
+                top: 65px;
+            }
+        }
+    }
+}
+
+.hero {
+    &.home-hero-mobile-position {
+        @include media-breakpoint-down(sm) {
+            padding-top: 400px;
+            .hero__image {
+                max-width: 350px;
+                top: 65px;
+            }
+        }
+
+        @media only screen and (max-width: 414px) {
+            padding-top: 450px;
+            .hero__image {
+                max-width: 350px;
+                top: 65px;
+            }
+        }
+
+        @media only screen and (max-width: 375px) {
+            padding-top: 400px;
+            .hero__image {
+                max-width: 300px;
+                top: 65px;
+            }
+        }
+    }
+}
+
+.contact-hero-mobile-position {
+    @include media-breakpoint-down(sm) {
+        .contact-details__inner {
+            padding-top: 425px;
+        }
+
+        .contact-details__image {
+            max-width: 450px;
+            top: 65px;
+        }
+    }
+
+    @media only screen and (max-width: 414px) {
+        .contact-details__inner {
+            padding-top: 400px;
+        }
+
+        .contact-details__image {
+            max-width: 400px;
+            top: 65px;
+        }
+    }
+
+    @media only screen and (max-width: 375px) {
+        .contact-details__inner {
+            padding-top: 275px;
+        }
+
+        .contact-details__image {
+            max-width: 300px;
+            top: 65px;
+        }
+    }
 }

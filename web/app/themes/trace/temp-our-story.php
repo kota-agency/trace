@@ -18,7 +18,7 @@ $form_id = get_field('form_id');
 
 ?>
 
-<section <?= block_id(); ?> class="page-header <?= implode(' ', $classes); ?>">
+<section <?= block_id(); ?> class="page-header our-story-hero-mobile-position <?= implode(' ', $classes); ?>">
 	<div class="container">
 		<div class="row">
 			<div class="col-12" data-aos="fade">
@@ -91,7 +91,7 @@ $heading2 = get_field('timeline_heading');
 	<div class="timeline__inner">
 		<div class="container">
 			<?php if ($heading2) : ?>
-				<h1 class="timeline__heading"><?= $heading2; ?></h1>
+				<h2 class="timeline__heading"><?= $heading2; ?></h2>
 			<?php endif; ?>
 			<div class="row">
 				<div class="col-lg-8">
@@ -105,7 +105,7 @@ $heading2 = get_field('timeline_heading');
 								$copy = get_sub_field('copy');
 
 								?>
-								<div class="milestone <?= $i === 0 ? 'active' : '' ?>">
+								<div class="milestone <?= $i === 0 ? 'active' : '' ?> <?= $image ? 'with-image' : '' ?>">
 									<div class="milestone__inner">
 										<?php if ($year) : ?>
 											<div class="milestone__year"><span><?= $year; ?></span></div>
@@ -164,7 +164,7 @@ if ($larger_text3) {
 		<div class="cta__heading-wrapper">
 			<?php if ($heading3) : ?>
 				<?php if ($larger_text3) : ?>
-					<h1><?= $heading3; ?></h1>
+					<2><?= $heading3; ?></h2>
 				<?php else : ?>
 					<h2><?= $heading3; ?></h2>
 				<?php endif; ?>
@@ -191,6 +191,11 @@ if ($larger_text3) {
 
 	</div>
 </section><!-- .cta -->
+
+<?php
+/** Get in touch component, data comming from site settings tab  **/
+    get_component('get-in-touch');
+?>
 
 
 <?php get_footer();?>

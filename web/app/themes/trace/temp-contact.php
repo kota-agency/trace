@@ -2,14 +2,6 @@
 //Template Name: Contact
 get_header();?>
 
-<style>
-	.page-header.page-header.page-header{
-		padding-top: 0;
-	}
-
-
-</style>
-
 <?php
 
 /**
@@ -19,13 +11,33 @@ get_header();?>
 $classes = ['full-width', padding_classes()];
 $address = get_field('address', 'options');
 $address_link = get_field('address_link', 'options');
+$label = get_field('label');
+$title = get_field('title');
+$image = wp_get_attachment_image(get_field('image'), 'full');
 
 ?>
 
 
-<section <?= block_id(); ?> class="contact-details <?= implode(' ', $classes); ?>">
+<section <?= block_id(); ?> class="contact-details contact-hero-mobile-position <?= implode(' ', $classes); ?>">
+    <?php if ($image) : ?>
+        <div class="contact-details__image">
+            <div data-aos="fade-down-left">
+                <?= $image; ?>
+            </div>
+        </div>
+    <?php endif; ?>
     <div class="contact-details__inner">
         <div class="container">
+            <div class="row">
+                <div class="col-12 contact-details__col header-title-pos">
+                    <?php if ($label) : ?>
+                        <h6 class="label"><?= $label; ?></h6>
+                    <?php endif; ?>
+                    <?php if ($title) : ?>
+                        <h1><?= $title; ?></h1>
+                    <?php endif; ?>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-6 col-lg-5 contact-details__col">
                     <div class="contact-details__content">
@@ -78,9 +90,9 @@ $address_link = get_field('address_link', 'options');
 
 $classes = ['full-width', padding_classes()];
 
-$label = get_field('label');
-$title = get_field('title');
-$image = wp_get_attachment_image(get_field('image'), 'full');
+// $label = get_field('label');
+// $title = get_field('title');
+// $image = wp_get_attachment_image(get_field('image'), 'full');
 $copy = get_field('copy');
 $form_id = get_field('form_id');
 
@@ -88,16 +100,6 @@ $form_id = get_field('form_id');
 
 <section <?= block_id(); ?> class="page-header <?= implode(' ', $classes); ?>">
 	<div class="container" data-aos="fade">
-		<div class="row">
-			<div class="col-12">
-				<?php if ($label) : ?>
-					<h6 class="label"><?= $label; ?></h6>
-				<?php endif; ?>
-				<?php if ($title) : ?>
-					<h1><?= $title; ?></h1>
-				<?php endif; ?>
-			</div>
-		</div>
 		<?php if ($copy) : ?>
 			<div class="row">
 				<div class="col-lg-6 page-header__copy">
@@ -106,18 +108,12 @@ $form_id = get_field('form_id');
 			</div>
 		<?php endif; ?>
 		<?php if ($form_id) : ?>
+            <h2><?= __('Message Us:', 'trace'); ?></h2>
 			<div class="page-header__form">
 				<?php gravity_form($form_id, false, false, false, null, true); ?>
 			</div>
 		<?php endif; ?>
 	</div>
-	<?php if ($image) : ?>
-		<div class="page-header__image">
-			<div data-aos="fade-down-left">
-				<?= $image; ?>
-			</div>
-		</div>
-	<?php endif; ?>
 </section><!-- .page-header -->
 
 

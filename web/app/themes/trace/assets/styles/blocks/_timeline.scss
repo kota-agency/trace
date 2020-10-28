@@ -26,6 +26,7 @@
     .milestone {
         padding: 15px 0;
         cursor: pointer;
+        // display: inline-block;
 
         &.active {
             padding: 60px 0;
@@ -52,7 +53,6 @@
             //        }
             //    }
             //}
-
 
             .milestone__inner {
                 align-items: center;
@@ -91,6 +91,7 @@
                 img {
                     display: block;
                     top: 50%;
+                    // transform: translate(-50%, -50%) scale(1.5);
                 }
             }
 
@@ -101,7 +102,8 @@
                 @include media-breakpoint-down(xs) {
                     padding-left: 15px;
                 }
-                p,li {
+                p,
+                li {
                     font-size: 4rem;
 
                     @include media-breakpoint-down(sm) {
@@ -163,6 +165,10 @@
                 flex: 0 0 60px;
                 max-width: 60px;
             }
+
+            span {
+                // transition: font-size 0.4s ease-in-out;
+            }
         }
 
         &__image {
@@ -181,7 +187,6 @@
                 max-width: 50px;
             }
 
-
             img {
                 display: none;
                 position: absolute;
@@ -190,11 +195,11 @@
                 z-index: 2;
                 border-radius: 50%;
                 transform: translateY(-50%) translateX(-50%);
-
+                // transition: transform 0.4s ease;
             }
 
             &:before {
-                content: '';
+                content: "";
                 display: block;
                 position: absolute;
                 top: 50%;
@@ -206,7 +211,7 @@
             }
 
             &:after {
-                content: '';
+                content: "";
                 display: block;
                 position: absolute;
                 top: 11px;
@@ -223,12 +228,15 @@
         &__copy {
             flex: 1 0;
 
-
-            p,li {
-
+            p,
+            li {
                 @include media-breakpoint-down(xs) {
                     font-size: 1.5rem;
                 }
+            }
+
+            p {
+                // transition: font-size 0.4s ease-in-out;
             }
         }
     }
