@@ -29,7 +29,7 @@ if ($larger_text) {
         <div class="cta__heading-wrapper">
             <?php if ($heading) : ?>
                 <?php if ($larger_text) : ?>
-                    <h1><?= $heading; ?></h1>
+                    <h2><?= $heading; ?></h2>
                 <?php else : ?>
                     <h2><?= $heading; ?></h2>
                 <?php endif; ?>

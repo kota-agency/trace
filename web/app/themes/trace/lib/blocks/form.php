@@ -14,7 +14,7 @@ $form_id = get_sub_field('form_id');
 <section <?= block_id(); ?> class="form <?= implode(' ', $classes); ?>" data-aos="fade">
     <div class="container">
         <?php if ($heading) : ?>
-            <h1 class="heading-width text-center"><?= $heading; ?></h1>
+            <h2 class="heading-width text-center"><?= $heading; ?></h2>
         <?php endif; ?>
         <?php if ($form_id) : ?>
             <div class="form__wrapper">
