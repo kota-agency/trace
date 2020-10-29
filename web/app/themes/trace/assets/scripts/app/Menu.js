@@ -154,6 +154,11 @@ function Menu() {
         menuItemStates($(e.currentTarget), 'leave');
     });
 
+    $('.masthead .menu-item-has-children .sub-menu li a').on('click', (e) => {
+        console.log(e.currentTarget.closest(".menu-item-has-children"));
+        menuItemStates($(e.currentTarget.closest(".menu-item-has-children")), 'leave');
+    });
+
     let lastScrollTop = 0;
 
     const updateScroll = () => {
