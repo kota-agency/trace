@@ -54,16 +54,18 @@ $agency_link = get_field('agency_link', 'options');
                                 </li>
                             </ul>
                         </nav>
-                        <?php if ($agency_link && $agency_logo) : ?>
-                            <a href="<?= $agency_link['url']; ?>" <?= $agency_link['target'] ? 'target="_blank"' : ''; ?>
-                               class="mastfoot__agency">
-                                <span class="milli"><?= __('Site by', 'trace'); ?></span>
-                                <img src="<?= $agency_logo['url']; ?>" alt="<?= $agency_logo['alt']; ?>">
+                        <div class="link-to-ref">
+                            <?php if ($agency_link && $agency_logo) : ?>
+                                <a href="<?= $agency_link['url']; ?>" <?= $agency_link['target'] ? 'target="_blank"' : ''; ?>
+                                class="mastfoot__agency">
+                                    <span class="milli"><?= __('Site by', 'trace'); ?></span>
+                                    <img src="<?= $agency_logo['url']; ?>" alt="<?= $agency_logo['alt']; ?>">
+                                </a>
+                            <?php endif; ?>
+                            <a href="https://artisticsideoflife.patternbyetsy.com/about" target="_blank" rel="noopener" class="mastfoot__art">
+                                <span class="milli"><?= __('Art by Maya Land', 'trace'); ?></span>
                             </a>
-                        <?php endif; ?>
-                        <a href="https://artisticsideoflife.patternbyetsy.com/about" target="_blank" rel="noopener" class="mastfoot__art">
-                            <span class="milli"><?= __('Art by Maya Land', 'trace'); ?></span>
-                        </a>
+                        </div>
                     </div>
                 </div>
             <?php endif; ?>

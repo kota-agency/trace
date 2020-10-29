@@ -105,9 +105,22 @@ a:focus {
         margin-left: 10px;
     }
 
+    .arrow-link svg line,
+    .arrow-link svg path {
+        transition: $transition;
+    }
+
     &:hover,
     &:focus {
         color: $color-quaternary;
+
+        .arrow-link svg line {
+            stroke: $color-quaternary;
+        }
+
+        .arrow-link svg path {
+            stroke: $color-quaternary;
+        }
     }
 }
 
@@ -893,6 +906,14 @@ div.dataTables_wrapper {
         display: flex;
         align-items: center;
         margin-left: 8px;
+    }
+}
+
+#gform_confirmation_wrapper_1 {
+    margin: 0 auto;
+
+    .gform_confirmation_message_1 {
+        text-align: center;
     }
 }
 

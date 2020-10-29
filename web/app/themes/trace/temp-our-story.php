@@ -164,7 +164,7 @@ if ($larger_text3) {
 		<div class="cta__heading-wrapper">
 			<?php if ($heading3) : ?>
 				<?php if ($larger_text3) : ?>
-					<2><?= $heading3; ?></h2>
+					<h2><?= $heading3; ?></h2>
 				<?php else : ?>
 					<h2><?= $heading3; ?></h2>
 				<?php endif; ?>
