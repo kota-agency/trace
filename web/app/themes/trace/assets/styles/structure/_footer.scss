@@ -165,9 +165,6 @@
         display: inline-block;
         margin-top: 100px;
         color: $white !important;
-        span {
-            margin-right: 10px;
-        }
 
         @include media-breakpoint-down(md) {
             display: block;
@@ -175,10 +172,8 @@
             margin-top: 90px;
         }
 
-        @include media-breakpoint-down(xs) {
-            display: block;
-            padding-top: 0;
-            margin-top: 90px;
+        span {
+            margin-right: 10px;
         }
     }
 
@@ -186,18 +181,14 @@
         display: inline-block;
         margin-top: 10px;
         color: $white !important;
-        span {
-            margin-right: 10px;
-        }
 
         @include media-breakpoint-down(md) {
             display: block;
             padding-top: 0px;
         }
 
-        @include media-breakpoint-down(xs) {
-            display: block;
-            padding-top: 0px;
+        span {
+            margin-right: 10px;
         }
     }
 
