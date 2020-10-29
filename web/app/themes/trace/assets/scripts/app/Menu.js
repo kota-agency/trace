@@ -28,7 +28,7 @@ function Menu() {
         }
     });
 
-    $mobileNav.find('.menu-item-has-children').append('<div class="arrow-nav-open-sub"></div>');
+    // $mobileNav.find('.menu-item-has-children').append('<div class="arrow-nav-open-sub"></div>');
 
     // $mobileNav.find('.menu-item-has-children .arrow-nav-open-sub').on('click', (e) => {
     //     // e.preventDefault();
