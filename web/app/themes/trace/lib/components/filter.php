@@ -37,9 +37,9 @@ $tag_blacklist = ['post_tag', 'post_format', 'product_type', 'product_visibility
 
                 <?php if ($_terms) : ?>
                     <ul class="filter__terms list-unstyled">
-                        <li>
+                        <!-- <li>
                             <a href="<?= get_post_type_archive_link($_post_type); ?>" class="btn btn--small  <?= !$page_obj->term_id ? '' : 'btn--hollow btn--white'; ?>"><?= __("All", "trace"); ?></a>
-                        </li>
+                        </li> -->
                         <?php foreach ($_terms as $_term) : ?>
                             <li class="filter__term">
                                 <a href="<?= get_term_link($_term->term_id, $_taxonomy); ?>" class="btn btn--small  <?= ($page_obj->term_id === $_term->term_id) ? '' : 'btn--hollow btn--white'; ?>"><?= $_term->name; ?></a>
