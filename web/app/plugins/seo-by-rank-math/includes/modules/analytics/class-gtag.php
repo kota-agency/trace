@@ -2,15 +2,13 @@
 /**
  * The GTag
  *
- * @since      1.4.0
+ * @since      1.0.49
  * @package    RankMath
  * @subpackage RankMath\modules
  * @author     Rank Math <support@rankmath.com>
  *
- * @credit forked from Google site kit.
  * @copyright 2019 Google LLC
- * @license   https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
- * @link      https://sitekit.withgoogle.com
+ * The following code is a derivative work of the code from the Site Kit Plugin(https://sitekit.withgoogle.com), which is licensed under Apache License 2.0.
  */
 
 namespace RankMath\Analytics;
@@ -61,9 +59,6 @@ class GTag {
 	 * The Constructor
 	 */
 	public function __construct() {
-		$this->action( 'wp_head', 'print_tracking_opt_out', 0 ); // For non-AMP and AMP.
-		$this->action( 'web_stories_story_head', 'print_tracking_opt_out', 0 ); // For Web Stories plugin.
-
 		$this->action( 'template_redirect', 'add_analytics_tag' );
 	}
 
@@ -207,27 +202,6 @@ class GTag {
 				'gtag(\'config\', \'' . esc_attr( $property_id ) . '\', ' . wp_json_encode( $gtag_opt ) . ' );'
 			);
 		}
-	}
-
-	/**
-	 * Print the user tracking opt-out code
-	 *
-	 * This script opts out of all Google Analytics tracking, for all measurement IDs, regardless of implementation.
-	 *
-	 * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/user-opt-out
-	 */
-	public function print_tracking_opt_out() {
-		if ( ! $this->is_tracking_disabled() ) {
-			return;
-		}
-
-		if ( $this->is_amp() ) :
-			?>
-		<script type="application/ld+json" id="__gaOptOutExtension"></script>
-		<?php else : ?>
-		<script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script>
-			<?php
-		endif;
 	}
 
 	/**

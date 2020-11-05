@@ -2,10 +2,10 @@
 Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, sitemap, google search console, schema, redirection
-Tested up to: 5.5.1
+Tested up to: 5.5.3
 Requires at least: 5.2
 Requires PHP: 7.0
-Stable tag: 1.0.49
+Stable tag: 1.0.51
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -475,25 +475,15 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.49 [Oct 10, 2020] =
-* Added: [NEW!] [HUGE!] Introducing the revamped [Analytics module](https://rankmath.com/kb/search-console/)! Now you can track your site's SEO performance from one place. Preview [https://i.rankmath.com/mk2pTt](https://i.rankmath.com/mk2pTt)
-* Added: [NEW!] [HUGE!] Google Analytics integration! Install Google Analytics code with a click of a button and track your unique visitors for every post/page of your website inside WordPress
-* Added: Automatically verify, add and configure your website for Google Search Console without leaving WordPress
-* Added: Automatically verify, add and configure your website for Google Analytics without leaving WordPress
-* Added: An option to exclude logged-in users from Google Analytics tracking
-* Added: Rank Math can automatically add [Sitemaps](https://rankmath.com/kb/configure-sitemaps/) into the Google Search Console. No more worrying about adding the Sitemaps manually inside Google Search Console
-* Added: New Analytics page shows your website's overall [SEO scores](https://rankmath.com/kb/score-100-in-tests/) & optimization
-* Added: Keyword Position graph shows the number of keywords ranking in the top 3, 10, 50, and 100 positions that are driving traffic to your website
-* Added: Advanced graph in the Performance tab of the Analytics module that gives you an overview of overall Site Traffic, Search Impressions, Search Clicks, CTR, & Average Position of your keywords
-* Added: An option to select the timeframe for your Analytics stats. Choose between past 7, 15, 30, or 90 days
-* Improved: "SEO Score: Bad" post-filter now shows only the posts that have a Focus keyword added to them
-* Fixed: [Auto-update](https://rankmath.com/kb/version-control/#auto-update) cannot be enabled from the plugins admin page
-* Fixed: Empty `itemList` element in the [Breadcrumbs Schema](https://rankmath.com/kb/general-settings/#bread-crumbs) for the blog page when show homepage link option was enabled in the settings
-* Fixed: An `Invalid object type` error for the "publisher" field if the [Local SEO](https://rankmath.com/kb/titles-and-meta/#local-seo) module was disabled
-* Fixed: A PHP notice appearing on some installations while saving category or a tag page
-* Fixed: `Save All` button in the bulk edit was showing a `400 Bad request` error if there were no changes in any of the posts
-* Fixed: Enable/Disable `Author Archive` toggle was not working as expected
-
-Note: We do not store or process any data on our servers. Your website's database will be used for storing and processing the data. You can read the plugin's usage policy [here](https://rankmath.com/usage-tracking/)
+= 1.0.51 [Nov 02, 2020] =
+* Improved: Dashboard widget completely revamped. Better stats are shown in the Rank Math widget ([https://i.rankmath.com/ZwPDM6](https://i.rankmath.com/ZwPDM6))
+* Improved: Responsiveness of the Analytics pages. Now you can check your website stats on the mobile devices
+* Improved: Replaced all the `textarea` fields in the Schema templates with the `input` field
+* Improved: Changed 'Open Days' field from `multiselect` to `checkbox` in the Restaurant Schema to improve the usability
+* Fixed: Default Article Schema type was not added in the old posts on some installations
+* Updated: Improved the comments on the files where the code was adapted from Yoast, as suggested by Joost de Valk
+* Fixed: `rank_math_rich_snippet` Shortcode was not working with all the Schema types
+* Fixed: Missing Logo Field error on the AMP pages when the Local SEO Module was disabled
+* Fixed: Styling issues related to Gutenberg v9.2.2
 
 Full changelog can be found here - **[Rank Math SEO changelog](https://rankmath.com/changelog/?utm_source=LP&utm_campaign=WP)**
