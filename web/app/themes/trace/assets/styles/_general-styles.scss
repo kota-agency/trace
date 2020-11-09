@@ -259,6 +259,13 @@ a:focus {
         max-width: 600px;
         margin: 0 auto 40px;
     }
+
+    &.theme-secondary {
+        a:not(.btn):focus,
+        a:not(.btn):hover {
+            color: $color-quaternary;
+        }
+    }
 }
 
 .site-outer {
