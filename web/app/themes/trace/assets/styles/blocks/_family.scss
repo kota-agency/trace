@@ -37,6 +37,74 @@
             width: 100%;
             height: 100%;
             opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            // &:nth-of-type(1) {
+            //     transform: rotate(2deg);
+            // }
+
+            // &:nth-of-type(2) {
+            //     height: 85%;
+            //     top: -10%;
+            //     margin: auto;
+            //     right: 0;
+            //     transform: rotate(-2deg);
+            // }
+
+            // &:nth-of-type(3) {
+            //     width: 90%;
+            //     left: 5%;
+            //     margin: auto;
+            // }
+
+            // &:nth-of-type(4) {
+            //     height: 110%;
+            //     top: -20%;
+            //     right: 0;
+            //     margin: auto;
+            //     transform: rotate(2deg);
+            // }
+
+            // &:nth-of-type(5) {
+            //     width: 110%;
+            //     left: -5%;
+            //     right: 0;
+            //     margin: auto;
+            //     transform: rotate(3deg);
+            // }
+
+            // &:nth-of-type(6) {
+            //     width: 120%;
+            //     left: -10%;
+            //     height: 90%;
+            //     top: 5%;
+            //     right: 0;
+            //     margin: auto;
+            //     transform: rotate(5deg);
+            // }
+
+            // &:nth-of-type(7) {
+            //     height: 110%;
+            //     left: 0%;
+            //     top: -5%;
+            //     right: 0;
+            //     margin: auto;
+            // }
+
+            // &:nth-of-type(8) {
+            //     width: 90%;
+            //     right: 0;
+            //     margin: auto;
+            // }
+
+            // &:nth-of-type(9) {
+            //     height: 80%;
+            //     top: -10%;
+            //     margin: auto;
+            //     right: 0;
+            // }
         }
     }
 
