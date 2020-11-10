@@ -219,7 +219,7 @@ $logos3 = get_field('family_logos');
                 <path class="st0" id="path-anim-1" d="M698.9,0.7c0,0-698.5-11.5-698.4,250.3c0.1,248.2,698.4,248.6,698.4,248.6s696.5,15.6,696-248.6
                 C1394.3-16.8,698.9,0.7,698.9,0.7z"/>
             </svg>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            <!-- <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 1395.4 500.3" xml:space="preserve">
                 <path class="st0" id="path-anim-2" d="M698.9,0.7c0,0-698.5-11.5-698.4,250.3c0.1,248.2,698.4,248.6,698.4,248.6s696.5,15.6,696-248.6
                 C1394.3-16.8,698.9,0.7,698.9,0.7z"/>
@@ -258,7 +258,7 @@ $logos3 = get_field('family_logos');
                 viewBox="0 0 1395.4 500.3" xml:space="preserve">
                 <path class="st0" id="path-anim-9" d="M698.9,0.7c0,0-698.5-11.5-698.4,250.3c0.1,248.2,698.4,248.6,698.4,248.6s696.5,15.6,696-248.6
                 C1394.3-16.8,698.9,0.7,698.9,0.7z"/>
-            </svg>
+            </svg> -->
            <!-- <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                  viewBox="0 0 1395.4 500.3" style="enable-background:new 0 0 1395.4 500.3;" xml:space="preserve">
                 <path id="path-anim-2" d="M710,18.6c0,0-687.4-11.1-687.3,241.3C22.8,499.2,710,499.6,710,499.6s685.4,15,684.9-239.7

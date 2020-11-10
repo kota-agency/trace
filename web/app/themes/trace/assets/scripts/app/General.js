@@ -32,7 +32,7 @@ function General() {
     const logoEight = document.querySelector('.family__logo8');
 
     const tl = gsap.timeline({defaults: { ease: "none" }})
-    console.log("here");
+
     if (logoZero) {
         tl.to(logoZero, {
             duration: duration, 
@@ -56,8 +56,8 @@ function General() {
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-2',
-              align: '#path-anim-2',
+              path: '#path-anim-1',
+              align: '#path-anim-1',
               alignOrigin: [0.5, 0.5],
               start: (startPoint*logoOne.dataset.logoIndex),
               end: 1 + (startPoint*logoOne.dataset.logoIndex),
@@ -72,8 +72,8 @@ function General() {
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-3',
-              align: '#path-anim-3',
+              path: '#path-anim-1',
+              align: '#path-anim-1',
               alignOrigin: [0.5, 0.5],
               start: (startPoint*logoTwo.dataset.logoIndex),
               end: 1 + (startPoint*logoTwo.dataset.logoIndex),
@@ -88,8 +88,8 @@ function General() {
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-4',
-              align: '#path-anim-4',
+              path: '#path-anim-1',
+              align: '#path-anim-1',
               alignOrigin: [0.5, 0.5],
               start: (startPoint*logoThree.dataset.logoIndex),
               end: 1 + (startPoint*logoThree.dataset.logoIndex),
@@ -104,8 +104,8 @@ function General() {
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-5',
-              align: '#path-anim-5',
+              path: '#path-anim-1',
+              align: '#path-anim-1',
               alignOrigin: [0.5, 0.5],
               start: (startPoint*logoFour.dataset.logoIndex),
               end: 1 + (startPoint*logoFour.dataset.logoIndex),
@@ -120,8 +120,8 @@ function General() {
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-6',
-              align: '#path-anim-6',
+              path: '#path-anim-1',
+              align: '#path-anim-1',
               alignOrigin: [0.5, 0.5],
               start: (startPoint*logoFive.dataset.logoIndex),
               end: 1 + (startPoint*logoFive.dataset.logoIndex),
@@ -136,8 +136,8 @@ function General() {
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-7',
-              align: '#path-anim-7',
+              path: '#path-anim-1',
+              align: '#path-anim-1',
               alignOrigin: [0.5, 0.5],
               start: 0 + (startPoint*logoSix.dataset.logoIndex),
               end: 1 + (startPoint*logoSix.dataset.logoIndex),
@@ -152,8 +152,8 @@ function General() {
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-8',
-              align: '#path-anim-8',
+              path: '#path-anim-1',
+              align: '#path-anim-1',
               alignOrigin: [0.5, 0.5],
               start: (startPoint*logoSeven.dataset.logoIndex),
               end: 1 + (startPoint*logoSeven.dataset.logoIndex),
@@ -169,8 +169,8 @@ function General() {
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-9',
-              align: '#path-anim-9',
+              path: '#path-anim-1',
+              align: '#path-anim-1',
               alignOrigin: [0.5, 0.5],
               start: (startPoint*logoEight.dataset.logoIndex),
               end: 1 + (startPoint*logoEight.dataset.logoIndex),
