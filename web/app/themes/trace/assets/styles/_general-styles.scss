@@ -261,9 +261,12 @@ a:focus {
     }
 
     &.theme-secondary {
-        a:not(.btn):focus,
-        a:not(.btn):hover {
+        a:not(.btn) {
             color: $color-quaternary;
+
+            &:hover {
+                color: $color-quaternary;
+            }
         }
     }
 }
