@@ -399,9 +399,6 @@ class Core extends Stats {
 			'ajax_error'              => esc_html__( 'Ajax Error', 'wp-smushit' ),
 			'all_done'                => esc_html__( 'All Done!', 'wp-smushit' ),
 			'sync_stats'              => esc_html__( 'Give us a moment while we sync the stats.', 'wp-smushit' ),
-			// Button text.
-			'resmush_check'           => esc_html__( 'RE-CHECK IMAGES', 'wp-smushit' ),
-			'resmush_complete'        => esc_html__( 'CHECK COMPLETE', 'wp-smushit' ),
 			// Progress bar text.
 			'progress_smushed'        => esc_html__( 'images optimized', 'wp-smushit' ),
 			'directory_url'           => network_admin_url( 'admin.php?page=smush&view=directory' ),
@@ -502,6 +499,12 @@ class Core extends Stats {
 	 */
 	public static function check_bulk_limit( $reset = false, $key = 'bulk_sent_count' ) {
 		$transient_name = WP_SMUSH_PREFIX . $key;
+
+		// If we JUST need to reset the transient.
+		if ( $reset ) {
+			set_transient( $transient_name, 0, 60 );
+			return;
+		}
 
 		$bulk_sent_count = (int) get_transient( $transient_name );
 

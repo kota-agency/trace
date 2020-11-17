@@ -49,10 +49,11 @@ if ( ! defined( 'WPINC' ) ) {
 				<p>
 					<?php
 					printf(
-					/* translators: %1$s: a tag start, %2$s: closing a tag */
-						esc_html__( '%1$sUpgrade to pro%2$s to bulk smush all your directory images with one click. Free users can smush 50 images with each click.', 'wp-smushit' ),
+					/* translators: %1$s: a tag start, %2$s: closing a tag, %3$d: free image limit */
+						esc_html__( '%1$sUpgrade to pro%2$s to bulk smush all your directory images with one click. Free users can smush %3$d images with each click.', 'wp-smushit' ),
 						'<a href="' . esc_url( $upgrade_url ) . '" target="_blank" title="' . esc_html__( 'Smush Pro', 'wp-smushit' ) . '">',
-						'</a>'
+						'</a>',
+						absint( \Smush\Core\Core::$max_free_bulk )
 					);
 					?>
 				</p>

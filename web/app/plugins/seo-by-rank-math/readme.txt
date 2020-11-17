@@ -5,7 +5,7 @@ Tags: seo, sitemap, google search console, schema, redirection
 Tested up to: 5.5.3
 Requires at least: 5.2
 Requires PHP: 7.0
-Stable tag: 1.0.51
+Stable tag: 1.0.52.2
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -475,15 +475,10 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.51 [Nov 02, 2020] =
-* Improved: Dashboard widget completely revamped. Better stats are shown in the Rank Math widget ([https://i.rankmath.com/ZwPDM6](https://i.rankmath.com/ZwPDM6))
-* Improved: Responsiveness of the Analytics pages. Now you can check your website stats on the mobile devices
-* Improved: Replaced all the `textarea` fields in the Schema templates with the `input` field
-* Improved: Changed 'Open Days' field from `multiselect` to `checkbox` in the Restaurant Schema to improve the usability
-* Fixed: Default Article Schema type was not added in the old posts on some installations
-* Updated: Improved the comments on the files where the code was adapted from Yoast, as suggested by Joost de Valk
-* Fixed: `rank_math_rich_snippet` Shortcode was not working with all the Schema types
-* Fixed: Missing Logo Field error on the AMP pages when the Local SEO Module was disabled
-* Fixed: Styling issues related to Gutenberg v9.2.2
+= 1.0.52.2 [Nov 13, 2020] =
+* Improved: Schema tab styling in the [Elementor Editor](https://rankmath.com/blog/elementor-seo/)
+* Fixed: uBlock & some other Ad Blocking browser extensions were falsely blocking Analytics page-related scripts
+* Fixed: Styling of the graph filters in the [Analytics page](https://rankmath.com/kb/analytics/) was breaking due to unnecessary CSS files loading from WooCommerce and AutomateWoo plugins
+* Fixed: [Rank Math Tools](https://rankmath.com/kb/rank-math-status-and-tools/) were not showing the notice after using them
 
 Full changelog can be found here - **[Rank Math SEO changelog](https://rankmath.com/changelog/?utm_source=LP&utm_campaign=WP)**

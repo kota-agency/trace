@@ -11,6 +11,7 @@
 namespace RankMath\Analytics;
 
 use RankMath\Helper;
+use RankMath\Google\Api;
 use MyThemeShop\Helpers\Str;
 use MyThemeShop\Database\Database;
 
@@ -64,6 +65,8 @@ class DB {
 
 			self::analytics()->whereBetween( 'created', [ $end, $start ] )->delete();
 		}
+
+		do_action( 'rank_math/analytics/delete_by_days', $days );
 		self::purge_cache();
 
 		return true;
@@ -78,6 +81,8 @@ class DB {
 		$start = date_i18n( 'Y-m-d H:i:s', strtotime( '-' . ( $days * 2 ) . ' days' ) );
 
 		self::analytics()->where( 'created', '<', $start )->delete();
+
+		do_action( 'rank_math/analytics/delete_data_log', $start );
 	}
 
 	/**
@@ -103,6 +108,10 @@ class DB {
 	 */
 	public static function info() {
 		global $wpdb;
+
+		if ( ! Api::get()->is_console_connected() ) {
+			return [];
+		}
 
 		$key  = 'rank_math_analytics_data_info';
 		$data = get_transient( $key );
@@ -155,7 +164,19 @@ class DB {
 	 * @return boolean
 	 */
 	public static function date_exists( $date ) {
-		$id = self::analytics()
+		$is_console   = \RankMath\Google\Console::is_console_connected();
+		$is_analytics = \RankMath\Google\Analytics::is_analytics_connected();
+
+		if ( ! $is_console && ! $is_analytics ) {
+			return true;
+		}
+
+		$id = self::analytics();
+		if ( ! $is_console && $is_analytics ) {
+			$id = self::table( 'rank_math_analytics_ga' );
+		}
+
+		$id = $id
 			->select( 'id' )
 			->where( 'created', $date )
 			->getVar();

@@ -140,23 +140,6 @@ class Dashboard extends Abstract_Page {
 		}
 
 		if ( 'bulk' === $this->get_current_tab() && $this->should_render() ) {
-			// Only display if the 'Tutorials' tab is shown (relevant in MU),
-			// the tutorials weren't dismissed, and if Dashboard's whitelabel isn't hiding the documentation.
-			if (
-				isset( $this->tabs['tutorials'] ) &&
-				! $this->settings->get_setting( WP_SMUSH_PREFIX . 'hide_tutorials_from_bulk_smush' ) &&
-				! apply_filters( 'wpmudev_branding_hide_doc_link', false )
-			) {
-				$this->add_meta_box(
-					'bulk-tutorials',
-					__( 'Tutorials', 'wp-smushit' ),
-					array( $this, 'bulk_tutorials_metabox' ),
-					null,
-					null,
-					'bulk'
-				);
-			}
-
 			if ( ! is_network_admin() ) {
 				// Show bulk smush box if a subsite admin.
 				$class = WP_Smush::is_pro() ? 'wp-smush-pro-install' : '';
@@ -169,6 +152,21 @@ class Dashboard extends Abstract_Page {
 					'bulk',
 					array(
 						'box_class' => "sui-box bulk-smush-wrapper {$class}",
+					)
+				);
+			}
+
+			// Only for the Free version and when there aren't images to smush.
+			if ( ! WP_Smush::is_pro() ) {
+				$this->add_meta_box(
+					'bulk/upgrade',
+					'',
+					null,
+					null,
+					null,
+					'bulk',
+					array(
+						'box_class' => 'sui-box sui-hidden',
 					)
 				);
 			}
@@ -332,10 +330,11 @@ class Dashboard extends Abstract_Page {
 	 * @param string $tab  Current tab.
 	 */
 	public function after_tab( $tab ) {
-		if ( 'bulk' === $tab ) {
-			$remaining = WP_Smush::get_instance()->core()->remaining_count;
-				echo '<span class="sui-tag sui-tag-warning wp-smush-remaining-count' . ( 0 < $remaining ? '' : ' sui-hidden' ) . '">' . absint( $remaining ) . '</span>';
-				echo '<i class="sui-icon-check-tick sui-success' . ( 0 < $remaining ? ' sui-hidden' : '' ) . '" aria-hidden="true"></i>';
+		// Don't display the count on the network admin for MU.
+		if ( 'bulk' === $tab && ! is_network_admin() ) {
+			$remaining = $this->get_total_images_to_smush();
+			echo '<span class="sui-tag sui-tag-warning wp-smush-remaining-count' . ( 0 < $remaining ? '' : ' sui-hidden' ) . '">' . absint( $remaining ) . '</span>';
+			echo '<i class="sui-icon-check-tick sui-success' . ( 0 < $remaining ? ' sui-hidden' : '' ) . '" aria-hidden="true"></i>';
 		} elseif ( 'cdn' === $tab ) {
 			$status = WP_Smush::get_instance()->core()->mod->cdn->status();
 			if ( 'overcap' === $status ) {
@@ -934,7 +933,7 @@ class Dashboard extends Abstract_Page {
 		// Get the counts from transient.
 		$items          = (int) get_transient( 'wp-smush-show-dir-scan-notice' );
 		$failed_items   = (int) get_transient( 'wp-smush-dir-scan-failed-items' );
-		$skipped_items  = (int) get_transient( 'wp-smush-dir-scan-skipped-items' ); //skipped because already optimized
+		$skipped_items  = (int) get_transient( 'wp-smush-dir-scan-skipped-items' ); // Skipped because already optimized.
 		$notice_message = esc_html__( 'Image compression complete.', 'wp-smushit' ) . ' ';
 		$notice_class   = 'error';
 
@@ -1050,7 +1049,7 @@ class Dashboard extends Abstract_Page {
 			array(
 				'human_format'    => empty( $human[1] ) ? 'B' : $human[1],
 				'human_size'      => empty( $human[0] ) ? '0' : $human[0],
-				'remaining'       => $core->remaining_count,
+				'remaining'       => $this->get_total_images_to_smush(),
 				'resize_count'    => ! $resize_count ? 0 : $resize_count,
 				'resize_enabled'  => (bool) $this->settings->get( 'resize' ),
 				'resize_savings'  => $resize_savings,
@@ -1058,15 +1057,6 @@ class Dashboard extends Abstract_Page {
 				'total_optimized' => $core->stats['total_images'],
 			)
 		);
-	}
-
-	/**
-	 * Tutorials slider under Bulk Smush section metabox.
-	 *
-	 * @since 3.7.1
-	 */
-	public function bulk_tutorials_metabox() {
-		$this->view( 'bulk-tutorials/meta-box' );
 	}
 
 	/**
@@ -1078,28 +1068,28 @@ class Dashboard extends Abstract_Page {
 	protected function get_tutorials_data() {
 		return array(
 			array(
-				'title'                => __( 'How to Get the Most Out of Smush Image Optimization', 'wp-smushit' ),
-				'content'              => __( 'Set your site up for maximum success. Learn how to get the most out of Smush and streamline your images for peak site performance.', 'wp-smushit' ),
-				'thumbnail_full'       => 'tutorial-1-thumbnail.png',
-				'thumbnail_full_2x'    => 'tutorial-1-thumbnail@2x.png',
-				'url'                  => 'https://premium.wpmudev.org/blog/how-to-get-the-most-out-of-smush/',
-				'read_time'            => 5,
+				'title'             => __( 'How to Get the Most Out of Smush Image Optimization', 'wp-smushit' ),
+				'content'           => __( 'Set your site up for maximum success. Learn how to get the most out of Smush and streamline your images for peak site performance.', 'wp-smushit' ),
+				'thumbnail_full'    => 'tutorial-1-thumbnail.png',
+				'thumbnail_full_2x' => 'tutorial-1-thumbnail@2x.png',
+				'url'               => 'https://premium.wpmudev.org/blog/how-to-get-the-most-out-of-smush/',
+				'read_time'         => 5,
 			),
 			array(
-				'title'                => __( "How To Ace Google's Image Page Speed Recommendations", 'wp-smushit' ),
-				'content'              => __( "See how toggling specific Smush settings can easily help you resolve all 4 of Google's 'image-related' page speed recommendations.", 'wp-smushit' ),
-				'thumbnail_full'       => 'tutorial-2-thumbnail.png',
-				'thumbnail_full_2x'    => 'tutorial-2-thumbnail@2x.png',
-				'url'                  => 'https://premium.wpmudev.org/blog/smush-pagespeed-image-compression/',
-				'read_time'            => 6,
+				'title'             => __( "How To Ace Google's Image Page Speed Recommendations", 'wp-smushit' ),
+				'content'           => __( "See how toggling specific Smush settings can easily help you resolve all 4 of Google's 'image-related' page speed recommendations.", 'wp-smushit' ),
+				'thumbnail_full'    => 'tutorial-2-thumbnail.png',
+				'thumbnail_full_2x' => 'tutorial-2-thumbnail@2x.png',
+				'url'               => 'https://premium.wpmudev.org/blog/smush-pagespeed-image-compression/',
+				'read_time'         => 6,
 			),
 			array(
-				'title'                => __( 'How To Bulk Optimize Images With Smush', 'wp-smushit' ),
-				'content'              => __( 'Skip the hassle of compressing all your images manually. Learn how Smush can easily help you do it in bulk.', 'wp-smushit' ),
-				'thumbnail_full'       => 'tutorial-3-thumbnail.png',
-				'thumbnail_full_2x'    => 'tutorial-3-thumbnail@2x.png',
-				'url'                  => 'https://premium.wpmudev.org/blog/smush-bulk-optimize-images/',
-				'read_time'            => 6,
+				'title'             => __( 'How To Bulk Optimize Images With Smush', 'wp-smushit' ),
+				'content'           => __( 'Skip the hassle of compressing all your images manually. Learn how Smush can easily help you do it in bulk.', 'wp-smushit' ),
+				'thumbnail_full'    => 'tutorial-3-thumbnail.png',
+				'thumbnail_full_2x' => 'tutorial-3-thumbnail@2x.png',
+				'url'               => 'https://premium.wpmudev.org/blog/smush-bulk-optimize-images/',
+				'read_time'         => 6,
 			),
 		);
 	}
@@ -1113,29 +1103,28 @@ class Dashboard extends Abstract_Page {
 	public function bulk_smush_metabox() {
 		$core = WP_Smush::get_instance()->core();
 
+		$total_images_to_smush = $this->get_total_images_to_smush();
+
+		// This is the same calculation used for $core->remaining_count,
+		// except that we don't add the re-smushed count here.
+		$unsmushed_count = $core->total_count - $core->smushed_count - $core->skipped_count;
+
 		$upgrade_url = add_query_arg(
 			array(
 				'utm_source'   => 'smush',
 				'utm_medium'   => 'plugin',
-				'utm_campaign' => 'smush_stats_enable_lossy',
+				'utm_campaign' => 'smush_bulksmush_completed_pagespeed_upgradetopro',
 			),
 			$this->upgrade_url
 		);
 
 		$bulk_upgrade_url = add_query_arg(
 			array(
+				'coupon'       => 'SMUSH30OFF',
+				'checkout'     => 0,
 				'utm_source'   => 'smush',
 				'utm_medium'   => 'plugin',
-				'utm_campaign' => 'smush_bulksmush_limit_notice',
-			),
-			$this->upgrade_url
-		);
-
-		$pro_upgrade_url = add_query_arg(
-			array(
-				'utm_source'   => 'smush',
-				'utm_medium'   => 'plugin',
-				'utm_campaign' => 'smush_bulksmush_upsell_notice',
+				'utm_campaign' => Core::$max_free_bulk < $total_images_to_smush ? 'smush_bulksmush_morethan50images_tryproforfree' : 'smush_bulksmush_lessthan50images_tryproforfree',
 			),
 			$this->upgrade_url
 		);
@@ -1143,14 +1132,15 @@ class Dashboard extends Abstract_Page {
 		$this->view(
 			'bulk/meta-box',
 			array(
-				'all_done'         => absint( $core->smushed_count ) + absint( $core->skipped_count ) === absint( $core->total_count ) && empty( $core->resmush_ids ),
-				'bulk_upgrade_url' => $bulk_upgrade_url,
-				'core'             => $core,
-				'hide_pagespeed'   => get_site_option( WP_SMUSH_PREFIX . 'hide_pagespeed_suggestion' ),
-				'is_pro'           => WP_Smush::is_pro(),
-				'lossy_enabled'    => WP_Smush::is_pro() && $this->settings->get( 'lossy' ),
-				'pro_upgrade_url'  => $pro_upgrade_url,
-				'upgrade_url'      => $upgrade_url,
+				'core'                  => $core,
+				'hide_pagespeed'        => get_site_option( WP_SMUSH_PREFIX . 'hide_pagespeed_suggestion' ),
+				'is_pro'                => WP_Smush::is_pro(),
+				'lossy_enabled'         => WP_Smush::is_pro() && $this->settings->get( 'lossy' ),
+				'unsmushed_count'       => $unsmushed_count > 0 ? $unsmushed_count : 0,
+				'resmush_count'         => count( get_option( 'wp-smush-resmush-list', array() ) ),
+				'total_images_to_smush' => $total_images_to_smush,
+				'upgrade_url'           => $upgrade_url,
+				'bulk_upgrade_url'      => $bulk_upgrade_url,
 			)
 		);
 	}
@@ -1498,6 +1488,29 @@ class Dashboard extends Abstract_Page {
 				'backups_count'    => WP_Smush::get_instance()->core()->mod->backup->get_attachments_with_backups(),
 			)
 		);
+	}
+
+	/**
+	 * Calculates the total images to be smushed.
+	 * This is all unsmushed images + all images to re-smush.
+	 *
+	 * We're not using $core->remaining_count because it excludes the resmush count
+	 * when the amount of unsmushed images and amount of images to re-smush are the same.
+	 * So, if you have 2 images to re-smush and 2 unsmushed images, it'll return 2 and no 4.
+	 * We might need to check that there, it's used everywhere so we must be careful. Using this in the meantime.
+	 *
+	 * @since 3.7.2
+	 *
+	 * @return integer
+	 */
+	protected function get_total_images_to_smush() {
+		$images_to_resmush = count( get_option( 'wp-smush-resmush-list', array() ) );
+
+		// This is the same calculation used for $core->remaining_count,
+		// except that we don't add the re-smushed count here.
+		$unsmushed_count = WP_Smush::get_instance()->core()->total_count - WP_Smush::get_instance()->core()->smushed_count - WP_Smush::get_instance()->core()->skipped_count;
+
+		return $images_to_resmush + $unsmushed_count;
 	}
 
 }

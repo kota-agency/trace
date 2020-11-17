@@ -285,6 +285,8 @@ class Backup extends Abstract_Module {
 			// Remove the transient.
 			delete_option( "wp-smush-restore-$attachment_id" );
 
+			\Smush\Core\Core::remove_from_smushed_list( $attachment_id );
+
 			if ( ! $resp ) {
 				return true;
 			}

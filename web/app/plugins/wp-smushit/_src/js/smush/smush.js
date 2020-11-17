@@ -663,6 +663,12 @@ class Smush {
 		document
 			.getElementById( 'bulk-smush-resume-button' )
 			.classList.remove( 'sui-hidden' );
+
+		if (document.getElementById('smush-box-bulk-upgrade')) {
+			document
+				.getElementById('smush-box-bulk-upgrade')
+				.classList.remove('sui-hidden');
+		}
 	}
 
 	/**

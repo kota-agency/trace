@@ -935,6 +935,7 @@ class Smush extends Abstract_Module {
 		}
 
 		$this->update_resmush_list( $attachment_id );
+		\Smush\Core\Core::add_to_smushed_list( $attachment_id );
 		if ( $return ) {
 			return $status;
 		}
