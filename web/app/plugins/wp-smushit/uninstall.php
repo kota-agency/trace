@@ -54,6 +54,7 @@ $smushit_keys = array(
 	'show_upgrade_modal',
 	// This could have been set in 3.7.1. The UI that set this was removed in 3.7.2.
 	'hide_tutorials_from_bulk_smush',
+	'hide_blackfriday_modal',
 );
 
 $db_keys = array(

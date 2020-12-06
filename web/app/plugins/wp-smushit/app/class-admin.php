@@ -182,7 +182,7 @@ class Admin {
 		if ( ! WP_Smush::is_pro() ) {
 			$upgrade_url = add_query_arg(
 				array(
-					'coupon'       => 'SMUSH30OFF',
+					'coupon'       => 'BF2020SMUSH',
 					'checkout'     => 0,
 					'utm_source'   => 'smush',
 					'utm_medium'   => 'plugin',
@@ -192,7 +192,7 @@ class Admin {
 			);
 
 			$label = 'wp-smush-pro/wp-smush.php' !== WP_SMUSH_BASENAME ? __( 'Upgrade to Smush Pro', 'wp-smushit' ) : __( 'Renew Membership', 'wp-smushit' );
-			$text  = 'wp-smush-pro/wp-smush.php' !== WP_SMUSH_BASENAME ? __( 'Upgrade *New Pricing*', 'wp-smushit' ) : __( 'Renew Membership', 'wp-smushit' );
+			$text  = 'wp-smush-pro/wp-smush.php' !== WP_SMUSH_BASENAME ? __( 'Upgrade *60% OFF Sale*', 'wp-smushit' ) : __( 'Renew Membership', 'wp-smushit' );
 
 			$links['upgrade'] = '<a href="' . esc_url( $upgrade_url ) . '" aria-label="' . esc_attr( $label ) . '" target="_blank" style="color: #8D00B1;">' . $text . '</a>';
 		}

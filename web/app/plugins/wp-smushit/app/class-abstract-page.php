@@ -179,57 +179,121 @@ abstract class Abstract_Page {
 			return;
 		}
 
-		$core = WP_Smush::get_instance()->core();
-
-		$install_type = get_site_option( 'wp-smush-install-type', false );
-
-		if ( ! $install_type ) {
-			$install_type = $core->smushed_count > 0 ? 'existing' : 'new';
-			update_site_option( 'wp-smush-install-type', $install_type );
-		}
-
-		// Prepare notice.
-		if ( 'new' === $install_type ) {
-			/* translators: 1. opening 'strong' tag, 2. closing 'strong' tag. */
-			$message = __( 'Thanks for installing Smush! %1$sGet a free trial + 30%% OFF%2$s Smush Pro for a limited time - an exclusive welcome discount for free version users! Grab it while it lasts.', 'wp-smushit' );
-		} else {
-			/* translators: 1. opening 'strong' tag, 2. closing 'strong' tag. */
-			$message = __( 'Thanks for updating Smush! %1$sGet 30%% OFF Smush Pro + Free Trial%2$s - Did you know we now offer Smush Pro only plans? With a limited time intro discount! Grab it while it lasts.', 'wp-smushit' );
-		}
-
 		$upgrade_url = add_query_arg(
 			array(
-				'coupon'       => 'SMUSH30OFF',
+				'coupon'       => 'BF2020SMUSH',
 				'checkout'     => 0,
 				'utm_source'   => 'smush',
 				'utm_medium'   => 'plugin',
-				'utm_campaign' => 'smush_dashboard_upgrade_notice',
+				'utm_campaign' => 'smush_bf2020banner',
 			),
 			$this->upgrade_url
 		);
+
+		$deadline_date = date_create( '2020-11-28T00:00:00', new \DateTimeZone( '-0400' ) );
+		$current_date  = date_create( date( 'Y-m-d H:i:s' ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+		$time_left     = $deadline_date > $current_date
+			? $deadline_date->diff( $current_date )
+			: false;
+
+		// Yes, the amount of markup here deserves its own file. This will be removed in 3.8.1.
 		?>
-		<div class="notice smush-notice" style="display: none;">
-			<div class="smush-notice-logo">
-				<img
-					src="<?php echo esc_url( WP_SMUSH_URL . 'app/assets/images/incsub-logo.png' ); ?>"
-					srcset="<?php echo esc_url( WP_SMUSH_URL . 'app/assets/images/incsub-logo@2x.png' ); ?> 2x"
-					alt="<?php esc_html_e( 'Smush CDN', 'wp-smushit' ); ?>"
-				>
+
+		<div id="smush-black-notice-content" class="smush-notice">
+
+			<div class="sui-wrap">
+
+				<div class="smush-black-notice-header">
+
+					<span class="smush-black-ribbon"><?php esc_html_e( '60% OFF', 'wp-smushit' ); ?></span>
+
+					<h3 class="smush-black-title"><?php esc_html_e( 'Black Friday 60% OFF Smush Pro!', 'wp-smushit' ); ?></h3>
+
+					<?php if ( ! empty( $time_left ) ) : ?>
+						<div class="smush-black-timer-container">
+
+							<p class="smush-black-timer-slogan"><?php esc_html_e( 'Limited Black Friday offer!', 'wp-smushit' ); ?></p>
+
+							<div class="smush-black-timer">
+
+								<div class="smush-black-time">
+
+									<p><?php esc_html_e( 'Days', 'wp-smushit' ); ?></p>
+
+									<?php $this->print_black_friday_countdown_number( $time_left->d ); ?>
+
+								</div>
+
+								<span class="smush-black-timer-dots" aria-hidden="true"></span>
+
+								<div class="smush-black-time">
+
+									<p><?php esc_html_e( 'Hours', 'wp-smushit' ); ?></p>
+
+									<?php $this->print_black_friday_countdown_number( $time_left->h ); ?>
+
+								</div>
+
+								<span class="smush-black-timer-dots" aria-hidden="true"></span>
+
+								<div class="smush-black-time">
+
+									<p><?php esc_html_e( 'Minutes', 'wp-smushit' ); ?></p>
+
+									<?php $this->print_black_friday_countdown_number( $time_left->i ); ?>
+
+								</div>
+
+							</div>
+
+						</div>
+					<?php endif; ?>
+
+				</div>
+
+				<div class="smush-black-notice-body">
+
+					<div class="smush-black-notice-content">
+
+						<p><?php esc_html_e( 'Get Smush Pro for the lowest price you will ever see and solve more image related PageSpeed recommendations!', 'wp-smushit' ); ?></p>
+
+						<p class="smush-black-notice-statement"><?php esc_html_e( '*Only admin users can see this message', 'wp-smushit' ); ?></p>
+
+					</div>
+
+					<a href="<?php echo esc_url( $upgrade_url ); ?>" class="sui-button sui-button-blue" target="_blank">
+						<?php esc_html_e( 'Get 60 % OFF Smush Pro', 'wp-smushit' ); ?>
+					</a>
+
+					<button class="smush-black-notice-dismiss smush-notice-dismiss">
+						<?php esc_html_e( 'Dismiss', 'wp-smushit' ); ?>
+					</button>
+
+				</div>
+
 			</div>
-			<div class="smush-notice-message<?php echo 'new' === $install_type ? ' wp-smush-fresh' : ' wp-smush-existing'; ?>">
-				<?php printf( esc_html( $message ), '<strong>', '</strong>' ); ?>
-				<br/><span class="smush-notice-only-admins"><?php esc_html_e( '*Only admin users can see this message', 'wp-smushit' ); ?></span>
-			</div>
-			<div class="smush-notice-cta">
-				<a href="<?php echo esc_url( $upgrade_url ); ?>" class="smush-notice-act button-primary" target="_blank">
-					<?php esc_html_e( 'Try Smush Pro Free', 'wp-smushit' ); ?>
-				</a>
-				<button class="smush-notice-dismiss smush-dismiss-welcome" data-msg="<?php esc_html_e( 'Saving', 'wp-smushit' ); ?>">
-					<?php esc_html_e( 'Dismiss', 'wp-smushit' ); ?>
-				</button>
-			</div>
+
 		</div>
 		<?php
+	}
+
+	/**
+	 * Prints the markup for the countdown numbers.
+	 *
+	 * @since 3.7.3
+	 *
+	 * @param int $number Number to print in the markup.
+	 */
+	private function print_black_friday_countdown_number( $number ) {
+		if ( $number < 10 ) {
+			$first  = 0;
+			$second = $number;
+		} else {
+			$second = $number % 10;
+			$first  = ( $number - $second ) / 10;
+		}
+
+		printf( '<div><span>%s</span><span>%s</span></div>', (int) $first, (int) $second );
 	}
 
 	/**
@@ -436,58 +500,13 @@ abstract class Abstract_Page {
 			$this->view( 'checking-files', array(), 'modals' );
 		}
 
-		// Show new pricing modal when it wasn't dismissed and it's free.
-		if ( get_site_option( WP_SMUSH_PREFIX . 'show_upgrade_modal' ) && ! WP_Smush::is_pro() ) {
+		// TODO: re-introduce the upgrade modal (show_upgrade_modal) in 3.8.0.
 
-			// Display only on single installs and on Network admin for multisites.
-			if ( ( ! is_multisite() && $hide_quick_setup ) || ( is_multisite() && is_network_admin() ) ) {
-				$yearly_url = add_query_arg(
-					array(
-						'coupon'       => 'SMUSH30OFF',
-						'checkout'     => 0,
-						'utm_source'   => 'smush',
-						'utm_medium'   => 'plugin',
-						'utm_campaign' => 'smush_pricingmodal_yearly',
-					),
-					$this->upgrade_url
-				);
-
-				$monthly_url = add_query_arg(
-					array(
-						'coupon'       => 'SMUSH30OFF',
-						'checkout'     => 0,
-						'utm_source'   => 'smush',
-						'utm_medium'   => 'plugin',
-						'utm_campaign' => 'smush_pricingmodal_monthly',
-					),
-					$this->upgrade_url
-				);
-
-				$main_cta_url = add_query_arg(
-					array(
-						'coupon'       => 'SMUSH30OFF',
-						'checkout'     => 0,
-						'utm_source'   => 'smush',
-						'utm_medium'   => 'plugin',
-						'utm_campaign' => 'smush_pricingmodal_checkallplansbutton',
-					),
-					$this->upgrade_url
-				);
-
-				$template_args = array(
-					'yearly_url'   => $yearly_url . '#yearly',
-					'monthly_url'  => $monthly_url . '#monthly',
-					'main_cta_url' => $main_cta_url,
-				);
-
-				$this->view( 'updated', $template_args, 'modals' );
-				?>
-				<script>
-					window.addEventListener("load", function(){
-						window.SUI.openModal( 'smush-updated-dialog', 'wpbody-content', undefined, false );
-					});
-				</script>
-				<?php
+		// Show the black friday modal when it wasn't dismissed, smush is free, and the quick setup isn't shown.
+		if ( ! get_site_option( WP_SMUSH_PREFIX . 'hide_blackfriday_modal' ) && ! WP_Smush::is_pro() && $hide_quick_setup ) {
+			// Show only to admins.
+			if ( current_user_can( 'edit_others_posts' ) && is_super_admin() ) {
+				$this->view( 'black-friday-sale', array(), 'modals' );
 			}
 		}
 	}

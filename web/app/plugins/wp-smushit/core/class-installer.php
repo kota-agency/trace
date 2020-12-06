@@ -102,11 +102,9 @@ class Installer {
 				self::upgrade_3_7_0();
 			}
 
-			if ( version_compare( $version, '3.7.2', '<' ) ) {
-				// Add the flag to display the release highlights modal.
-				add_site_option( WP_SMUSH_PREFIX . 'show_upgrade_modal', true );
-				// And show the upgrade notice.
-				delete_site_option( WP_SMUSH_PREFIX . 'hide_smush_welcome' );
+			if ( version_compare( $version, '3.7.3', '<' ) ) {
+				// Show the upgrade notice.
+				delete_site_option( WP_SMUSH_PREFIX . 'hide_upgrade_notice' );
 			}
 
 			// Create/upgrade directory smush table.

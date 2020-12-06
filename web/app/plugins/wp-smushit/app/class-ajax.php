@@ -119,8 +119,12 @@ class Ajax {
 		 */
 		add_action( 'wp_ajax_recheck_api_status', array( $this, 'recheck_api_status' ) );
 
+		/**
+		 * MODALS
+		 */
 		// Hide the new features modal.
 		add_action( 'wp_ajax_hide_new_features', array( $this, 'hide_new_features_modal' ) );
+		add_action( 'wp_ajax_smush_dismiss_black_friday_modal', array( $this, 'hide_black_friday_modal' ) );
 	}
 
 	/***************************************
@@ -134,16 +138,6 @@ class Ajax {
 	public function skip_smush_setup() {
 		check_ajax_referer( 'smush_quick_setup' );
 		update_option( 'skip-smush-setup', true );
-		wp_send_json_success();
-	}
-
-	/**
-	 * Hide the new features modal
-	 *
-	 * @since 3.7.0
-	 */
-	public function hide_new_features_modal() {
-		delete_site_option( WP_SMUSH_PREFIX . 'show_upgrade_modal' );
 		wp_send_json_success();
 	}
 
@@ -1140,6 +1134,33 @@ class Ajax {
 	 */
 	public function recheck_api_status() {
 		WP_Smush::get_instance()->validate_install( true );
+		wp_send_json_success();
+	}
+
+	/***************************************
+	 *
+	 * MODALS
+	 *
+	 * @since 3.7.0
+	 */
+
+	/**
+	 * Hide the new features modal
+	 *
+	 * @since 3.7.0
+	 */
+	public function hide_new_features_modal() {
+		delete_site_option( WP_SMUSH_PREFIX . 'show_upgrade_modal' );
+		wp_send_json_success();
+	}
+
+	/**
+	 * Hide the Black Friday sale modal
+	 *
+	 * @since 3.7.3
+	 */
+	public function hide_black_friday_modal() {
+		update_site_option( WP_SMUSH_PREFIX . 'hide_blackfriday_modal', true );
 		wp_send_json_success();
 	}
 

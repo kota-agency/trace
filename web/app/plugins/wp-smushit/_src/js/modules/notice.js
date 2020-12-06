@@ -54,42 +54,29 @@
 		$.post( ajaxurl, { action: 'hide_api_message' } );
 	} );
 
-	let elNotice = $( '.smush-notice' );
-	const btnAct = elNotice.find( '.smush-notice-act' );
-
-	elNotice.fadeIn( 500 );
-
 	// Hide the notice after a CTA button was clicked
-	function removeNotice() {
-		elNotice.fadeTo( 100, 0, () =>
-			elNotice.slideUp( 100, () => elNotice.remove() )
+	function removeNotice(e) {
+		const $notice = $(e.currentTarget).closest('.smush-notice');
+		$notice.fadeTo(100, 0, () =>
+			$notice.slideUp(100, () => $notice.remove())
 		);
 	}
 
-	btnAct.on( 'click', () => {
-		removeNotice();
-		notifyWordpress( btnAct.data( 'msg' ) );
-	} );
+	// Only used for the Dashboard notification for now.
+	$('.smush-notice .smush-notice-act').on('click', (e) => {
+		removeNotice(e);
+	});
 
-	elNotice.find( '.smush-notice-dismiss' ).on( 'click', () => {
-		removeNotice();
-		notifyWordpress( btnAct.data( 'msg' ) );
-	} );
-
-	// Notify WordPress about the users choice and close the message.
-	function notifyWordpress( message ) {
-		elNotice.attr( 'data-message', message );
-		elNotice.addClass( 'loading' );
-
-		// Send a ajax request to save the dismissed notice option.
-		$.post( ajaxurl, { action: 'dismiss_upgrade_notice' } );
-	}
+	// Only used for the upgrade notice.
+	$('.smush-notice .smush-notice-dismiss').on('click', (e) => {
+		removeNotice(e);
+		$.post(ajaxurl, { action: 'dismiss_upgrade_notice' });
+	});
 
 	// Dismiss the update notice.
 	$( '.wp-smush-update-info' ).on( 'click', '.notice-dismiss', ( e ) => {
 		e.preventDefault();
-		elNotice = $( this );
-		removeNotice();
+		removeNotice(e);
 		$.post( ajaxurl, { action: 'dismiss_update_info' } );
 	} );
 } )( jQuery );

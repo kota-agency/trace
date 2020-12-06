@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Smush 3.7.2\n"
+"Project-Id-Version: Smush 3.7.3\n"
 "Report-Msgid-Bugs-To: https://wpmudev.org\n"
-"POT-Creation-Date: 2020-11-10 22:52:43+00:00\n"
+"POT-Creation-Date: 2020-11-23 01:22:46+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,100 +13,110 @@ msgstr ""
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: app/class-abstract-page.php:194
-#. translators: 1. opening 'strong' tag, 2. closing 'strong' tag.
-msgid ""
-"Thanks for installing Smush! %1$sGet a free trial + 30%% OFF%2$s Smush Pro "
-"for a limited time - an exclusive welcome discount for free version users! "
-"Grab it while it lasts."
+#: app/class-abstract-page.php:208
+msgid "60% OFF"
 msgstr ""
 
-#: app/class-abstract-page.php:197
-#. translators: 1. opening 'strong' tag, 2. closing 'strong' tag.
-msgid ""
-"Thanks for updating Smush! %1$sGet 30%% OFF Smush Pro + Free Trial%2$s - "
-"Did you know we now offer Smush Pro only plans? With a limited time intro "
-"discount! Grab it while it lasts."
+#: app/class-abstract-page.php:210
+msgid "Black Friday 60% OFF Smush Pro!"
 msgstr ""
 
-#: app/class-abstract-page.php:216 app/class-abstract-page.php:278
-#: app/views/cdn/disabled-meta-box.php:19 app/views/cdn/upsell-meta-box.php:20
-#: app/views/lazyload/disabled-meta-box.php:18
-msgid "Smush CDN"
+#: app/class-abstract-page.php:215
+msgid "Limited Black Friday offer!"
 msgstr ""
 
 #: app/class-abstract-page.php:221
+msgid "Days"
+msgstr ""
+
+#: app/class-abstract-page.php:231
+msgid "Hours"
+msgstr ""
+
+#: app/class-abstract-page.php:241
+msgid "Minutes"
+msgstr ""
+
+#: app/class-abstract-page.php:258
+msgid ""
+"Get Smush Pro for the lowest price you will ever see and solve more image "
+"related PageSpeed recommendations!"
+msgstr ""
+
+#: app/class-abstract-page.php:260
 msgid "*Only admin users can see this message"
 msgstr ""
 
-#: app/class-abstract-page.php:225
-msgid "Try Smush Pro Free"
+#: app/class-abstract-page.php:265
+msgid "Get 60 % OFF Smush Pro"
 msgstr ""
 
-#: app/class-abstract-page.php:227
-msgid "Saving"
-msgstr ""
-
-#: app/class-abstract-page.php:228 app/class-abstract-page.php:705
+#: app/class-abstract-page.php:269 app/class-abstract-page.php:724
 #: app/class-admin.php:406 app/pages/class-dashboard.php:1015
 #: app/pages/class-dashboard.php:1016 app/views/bulk/meta-box.php:77
 #: app/views/bulk/meta-box.php:85 core/class-core.php:415
 msgid "Dismiss"
 msgstr ""
 
-#: app/class-abstract-page.php:246
+#: app/class-abstract-page.php:310
 msgid "Smush Free was deactivated. You have Smush Pro active!"
 msgstr ""
 
-#: app/class-abstract-page.php:282
+#: app/class-abstract-page.php:342 app/views/cdn/disabled-meta-box.php:19
+#: app/views/cdn/upsell-meta-box.php:20
+#: app/views/lazyload/disabled-meta-box.php:18
+msgid "Smush CDN"
+msgstr ""
+
+#: app/class-abstract-page.php:346
 msgid ""
 "Smush Pro requires the WPMU DEV Dashboard plugin to unlock pro features. "
 "Please make sure you have installed, activated and logged into the "
 "Dashboard."
 msgstr ""
 
-#: app/class-abstract-page.php:287
+#: app/class-abstract-page.php:351
 msgid "Log In"
 msgstr ""
 
-#: app/class-abstract-page.php:291
+#: app/class-abstract-page.php:355
 msgid "Install Plugin"
 msgstr ""
 
-#: app/class-abstract-page.php:630
+#: app/class-abstract-page.php:649
 msgid "DASHBOARD"
 msgstr ""
 
-#: app/class-abstract-page.php:639
+#: app/class-abstract-page.php:658
 msgid ""
 "Lets you check if any images can be further optimized. Useful after "
 "changing settings."
 msgstr ""
 
-#: app/class-abstract-page.php:642
+#: app/class-abstract-page.php:661
 msgid "Re-Check Images"
 msgstr ""
 
-#: app/class-abstract-page.php:646
+#: app/class-abstract-page.php:665
 msgid "Check Complete"
 msgstr ""
 
-#: app/class-abstract-page.php:659
+#: app/class-abstract-page.php:678
 msgid "Documentation"
 msgstr ""
 
-#: app/class-abstract-page.php:733
+#: app/class-abstract-page.php:752
 msgid "Your settings have been updated!"
 msgstr ""
 
-#: app/class-abstract-page.php:740
+#: app/class-abstract-page.php:759
 msgid ""
 "Your settings have been saved and changes are now propagating to the CDN. "
 "Changes can take up to 30 minutes to take effect but your images will "
 "continue to be served in the mean time, please be patient."
 msgstr ""
 
-#: app/class-abstract-page.php:753
+#: app/class-abstract-page.php:772
 #. translators: %1$s - <a>, %2$s - </a>
 msgid "You have images that need smushing. %1$sBulk smush now!%2$s"
 msgstr ""
@@ -121,7 +131,7 @@ msgid "Renew Membership"
 msgstr ""
 
 #: app/class-admin.php:195
-msgid "Upgrade *New Pricing*"
+msgid "Upgrade *60% OFF Sale*"
 msgstr ""
 
 #: app/class-admin.php:201
@@ -291,40 +301,40 @@ msgid ""
 "can smush %3$d images per batch."
 msgstr ""
 
-#: app/class-ajax.php:305 core/integrations/class-nextgen.php:416
+#: app/class-ajax.php:299 core/integrations/class-nextgen.php:416
 msgid "You don't have permission to work with uploaded files."
 msgstr ""
 
-#: app/class-ajax.php:313 core/integrations/class-nextgen.php:424
+#: app/class-ajax.php:307 core/integrations/class-nextgen.php:424
 msgid "No attachment ID was provided."
 msgstr ""
 
-#: app/class-ajax.php:329
+#: app/class-ajax.php:323
 msgid "Attachment Skipped - Check `wp_smush_image` filter."
 msgstr ""
 
-#: app/class-ajax.php:352
+#: app/class-ajax.php:346
 msgid "Image not smushed, fields empty."
 msgstr ""
 
-#: app/class-ajax.php:361 core/integrations/class-nextgen.php:662
+#: app/class-ajax.php:355 core/integrations/class-nextgen.php:662
 msgid ""
 "Image couldn't be smushed as the nonce verification failed, try reloading "
 "the page."
 msgstr ""
 
-#: app/class-ajax.php:399
+#: app/class-ajax.php:393
 msgid ""
 "We haven’t found any images in your media library yet so there’s no "
 "smushing to be done! Once you upload images, reload this page and start "
 "playing!"
 msgstr ""
 
-#: app/class-ajax.php:430
+#: app/class-ajax.php:424
 msgid "Yay! All images are optimized as per your current settings."
 msgstr ""
 
-#: app/class-ajax.php:683
+#: app/class-ajax.php:677
 #. translators: %1$d - number of images, %2$s - opening a tag, %3$s - closing a
 #. tag
 msgid ""
@@ -332,30 +342,30 @@ msgid ""
 "smush now!%3$s"
 msgstr ""
 
-#: app/class-ajax.php:794
+#: app/class-ajax.php:788
 msgid "No attachment ID was received."
 msgstr ""
 
-#: app/class-ajax.php:822
+#: app/class-ajax.php:816
 msgid "No file data found in image meta."
 msgstr ""
 
-#: app/class-ajax.php:825
+#: app/class-ajax.php:819
 #. translators: %d - attachment ID
 msgid "undefined (attachment ID: %d)"
 msgstr ""
 
-#: app/class-ajax.php:853
+#: app/class-ajax.php:847
 msgid "Skipped with wp_smush_image filter"
 msgstr ""
 
-#: app/class-ajax.php:916
+#: app/class-ajax.php:910
 msgid ""
 "Timeout error. You can increase the request timeout to make sure Smush has "
 "enough time to process larger files. `define('WP_SMUSH_API_TIMEOUT', 150);`"
 msgstr ""
 
-#: app/class-ajax.php:1029 app/class-ajax.php:1086
+#: app/class-ajax.php:1023 app/class-ajax.php:1080
 msgid "User can not modify options"
 msgstr ""
 
@@ -544,6 +554,77 @@ msgstr ""
 msgid ""
 "Bulk smush is currently running. You need to keep this page open for the "
 "process to complete."
+msgstr ""
+
+#: app/modals/black-friday-sale.php:54
+msgid "Close this dialog window"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:70
+msgid "Smush Pro 60% OFF"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:72
+msgid "For all your image optimization needs."
+msgstr ""
+
+#: app/modals/black-friday-sale.php:74
+msgid "Before $60 per year, now $24 per year. A total of 8 months free!"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:81
+msgid "year"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:84
+msgid "Total of 8 months free!"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:94
+msgid "Get 60% Off Smush Pro"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:98 app/modals/updated.php:89
+msgid "Smush Pro benefits"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:104
+msgid "Unlimited Bulk Smush"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:109 app/modals/updated.php:113
+#: app/views/bulk/meta-box.php:200 app/views/bulk/meta-box.php:223
+msgid "Smush original images"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:114 app/modals/updated.php:99
+#: app/views/bulk/meta-box.php:197 app/views/bulk/meta-box.php:220
+msgid "10 GB Smush CDN"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:119 app/modals/updated.php:116
+msgid "Automated resizing"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:124 app/modals/updated.php:102
+msgid "Super Smush lossy compression"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:129 app/modals/updated.php:119
+msgid "Auto convert PNG’s to JPEG’s"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:134 app/modals/updated.php:105
+msgid "NextGen Gallery integration"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:139 app/modals/updated.php:122
+#: core/modules/class-cdn.php:208
+msgid "WebP Conversion"
+msgstr ""
+
+#: app/modals/black-friday-sale.php:156
+msgid "Check All Plans"
 msgstr ""
 
 #: app/modals/checking-files.php:28
@@ -901,42 +982,8 @@ msgstr ""
 msgid "/month"
 msgstr ""
 
-#: app/modals/updated.php:89
-msgid "Smush Pro benefits"
-msgstr ""
-
 #: app/modals/updated.php:96
 msgid "Unlimited bulk Smush"
-msgstr ""
-
-#: app/modals/updated.php:99 app/views/bulk/meta-box.php:197
-#: app/views/bulk/meta-box.php:220
-msgid "10 GB Smush CDN"
-msgstr ""
-
-#: app/modals/updated.php:102
-msgid "Super Smush lossy compression"
-msgstr ""
-
-#: app/modals/updated.php:105
-msgid "NextGen Gallery integration"
-msgstr ""
-
-#: app/modals/updated.php:113 app/views/bulk/meta-box.php:200
-#: app/views/bulk/meta-box.php:223
-msgid "Smush original images"
-msgstr ""
-
-#: app/modals/updated.php:116
-msgid "Automated resizing"
-msgstr ""
-
-#: app/modals/updated.php:119
-msgid "Auto convert PNG’s to JPEG’s"
-msgstr ""
-
-#: app/modals/updated.php:122 core/modules/class-cdn.php:208
-msgid "WebP Conversion"
 msgstr ""
 
 #: app/modals/updated.php:133

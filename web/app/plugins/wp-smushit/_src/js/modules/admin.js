@@ -1235,6 +1235,19 @@ jQuery( function( $ ) {
 		goToByScroll( '#column-wp-smush-resize' );
 	} );
 
+	// Display dialogs that shows up with no user action.
+	if ( $( '#smush-updated-dialog' ).length ) {
+		// Displays the modal with the release's higlights if it exists.
+		window.SUI.openModal( 'smush-updated-dialog', 'wpbody-content', undefined, false );
+
+	} else if ( $( '#smush-black-friday-dialog' ).length ) {
+		// Displays the modal with the Black Friday sale if it exists and the upgrade one doesn't.
+		window.SUI.openModal( 'smush-black-friday-dialog', 'wpbody-content', undefined, false );
+
+		// Dismiss the modal on close.
+		$( '#smush-black-friday-dialog' ).on( 'close', () =>  $.post( ajaxurl, { action: 'smush_dismiss_black_friday_modal' } ) );
+	}
+
 	/**
 	 * @namespace aria
 	 */

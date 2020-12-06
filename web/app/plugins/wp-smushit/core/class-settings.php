@@ -487,6 +487,8 @@ class Settings {
 
 		delete_site_option( WP_SMUSH_PREFIX . 'networkwide' );
 		delete_site_option( WP_SMUSH_PREFIX . 'hide_smush_welcome' );
+		delete_site_option( WP_SMUSH_PREFIX . 'hide_upgrade_notice' );
+		delete_site_option( WP_SMUSH_PREFIX . 'hide_blackfriday_modal' );
 		$this->delete_setting( WP_SMUSH_PREFIX . 'settings' );
 		$this->delete_setting( WP_SMUSH_PREFIX . 'image_sizes' );
 		$this->delete_setting( WP_SMUSH_PREFIX . 'resize_sizes' );
