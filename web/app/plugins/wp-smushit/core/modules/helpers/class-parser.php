@@ -381,8 +381,10 @@ class Parser {
 	 */
 	public static function add_attribute( &$element, $name, $value = null ) {
 		$closing = false === strpos( $element, '/>' ) ? '>' : ' />';
+		$quotes  = false === strpos( $element, '"' ) ? '\'' : '"';
+
 		if ( ! is_null( $value ) ) {
-			$element = rtrim( $element, $closing ) . " {$name}=\"{$value}\"{$closing}";
+			$element = rtrim( $element, $closing ) . " {$name}={$quotes}{$value}{$quotes}{$closing}";
 		} else {
 			$element = rtrim( $element, $closing ) . " {$name}{$closing}";
 		}

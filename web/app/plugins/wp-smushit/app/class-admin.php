@@ -101,8 +101,25 @@ class Admin {
 	 * Register JS and CSS.
 	 */
 	private function register_scripts() {
-		// Share UI JS.
-		wp_register_script( 'smush-sui', WP_SMUSH_URL . 'app/assets/js/smush-sui.min.js', array( 'jquery' ), WP_SHARED_UI_VERSION, true );
+		global $wp_version;
+		/**
+		 * Queue clipboard.js from your plugin if WP's version is below 5.2.0
+		 * since it's only included from 5.2.0 on.
+		 *
+		 * Use 'clipboard' as the handle so it matches WordPress' handle for the script.
+		 *
+		 * @since 3.8.0
+		 */
+		if ( version_compare( $wp_version, '5.2', '<' ) ) {
+			wp_register_script( 'clipboard', WP_SMUSH_URL . 'app/assets/js/smush-clipboard.min.js', array(), WP_SMUSH_VERSION, true );
+		}
+
+		/**
+		 * Share UI JS.
+		 *
+		 * @since 3.8.0 added 'clipboard' dependency.
+		 */
+		wp_register_script( 'smush-sui', WP_SMUSH_URL . 'app/assets/js/smush-sui.min.js', array( 'jquery', 'clipboard' ), WP_SHARED_UI_VERSION, true );
 
 		// Main JS.
 		wp_register_script( 'smush-admin', WP_SMUSH_URL . 'app/assets/js/smush-admin.min.js', array( 'jquery', 'smush-sui', 'underscore', 'wp-color-picker' ), WP_SMUSH_VERSION, true );
@@ -182,7 +199,7 @@ class Admin {
 		if ( ! WP_Smush::is_pro() ) {
 			$upgrade_url = add_query_arg(
 				array(
-					'coupon'       => 'BF2020SMUSH',
+					'coupon'       => 'SMUSH30OFF',
 					'checkout'     => 0,
 					'utm_source'   => 'smush',
 					'utm_medium'   => 'plugin',
@@ -192,17 +209,17 @@ class Admin {
 			);
 
 			$label = 'wp-smush-pro/wp-smush.php' !== WP_SMUSH_BASENAME ? __( 'Upgrade to Smush Pro', 'wp-smushit' ) : __( 'Renew Membership', 'wp-smushit' );
-			$text  = 'wp-smush-pro/wp-smush.php' !== WP_SMUSH_BASENAME ? __( 'Upgrade *60% OFF Sale*', 'wp-smushit' ) : __( 'Renew Membership', 'wp-smushit' );
+			$text  = 'wp-smush-pro/wp-smush.php' !== WP_SMUSH_BASENAME ? __( 'Upgrade *New Pricing*', 'wp-smushit' ) : __( 'Renew Membership', 'wp-smushit' );
 
-			$links['upgrade'] = '<a href="' . esc_url( $upgrade_url ) . '" aria-label="' . esc_attr( $label ) . '" target="_blank" style="color: #8D00B1;">' . $text . '</a>';
+			$links['smush_upgrade'] = '<a href="' . esc_url( $upgrade_url ) . '" aria-label="' . esc_attr( $label ) . '" target="_blank" style="color: #8D00B1;">' . $text . '</a>';
 		}
 
 		// Documentation link.
-		$links['docs'] = '<a href="https://premium.wpmudev.org/docs/wpmu-dev-plugins/smush/?utm_source=smush&utm_medium=plugin&utm_campaign=smush_pluginlist_docs" aria-label="' . esc_attr( __( 'View Smush Documentation', 'wp-smushit' ) ) . '" target="_blank">' . esc_html__( 'Docs', 'wp-smushit' ) . '</a>';
+		$links['smush_docs'] = '<a href="https://premium.wpmudev.org/docs/wpmu-dev-plugins/smush/?utm_source=smush&utm_medium=plugin&utm_campaign=smush_pluginlist_docs" aria-label="' . esc_attr( __( 'View Smush Documentation', 'wp-smushit' ) ) . '" target="_blank">' . esc_html__( 'Docs', 'wp-smushit' ) . '</a>';
 
 		// Settings link.
 		$settings_page      = is_multisite() && is_network_admin() ? network_admin_url( 'admin.php?page=smush' ) : menu_page_url( 'smush', false );
-		$links['dashboard'] = '<a href="' . $settings_page . '" aria-label="' . esc_attr( __( 'Go to Smush Dashboard', 'wp-smushit' ) ) . '">' . esc_html__( 'Settings', 'wp-smushit' ) . '</a>';
+		$links['smush_dashboard'] = '<a href="' . $settings_page . '" aria-label="' . esc_attr( __( 'Go to Smush Dashboard', 'wp-smushit' ) ) . '">' . esc_html__( 'Settings', 'wp-smushit' ) . '</a>';
 
 		return array_reverse( $links );
 	}
@@ -381,8 +398,15 @@ class Admin {
 		}
 
 		$conflict_check = get_transient( WP_SMUSH_PREFIX . 'conflict_check' );
-		if ( false === $conflict_check || empty( $conflict_check ) ) {
+
+		// Have never checked before.
+		if ( false === $conflict_check ) {
 			wp_schedule_single_event( time(), 'smush_check_for_conflicts' );
+			return;
+		}
+
+		// No conflicting plugins detected.
+		if ( isset( $conflict_check ) && is_array( $conflict_check ) && empty( $conflict_check ) ) {
 			return;
 		}
 

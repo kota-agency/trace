@@ -30,17 +30,19 @@ class Common {
 	 * Common constructor.
 	 */
 	public function __construct() {
-		// AJAX Thumbnail Rebuild integration.
-		add_filter( 'wp_smush_media_image', array( $this, 'skip_images' ), 10, 2 );
+		if ( is_admin() ) {
+			// AJAX Thumbnail Rebuild integration.
+			add_filter( 'wp_smush_media_image', array( $this, 'skip_images' ), 10, 2 );
 
-		// Optimise WP retina 2x images.
-		add_action( 'wr2x_retina_file_added', array( $this, 'smush_retina_image' ), 20, 3 );
+			// Optimise WP retina 2x images.
+			add_action( 'wr2x_retina_file_added', array( $this, 'smush_retina_image' ), 20, 3 );
 
-		// WPML integration.
-		add_action( 'wp_smush_image_optimised', array( $this, 'wpml_update_duplicate_meta' ), 10, 3 );
+			// WPML integration.
+			add_action( 'wp_smush_image_optimised', array( $this, 'wpml_update_duplicate_meta' ), 10, 3 );
 
-		// Remove any pre_get_posts_filters added by WP Media Folder plugin.
-		add_action( 'wp_smush_remove_filters', array( $this, 'remove_filters' ) );
+			// Remove any pre_get_posts_filters added by WP Media Folder plugin.
+			add_action( 'wp_smush_remove_filters', array( $this, 'remove_filters' ) );
+		}
 
 		// ReCaptcha lazy load.
 		add_filter( 'smush_skip_iframe_from_lazy_load', array( $this, 'exclude_recaptcha_iframe' ), 10, 2 );
@@ -55,9 +57,10 @@ class Common {
 		add_filter( 'smush_skip_image_from_lazy_load', array( $this, 'trp_translation_editor' ) );
 
 		// Jetpack CDN compatibility.
-		if ( class_exists( '\Jetpack' ) ) {
-			add_filter( 'smush_cdn_skip_image', array( $this, 'jetpack_cdn_compat' ), 10, 2 );
-		}
+		add_filter( 'smush_cdn_skip_image', array( $this, 'jetpack_cdn_compat' ), 10, 2 );
+
+		// WP Maintenance Plugin integration.
+		add_action( 'template_redirect', array( $this, 'wp_maintenance_mode' ) );
 	}
 
 	/**
@@ -374,13 +377,12 @@ class Common {
 	/**
 	 * Disables "Lazy Load" on Translate Press translate editor
 	 *
-	 * @param bool   $skip  Should skip? Default: false.
+	 * @param bool $skip  Should skip? Default: false.
 	 *
 	 * @return bool
 	 */
-	public function trp_translation_editor( $skip ){
-
-		if( ! class_exists( '\TRP_Translate_Press' ) || ! isset( $_GET['trp-edit-translation'] ) ){
+	public function trp_translation_editor( $skip ) {
+		if ( ! class_exists( '\TRP_Translate_Press' ) || ! isset( $_GET['trp-edit-translation'] ) ) {
 			return $skip;
 		}
 
@@ -405,6 +407,10 @@ class Common {
 	 * @return bool
 	 */
 	public function jetpack_cdn_compat( $skip, $url ) {
+		if ( ! class_exists( '\Jetpack' ) ) {
+			return $skip;
+		}
+
 		if ( method_exists( '\Jetpack', 'is_module_active' ) && ! \Jetpack::is_module_active( 'photon' ) ) {
 			return $skip;
 		}
@@ -416,6 +422,31 @@ class Common {
 			return true;
 		}
 		return $skip;
+	}
+
+
+	/**************************************
+	 *
+	 * WP Maintenance Plugin
+	 *
+	 * @since 3.8.0
+	 */
+
+	/**
+	 * Disable page parsing when "Maintenance" is enabled
+	 *
+	 * @since 3.8.0
+	 */
+	public function wp_maintenance_mode() {
+		if ( ! class_exists( '\MTNC' ) ) {
+			return;
+		}
+
+		global $mt_options;
+
+		if ( ! is_user_logged_in() && ! empty( $mt_options['state'] ) ) {
+			add_filter( 'wp_smush_should_skip_parse', '__return_true' );
+		}
 	}
 
 	/**************************************

@@ -6,9 +6,7 @@
  *
  * @since 3.7.0
  *
- * @var string $yearly_url   URL for the yearly plan CTA button.
- * @var string $monthly_url  URL for the monthly plan CTA button.
- * @var string $main_cta_url URL for the modal's CTA button.
+ * @var string $cta_url URL for the modal's CTA button.
  */
 
 if ( ! defined( 'WPINC' ) ) {
@@ -17,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 ?>
 
-<div class="sui-modal sui-modal-lg">
+<div class="sui-modal sui-modal-md">
 	<div
 		role="dialog"
 		id="smush-updated-dialog"
@@ -26,111 +24,49 @@ if ( ! defined( 'WPINC' ) ) {
 		aria-labelledby="smush-title-updated-dialog"
 	>
 		<div class="sui-box">
-			<div class="sui-box-header sui-flatten sui-content-center sui-spacing-sides--60 sui-spacing-top--60 sui-spacing-bottom--30">
+			<div class="sui-box-header sui-flatten sui-content-center sui-spacing-sides--20">
+				<figure class="sui-box-banner" aria-hidden="true">
+					<img src="<?php echo esc_url( WP_SMUSH_URL . 'app/assets/images/updated/updated.png' ); ?>"
+						srcset="<?php echo esc_url( WP_SMUSH_URL . 'app/assets/images/updated/updated.png' ); ?> 1x, <?php echo esc_url( WP_SMUSH_URL . 'app/assets/images/updated/updated' ); ?>@2x.png 2x"
+						alt="<?php esc_attr_e( 'Smush Updated Modal', 'wp-smushit' ); ?>" class="sui-image sui-image-center">
+				</figure>
+
 				<button class="sui-button-icon sui-button-float--right" data-modal-close="" onclick="WP_Smush.onboarding.hideUpgradeModal()">
 					<i class="sui-icon-close sui-md" aria-hidden="true"></i>
 				</button>
-
-				<h3 class="sui-box-title sui-lg" id="smush-title-updated-dialog" style="white-space: normal">
-					<?php esc_html_e( 'Introducing our new Smush-Only Plans! 🎉', 'wp-smushit' ); ?>
-				</h3>
-
-				<p class="sui-description">
-					<?php esc_html_e( "We've heard your requests to get Smush Pro by itself and now you can. To celebrate, we're throwing in a special 30% intro discount! Grab it while it lasts.", 'wp-smushit' ); ?>
-				</p>
 			</div>
 
 			<div class="sui-box-body sui-content-center sui-spacing-sides--50 sui-spacing-top--0">
+				<h3 class="sui-box-title sui-lg" id="smush-title-updated-dialog" style="white-space: normal">
+					<?php
+					esc_html_e( 'NEW: Serve WebP Images Without Smush CDN', 'wp-smushit' );
+					if ( ! WP_Smush::is_pro() ) {
+						echo '<span class="sui-tag sui-tag-pro" style="margin-left: 5px">' . esc_html__( 'Pro', 'wp-smushit' ) . '</span>';
+					}
+					?>
+				</h3>
 
-				<div id="wp-smush-yearly-plan-highlight" class="sui-col-sm-6">
-					<div class="wp-smush-icon-container">
-						<span class="sui-icon-smush sui-lg" aria-hidden="true"></span>
-					</div>
-					<div class="wp-smush-plan-highlight-text-container">
-						<h4><?php esc_html_e( '2 Months Free + 30% OFF', 'wp-smushit' ); ?></h4>
-						<small><?php esc_html_e( 'Limited offer, get a yearly plan with a discount!', 'wp-smushit' ); ?></small>
-					</div>
-				</div>
+				<p class="sui-description">
+					<?php esc_html_e( 'The ability to serve WebP images without utilizing Smush Pro’s CDN was highly requested, and we’re excited to announce it’s now possible!', 'wp-smushit' ); ?>
+				</p>
 
-				<div class="sui-border-frame">
-					<div id="wp-smush-plan-comparison" class="sui-row">
-						<div class="sui-col-sm-6">
-							<div class="wp-smush-plan-wrapper">
-								<div class="wp-smush-plan-content">
-									<h4><?php esc_html_e( 'Yearly', 'wp-smushit' ); ?></h4>
-									<p class="wp-smush-plan-description"><?php esc_html_e( 'Smush Pro yearly plan for all your image optimization needs', 'wp-smushit' ); ?></p>
-									<del>$72</del>
-									<span class="wp-smush-plan-price">$42</span>
-									<span class="wp-smush-plan-period"><?php esc_html_e( '/year', 'wp-smushit' ); ?></span>
-									<p class="wp-smush-price-description"><?php esc_html_e( '*Just $3.50 per month.', 'wp-smushit' ); ?><br/><span style="color: #8D00B1;"><?php esc_html_e( 'Total of 5 months free!', 'wp-smushit' ); ?></span></p>
-								</div>
-								<div class="wp-smush-plan-cta-container">
-									<a href="<?php echo esc_url( $yearly_url ); ?>" target="_blank" class="sui-button sui-button-purple"><?php esc_html_e( 'Try Free For 7 Days', 'wp-smushit' ); ?></a>
-								</div>
-							</div>
-						</div>
-						<div class="sui-col-sm-6">
-							<div class="wp-smush-plan-wrapper">
-								<div class="wp-smush-plan-content">
-									<h4><?php esc_html_e( 'Monthly', 'wp-smushit' ); ?></h4>
-									<p class="wp-smush-plan-description"><?php esc_html_e( 'Smush Pro monthly plan for all your image optimization needs', 'wp-smushit' ); ?></p>
-									<span class="wp-smush-plan-price">$6</span>
-									<span class="wp-smush-plan-period"><?php esc_html_e( '/month', 'wp-smushit' ); ?></span>
-								</div>
-								<div class="wp-smush-plan-cta-container">
-									<a href="<?php echo esc_url( $monthly_url ); ?>" target="_blank" class="sui-button sui-button-purple"><?php esc_html_e( 'Try Free For 7 Days', 'wp-smushit' ); ?></a>
-								</div>
-							</div>
-						</div>
-					</div>
+				<p class="sui-description">
+					<?php esc_html_e( 'Speed up your site, consume less bandwidth, and serve streamlined images that are around 26% smaller than JPG and PNG formats. All without sacrificing image quality.', 'wp-smushit' ); ?>
+				</p>
 
-					<div id="wp-smush-pro-benefits-title">
-						<span class="sui-icon-smush sui-md" aria-hidden="true"></span>
-						<span><?php esc_html_e( 'Smush Pro benefits', 'wp-smushit' ); ?></span>
-					</div>
+				<p class="sui-description">
+					<?php
+					printf(
+						/* translators: 1. opening link, 2. closing link. */
+						esc_html__( 'With Smush Pro’s new integrated %1$sWebP feature%2$s, you can now easily serve compressed next-gen images to supported browsers. You can also gracefully fallback to JPGs and PNGs for browsers that aren’t compatible.', 'wp-smushit' ),
+						'<a href="' . esc_url( $cta_url ) . '" onclick="WP_Smush.onboarding.hideUpgradeModal()">',
+						'</a>'
+					);
+					?>
+				</p>
 
-					<div class="sui-row smush-pro-features">
-						<div class="sui-col-md-6">
-							<ul>
-								<li class="smush-pro-feature-row"><div class="smush-pro-feature-title">
-									<?php esc_html_e( 'Unlimited bulk Smush', 'wp-smushit' ); ?>
-								</div></li>
-								<li class="smush-pro-feature-row"><div class="smush-pro-feature-title">
-									<?php esc_html_e( '10 GB Smush CDN', 'wp-smushit' ); ?>
-								</div></li>
-								<li class="smush-pro-feature-row"><div class="smush-pro-feature-title">
-									<?php esc_html_e( 'Super Smush lossy compression', 'wp-smushit' ); ?>
-								</div></li>
-								<li class="smush-pro-feature-row"><div class="smush-pro-feature-title">
-									<?php esc_html_e( 'NextGen Gallery integration', 'wp-smushit' ); ?>
-								</div></li>
-							</ul>
-						</div>
-
-						<div class="sui-col-md-6">
-							<ul>
-								<li class="smush-pro-feature-row"><div class="smush-pro-feature-title">
-									<?php esc_html_e( 'Smush original images', 'wp-smushit' ); ?>
-								</div></li>
-								<li class="smush-pro-feature-row"><div class="smush-pro-feature-title">
-									<?php esc_html_e( 'Automated resizing', 'wp-smushit' ); ?>
-								</div></li>
-								<li class="smush-pro-feature-row"><div class="smush-pro-feature-title">
-									<?php esc_html_e( 'Auto convert PNG’s to JPEG’s', 'wp-smushit' ); ?>
-								</div></li>
-								<li class="smush-pro-feature-row"><div class="smush-pro-feature-title">
-									<?php esc_html_e( 'WebP Conversion', 'wp-smushit' ); ?>
-								</div></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="sui-box-footer sui-content-center sui-flatten">
-				<a href="<?php echo esc_url( $main_cta_url ); ?>" target="_blank" class="sui-button sui-button-ghost" onclick="WP_Smush.onboarding.hideUpgradeModal()">
-					<i class="sui-icon-open-new-window" aria-hidden="true"></i>
-					<?php esc_html_e( 'Check all plans', 'wp-smushit' ); ?>
+				<a href="<?php echo esc_url( $cta_url ); ?>" class="sui-button" onclick="WP_Smush.onboarding.hideUpgradeModal()">
+					<?php esc_html_e( 'Got it', 'wp-smushit' ); ?>
 				</a>
 			</div>
 		</div>

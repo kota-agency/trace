@@ -40,14 +40,14 @@ class Stats {
 	 *
 	 * @var int $query_limit
 	 */
-	private $query_limit = 3000;
+	private $query_limit;
 
 	/**
 	 * Set a limit to max number of rows in MySQL query. Default: 5000.
 	 *
 	 * @var int $max_rows
 	 */
-	private $max_rows = 5000;
+	private $max_rows;
 
 	/**
 	 * Protected init class, used in child methods instead of constructor.
@@ -92,6 +92,10 @@ class Stats {
 	 * @param bool $force_update  Whether to force update the global stats or not.
 	 */
 	public function setup_global_stats( $force_update = false ) {
+		if ( ! $this->mod->dir ) {
+			$this->mod->dir = new Modules\Dir();
+		}
+
 		// Set directory smush status.
 		$this->dir_stats = Modules\Dir::should_continue() ? $this->mod->dir->total_stats() : array();
 
@@ -108,7 +112,7 @@ class Stats {
 			$this->smushed_attachments = $this->get_smushed_attachments( $force_update );
 		}
 
-		// Get supersmushed images count.
+		// Get super smushed images count.
 		if ( ! $this->super_smushed ) {
 			$this->super_smushed = count( $this->get_super_smushed_attachments() );
 		}
@@ -282,7 +286,7 @@ class Stats {
 		}
 
 		$mime_type = get_post_mime_type( $id );
-		$id_string = strval( $id );
+		$id_string = (string) $id;
 
 		// Add the ID if the mime type is allowed and the ID isn't in the list already.
 		if ( $mime_type && in_array( $mime_type, Core::$mime_types, true ) && ! in_array( $id_string, $posts, true ) ) {
@@ -318,7 +322,7 @@ class Stats {
 			return;
 		}
 
-		$index = array_search( strval( $id ), $posts, true );
+		$index = array_search( (string) $id, $posts, true );
 		if ( false !== $index ) {
 			unset( $posts[ $index ] );
 			wp_cache_set( 'media_attachments', $posts, 'wp-smush' );
@@ -412,61 +416,14 @@ class Stats {
 	 * @return array
 	 */
 	public function get_super_smushed_attachments() {
-		$get_posts   = true;
-		$attachments = array();
-		$args        = array(
-			'fields'                 => array( 'ids', 'post_mime_type' ),
-			'post_type'              => 'attachment',
-			'post_status'            => 'any',
-			'orderby'                => 'ID',
-			'order'                  => 'DESC',
-			'posts_per_page'         => $this->query_limit,
-			'offset'                 => 0,
-			'update_post_term_cache' => false,
-			'no_found_rows'          => true,
-			'meta_query'             => array(
-				array(
-					'key'   => 'wp-smush-lossy',
-					'value' => 1,
-				),
+		$meta_query = array(
+			array(
+				'key'   => 'wp-smush-lossy',
+				'value' => 1,
 			),
 		);
 
-		// Loop over to get all the attachments.
-		while ( $get_posts ) {
-			// Remove the Filters added by WP Media Folder.
-			do_action( 'wp_smush_remove_filters' );
-
-			$query = new WP_Query( $args );
-
-			if ( ! empty( $query->post_count ) && count( $query->posts ) > 0 ) {
-				// Get a filtered list of post ids.
-				$posts = Helper::filter_by_mime( $query->posts );
-				// Merge the results.
-				$attachments = array_merge( $attachments, $posts );
-
-				// Update the offset.
-				$args['offset'] += $this->query_limit;
-			} else {
-				// If we didn't get any posts from query, set $get_posts to false.
-				$get_posts = false;
-			}
-
-			// If we already got enough posts.
-			if ( count( $attachments ) >= $this->max_rows ) {
-				$get_posts = false;
-			} elseif ( ! empty( $this->total_count ) && $this->total_count <= $args['offset'] ) {
-				// If total Count is set, and it is alread lesser than offset, don't query.
-				$get_posts = false;
-			}
-		}
-
-		// Remove resmush IDs from the list.
-		if ( ! empty( $this->resmush_ids ) && is_array( $this->resmush_ids ) ) {
-			$attachments = array_diff( $attachments, $this->resmush_ids );
-		}
-
-		return $attachments;
+		return $this->run_query( $meta_query );
 	}
 
 	/**
@@ -503,10 +460,35 @@ class Stats {
 	 * @return array
 	 */
 	private function get_attachments() {
-		// Get all the attachments with wp-smush-lossy.
+		$meta_query = array(
+			array(
+				'key'     => Modules\Smush::$smushed_meta_key,
+				'compare' => 'NOT EXISTS',
+			),
+			array(
+				'key'     => 'wp-smush-ignore-bulk',
+				'value'   => 'true',
+				'compare' => 'NOT EXISTS',
+			),
+		);
+
+		return $this->run_query( $meta_query );
+	}
+
+	/**
+	 * Wrapper function for looping over a set of posts and fetching the required, based on the arguments.
+	 *
+	 * @since 3.8.0  Moved out of get_attachments() and get_super_smushed_attachments().
+	 *
+	 * @param array $meta_query  Meta query arguments for WP_Query.
+	 *
+	 * @return array
+	 */
+	private function run_query( $meta_query = array() ) {
 		$get_posts   = true;
 		$attachments = array();
-		$args        = array(
+
+		$args = array(
 			'fields'                 => array( 'ids', 'post_mime_type' ),
 			'post_type'              => 'attachment',
 			'post_status'            => 'any',
@@ -516,17 +498,7 @@ class Stats {
 			'offset'                 => 0,
 			'update_post_term_cache' => false,
 			'no_found_rows'          => true,
-			'meta_query'             => array(
-				array(
-					'key'     => Modules\Smush::$smushed_meta_key,
-					'compare' => 'NOT EXISTS',
-				),
-				array(
-					'key'     => 'wp-smush-ignore-bulk',
-					'value'   => 'true',
-					'compare' => 'NOT EXISTS',
-				),
-			),
+			'meta_query'             => $meta_query,
 		);
 
 		// Loop over to get all the attachments.
@@ -553,7 +525,7 @@ class Stats {
 			if ( count( $attachments ) >= $this->max_rows ) {
 				$get_posts = false;
 			} elseif ( ! empty( $this->total_count ) && $this->total_count <= $args['offset'] ) {
-				// If total Count is set, and it is alread lesser than offset, don't query.
+				// If total Count is set, and it is already lesser than offset, don't query.
 				$get_posts = false;
 			}
 		}
@@ -573,10 +545,10 @@ class Stats {
 	 *
 	 * @return array Stats
 	 *  array(
-	 * 'size_before' => 0,
-	 * 'size_after'    => 0,
-	 * 'savings_resize' => 0,
-	 * 'savings_conversion' => 0
+	 *     'size_before'        => 0,
+	 *     'size_after'         => 0,
+	 *     'savings_resize'     => 0,
+	 *     'savings_conversion' => 0
 	 *  )
 	 */
 	public function get_stats_for_attachments( $attachments = array() ) {

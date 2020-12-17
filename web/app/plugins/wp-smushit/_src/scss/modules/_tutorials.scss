@@ -51,6 +51,9 @@ $thumb-height: 54px;
 						position: relative;
 						border-top-left-radius: $border-radius;
 						border-top-right-radius: $border-radius;
+						background-position: top;
+						background-repeat: no-repeat;
+						background-size: cover;
 
 						img {
 							width: auto;

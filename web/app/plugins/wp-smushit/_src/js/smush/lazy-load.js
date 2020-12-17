@@ -37,6 +37,8 @@
 			if ( this.lazyloadDisableButton ) {
 				this.lazyloadDisableButton.addEventListener( 'click', ( e ) => {
 					e.preventDefault();
+					e.currentTarget.classList.add( 'sui-button-onload' );
+
 					this.toggle_lazy_load( false );
 				} );
 			}
@@ -148,40 +150,17 @@
 					if ( 'undefined' !== typeof res.success && res.success ) {
 						location.reload();
 					} else if ( 'undefined' !== typeof res.data.message ) {
-						this.showNotice( res.data.message );
+						WP_Smush.helpers.showErrorNotice( res.data.message );
+						document.querySelector( '.sui-button-onload' ).classList.remove( 'sui-button-onload' );
 					}
 				} else {
-					this.showNotice( 'Request failed.  Returned status of ' + xhr.status );
+					WP_Smush.helpers.showErrorNotice( 'Request failed.  Returned status of ' + xhr.status );
+					document.querySelector( '.sui-button-onload' ).classList.remove( 'sui-button-onload' );
 				}
 			};
 			xhr.send(
 				'param=' + enable + '&_ajax_nonce=' + nonceField[ 0 ].value
 			);
-		},
-
-		/**
-		 * Show message (notice).
-		 *
-		 * @since 3.0
-		 *
-		 * @param {string} message
-		 */
-		showNotice( message ) {
-			if ( 'undefined' === typeof message ) {
-				return;
-			}
-
-			const noticeMessage = `<p>${ message }</p>`,
-				noticeOptions = {
-					type: 'error',
-					icon: 'info',
-				};
-
-			SUI.openNotice( 'wp-smush-ajax-notice', noticeMessage, noticeOptions );
-
-			if ( this.lazyloadEnableButton ) {
-				this.lazyloadEnableButton.classList.remove( 'sui-button-onload' );
-			}
 		},
 
 		/**

@@ -13,13 +13,7 @@
 	 *
 	 * @since 3.6.2  Moved from class-s3.php
 	 */
-	$.get( ajaxurl, { action: 'smush_notice_s3_support_required' }, function(
-		r
-	) {
-		if ( 'undefined' === typeof r.data ) {
-			return;
-		}
-
+	if ( $( '#wp-smush-s3support-alert' ).length ) {
 		const noticeOptions = {
 			type: 'warning',
 			icon: 'info',
@@ -32,10 +26,10 @@
 
 		window.SUI.openNotice(
 			'wp-smush-s3support-alert',
-			r.data,
+			$( '#wp-smush-s3support-alert' ).data( 'message' ),
 			noticeOptions
 		);
-	} );
+	}
 
 	// Dismiss S3 support alert.
 	$( '#wp-smush-s3support-alert' ).on( 'click', 'button', () => {

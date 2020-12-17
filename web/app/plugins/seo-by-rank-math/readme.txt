@@ -2,10 +2,10 @@
 Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, sitemap, google search console, schema, redirection
-Tested up to: 5.5.3
+Tested up to: 5.6
 Requires at least: 5.2
 Requires PHP: 7.0
-Stable tag: 1.0.53.1
+Stable tag: 1.0.54.3
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -475,22 +475,10 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.53.1 [Nov 29, 2020] =
-* Improved: Made plugin compatible with the PHP 8.0
-* Improved: Plugin's plan handling that was causing a conflict with the Analytics module as well
-* Fixed: Focus Keyword field background color in the Elementor Editor's light theme
-
-= 1.0.53 [Nov 27, 2020] =
-* Improved: Google Access token for the [Analytics Module](https://rankmath.com/kb/analytics/) refreshes only when the data fetching is done via a cron job
-* * Improved: Hardened the security in some places in the plugin
-* Improved: Restrict [Schema](https://rankmath.com/kb/rich-snippets/) output on password-protected pages
-* Improved: Moved the URL field in the desktop preview area to appear before the title
-* Improved: Clicking the preview area in the Classic Editor now opens the meta editor
-* Fixed: Modules page was not getting [translated](https://rankmath.com/kb/multiple-languages-seo-rankmath-translatepress/) completely
-* Fixed: [Import tool](https://rankmath.com/kb/import-export-settings/) was not importing the taxonomy metadata from the AIO SEO Pro plugin
-* Fixed: SERP Preview was showing the wrong permalink for the secondary language category pages of WPML plugin
-* Fixed: Redirections were not working for the secondary language of WPML plugin
-* Removed: 'Head, Footer and Post Injections' plugin from the conflicting plugin lists
-* Removed: Site Kit's developer ID from the GA tracking code as it was not required
+= 1.0.54.3 [Dec 13, 2020] =
+* Fixed: Classic Editor's [SEO tests](https://rankmath.com/kb/score-100-in-tests/) were not loading in Firefox on some installations
+* Fixed: `Call to undefined function wc_get_product()` in the Google Preview area on some installations
+* Fixed: `hiringOrganization` field in the [Job Posting Schema](https://rankmath.com/kb/rich-snippets/#8-job-posting) was showing the wrong description
+* Removed: `InteractionCount` field from [Video Schema](https://rankmath.com/kb/rich-snippets/#17-video-object) as this field is not recommended by Google
 
 Full changelog can be found here - **[Rank Math SEO changelog](https://rankmath.com/changelog/?utm_source=LP&utm_campaign=WP)**

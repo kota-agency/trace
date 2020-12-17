@@ -449,6 +449,9 @@ class Admin extends NextGen {
 		// Count of images ( Attachments ), Does not includes additioanl sizes that might have been created.
 		$this->smushed_count = isset( $smushed_images ) && is_array( $smushed_images ) ? count( $smushed_images ) : $smushed_images;
 
+		$this->super_smushed = get_option( 'wp-smush-super_smushed_nextgen', array() );
+		$this->super_smushed = ! empty( $this->super_smushed['ids'] ) ? count( $this->super_smushed['ids'] ) : 0;
+
 		$this->remaining_count = $this->ng_stats->get_ngg_images( 'unsmushed', true );
 	}
 

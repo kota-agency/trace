@@ -88,7 +88,7 @@ class Admin implements Runner {
 	 */
 	public function process_oauth() {
 
-		$security      = filter_input( INPUT_GET, 'security', FILTER_SANITIZE_STRING );
+		$security      = filter_input( INPUT_GET, 'rankmath_security', FILTER_SANITIZE_STRING );
 		$process_oauth = filter_input( INPUT_GET, 'process_oauth', FILTER_SANITIZE_STRING );
 		$access_token  = filter_input( INPUT_GET, 'access_token', FILTER_SANITIZE_STRING );
 
@@ -126,6 +126,10 @@ class Admin implements Runner {
 				],
 				$current_request
 			);
+
+			// Remove possible admin notice if we have new access token.
+			delete_option( 'rankmath_google_api_failed_attempts_data' );
+			delete_option( 'rankmath_google_api_reconnect' );
 
 			wp_safe_redirect( $current_request );
 			exit();

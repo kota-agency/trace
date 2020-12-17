@@ -167,20 +167,22 @@ if ( ! defined( 'WPINC' ) ) {
 		</div>
 
 		<div class="sui-box-settings-col-2">
-			<strong><?php esc_html_e( 'Restore Images', 'wp-smushit' ); ?></strong>
-			<span class="sui-description">
-				<?php esc_html_e( 'Made a mistake? No worries. We have a built-in bulk restore tool that will restore your image thumbnails to their original state.', 'wp-smushit' ); ?>
-			</span>
-			<span class="sui-description sui-margin-bottom">
-				<?php
-				printf(
-					/* translators: %1$s - <a> link, %2$s - </a> */
-					esc_html__( 'Navigate to %1$sTools%2$s to begin the process.', 'wp-smushit' ),
-					'<a href="' . esc_url( $this->get_page_url() ) . '&view=tools">',
-					'</a>'
-				);
-				?>
-			</span>
+			<?php if ( $this->should_render( 'tools' ) ) : ?>
+				<strong><?php esc_html_e( 'Restore Images', 'wp-smushit' ); ?></strong>
+				<span class="sui-description">
+					<?php esc_html_e( 'Made a mistake? No worries. We have a built-in bulk restore tool that will restore your image thumbnails to their original state.', 'wp-smushit' ); ?>
+				</span>
+				<span class="sui-description sui-margin-bottom">
+					<?php
+					printf(
+						/* translators: %1$s - <a> link, %2$s - </a> */
+						esc_html__( 'Navigate to %1$sTools%2$s to begin the process.', 'wp-smushit' ),
+						'<a href="' . esc_url( $this->get_page_url() ) . '&view=tools">',
+						'</a>'
+					);
+					?>
+				</span>
+			<?php endif; ?>
 
 			<strong><?php echo esc_html( $settings_data['keep_data']['label'] ); ?></strong>
 			<span class="sui-description">

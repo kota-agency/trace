@@ -24,7 +24,7 @@ jQuery( function( $ ) {
 		//reduce parent opacity
 		parent.css( { opacity: '0.5' } );
 		//Disable Links
-		parent.find( 'a' ).attr( 'disabled', 'disabled' );
+		parent.find( 'a' ).prop( 'disabled', true );
 	};
 
 	/**
@@ -38,7 +38,7 @@ jQuery( function( $ ) {
 		//reduce parent opacity
 		parent.css( { opacity: '1' } );
 		//Disable Links
-		parent.find( 'a' ).removeAttr( 'disabled' );
+		parent.find( 'a' ).prop('disabled', false);
 	};
 
 	/**
@@ -56,7 +56,7 @@ jQuery( function( $ ) {
 		action
 	) {
 		// If disabled.
-		if ( 'disabled' === currentButton.attr( 'disabled' ) ) {
+		if ( currentButton.prop( 'disabled' ) ) {
 			return;
 		}
 
@@ -284,7 +284,7 @@ jQuery( function( $ ) {
 		} );
 
 		// Disable Bulk smush button and itself.
-		$( '.wp-smush-all' ).attr( 'disabled', 'disabled' );
+		$( '.wp-smush-all' ).prop( 'disabled', true );
 
 		// Hide Settings changed Notice.
 		$( '.wp-smush-settings-changed' ).hide();
@@ -353,7 +353,7 @@ jQuery( function( $ ) {
 					}
 
 					// Hide the Existing wrapper.
-					const notices = $( '.bulk-smush-wrapper .sui-notice' );
+					const notices = $( '.bulk-smush-wrapper .sui-notice:not(.smush-upsell-notice)' );
 					if ( notices.length > 0 ) {
 						notices.addClass( 'sui-hidden' );
 						$( '.wp-smush-pagespeed-recommendation' ).addClass( 'sui-hidden' );
@@ -429,16 +429,16 @@ jQuery( function( $ ) {
 				$completedText.addClass('sui-hidden');
 			}, 2000);
 
-			$( '.wp-smush-all' ).removeAttr( 'disabled' );
+			$( '.wp-smush-all' ).prop('disabled', false);
 		} );
 	};
 
 	const updateDisplayedContentAfterReCheck = function( count ) {
 		const $pendingImagesWrappers = jQuery(
-			'.bulk-smush-wrapper .wp-smush-bulk-wrapper'
+			'.bulk-smush-wrapper .wp-smush-bulk-wrapper, #wp-smush-pending-to-smush-text'
 		);
 		const $allDoneWrappers = jQuery(
-			'.bulk-smush-wrapper .wp-smush-all-done, .bulk-smush-wrapper .wp-smush-pagespeed-recommendation'
+			'.bulk-smush-wrapper .wp-smush-all-done, .bulk-smush-wrapper .wp-smush-pagespeed-recommendation, #smush-box-bulk-upgrade, #wp-smush-all-smushed-text'
 		);
 
 		if ( $pendingImagesWrappers.length && $allDoneWrappers.length ) {
@@ -594,7 +594,7 @@ jQuery( function( $ ) {
 	 */
 	$( 'body' ).on( 'click', 'a.smush-stats-details', function( e ) {
 		//If disabled
-		if ( 'disabled' == $( this ).attr( 'disabled' ) ) {
+		if ( $( this ).prop( 'disabled' ) ) {
 			return false;
 		}
 
@@ -668,9 +668,9 @@ jQuery( function( $ ) {
 			return false;
 		}
 
-		jQuery( '.wp-smush-all, .wp-smush-scan' ).attr(
+		jQuery( '.wp-smush-all, .wp-smush-scan' ).prop(
 			'disabled',
-			'disabled'
+			true
 		);
 		$( '.wp-smush-notice.wp-smush-remaining' ).hide();
 		new Smush( $( this ), true, 'nextgen' );
@@ -801,14 +801,14 @@ jQuery( function( $ ) {
 
 			// Send ajax, Update Settings, And Check For resmush.
 			jQuery.post( ajaxurl, param ).done( function() {
-				jQuery( 'form#wp-smush-settings-form' ).submit();
+				jQuery( 'form#wp-smush-settings-form' ).trigger('submit');
 				return true;
 			} );
 		} else {
 			$( '.wp-smush-hex-notice' ).hide();
 
 			// Update text.
-			self.attr( 'disabled', 'disabled' ).addClass( 'button-grey' );
+			self.prop( 'disabled', true ).addClass( 'button-grey' );
 
 			// Update save button text.
 			if (
@@ -840,7 +840,7 @@ jQuery( function( $ ) {
 
 			// Send ajax, Update Settings, And Check For resmush.
 			jQuery.post( ajaxurl, param ).done( function() {
-				jQuery( 'form#wp-smush-settings-form' ).submit();
+				jQuery( 'form#wp-smush-settings-form' ).trigger('submit');
 				return true;
 			} );
 		}
@@ -1191,19 +1191,6 @@ jQuery( function( $ ) {
 			}
 		} );
 	}
-	//Close Directory smush modal, if pressed esc
-	$( document ).keyup( function( e ) {
-		if ( e.keyCode === 27 ) {
-			const modal = $(
-				'div.dev-overlay.wp-smush-list-dialog, div.dev-overlay.wp-smush-get-pro'
-			);
-			//If the Directory dialog is not visible
-			if ( ! modal.is( ':visible' ) ) {
-				return;
-			}
-			modal.find( 'div.close' ).click();
-		}
-	} );
 
 	//Dismiss Smush recommendation
 	$( 'span.dismiss-recommendation' ).on( 'click', function( e ) {
@@ -1222,30 +1209,10 @@ jQuery( function( $ ) {
 		} );
 	} );
 
-	/**
-	 * Scroll to resize settings.
-	 *
-	 * @since 3.3.2
-	 */
-	$( '#close-resize-update-dialog' ).on( 'click', function( e ) {
-		e.preventDefault();
-
-		window.SUI.dialogs[ 'resizing-update' ].hide();
-
-		goToByScroll( '#column-wp-smush-resize' );
-	} );
-
-	// Display dialogs that shows up with no user action.
+	// Display dialogs that show up with no user action.
 	if ( $( '#smush-updated-dialog' ).length ) {
 		// Displays the modal with the release's higlights if it exists.
 		window.SUI.openModal( 'smush-updated-dialog', 'wpbody-content', undefined, false );
-
-	} else if ( $( '#smush-black-friday-dialog' ).length ) {
-		// Displays the modal with the Black Friday sale if it exists and the upgrade one doesn't.
-		window.SUI.openModal( 'smush-black-friday-dialog', 'wpbody-content', undefined, false );
-
-		// Dismiss the modal on close.
-		$( '#smush-black-friday-dialog' ).on( 'close', () =>  $.post( ajaxurl, { action: 'smush_dismiss_black_friday_modal' } ) );
 	}
 
 	/**

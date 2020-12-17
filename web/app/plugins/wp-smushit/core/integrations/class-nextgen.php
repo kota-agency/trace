@@ -664,7 +664,7 @@ class NextGen extends Abstract_Integration {
 			);
 		}
 
-		$status = $this->smush_image( intval( $_POST['attachment_id'] ) );
+		$status = $this->smush_image( (int) $_POST['attachment_id'] );
 
 		// If any of the image is restored, we count it as success.
 		if ( ! empty( $status ) && ! is_wp_error( $status ) ) {

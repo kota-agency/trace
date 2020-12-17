@@ -37,14 +37,7 @@ $tutorials = $this->get_tutorials_data();
 					data-href="<?php echo esc_url( $tutorial['url'] ); ?>"
 					data-tutorial="<?php echo esc_attr( $index ); ?>"
 				>
-
-					<div tabindex="-1" class="wp-smush-tutorial-item-header" aria-hidden="true">
-						<img
-							src="<?php echo esc_url( WP_SMUSH_URL . 'app/assets/images/tutorials/' . $tutorial['thumbnail_full'] ); ?>"
-							srcset="<?php echo esc_url( WP_SMUSH_URL . 'app/assets/images/tutorials/' . $tutorial['thumbnail_full'] ); ?> 1x, <?php echo esc_url( WP_SMUSH_URL . 'app/assets/images/tutorials/' . $tutorial['thumbnail_full_2x'] ); ?> 2x"
-							alt="<?php esc_html_e( 'Article image', 'wp-smushit' ); ?>"
-						/>
-					</div>
+					<div tabindex="-1" class="wp-smush-tutorial-item-header" aria-hidden="true" style="background-image: url(<?php echo esc_url( WP_SMUSH_URL . 'app/assets/images/tutorials/' . $tutorial['thumbnail_full_2x'] ); ?>);"></div>
 
 					<div class="wp-smush-tutorial-item-body">
 

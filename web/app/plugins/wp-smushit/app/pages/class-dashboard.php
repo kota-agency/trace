@@ -63,6 +63,7 @@ class Dashboard extends Abstract_Page {
 				'integrations' => __( 'Integrations', 'wp-smushit' ),
 				'lazy_load'    => __( 'Lazy Load', 'wp-smushit' ),
 				'cdn'          => __( 'CDN', 'wp-smushit' ),
+				'webp'         => __( 'WebP', 'wp-smushit' ),
 				'tools'        => __( 'Tools', 'wp-smushit' ),
 				'settings'     => __( 'Settings', 'wp-smushit' ),
 				'tutorials'    => __( 'Tutorials', 'wp-smushit' ),
@@ -107,6 +108,7 @@ class Dashboard extends Abstract_Page {
 
 		// Disabled on all subsites.
 		if ( is_multisite() && ! is_network_admin() ) {
+			unset( $this->tabs['webp'] );
 			unset( $this->tabs['settings'] );
 		}
 	}
@@ -286,6 +288,50 @@ class Dashboard extends Abstract_Page {
 			}
 		}
 
+		if ( 'webp' === $this->get_current_tab() && $this->should_render() ) {
+			if ( ! WP_Smush::is_pro() ) {
+				$this->add_meta_box(
+					'webp/upsell',
+					__( 'WebP', 'wp-smushit' ),
+					null,
+					array( $this, 'webp_upsell_metabox_header' ),
+					null,
+					'webp'
+				);
+			} else {
+				if ( ! $this->settings->get( 'webp_mod' ) ) {
+					$this->add_meta_box(
+						'webp/disabled',
+						__( 'WebP', 'wp-smushit' ),
+						null,
+						array( $this, 'webp_metabox_header' ),
+						null,
+						'webp'
+					);
+				} else {
+					$this->add_meta_box(
+						'webp/webp',
+						__( 'WebP', 'wp-smushit' ),
+						null,
+						array( $this, 'webp_metabox_header' ),
+						null,
+						'webp'
+					);
+
+					if ( ! WP_Smush::get_instance()->core()->mod->webp->is_configured() ) {
+						$this->add_meta_box(
+							'webp_config',
+							__( 'Configurations', 'wp-smushit' ),
+							array( $this, 'webp_config_metabox' ),
+							null,
+							null,
+							'webp'
+						);
+					}
+				}
+			}
+		}
+
 		if ( 'tools' === $this->get_current_tab() && $this->should_render() ) {
 			$box_body_class = WP_Smush::is_pro() ? '' : 'sui-upsell-items';
 			$this->add_meta_box(
@@ -342,10 +388,20 @@ class Dashboard extends Abstract_Page {
 			} elseif ( 'upgrade' === $status || 'activating' === $status ) {
 				echo '<i class="sui-icon-warning-alert sui-warning" aria-hidden="true"></i>';
 			} elseif ( 'enabled' === $status ) {
-				echo '<i class="sui-icon-check-tick sui-info" aria-hidden="true"></i>';
+				echo '<i class="sui-icon-check-tick sui-success" aria-hidden="true"></i>';
 			}
 		} elseif ( 'lazy_load' === $tab && $this->settings->get( 'lazy_load' ) ) {
-			echo '<i class="sui-icon-check-tick sui-info" aria-hidden="true"></i>';
+			echo '<i class="sui-icon-check-tick sui-success" aria-hidden="true"></i>';
+		} elseif ( 'webp' === $tab ) {
+			if ( ! WP_Smush::is_pro() || ! $this->settings->get( 'webp_mod' ) ) {
+				return;
+			}
+
+			if ( WP_Smush::get_instance()->core()->mod->webp->is_configured() ) {
+				echo '<i id="webp-tab-icon" class="sui-icon-check-tick sui-success" aria-hidden="true"></i>';
+			} else {
+				echo '<i id="webp-tab-icon" class="sui-icon-warning-alert sui-warning" aria-hidden="true"></i>';
+			}
 		}
 	}
 
@@ -559,7 +615,7 @@ class Dashboard extends Abstract_Page {
 				$core->set_pro_savings();
 			}
 			$pro_savings      = $core->stats['pro_savings'];
-			$show_pro_savings = $pro_savings['savings'] > 0 ? true : false;
+			$show_pro_savings = $pro_savings['savings'] > 0;
 			if ( $show_pro_savings ) {
 				?>
 				<li class="smush-avg-pro-savings" id="smush-avg-pro-savings">
@@ -1352,7 +1408,7 @@ class Dashboard extends Abstract_Page {
 		);
 
 		$status_color = array(
-			'enabled'    => 'info',
+			'enabled'    => 'success',
 			'disabled'   => 'error',
 			'activating' => 'warning',
 			'upgrade'    => 'warning',
@@ -1383,6 +1439,63 @@ class Dashboard extends Abstract_Page {
 			array(
 				'title'   => __( 'CDN', 'wp-smushit' ),
 				'tooltip' => __( 'This feature is likely to work without issue, however our CDN is in beta stage and some issues are still present.', 'wp-smushit' ),
+			)
+		);
+	}
+
+	/**
+	 * Upsell meta box header.
+	 *
+	 * @since 3.8.0
+	 */
+	public function webp_upsell_metabox_header() {
+		$this->view( 'webp/upsell-meta-box-header' );
+	}
+
+	/**
+	 * WebP meta box header.
+	 *
+	 * @since 3.8.0
+	 */
+	public function webp_metabox_header() {
+		$this->view(
+			'webp/meta-box-header',
+			array(
+				'is_disabled'   => ! $this->settings->get( 'webp_mod' ) || ! WP_Smush::get_instance()->core()->s3->setting_status(),
+				'is_configured' => WP_Smush::get_instance()->core()->mod->webp->is_configured(),
+			)
+		);
+	}
+
+	/**
+	 * WebP meta box.
+	 *
+	 * @since 3.8.0
+	 */
+	public function webp_config_metabox() {
+		$webp    = WP_Smush::get_instance()->core()->mod->webp;
+		$servers = $webp->get_servers();
+		// WebP module does not support iss and cloudflare server.
+		unset( $servers['iis'], $servers['cloudflare'] );
+
+		$server_type          = strtolower( $webp->get_server_type() );
+		$detected_server      = '';
+		$detected_server_name = '';
+
+		if ( isset( $servers[ $server_type ] ) ) {
+			$detected_server      = $server_type;
+			$detected_server_name = $servers[ $server_type ];
+		}
+
+		$this->view(
+			'webp/config-meta-box',
+			array(
+				'servers'              => $servers,
+				'detected_server'      => $detected_server,
+				'detected_server_name' => $detected_server_name,
+				'nginx_config_code'    => $webp->get_nginx_code(),
+				'apache_htaccess_code' => $webp->get_apache_code( true ),
+				'is_htaccess_written'  => $webp->is_htaccess_written(),
 			)
 		);
 	}
@@ -1510,7 +1623,12 @@ class Dashboard extends Abstract_Page {
 		// except that we don't add the re-smushed count here.
 		$unsmushed_count = WP_Smush::get_instance()->core()->total_count - WP_Smush::get_instance()->core()->smushed_count - WP_Smush::get_instance()->core()->skipped_count;
 
-		return $images_to_resmush + $unsmushed_count;
+		// Sometimes this number can be negative, if there are weird issues with meta data.
+		if ( $unsmushed_count > 0 ) {
+			return $images_to_resmush + $unsmushed_count;
+		}
+
+		return $images_to_resmush;
 	}
 
 }

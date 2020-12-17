@@ -1,13 +1,13 @@
 === Smush - Lazy Load Images, Optimize & Compress Images ===
 Plugin Name: Smush - Lazy Load Images, Optimize & Compress Images
-Version: 3.7.3
+Version: 3.8.2
 Author: WPMU DEV
 Author URI: https://premium.wpmudev.org/
 Contributors: WPMUDEV, alexdunae
 Tags: optimize images, convert webp, lazy load, resize images, compress images, webp, performance, optimization, photography, optimizer, image optimizer, image compress, image optimize, webp format
 Requires at least: 5.2
-Tested up to: 5.5
-Stable tag: 3.7.3
+Tested up to: 5.6
+Stable tag: 3.8.2
 Requires PHP: 5.6.20
 License: GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -182,6 +182,36 @@ It depends what side of the pond you live on...but whether you say optimize, opt
 4. Smush will find and optimize images for you.
 
 == Changelog ==
+
+= 3.8.2 ( 2020-12-09 ) =
+
+- Enhance: Compatibility with PHP 8.0
+- Enhance: Compatibility with WP 5.6
+- Enhance: Compatibility with Hub
+- Fix: API validation on new installs
+
+= 3.8.1 ( 2020-12-03 ) =
+
+- Fix: Error when querying stats from Hub
+
+= 3.8.0 ( 2020-12-03 ) =
+
+- New: Local WebP support
+- Enhance: Plugin performance
+- Enhance: Lazy load module will properly distinguish between single/double quotes
+- Enhance: srcset generation speed
+- Fix: Image resize detection flagging images that have been auto resized by CDN
+- Fix: Lazy Load conflicting with Maintenance plugin
+- Fix: PHP warning when saving lazy load settings
+- Fix: Copy URL functionality in media library
+- Fix: Whitelabel branding
+- Fix: Tools link in network admin Settings page
+- Fix: Upsell notice breaking after re-checking images
+- Fix: smush_check_for_conflicts cron running on every page load
+- Fix: Compatibility with SupportCandy plugin
+- Fix: Minor UI issues in Tutorials module
+- Fix: Minor UI issues in NextGen Smush page
+- Fix: CDN image paths on sub-directory installs
 
 = 3.7.3 ( 2020-11-23 ) =
 
