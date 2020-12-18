@@ -104,7 +104,8 @@ const Sliders = (() => {
         infinite: true,
         appendElArrows: '.testimonials__arrows',
         autoplay: true,
-        autoplaySpeed: 5000
+        autoplaySpeed: 3000,
+        pauseOnHover: false,
     });
 
 

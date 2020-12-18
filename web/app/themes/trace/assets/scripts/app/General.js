@@ -180,7 +180,7 @@ function General() {
 
     // MotionPathHelper.create(".family__logo2");
 
-
+    tl.pause(1)
 
     let animating = false;
 

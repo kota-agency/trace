@@ -91,6 +91,7 @@
                 img {
                     display: block;
                     top: 50%;
+                    width: 100%;
                     // transform: translate(-50%, -50%) scale(1.5);
                 }
             }
@@ -173,8 +174,8 @@
 
         &__image {
             position: relative;
-            flex: 0 0 100px;
-            max-width: 100px;
+            flex: 0 0 200px;
+            max-width: 200px;
             align-self: stretch;
 
             @include media-breakpoint-down(xs) {

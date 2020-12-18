@@ -2,6 +2,12 @@
     position: relative;
     z-index: 2;
 
+    &__content {
+        a {
+            color: $color-quaternary;
+        }
+    }
+
     &__item {
         position: relative;
         padding: 85px 0;
