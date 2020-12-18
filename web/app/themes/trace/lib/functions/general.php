@@ -12,7 +12,7 @@ add_image_size('full', 3000, 3000, true);
 add_image_size('logo', 200, 100, false);
 add_image_size('content_image', 600, 350, true);
 add_image_size('card', 400, 400, true);
-add_image_size('milestone', 100, 100, true);
+// add_image_size('milestone', 100, 100, true);
 
 /*
 Scripts & Styles

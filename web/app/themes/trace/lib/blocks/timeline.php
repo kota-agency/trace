@@ -23,7 +23,7 @@ $heading = get_field('heading');
                                 <?php
 
                                 $year = get_sub_field('year');
-                                $image = wp_get_attachment_image(get_sub_field('image'), 'milestone');
+                                $image = wp_get_attachment_image(get_sub_field('image'), 'card');
                                 $copy = get_sub_field('copy');
 
                                 ?>

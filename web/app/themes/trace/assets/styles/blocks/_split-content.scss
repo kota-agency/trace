@@ -3,7 +3,7 @@
     z-index: 2;
 
     &__content {
-        a {
+        a:not(.btn) {
             color: $color-quaternary;
         }
     }
