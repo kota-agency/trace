@@ -1827,3 +1827,25 @@ function ai1wm_got_url_permalinks() {
 
 	return true;
 }
+
+/**
+ * Get .htaccess file content
+ *
+ * @return string
+ */
+function ai1wm_get_htaccess() {
+	if ( is_file( AI1WM_WORDPRESS_HTACCESS ) ) {
+		return @file_get_contents( AI1WM_WORDPRESS_HTACCESS );
+	}
+}
+
+/**
+ * Get web.config file content
+ *
+ * @return string
+ */
+function ai1wm_get_webconfig() {
+	if ( is_file( AI1WM_WORDPRESS_WEBCONFIG ) ) {
+		return @file_get_contents( AI1WM_WORDPRESS_WEBCONFIG );
+	}
+}

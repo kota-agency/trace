@@ -35,7 +35,7 @@ define( 'AI1WM_DEBUG', false );
 // ==================
 // = Plugin Version =
 // ==================
-define( 'AI1WM_VERSION', '7.32' );
+define( 'AI1WM_VERSION', '7.33' );
 
 // ===============
 // = Plugin Name =
@@ -438,6 +438,11 @@ define( 'AI1WM_BACKUPS_WEBCONFIG', AI1WM_BACKUPS_PATH . DIRECTORY_SEPARATOR . 'w
 // = WordPress .htaccess File =
 // ============================
 define( 'AI1WM_WORDPRESS_HTACCESS', ABSPATH . DIRECTORY_SEPARATOR . '.htaccess' );
+
+// =============================
+// = WordPress web.config File =
+// =============================
+define( 'AI1WM_WORDPRESS_WEBCONFIG', ABSPATH . DIRECTORY_SEPARATOR . 'web.config' );
 
 // ================================
 // = WP Migration Plugin Base Dir =

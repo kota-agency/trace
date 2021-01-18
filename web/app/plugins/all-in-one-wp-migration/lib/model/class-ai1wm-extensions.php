@@ -214,7 +214,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMME_PLUGIN_ABOUT,
 				'basename' => AI1WMME_PLUGIN_BASENAME,
 				'version'  => AI1WMME_VERSION,
-				'requires' => '4.0',
+				'requires' => '4.3',
 				'short'    => AI1WMME_PLUGIN_SHORT,
 			);
 		}

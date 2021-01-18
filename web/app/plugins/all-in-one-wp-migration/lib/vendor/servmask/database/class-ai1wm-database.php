@@ -717,19 +717,15 @@ abstract class Ai1wm_Database {
 	 * Export database into a file
 	 *
 	 * @param  string  $file_name    File name
+	 * @param  integer $query_offset Query offset
 	 * @param  integer $table_index  Table index
 	 * @param  integer $table_offset Table offset
 	 * @param  integer $table_rows   Table rows
 	 * @return boolean
 	 */
-	public function export( $file_name, &$table_index = 0, &$table_offset = 0, &$table_rows = 0 ) {
+	public function export( $file_name, &$query_offset = 0, &$table_index = 0, &$table_offset = 0, &$table_rows = 0 ) {
 		// Set file handler
-		$file_handler = ai1wm_open( $file_name, 'ab' );
-
-		// Write headers
-		if ( $table_index === 0 ) {
-			ai1wm_write( $file_handler, $this->get_header() );
-		}
+		$file_handler = ai1wm_open( $file_name, 'cb' );
 
 		// Start time
 		$start = microtime( true );
@@ -746,216 +742,228 @@ abstract class Ai1wm_Database {
 		// Get views
 		$views = $this->get_views();
 
-		// Export tables
-		for ( ; $table_index < count( $tables ); ) {
+		// Set file pointer at the query offset
+		if ( fseek( $file_handler, $query_offset ) !== -1 ) {
 
-			// Get table name
-			$table_name = $tables[ $table_index ];
+			// Write headers
+			if ( $query_offset === 0 ) {
+				ai1wm_write( $file_handler, $this->get_header() );
+			}
 
-			// Replace table name prefixes
-			$new_table_name = $this->replace_table_prefixes( $table_name, 0 );
+			// Export tables
+			for ( ; $table_index < count( $tables ); ) {
 
-			// Loop over tables and views
-			if ( in_array( $table_name, $views ) ) {
+				// Get table name
+				$table_name = $tables[ $table_index ];
 
-				// Get create view statement
-				if ( $table_offset === 0 ) {
+				// Replace table name prefixes
+				$new_table_name = $this->replace_table_prefixes( $table_name, 0 );
 
-					// Write view drop statement
-					$drop_view = "\nDROP VIEW IF EXISTS `{$new_table_name}`;\n";
-
-					// Write drop view statement
-					ai1wm_write( $file_handler, $drop_view );
+				// Loop over tables and views
+				if ( in_array( $table_name, $views ) ) {
 
 					// Get create view statement
-					$create_view = $this->get_create_view( $table_name );
+					if ( $table_offset === 0 ) {
 
-					// Replace create view name
-					$create_view = $this->replace_view_name( $create_view, $table_name, $new_table_name );
+						// Write view drop statement
+						$drop_view = "\nDROP VIEW IF EXISTS `{$new_table_name}`;\n";
 
-					// Replace create view identifiers
-					$create_view = $this->replace_view_identifiers( $create_view );
+						// Write drop view statement
+						ai1wm_write( $file_handler, $drop_view );
 
-					// Replace create view options
-					$create_view = $this->replace_view_options( $create_view );
+						// Get create view statement
+						$create_view = $this->get_create_view( $table_name );
 
-					// Write create view statement
-					ai1wm_write( $file_handler, $create_view );
+						// Replace create view name
+						$create_view = $this->replace_view_name( $create_view, $table_name, $new_table_name );
 
-					// Write end of statement
-					ai1wm_write( $file_handler, ";\n\n" );
-				}
+						// Replace create view identifiers
+						$create_view = $this->replace_view_identifiers( $create_view );
 
-				// Set curent table index
-				$table_index++;
+						// Replace create view options
+						$create_view = $this->replace_view_options( $create_view );
 
-				// Set current table offset
-				$table_offset = 0;
+						// Write create view statement
+						ai1wm_write( $file_handler, $create_view );
 
-			} else {
-
-				// Get create table statement
-				if ( $table_offset === 0 ) {
-
-					// Write table drop statement
-					$drop_table = "\nDROP TABLE IF EXISTS `{$new_table_name}`;\n";
-
-					// Write table statement
-					ai1wm_write( $file_handler, $drop_table );
-
-					// Get create table statement
-					$create_table = $this->get_create_table( $table_name );
-
-					// Replace create table name
-					$create_table = $this->replace_table_name( $create_table, $table_name, $new_table_name );
-
-					// Replace create table comments
-					$create_table = $this->replace_table_comments( $create_table );
-
-					// Replace create table constraints
-					$create_table = $this->replace_table_constraints( $create_table );
-
-					// Replace create table options
-					$create_table = $this->replace_table_options( $create_table );
-
-					// Write create table statement
-					ai1wm_write( $file_handler, $create_table );
-
-					// Write end of statement
-					ai1wm_write( $file_handler, ";\n\n" );
-				}
-
-				// Get primary keys
-				$primary_keys = $this->get_primary_keys( $table_name );
-
-				// Get table columns
-				$table_columns = $this->get_column_types( $table_name );
-
-				// Get prefix columns
-				$prefix_columns = $this->get_table_prefix_columns( $table_name );
-
-				do {
-
-					// Set query
-					if ( $primary_keys ) {
-
-						// Set table keys
-						$table_keys = array();
-						foreach ( $primary_keys as $key ) {
-							$table_keys[] = sprintf( '`%s`', $key );
-						}
-
-						$table_keys = implode( ', ', $table_keys );
-
-						// Set table where clauses
-						$table_where = array( 1 );
-						foreach ( $this->get_table_where_clauses( $table_name ) as $clause ) {
-							$table_where[] = $clause;
-						}
-
-						$table_where = implode( ' AND ', $table_where );
-
-						// Set query with offset and rows count
-						$query = sprintf( 'SELECT t1.* FROM `%s` AS t1 JOIN (SELECT %s FROM `%s` WHERE %s ORDER BY %s LIMIT %d, %d) AS t2 USING (%s)', $table_name, $table_keys, $table_name, $table_where, $table_keys, $table_offset, AI1WM_MAX_SELECT_RECORDS, $table_keys );
-
-					} else {
-
-						// Set table keys
-						$table_keys = 1;
-
-						// Set table where clauses
-						$table_where = array( 1 );
-						foreach ( $this->get_table_where_clauses( $table_name ) as $clause ) {
-							$table_where[] = $clause;
-						}
-
-						$table_where = implode( ' AND ', $table_where );
-
-						// Set query with offset and rows count
-						$query = sprintf( 'SELECT * FROM `%s` WHERE %s ORDER BY %s LIMIT %d, %d', $table_name, $table_where, $table_keys, $table_offset, AI1WM_MAX_SELECT_RECORDS );
+						// Write end of statement
+						ai1wm_write( $file_handler, ";\n\n" );
 					}
 
-					// Run SQL query
-					$result = $this->query( $query );
+					// Set curent table index
+					$table_index++;
 
-					// Repair table data
-					if ( $this->errno() === 1194 ) {
+					// Set current table offset
+					$table_offset = 0;
 
-						// Current table is marked as crashed and should be repaired
-						$this->repair_table( $table_name );
+				} else {
+
+					// Get create table statement
+					if ( $table_offset === 0 ) {
+
+						// Write table drop statement
+						$drop_table = "\nDROP TABLE IF EXISTS `{$new_table_name}`;\n";
+
+						// Write table statement
+						ai1wm_write( $file_handler, $drop_table );
+
+						// Get create table statement
+						$create_table = $this->get_create_table( $table_name );
+
+						// Replace create table name
+						$create_table = $this->replace_table_name( $create_table, $table_name, $new_table_name );
+
+						// Replace create table comments
+						$create_table = $this->replace_table_comments( $create_table );
+
+						// Replace create table constraints
+						$create_table = $this->replace_table_constraints( $create_table );
+
+						// Replace create table options
+						$create_table = $this->replace_table_options( $create_table );
+
+						// Write create table statement
+						ai1wm_write( $file_handler, $create_table );
+
+						// Write end of statement
+						ai1wm_write( $file_handler, ";\n\n" );
+					}
+
+					// Get primary keys
+					$primary_keys = $this->get_primary_keys( $table_name );
+
+					// Get table columns
+					$table_columns = $this->get_column_types( $table_name );
+
+					// Get prefix columns
+					$prefix_columns = $this->get_table_prefix_columns( $table_name );
+
+					do {
+
+						// Set query
+						if ( $primary_keys ) {
+
+							// Set table keys
+							$table_keys = array();
+							foreach ( $primary_keys as $key ) {
+								$table_keys[] = sprintf( '`%s`', $key );
+							}
+
+							$table_keys = implode( ', ', $table_keys );
+
+							// Set table where clauses
+							$table_where = array( 1 );
+							foreach ( $this->get_table_where_clauses( $table_name ) as $clause ) {
+								$table_where[] = $clause;
+							}
+
+							$table_where = implode( ' AND ', $table_where );
+
+							// Set query with offset and rows count
+							$query = sprintf( 'SELECT t1.* FROM `%s` AS t1 JOIN (SELECT %s FROM `%s` WHERE %s ORDER BY %s LIMIT %d, %d) AS t2 USING (%s)', $table_name, $table_keys, $table_name, $table_where, $table_keys, $table_offset, AI1WM_MAX_SELECT_RECORDS, $table_keys );
+
+						} else {
+
+							// Set table keys
+							$table_keys = 1;
+
+							// Set table where clauses
+							$table_where = array( 1 );
+							foreach ( $this->get_table_where_clauses( $table_name ) as $clause ) {
+								$table_where[] = $clause;
+							}
+
+							$table_where = implode( ' AND ', $table_where );
+
+							// Set query with offset and rows count
+							$query = sprintf( 'SELECT * FROM `%s` WHERE %s ORDER BY %s LIMIT %d, %d', $table_name, $table_where, $table_keys, $table_offset, AI1WM_MAX_SELECT_RECORDS );
+						}
 
 						// Run SQL query
 						$result = $this->query( $query );
-					}
 
-					// Generate insert statements
-					if ( $num_rows = $this->num_rows( $result ) ) {
+						// Repair table data
+						if ( $this->errno() === 1194 ) {
 
-						// Loop over table rows
-						while ( $row = $this->fetch_assoc( $result ) ) {
+							// Current table is marked as crashed and should be repaired
+							$this->repair_table( $table_name );
 
-							// Write start transaction
-							if ( $table_offset % AI1WM_MAX_TRANSACTION_QUERIES === 0 ) {
-								ai1wm_write( $file_handler, "START TRANSACTION;\n" );
-							}
+							// Run SQL query
+							$result = $this->query( $query );
+						}
 
-							$items = array();
-							foreach ( $row as $key => $value ) {
-								// Replace table prefix columns
-								if ( isset( $prefix_columns[ strtolower( $key ) ] ) ) {
-									$value = $this->replace_column_prefixes( $value, 0 );
+						// Generate insert statements
+						if ( $num_rows = $this->num_rows( $result ) ) {
+
+							// Loop over table rows
+							while ( $row = $this->fetch_assoc( $result ) ) {
+
+								// Write start transaction
+								if ( $table_offset % AI1WM_MAX_TRANSACTION_QUERIES === 0 ) {
+									ai1wm_write( $file_handler, "START TRANSACTION;\n" );
 								}
 
-								$items[] = $this->prepare_table_values( $value, $table_columns[ strtolower( $key ) ] );
+								$items = array();
+								foreach ( $row as $key => $value ) {
+									// Replace table prefix columns
+									if ( isset( $prefix_columns[ strtolower( $key ) ] ) ) {
+										$value = $this->replace_column_prefixes( $value, 0 );
+									}
+
+									$items[] = $this->prepare_table_values( $value, $table_columns[ strtolower( $key ) ] );
+								}
+
+								// Set table values
+								$table_values = implode( ',', $items );
+
+								// Set insert statement
+								$table_insert = "INSERT INTO `{$new_table_name}` VALUES ({$table_values});\n";
+
+								// Write insert statement
+								ai1wm_write( $file_handler, $table_insert );
+
+								// Set current table offset
+								$table_offset++;
+
+								// Set current table rows
+								$table_rows++;
+
+								// Write end of transaction
+								if ( $table_offset % AI1WM_MAX_TRANSACTION_QUERIES === 0 ) {
+									ai1wm_write( $file_handler, "COMMIT;\n" );
+								}
 							}
-
-							// Set table values
-							$table_values = implode( ',', $items );
-
-							// Set insert statement
-							$table_insert = "INSERT INTO `{$new_table_name}` VALUES ({$table_values});\n";
-
-							// Write insert statement
-							ai1wm_write( $file_handler, $table_insert );
-
-							// Set current table offset
-							$table_offset++;
-
-							// Set current table rows
-							$table_rows++;
+						} else {
 
 							// Write end of transaction
-							if ( $table_offset % AI1WM_MAX_TRANSACTION_QUERIES === 0 ) {
+							if ( $table_offset % AI1WM_MAX_TRANSACTION_QUERIES !== 0 ) {
 								ai1wm_write( $file_handler, "COMMIT;\n" );
 							}
+
+							// Set curent table index
+							$table_index++;
+
+							// Set current table offset
+							$table_offset = 0;
 						}
-					} else {
 
-						// Write end of transaction
-						if ( $table_offset % AI1WM_MAX_TRANSACTION_QUERIES !== 0 ) {
-							ai1wm_write( $file_handler, "COMMIT;\n" );
+						// Close result cursor
+						$this->free_result( $result );
+
+						// Time elapsed
+						if ( ( $timeout = apply_filters( 'ai1wm_completed_timeout', 10 ) ) ) {
+							if ( ( microtime( true ) - $start ) > $timeout ) {
+								$completed = false;
+								break 2;
+							}
 						}
-
-						// Set curent table index
-						$table_index++;
-
-						// Set current table offset
-						$table_offset = 0;
-					}
-
-					// Close result cursor
-					$this->free_result( $result );
-
-					// Time elapsed
-					if ( ( $timeout = apply_filters( 'ai1wm_completed_timeout', 10 ) ) ) {
-						if ( ( microtime( true ) - $start ) > $timeout ) {
-							$completed = false;
-							break 2;
-						}
-					}
-				} while ( $num_rows > 0 );
+					} while ( $num_rows > 0 );
+				}
 			}
 		}
+
+		// Set query offset
+		$query_offset = ftell( $file_handler );
 
 		// Close file handler
 		ai1wm_close( $file_handler );
@@ -975,7 +983,7 @@ abstract class Ai1wm_Database {
 		$max_allowed_packet = $this->get_max_allowed_packet();
 
 		// Set file handler
-		$file_handler = ai1wm_open( $file_name, 'r' );
+		$file_handler = ai1wm_open( $file_name, 'rb' );
 
 		// Start time
 		$start = microtime( true );
@@ -1076,9 +1084,6 @@ abstract class Ai1wm_Database {
 							}
 						}
 
-						// Set query offset
-						$query_offset = ftell( $file_handler );
-
 						// Time elapsed
 						if ( ( $timeout = apply_filters( 'ai1wm_completed_timeout', 10 ) ) ) {
 							if ( ! $this->is_atomic_query( $query ) ) {
@@ -1097,6 +1102,9 @@ abstract class Ai1wm_Database {
 			// End transaction
 			$this->query( 'COMMIT' );
 		}
+
+		// Set query offset
+		$query_offset = ftell( $file_handler );
 
 		// Close file handler
 		ai1wm_close( $file_handler );
