@@ -141,6 +141,16 @@ function ai1wm_media_list_path( $params ) {
 }
 
 /**
+ * Get tables.list absolute path
+ *
+ * @param  array  $params Request parameters
+ * @return string
+ */
+function ai1wm_tables_list_path( $params ) {
+	return ai1wm_storage_path( $params ) . DIRECTORY_SEPARATOR . AI1WM_TABLES_LIST_NAME;
+}
+
+/**
  * Get package.json absolute path
  *
  * @param  array  $params Request parameters

@@ -28,7 +28,6 @@ return array(
     'Yoast\\WP\\Duplicate_Post\\UI\\Column' => $baseDir . '/src/ui/class-column.php',
     'Yoast\\WP\\Duplicate_Post\\UI\\Link_Builder' => $baseDir . '/src/ui/class-link-builder.php',
     'Yoast\\WP\\Duplicate_Post\\UI\\Metabox' => $baseDir . '/src/ui/class-metabox.php',
-    'Yoast\\WP\\Duplicate_Post\\UI\\Post_List' => $baseDir . '/src/ui/class-post-list.php',
     'Yoast\\WP\\Duplicate_Post\\UI\\Post_States' => $baseDir . '/src/ui/class-post-states.php',
     'Yoast\\WP\\Duplicate_Post\\UI\\Row_Actions' => $baseDir . '/src/ui/class-row-actions.php',
     'Yoast\\WP\\Duplicate_Post\\UI\\User_Interface' => $baseDir . '/src/ui/class-user-interface.php',

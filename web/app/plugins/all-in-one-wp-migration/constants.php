@@ -35,7 +35,7 @@ define( 'AI1WM_DEBUG', false );
 // ==================
 // = Plugin Version =
 // ==================
-define( 'AI1WM_VERSION', '7.33' );
+define( 'AI1WM_VERSION', '7.34' );
 
 // ===============
 // = Plugin Name =
@@ -161,6 +161,11 @@ define( 'AI1WM_CONTENT_LIST_NAME', 'content.list' );
 // = Archive Media List Name =
 // ===========================
 define( 'AI1WM_MEDIA_LIST_NAME', 'media.list' );
+
+// ============================
+// = Archive Tables List Name =
+// ============================
+define( 'AI1WM_TABLES_LIST_NAME', 'tables.list' );
 
 // =================================
 // = Archive Must-Use Plugins Name =

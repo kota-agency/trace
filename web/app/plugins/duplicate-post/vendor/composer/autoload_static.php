@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbac46342df44ff7c7344b8e79f379de2
+class ComposerStaticInitedd91d310f2404dbd0a4f0e790496f5c
 {
     public static $classMap = array (
         'Yoast\\WP\\Duplicate_Post\\Admin\\Options' => __DIR__ . '/../..' . '/src/admin/class-options.php',
@@ -29,7 +29,6 @@ class ComposerStaticInitbac46342df44ff7c7344b8e79f379de2
         'Yoast\\WP\\Duplicate_Post\\UI\\Column' => __DIR__ . '/../..' . '/src/ui/class-column.php',
         'Yoast\\WP\\Duplicate_Post\\UI\\Link_Builder' => __DIR__ . '/../..' . '/src/ui/class-link-builder.php',
         'Yoast\\WP\\Duplicate_Post\\UI\\Metabox' => __DIR__ . '/../..' . '/src/ui/class-metabox.php',
-        'Yoast\\WP\\Duplicate_Post\\UI\\Post_List' => __DIR__ . '/../..' . '/src/ui/class-post-list.php',
         'Yoast\\WP\\Duplicate_Post\\UI\\Post_States' => __DIR__ . '/../..' . '/src/ui/class-post-states.php',
         'Yoast\\WP\\Duplicate_Post\\UI\\Row_Actions' => __DIR__ . '/../..' . '/src/ui/class-row-actions.php',
         'Yoast\\WP\\Duplicate_Post\\UI\\User_Interface' => __DIR__ . '/../..' . '/src/ui/class-user-interface.php',
@@ -45,7 +44,7 @@ class ComposerStaticInitbac46342df44ff7c7344b8e79f379de2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInitbac46342df44ff7c7344b8e79f379de2::$classMap;
+            $loader->classMap = ComposerStaticInitedd91d310f2404dbd0a4f0e790496f5c::$classMap;
 
         }, null, ClassLoader::class);
     }
