@@ -172,3 +172,36 @@ function enable_gutenberg_editor_for_blog_page( $replace, $post ) {
     return $replace;
 
 }
+
+add_filter( 'retrieve_password_message', 'my_retrieve_password_message', 10, 4 );
+function my_retrieve_password_message( $message, $key, $user_login, $user_data ) {
+
+    // Start with the default content.
+    $site_name = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+    $message = __( 'Someone has requested a password reset for the following account:' ) . "\r\n\r\n";
+    /* translators: %s: site name */
+    $message .= sprintf( __( 'Site Name: %s' ), $site_name ) . "\r\n\r\n";
+    /* translators: %s: user login */
+    $message .= sprintf( __( 'Username: %s' ), $user_login ) . "\r\n\r\n";
+    $message .= __( 'If this was a mistake, just ignore this email and nothing will happen.' ) . "\r\n\r\n";
+    $message .= __( 'To reset your password, visit the following addres::' ) . "\r\n\r\n";
+    $message .= '<' . network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ) . ">\r\n";
+
+    /*
+     * If the problem persists with this filter, remove
+     * the last line above and use the line below by
+     * removing "//" (which comments it out) and hard
+     * coding the domain to your site, thus avoiding
+     * the network_site_url() function.
+     */
+    // $message .= '<http://yoursite.com/wp-login.php?action=rp&key=' . $key . '&login=' . rawurlencode( $user_login ) . ">\r\n";
+
+    // Return the filtered message.
+    return $message;
+
+}
+
+add_filter( 'wp_mail_from', 'new_mail_from' );     
+function new_mail_from( $old ) {
+    return 'no-reply@tracesolutions.co.uk'; // Edit it with your email address
+}
