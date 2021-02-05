@@ -75,11 +75,18 @@
     }
   }
 
+  .
+
   .gfield_label {
-    display: none;
     font-size: 1.8rem;
     font-weight: bold;
     color: $white;
+  }
+
+  .hidden_label {
+    .gfield_label {
+      display: none !important
+    }
   }
 
   .gfield_required {
