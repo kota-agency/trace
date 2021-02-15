@@ -4,7 +4,7 @@ Contributors: johnbillion, scompt
 Tags: cron, wp-cron, crontrol, debug  
 Requires at least: 4.1  
 Tested up to: 5.6  
-Stable tag: 1.9.0  
+Stable tag: 1.9.1  
 Requires PHP: 5.3  
 Donate link: https://github.com/sponsors/johnbillion
 
@@ -141,6 +141,10 @@ The cron commands which were previously included in WP Crontrol are now part of 
 3. New cron schedules can be added, giving plugin developers more options when scheduling events<br>![](.wordpress-org/screenshot-2.png)
 
 ## Changelog ##
+
+### 1.9.1 ###
+
+* Fix the adding of new cron events when `DISALLOW_FILE_EDIT` is true.
 
 ### 1.9.0 ###
 

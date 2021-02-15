@@ -340,7 +340,9 @@ class Ai1wm_Import_Done {
 		}
 
 		// Set progress
-		if ( ai1wm_validate_plugin_basename( 'oxygen/functions.php' ) ) {
+		if ( ai1wm_validate_plugin_basename( 'fusion-builder/fusion-builder.php' ) ) {
+			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/avada' ) );
+		} elseif ( ai1wm_validate_plugin_basename( 'oxygen/functions.php' ) ) {
 			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/oxygen' ) );
 		} else {
 			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/done' ) );

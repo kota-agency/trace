@@ -37,11 +37,25 @@ abstract class Ai1wm_Database {
 	protected $wpdb = null;
 
 	/**
+	 * WordPress database base tables
+	 *
+	 * @var array
+	 */
+	protected $base_tables = null;
+
+	/**
+	 * WordPress database views
+	 *
+	 * @var array
+	 */
+	protected $views = null;
+
+	/**
 	 * WordPress database tables
 	 *
 	 * @var array
 	 */
-	protected $tables = array();
+	protected $tables = null;
 
 	/**
 	 * Old table prefixes
@@ -572,10 +586,7 @@ abstract class Ai1wm_Database {
 	 * @return array
 	 */
 	protected function get_views() {
-		static $views = null;
-
-		// Get views
-		if ( is_null( $views ) ) {
+		if ( is_null( $this->views ) ) {
 			$where_query = array();
 
 			// Get lower case table names
@@ -588,13 +599,13 @@ abstract class Ai1wm_Database {
 						if ( $lower_case_table_names ) {
 							$where_query[] = sprintf( "(`Tables_in_%s` REGEXP '^%s' AND `Tables_in_%s` NOT REGEXP '^%s')", $this->wpdb->dbname, $prefix_filter[0], $this->wpdb->dbname, $prefix_filter[1] );
 						} else {
-							$where_query[] = sprintf( "(`Tables_in_%s` REGEXP BINARY '^%s' AND `Tables_in_%s` NOT REGEXP BINARY '^%s')", $this->wpdb->dbname, $prefix_filter[0], $this->wpdb->dbname, $prefix_filter[1] );
+							$where_query[] = sprintf( "(CAST(`Tables_in_%s` AS BINARY) REGEXP BINARY '^%s' AND CAST(`Tables_in_%s` AS BINARY) NOT REGEXP BINARY '^%s')", $this->wpdb->dbname, $prefix_filter[0], $this->wpdb->dbname, $prefix_filter[1] );
 						}
 					} else {
 						if ( $lower_case_table_names ) {
 							$where_query[] = sprintf( "`Tables_in_%s` REGEXP '^%s'", $this->wpdb->dbname, $prefix_filter[0] );
 						} else {
-							$where_query[] = sprintf( "`Tables_in_%s` REGEXP BINARY '^%s'", $this->wpdb->dbname, $prefix_filter[0] );
+							$where_query[] = sprintf( "CAST(`Tables_in_%s` AS BINARY) REGEXP BINARY '^%s'", $this->wpdb->dbname, $prefix_filter[0] );
 						}
 					}
 				}
@@ -602,13 +613,13 @@ abstract class Ai1wm_Database {
 				$where_query[] = 1;
 			}
 
-			$views = array();
+			$this->views = array();
 
 			// Loop over views
 			$result = $this->query( sprintf( "SHOW FULL TABLES FROM `%s` WHERE `Table_type` = 'VIEW' AND (%s)", $this->wpdb->dbname, implode( ' OR ', $where_query ) ) );
 			while ( $row = $this->fetch_row( $result ) ) {
 				if ( isset( $row[0] ) ) {
-					$views[] = $row[0];
+					$this->views[] = $row[0];
 				}
 			}
 
@@ -616,7 +627,7 @@ abstract class Ai1wm_Database {
 			$this->free_result( $result );
 		}
 
-		return $views;
+		return $this->views;
 	}
 
 	/**
@@ -625,10 +636,7 @@ abstract class Ai1wm_Database {
 	 * @return array
 	 */
 	protected function get_base_tables() {
-		static $base_tables = null;
-
-		// Get base tables
-		if ( is_null( $base_tables ) ) {
+		if ( is_null( $this->base_tables ) ) {
 			$where_query = array();
 
 			// Get lower case table names
@@ -641,13 +649,13 @@ abstract class Ai1wm_Database {
 						if ( $lower_case_table_names ) {
 							$where_query[] = sprintf( "(`Tables_in_%s` REGEXP '^%s' AND `Tables_in_%s` NOT REGEXP '^%s')", $this->wpdb->dbname, $prefix_filter[0], $this->wpdb->dbname, $prefix_filter[1] );
 						} else {
-							$where_query[] = sprintf( "(`Tables_in_%s` REGEXP BINARY '^%s' AND `Tables_in_%s` NOT REGEXP BINARY '^%s')", $this->wpdb->dbname, $prefix_filter[0], $this->wpdb->dbname, $prefix_filter[1] );
+							$where_query[] = sprintf( "(CAST(`Tables_in_%s` AS BINARY) REGEXP BINARY '^%s' AND CAST(`Tables_in_%s` AS BINARY) NOT REGEXP BINARY '^%s')", $this->wpdb->dbname, $prefix_filter[0], $this->wpdb->dbname, $prefix_filter[1] );
 						}
 					} else {
 						if ( $lower_case_table_names ) {
 							$where_query[] = sprintf( "`Tables_in_%s` REGEXP '^%s'", $this->wpdb->dbname, $prefix_filter[0] );
 						} else {
-							$where_query[] = sprintf( "`Tables_in_%s` REGEXP BINARY '^%s'", $this->wpdb->dbname, $prefix_filter[0] );
+							$where_query[] = sprintf( "CAST(`Tables_in_%s` AS BINARY) REGEXP BINARY '^%s'", $this->wpdb->dbname, $prefix_filter[0] );
 						}
 					}
 				}
@@ -655,13 +663,13 @@ abstract class Ai1wm_Database {
 				$where_query[] = 1;
 			}
 
-			$base_tables = array();
+			$this->base_tables = array();
 
 			// Loop over base tables
 			$result = $this->query( sprintf( "SHOW FULL TABLES FROM `%s` WHERE `Table_type` = 'BASE TABLE' AND (%s)", $this->wpdb->dbname, implode( ' OR ', $where_query ) ) );
 			while ( $row = $this->fetch_row( $result ) ) {
 				if ( isset( $row[0] ) ) {
-					$base_tables[] = $row[0];
+					$this->base_tables[] = $row[0];
 				}
 			}
 
@@ -669,7 +677,7 @@ abstract class Ai1wm_Database {
 			$this->free_result( $result );
 		}
 
-		return $base_tables;
+		return $this->base_tables;
 	}
 
 	/**
@@ -690,7 +698,7 @@ abstract class Ai1wm_Database {
 	 * @return array
 	 */
 	public function get_tables() {
-		if ( empty( $this->tables ) ) {
+		if ( is_null( $this->tables ) ) {
 			return array_merge( $this->get_base_tables(), $this->get_views() );
 		}
 
