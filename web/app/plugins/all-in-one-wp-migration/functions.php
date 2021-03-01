@@ -1804,38 +1804,26 @@ function ai1wm_escape_windows_directory_separator( $path ) {
 }
 
 /**
- * Returns whether the server supports URL rewriting.
- * Detects Apache's mod_rewrite, IIS 7.0+ permalink support, and nginx.
+ * Should reset WordPress permalinks?
  *
- * @return boolean Whether the server supports URL rewriting.
+ * @param  array   $params Request parameters
+ * @return boolean
  */
-function ai1wm_got_url_rewrite() {
-	if ( iis7_supports_permalinks() ) {
-		return true;
-	} elseif ( ! empty( $GLOBALS['is_nginx'] ) ) {
-		return true;
-	}
-
-	return apache_mod_loaded( 'mod_rewrite', false );
-}
-
-/**
- * Returns whether the server supports URL permalinks.
- * Detects Apache's mod_rewrite and URL permalinks.
- *
- * @return boolean Whether the server supports URL permalinks.
- */
-function ai1wm_got_url_permalinks() {
+function ai1wm_should_reset_permalinks( $params ) {
 	global $wp_rewrite, $is_apache;
-	if ( $wp_rewrite->using_permalinks() ) {
-		return true;
+
+	// Permalinks are not supported
+	if ( empty( $params['using_permalinks'] ) ) {
+		if ( $wp_rewrite->using_permalinks() ) {
+			if ( $is_apache ) {
+				if ( ! apache_mod_loaded( 'mod_rewrite', false ) ) {
+					return true;
+				}
+			}
+		}
 	}
 
-	if ( $is_apache ) {
-		return apache_mod_loaded( 'mod_rewrite', false );
-	}
-
-	return true;
+	return false;
 }
 
 /**

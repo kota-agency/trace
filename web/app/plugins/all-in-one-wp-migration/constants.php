@@ -35,7 +35,7 @@ define( 'AI1WM_DEBUG', false );
 // ==================
 // = Plugin Version =
 // ==================
-define( 'AI1WM_VERSION', '7.36' );
+define( 'AI1WM_VERSION', '7.37' );
 
 // ===============
 // = Plugin Name =
@@ -208,9 +208,14 @@ define( 'AI1WM_GD_SYSTEM_PLUGIN_NAME', 'gd-system-plugin.php' );
 define( 'AI1WM_WP_STACK_CACHE_NAME', 'wp-stack-cache.php' );
 
 // ===========================
-// = WP.com Site Helper Name =
+// = WP.com Site Loader Name =
 // ===========================
 define( 'AI1WM_WP_COMSH_LOADER_NAME', 'wpcomsh-loader.php' );
+
+// ===========================
+// = WP.com Site Helper Name =
+// ===========================
+define( 'AI1WM_WP_COMSH_HELPER_NAME', 'wpcomsh' );
 
 // ================================
 // = WP Engine System Plugin Name =

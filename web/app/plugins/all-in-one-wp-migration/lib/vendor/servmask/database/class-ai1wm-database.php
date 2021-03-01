@@ -188,9 +188,12 @@ abstract class Ai1wm_Database {
 		if ( is_resource( $this->wpdb->dbh ) ) {
 			if ( get_resource_type( $this->wpdb->dbh ) === 'SQL Server Connection' ) {
 				throw new Ai1wm_Database_Exception(
-					'Your WordPress installation uses Microsoft SQL Server. ' .
-					'To use All-in-One WP Migration, please change your installation to MySQL and try again. ' .
-					'<a href="https://help.servmask.com/knowledgebase/microsoft-sql-server/" target="_blank">Technical details</a>',
+					__(
+						'Your WordPress installation uses Microsoft SQL Server. ' .
+						'To use All-in-One WP Migration, please change your installation to MySQL and try again. ' .
+						'<a href="https://help.servmask.com/knowledgebase/microsoft-sql-server/" target="_blank">Technical details</a>',
+						AI1WM_PLUGIN_NAME
+					),
 					501
 				);
 			}
@@ -1039,30 +1042,42 @@ abstract class Ai1wm_Database {
 							if ( $this->errno() === 1226 ) {
 								if ( stripos( $this->error(), 'max_queries_per_hour' ) !== false ) {
 									throw new Ai1wm_Database_Exception(
-										'Your WordPress installation has reached the maximum allowed queries per hour set by your server admin or hosting provider. ' .
-										'To use All-in-One WP Migration, please increase MySQL max_queries_per_hour limit. ' .
-										'<a href="https://help.servmask.com/knowledgebase/mysql-error-codes/#max-queries-per-hour" target="_blank">Technical details</a>',
+										__(
+											'Your WordPress installation has reached the maximum allowed queries per hour set by your server admin or hosting provider. ' .
+											'To use All-in-One WP Migration, please increase MySQL max_queries_per_hour limit. ' .
+											'<a href="https://help.servmask.com/knowledgebase/mysql-error-codes/#max-queries-per-hour" target="_blank">Technical details</a>',
+											AI1WM_PLUGIN_NAME
+										),
 										503
 									);
 								} elseif ( stripos( $this->error(), 'max_updates_per_hour' ) !== false ) {
 									throw new Ai1wm_Database_Exception(
-										'Your WordPress installation has reached the maximum allowed updates per hour set by your server admin or hosting provider. ' .
-										'To use All-in-One WP Migration, please increase MySQL max_updates_per_hour limit. ' .
-										'<a href="https://help.servmask.com/knowledgebase/mysql-error-codes/#max-updates-per-hour" target="_blank">Technical details</a>',
+										__(
+											'Your WordPress installation has reached the maximum allowed updates per hour set by your server admin or hosting provider. ' .
+											'To use All-in-One WP Migration, please increase MySQL max_updates_per_hour limit. ' .
+											'<a href="https://help.servmask.com/knowledgebase/mysql-error-codes/#max-updates-per-hour" target="_blank">Technical details</a>',
+											AI1WM_PLUGIN_NAME
+										),
 										503
 									);
 								} elseif ( stripos( $this->error(), 'max_connections_per_hour' ) !== false ) {
 									throw new Ai1wm_Database_Exception(
-										'Your WordPress installation has reached the maximum allowed connections per hour set by your server admin or hosting provider. ' .
-										'To use All-in-One WP Migration, please increase MySQL max_connections_per_hour limit. ' .
-										'<a href="https://help.servmask.com/knowledgebase/mysql-error-codes/#max-connections-per-hour" target="_blank">Technical details</a>',
+										__(
+											'Your WordPress installation has reached the maximum allowed connections per hour set by your server admin or hosting provider. ' .
+											'To use All-in-One WP Migration, please increase MySQL max_connections_per_hour limit. ' .
+											'<a href="https://help.servmask.com/knowledgebase/mysql-error-codes/#max-connections-per-hour" target="_blank">Technical details</a>',
+											AI1WM_PLUGIN_NAME
+										),
 										503
 									);
 								} elseif ( stripos( $this->error(), 'max_user_connections' ) !== false ) {
 									throw new Ai1wm_Database_Exception(
-										'Your WordPress installation has reached the maximum allowed user connections set by your server admin or hosting provider. ' .
-										'To use All-in-One WP Migration, please increase MySQL max_user_connections limit. ' .
-										'<a href="https://help.servmask.com/knowledgebase/mysql-error-codes/#max-user-connections" target="_blank">Technical details</a>',
+										__(
+											'Your WordPress installation has reached the maximum allowed user connections set by your server admin or hosting provider. ' .
+											'To use All-in-One WP Migration, please increase MySQL max_user_connections limit. ' .
+											'<a href="https://help.servmask.com/knowledgebase/mysql-error-codes/#max-user-connections" target="_blank">Technical details</a>',
+											AI1WM_PLUGIN_NAME
+										),
 										503
 									);
 								}

@@ -27,10 +27,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Kangaroos cannot jump here' );
 }
 
-if ( ai1wm_got_url_permalinks() ) {
-	printf( __( '» <a class="ai1wm-no-underline" href="%s" target="_blank">Save permalinks structure</a>. (opens a new window)<br />', AI1WM_PLUGIN_NAME ), admin_url( 'options-permalink.php#submit' ) );
-} else {
+if ( $should_reset_permalinks ) {
 	print( __( '» Permalinks are set to default. <a class="ai1wm-no-underline" href="https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/" target="_blank">Why?</a> (opens a new window)<br />', AI1WM_PLUGIN_NAME ) );
+} else {
+	printf( __( '» <a class="ai1wm-no-underline" href="%s" target="_blank">Save permalinks structure</a>. (opens a new window)<br />', AI1WM_PLUGIN_NAME ), admin_url( 'options-permalink.php#submit' ) );
 }
 
 if ( ai1wm_validate_plugin_basename( 'oxygen/functions.php' ) ) {

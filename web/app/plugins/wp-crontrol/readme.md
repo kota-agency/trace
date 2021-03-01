@@ -2,9 +2,9 @@
 
 Contributors: johnbillion, scompt  
 Tags: cron, wp-cron, crontrol, debug  
-Requires at least: 4.1  
-Tested up to: 5.6  
-Stable tag: 1.9.1  
+Requires at least: 4.2  
+Tested up to: 5.7  
+Stable tag: 1.10.0  
 Requires PHP: 5.3  
 Donate link: https://github.com/sponsors/johnbillion
 
@@ -74,9 +74,11 @@ You can change the time and recurrence of a cron event by clicking the "Edit" li
 
 ### How can I create a cron event that requests a URL?
 
-From the "Add PHP Cron Event" tab, create a cron event that includes PHP that fetches the URL using the WordPress HTTP API. For example:
+From the Tools → Cron Events → Add New screen, create a PHP cron event that includes PHP that fetches the URL using the WordPress HTTP API. For example:
 
 	wp_remote_get( 'http://example.com' );
+
+Please see the "Which users can manage PHP cron events?" FAQ for information about which users can create PHP cron events.
 
 ### Why do changes that I make to some cron events not get saved?
 
@@ -138,9 +140,18 @@ The cron commands which were previously included in WP Crontrol are now part of 
 
 2. New cron events can be added<br>![](.wordpress-org/screenshot-2.png)
 
-3. New cron schedules can be added, giving plugin developers more options when scheduling events<br>![](.wordpress-org/screenshot-2.png)
+3. New cron schedules can be added, giving plugin developers more options when scheduling events<br>![](.wordpress-org/screenshot-3.png)
 
 ## Changelog ##
+
+### 1.10.0 ###
+
+* Support for more granular cron-related error messages in WordPress 5.7
+* Several accessibility improvements
+* Warning for events that are attached to [a schedule that is too frequent](https://github.com/johnbillion/wp-crontrol/wiki/This-interval-is-less-than-the-WP_CRON_LOCK_TIMEOUT-constant)
+* More clarity around events and schedules that are built in to WordPress core
+* Add a Help tab with links to the wiki and FAQs
+
 
 ### 1.9.1 ###
 

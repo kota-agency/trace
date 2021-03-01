@@ -64,6 +64,7 @@ function get() {
 
 	array_walk( $schedules, function( array &$schedule, $name ) {
 		$schedule['name'] = $name;
+		$schedule['is_too_frequent'] = ( $schedule['interval'] < WP_CRON_LOCK_TIMEOUT );
 	} );
 
 	return $schedules;
@@ -72,7 +73,7 @@ function get() {
 /**
  * Displays a dropdown filled with the possible schedules, including non-repeating.
  *
- * @param bool $current The currently selected schedule.
+ * @param string|false $current The currently selected schedule, or false for none.
  */
 function dropdown( $current = false ) {
 	$schedules = get();

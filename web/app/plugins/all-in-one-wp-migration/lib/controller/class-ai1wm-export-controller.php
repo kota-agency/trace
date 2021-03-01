@@ -72,6 +72,15 @@ class Ai1wm_Export_Controller {
 							// Log request
 							Ai1wm_Log::export( $params );
 
+						} catch ( Ai1wm_Database_Exception $e ) {
+							if ( defined( 'WP_CLI' ) ) {
+								WP_CLI::error( sprintf( __( 'Unable to export. Error code: %s. %s', AI1WM_PLUGIN_NAME ), $e->getCode(), $e->getMessage() ) );
+							} else {
+								status_header( $e->getCode() );
+								echo json_encode( array( 'errors' => array( array( 'code' => $e->getCode(), 'message' => $e->getMessage() ) ) ) );
+							}
+							Ai1wm_Directory::delete( ai1wm_storage_path( $params ) );
+							exit;
 						} catch ( Exception $e ) {
 							if ( defined( 'WP_CLI' ) ) {
 								WP_CLI::error( sprintf( __( 'Unable to export: %s', AI1WM_PLUGIN_NAME ), $e->getMessage() ) );
