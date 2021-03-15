@@ -28,11 +28,11 @@ add_action('wp_enqueue_scripts', function () {
 	//wp_enqueue_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js', array(), '2.2.4', false);
 	wp_enqueue_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js', array(), '3.3.1', false);
 	//wp_enqueue_script('vendor', get_template_directory_uri() . '/dist/scripts/vendor.min.js', array(), '1.0.0', true);
-	wp_enqueue_script('custom', get_template_directory_uri() . '/dist/scripts/script.min.js', array(), '1.0.9', true);
+	wp_enqueue_script('custom', get_template_directory_uri() . '/dist/scripts/script.min.js', array(), '1.0.10', true);
 	//wp_enqueue_script('icons', get_template_directory_uri() . '/dist/scripts/icons.min.js', array(), '1.0.0', true);
 	//wp_script_add_data( 'icons', 'data-search-pseudo-elements', true );
 
-	wp_enqueue_style('style', get_template_directory_uri() . '/dist/styles/style.min.css', false, '1.0.9', 'all');
+	wp_enqueue_style('style', get_template_directory_uri() . '/dist/styles/style.min.css', false, '1.0.10', 'all');
 	wp_localize_script('custom', 'theme_params', array(
 		'ajaxurl' => admin_url('admin-ajax.php'), // WordPress AJAX
 		'stylesheet_dir' => get_stylesheet_directory_uri(),
@@ -272,7 +272,25 @@ add_filter('allowed_block_types', function ($allowed) {
     return array_keys($allowed);
 });
 
+add_shortcode('gated_download', function ($atts, $content = null) { 
+    $a = shortcode_atts( array(
+        'id' => '',
+        'style' => ''
+    ), $atts );
+     
+    if($a['style'] == 'btn') {
+    	return '<a class="gated-file btn" data-gravity-form="'.$a['id'].'">' . $content . '</a>' ;
+    }
+    return '<a class="gated-file" data-gravity-form="'.$a['id'].'">' . $content . '</a>' ;
+} ); 
 
-
-
-
+add_action('wp_ajax_get_gravity_form', function() {
+    $gravity_id = $_GET['gravity_form_id'];
+    echo gravity_form($gravity_id, true, true, false, null, true);
+    die;
+});
+add_action('wp_ajax_nopriv_get_gravity_form', function() {
+    $gravity_id = $_GET['gravity_form_id'];
+    echo gravity_form($gravity_id, true, true, false, null, true);
+    die;
+});

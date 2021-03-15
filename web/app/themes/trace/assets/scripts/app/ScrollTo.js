@@ -36,7 +36,7 @@ function scrollTo() {
         }, 1500);
     });
 
-    $('a').on('click', (e) => {
+    $('a:not(.gated-file)').on('click', (e) => {
 
         const $this = $(e.currentTarget);
 
