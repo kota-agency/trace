@@ -123,6 +123,7 @@ if (file_exists($env_config)) {
 Config::apply();
 
 define( 'WP_CACHE', true );
+define( 'WPCACHEHOME', '/web/app/plugins/wp-super-cache/' );
 
 /**
  * Bootstrap WordPress
