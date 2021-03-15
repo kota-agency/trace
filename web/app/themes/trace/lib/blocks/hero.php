@@ -20,7 +20,7 @@ $image = wp_get_attachment_image(get_field('image'), 'full');
         <div class="row">
             <div class="col-md-8">
 
-                <div class="hero__content" data-aos="fade-up">
+                <div class="hero__content">
                     <?php if ($title) : ?>
                         <h1 class="text-uppercase"><?= str_replace(['<p>', '</p>'], '', $title); ?></h1>
                     <?php endif; ?>
@@ -31,7 +31,7 @@ $image = wp_get_attachment_image(get_field('image'), 'full');
         <?php if ($image) : ?>
 
             <div class="hero__image">
-                <div data-aos="fade-left" data-aos-delay="500">
+                <div>
                     <?= $image; ?>
                 </div>
             </div>
