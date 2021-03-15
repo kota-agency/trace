@@ -6,66 +6,6 @@
     <title><?php wp_title(); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-5740928-1"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-5740928-1');
-    </script>
-
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-TLL3QZN');</script>
-    <!-- End Google Tag Manager -->
-
-    <!-- A1 script -->
-    <script>
-    var cid = 6596;
-    (function() {
-    window.a1wObj = 'a1w';
-    window.a1w = window.a1w || function(){
-    (window.a1w.q = window.ga.q || []).push(arguments)
-    },
-    window.a1w.l = 1 * new Date();
-    var a = document.createElement('script');
-    var m = document.getElementsByTagName('script')[0];
-    a.async = 1;
-    a.src = "https://api1.websuccess-data.com/tracker.js";
-    m.parentNode.insertBefore(a,m)
-    })()
-    </script>
-    <!-- End A1 script -->
-
-    <!-- Lucky orange script -->
-    <script type='text/javascript'>
-    window.__lo_site_id = 177182;
-
-    (function() {
-    var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
-    wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
-    })();
-    </script>
-    <!-- End Lucky orange script -->
-
-    <!-- Script for browser update -->
-    <script> 
-        var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,api:2020.10 }; 
-        function $buo_f(){ 
-        var e = document.createElement("script"); 
-        e.src = "//browser-update.org/update.min.js"; 
-        document.body.appendChild(e);
-        };
-        try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
-        catch(e){window.attachEvent("onload", $buo_f)}
-    </script>
-    <!-- End Script for browser update -->
-
     <?php wp_head(); ?>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.14.0/css/all.css"
           integrity="sha384-VhBcF/php0Z/P5ZxlxaEx1GwqTQVIBu4G4giRWxTKOCjTxsPFETUDdVL5B6vYvOt" crossorigin="anonymous">
@@ -75,11 +15,6 @@
 </head>
 
 <body <?php body_class(); ?>>
-
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLL3QZN"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
 
 <?php
 
