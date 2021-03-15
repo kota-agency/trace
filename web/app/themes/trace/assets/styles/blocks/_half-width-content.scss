@@ -130,6 +130,7 @@
     }
 }
 
-.single-post .half-width-content .container a {
+.single-post .half-width-content .container a,
+.page .half-width-content .container a {
     color: $color-quaternary;
 }
