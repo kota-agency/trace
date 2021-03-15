@@ -122,6 +122,8 @@ if (file_exists($env_config)) {
 
 Config::apply();
 
+define( 'WP_CACHE', true );
+
 /**
  * Bootstrap WordPress
  */
