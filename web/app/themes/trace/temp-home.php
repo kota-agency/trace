@@ -23,7 +23,7 @@ $image = wp_get_attachment_image(get_field('image'), 'full');
         <div class="row">
             <div class="col-md-8">
 
-                <div class="hero__content" data-aos="fade-up">
+                <div class="hero__content">
                     <?php if ($title) : ?>
                         <h1 class="text-uppercase"><?= str_replace(['<p>', '</p>'], '', $title); ?></h1>
                     <?php endif; ?>
@@ -34,7 +34,7 @@ $image = wp_get_attachment_image(get_field('image'), 'full');
         <?php if ($image) : ?>
 
             <div class="hero__image">
-                <div data-aos="fade-left" data-aos-delay="500">
+                <div>
                     <?= $image; ?>
                 </div>
             </div>
@@ -69,7 +69,7 @@ if ($wide_heading2) {
         <div class="container">
             <?php if ($mobile_image2) : ?>
                 <div class="image-content__image d-md-none">
-                    <div data-aos="fade-up">
+                    <div>
                         <?= $mobile_image2; ?>
                     </div>
                 </div>
@@ -77,11 +77,11 @@ if ($wide_heading2) {
             <div class="row">
                 <div class="<?= $wide_heading2 ? 'col-md-9' : 'col-md-6'; ?> position-static">
                     <?php if ($heading2) : ?>
-                        <h2 data-aos="fade"><?= $heading2; ?></h2>
+                        <h2><?= $heading2; ?></h2>
                     <?php endif; ?>
                     <?php if ($image2) : ?>
                         <div class="image-content__image image-content__image--desktop d-none d-md-block">
-                            <div data-aos="fade-right">
+                            <div>
                                 <?= $image2; ?>
                             </div>
                         </div>
@@ -91,7 +91,7 @@ if ($wide_heading2) {
             </div>
             <div class="row">
                 <div class="offset-md-7 col-md-5">
-                    <div class="image-content__content" data-aos="fade-up">
+                    <div class="image-content__content">
                         <?php if ($copy2) : ?>
                             <div class="image-content__copy">
                                 <?= $copy2; ?>

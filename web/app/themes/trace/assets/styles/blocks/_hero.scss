@@ -44,8 +44,8 @@
         width: 1310px;
         transform: rotate(-90deg) translateY(-100%) translateX(-15%);
         opacity: 0;
-        animation: fade-text-up 1s forwards;
-        animation-delay: 1.5s;
+        // animation: fade-text-up 1s forwards;
+        // animation-delay: 1.5s;
 
         @include media-breakpoint-down(lg) {
             display: none;
