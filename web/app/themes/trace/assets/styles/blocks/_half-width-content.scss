@@ -131,6 +131,6 @@
 }
 
 .single-post .half-width-content .container a,
-.page .half-width-content .container a {
+.page .half-width-content .container a:not(.btn) {
     color: $color-quaternary;
 }
