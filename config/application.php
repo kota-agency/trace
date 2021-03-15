@@ -123,7 +123,7 @@ if (file_exists($env_config)) {
 Config::apply();
 
 define( 'WP_CACHE', true );
-define( 'WPCACHEHOME', '/web/app/plugins/wp-super-cache/' );
+define( 'WPCACHEHOME', '/home/forge/trace-web-vitals.in-beta.link/web/app/plugins/wp-super-cache/' );
 
 /**
  * Bootstrap WordPress
