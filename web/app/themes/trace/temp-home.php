@@ -35,7 +35,7 @@ $image = wp_get_attachment_image(get_field('image'), 'full', '', ['loading' => f
 
             <div class="hero__image">
                 <div>
-                    <!-- <?= $image; ?> -->
+                    <?= $image; ?>
                 </div>
             </div>
 
