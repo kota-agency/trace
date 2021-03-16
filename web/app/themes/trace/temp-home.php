@@ -311,6 +311,8 @@ $button_sector_cta = get_field('sectors_button');
     </div>
 </section><!-- .sectors -->
 
+<!--
+
 <?php
 
 /**
@@ -370,6 +372,8 @@ $placeholder5 = wp_get_attachment_image_url(get_field('video_placeholder'), 'ful
         <?php endif; ?>
     </section><!-- .video -->
 <?php endif; ?>
+
+-->
 
 <?php
 
