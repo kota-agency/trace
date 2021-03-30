@@ -42,6 +42,18 @@
 	background: $color-primary;
 	width: 90%;
 
+  .ginput_container_checkbox {
+    position: relative;
+
+    input[type="checkbox"] {
+      left: 0;
+      opacity: 1;
+      top: 0;
+      border: none;
+      z-index: 9;
+    }
+  }
+
 	h3 {
 		font-size: 3rem;
 		text-align: center;
