@@ -4,9 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitedd91d310f2404dbd0a4f0e790496f5c
+class ComposerStaticInitb771dd36b1819b8209dfac03b31cc9ed
 {
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Yoast\\WP\\Duplicate_Post\\Admin\\Options' => __DIR__ . '/../..' . '/src/admin/class-options.php',
         'Yoast\\WP\\Duplicate_Post\\Admin\\Options_Form_Generator' => __DIR__ . '/../..' . '/src/admin/class-options-form-generator.php',
         'Yoast\\WP\\Duplicate_Post\\Admin\\Options_Inputs' => __DIR__ . '/../..' . '/src/admin/class-options-inputs.php',
@@ -44,7 +45,7 @@ class ComposerStaticInitedd91d310f2404dbd0a4f0e790496f5c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInitedd91d310f2404dbd0a4f0e790496f5c::$classMap;
+            $loader->classMap = ComposerStaticInitb771dd36b1819b8209dfac03b31cc9ed::$classMap;
 
         }, null, ClassLoader::class);
     }

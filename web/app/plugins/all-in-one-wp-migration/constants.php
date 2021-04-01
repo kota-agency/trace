@@ -35,7 +35,7 @@ define( 'AI1WM_DEBUG', false );
 // ==================
 // = Plugin Version =
 // ==================
-define( 'AI1WM_VERSION', '7.37' );
+define( 'AI1WM_VERSION', '7.40' );
 
 // ===============
 // = Plugin Name =
@@ -167,6 +167,11 @@ define( 'AI1WM_MEDIA_LIST_NAME', 'media.list' );
 // ============================
 define( 'AI1WM_TABLES_LIST_NAME', 'tables.list' );
 
+// =============================
+// = Archive Cookies Text Name =
+// =============================
+define( 'AI1WM_COOKIES_NAME', 'cookies.txt' );
+
 // =================================
 // = Archive Must-Use Plugins Name =
 // =================================
@@ -232,15 +237,10 @@ define( 'AI1WM_WPE_SIGN_ON_PLUGIN_NAME', 'wpe-wp-sign-on-plugin.php' );
 // ===================================
 define( 'AI1WM_WP_ENGINE_SECURITY_AUDITOR_NAME', 'wpengine-security-auditor.php' );
 
-// ===================
-// = Export Log Name =
-// ===================
-define( 'AI1WM_EXPORT_NAME', 'export.log' );
-
-// ===================
-// = Import Log Name =
-// ===================
-define( 'AI1WM_IMPORT_NAME', 'import.log' );
+// ===========================
+// = WP Cerber Security Name =
+// ===========================
+define( 'AI1WM_WP_CERBER_SECURITY_NAME', 'aaa-wp-cerber.php' );
 
 // ==================
 // = Error Log Name =

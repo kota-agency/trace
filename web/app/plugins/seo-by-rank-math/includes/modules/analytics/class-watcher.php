@@ -13,6 +13,8 @@ namespace RankMath\Analytics;
 use RankMath\Helper;
 use RankMath\Traits\Hooker;
 use RankMath\Google\Console;
+use RankMath\Google\Analytics;
+use RankMathPro\Google\Adsense;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -45,7 +47,10 @@ class Watcher {
 	 * Hooks
 	 */
 	public function hooks() {
-		if ( Console::is_console_connected() ) {
+		if ( Console::is_console_connected() ||
+			Analytics::is_analytics_connected() ||
+			\class_exists( 'RankMathPro\Google\Adsense' ) && method_exists( 'Adsense', 'is_adsense_connected' ) && Adsense::is_adsense_connected()
+		) {
 			$this->action( 'save_post', 'update_post_info', 99 );
 			$this->action( 'rank_math/schema/update', 'update_post_schema_info', 99 );
 		}
@@ -73,8 +78,13 @@ class Watcher {
 		}
 
 		$id      = get_post_meta( $post_id, 'rank_math_analytic_object_id', true );
-		$fk      = get_post_meta( $post_id, 'rank_math_focus_keyword', true );
 		$schemas = \RankMath\Schema\DB::get_schema_types( $post_id );
+
+		$fk = get_post_meta( $post_id, 'rank_math_focus_keyword', true );
+		if ( $fk ) {
+			$fk = explode( ',', $fk );
+			$fk = trim( $fk[0] );
+		}
 
 		if ( empty( $schemas ) && 'off' === get_post_meta( $post_id, 'rank_math_rich_snippet', true ) ) {
 			$schemas = __( 'None', 'rank-math' );

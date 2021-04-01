@@ -69,9 +69,6 @@ class Ai1wm_Export_Controller {
 							// Run function hook
 							$params = call_user_func_array( $hook['function'], array( $params ) );
 
-							// Log request
-							Ai1wm_Log::export( $params );
-
 						} catch ( Ai1wm_Database_Exception $e ) {
 							if ( defined( 'WP_CLI' ) ) {
 								WP_CLI::error( sprintf( __( 'Unable to export. Error code: %s. %s', AI1WM_PLUGIN_NAME ), $e->getCode(), $e->getMessage() ) );

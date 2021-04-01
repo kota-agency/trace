@@ -1038,6 +1038,11 @@ abstract class Ai1wm_Database {
 								$this->query( $query );
 							}
 
+							// Check tablespace exists
+							if ( $this->errno() === 1813 ) {
+								throw new Ai1wm_Database_Exception( __( 'Error importing database table. <a href="https://help.servmask.com/knowledgebase/mysql-error-importing-table/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), 503 );
+							}
+
 							// Check max queries per hour
 							if ( $this->errno() === 1226 ) {
 								if ( stripos( $this->error(), 'max_queries_per_hour' ) !== false ) {

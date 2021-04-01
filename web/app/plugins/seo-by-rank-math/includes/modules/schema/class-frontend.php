@@ -44,8 +44,24 @@ class Frontend {
 		$this->action( 'rank_math/json_ld', 'add_schema', 10, 2 );
 		$this->action( 'rank_math/json_ld', 'connect_schema_entities', 99, 2 );
 		$this->filter( 'rank_math/snippet/rich_snippet_event_entity', 'validate_event_schema', 11, 2 );
+		$this->filter( 'rank_math/snippet/rich_snippet_article_entity', 'add_name_property', 11, 2 );
 
 		new Schema_OpenGraph_Tags();
+	}
+
+	/**
+	 * Add name property to the Article schema.
+	 *
+	 * @param array $schema Snippet Data.
+	 * @return array
+	 */
+	public function add_name_property( $schema ) {
+		if ( empty( $schema['headline'] ) ) {
+			return $schema;
+		}
+
+		$schema['name'] = $schema['headline'];
+		return $schema;
 	}
 
 	/**
@@ -84,7 +100,9 @@ class Frontend {
 				return ! in_array( $schema['@type'], [ 'WooCommerceProduct', 'EDDProduct' ], true );
 			}
 		);
-		$schemas = $jsonld->replace_variables( $schemas );
+		DB::unpublish_jobposting_post( $jsonld, $schemas );
+
+		$schemas = $jsonld->replace_variables( $schemas, [], $data );
 		$schemas = $jsonld->filter( $schemas, $jsonld, $data );
 
 		return array_merge( $data, $schemas );
@@ -206,6 +224,10 @@ class Frontend {
 	private function change_webpage_entity( $schemas, $types ) {
 		if ( in_array( 'Product', $types, true ) ) {
 			$schemas['WebPage']['@type'] = 'ItemPage';
+		}
+
+		if ( isset( $schemas['howto'] ) && ! empty( $schemas['WebPage'] ) ) {
+			$schemas['howto']['mainEntityOfPage'] = [ '@id' => $schemas['WebPage']['@id'] ];
 		}
 
 		$faq_data = array_map(

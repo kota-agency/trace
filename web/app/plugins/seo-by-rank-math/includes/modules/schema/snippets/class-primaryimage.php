@@ -11,6 +11,7 @@
 namespace RankMath\Schema;
 
 use RankMath\Helper;
+use RankMath\Paper\Paper;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -35,11 +36,13 @@ class PrimaryImage implements Snippet {
 
 		$data['primaryImage'] = [
 			'@type'  => 'ImageObject',
-			'@id'    => $jsonld->parts['canonical'] . '#primaryImage',
+			'@id'    => Paper::get()->get_canonical() . '#primaryImage',
 			'url'    => $image[0],
 			'width'  => $image[1],
 			'height' => $image[2],
 		];
+
+		$jsonld->add_prop( 'language', $data['primaryImage'] );
 
 		return $data;
 	}

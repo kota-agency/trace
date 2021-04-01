@@ -70,6 +70,8 @@ class Posts extends Objects {
 			'difference' => $keywords - $old_keywords,
 		];
 
+		$post->admin_url = admin_url();
+
 		$post = apply_filters( 'rank_math/analytics/single/report', $post, $this );
 
 		return array_merge(
@@ -99,7 +101,8 @@ class Posts extends Objects {
 		$pages   = \array_keys( $objects['rows'] );
 		$console = $this->get_analytics_data(
 			[
-				'limit'     => "LIMIT 0, {$per_page}",
+				'offset'    => 0, // Here offset should always zero.
+				'perpage'   => $per_page,
 				'sub_where' => " AND page IN ('" . join( "', '", $pages ) . "')",
 			]
 		);

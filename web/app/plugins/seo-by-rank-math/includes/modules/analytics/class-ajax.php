@@ -57,7 +57,7 @@ class AJAX {
 		$country = Param::post( 'country', 'all' );
 		$days    = Param::get( 'days', 90, FILTER_VALIDATE_INT );
 
-		$prev  = get_option( 'rank_math_google_analytic_profile' );
+		$prev  = get_option( 'rank_math_google_analytic_profile', [] );
 		$value = [
 			'country' => $country,
 			'profile' => $profile,
@@ -68,6 +68,11 @@ class AJAX {
 		$all_accounts          = get_option( 'rank_math_analytics_all_services', [] );
 		$all_accounts['sites'] = [ $profile => $profile ];
 		update_option( 'rank_math_analytics_all_services', $all_accounts );
+
+		// Purge Cache.
+		if ( ! empty( array_diff( $prev, $value ) ) ) {
+			DB::purge_cache();
+		}
 
 		Workflow\Workflow::do_workflow(
 			'console',
@@ -93,6 +98,8 @@ class AJAX {
 			'country'          => Param::post( 'country', 'all' ),
 			'install_code'     => Param::post( 'installCode', false, FILTER_VALIDATE_BOOLEAN ),
 			'anonymize_ip'     => Param::post( 'anonymizeIP', false, FILTER_VALIDATE_BOOLEAN ),
+			'local_ga_js'      => Param::post( 'localGAJS', false, FILTER_VALIDATE_BOOLEAN ),
+			'cookieless_ga'    => Param::post( 'cookielessGA', false, FILTER_VALIDATE_BOOLEAN ),
 			'exclude_loggedin' => Param::post( 'excludeLoggedin', false, FILTER_VALIDATE_BOOLEAN ),
 		];
 

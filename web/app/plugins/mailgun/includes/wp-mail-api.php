@@ -257,6 +257,22 @@ function wp_mail($to, $subject, $message, $headers = '', $attachments = array())
         }
     }
 
+    /**
+     * Filter tags.
+     *
+     * @param array  $tags        Mailgun tags.
+     * @param string $to          To address.
+     * @param string $subject     Subject line.
+     * @param string $message     Message content.
+     * @param array  $headers     Headers array.
+     * @param array  $attachments Attachments array.
+     * @param string $region      Mailgun region.
+     * @param string $domain      Mailgun domain.
+     *
+     * @return array              Mailgun tags.
+     */
+    $body['o:tag'] = apply_filters( 'mailgun_tags', $body['o:tag'], $to, $subject, $message, $headers, $attachments, $region, $domain );
+
     if (!empty($cc) && is_array($cc)) {
         $body['cc'] = implode(', ', $cc);
     }
@@ -269,7 +285,7 @@ function wp_mail($to, $subject, $message, $headers = '', $attachments = array())
     // write the message body to a file and try to determine the mimetype
     // using get_mime_content_type.
     if (!isset($content_type)) {
-        $tmppath = tempnam(sys_get_temp_dir(), 'mg');
+        $tmppath = tempnam(get_temp_dir(), 'mg');
         $tmp = fopen($tmppath, 'w+');
 
         fwrite($tmp, $message);

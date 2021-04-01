@@ -337,6 +337,11 @@ class Ai1wm_Import_Done {
 			}
 		}
 
+		// Clear auth cookie (WP Cerber)
+		if ( ai1wm_validate_plugin_basename( 'wp-cerber/wp-cerber.php' ) ) {
+			wp_clear_auth_cookie();
+		}
+
 		$should_reset_permalinks = false;
 
 		// Switch to default permalink structure

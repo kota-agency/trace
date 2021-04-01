@@ -43,7 +43,7 @@ class Local_Seo {
 		if (
 			Helper::is_module_active( 'sitemap' ) &&
 			'company' === Helper::get_settings( 'titles.knowledgegraph_type' ) &&
-			$this->do_filter( 'sitemap/locations', defined( 'RANK_MATH_PRO_FILE' ) )
+			$this->do_filter( 'sitemap/locations', false )
 		) {
 			new KML_File();
 		}
@@ -103,6 +103,10 @@ class Local_Seo {
 	 * @return array
 	 */
 	public function organization_or_person( $data, $json_ld ) {
+		if ( ! $json_ld->can_add_global_entities( $data ) ) {
+			return $data;
+		}
+
 		$entity = [
 			'@type' => '',
 			'@id'   => '',
@@ -113,13 +117,7 @@ class Local_Seo {
 		$json_ld->add_prop( 'email', $entity );
 		$json_ld->add_prop( 'url', $entity );
 		$json_ld->add_prop( 'address', $entity );
-
-		if ( $value = Helper::get_settings( 'titles.knowledgegraph_logo' ) ) { // phpcs:ignore
-			$entity['logo'] = [
-				'@type' => 'ImageObject',
-				'url'   => $value,
-			];
-		}
+		$json_ld->add_prop( 'image', $entity );
 
 		switch ( Helper::get_settings( 'titles.knowledgegraph_type' ) ) {
 			case 'company':

@@ -2,10 +2,10 @@
 Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, sitemap, google search console, schema, redirection, WordPress SEO
-Tested up to: 5.6.1
-Requires at least: 5.2
-Requires PHP: 7.0
-Stable tag: 1.0.58
+Tested up to: 5.7
+Requires at least: 5.5
+Requires PHP: 7.2
+Stable tag: 1.0.61
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -27,7 +27,7 @@ SEO might be the best and most **consistent source of traffic** for one's websit
 
 Its host of **intelligent features** brings top SEO capabilities in your hands that were previously out of reach. The **smart automation** features give you the **power of an entire SEO team** with just a few clicks. A **well thought out design, powerful features, and years of development** by the MyThemeShop squad make Rank Math a game-changing SEO plugin that will level the SEO playing field in your favor to help increase traffic.
 
-###  Rank Math beats the competition with hands tied behind its back. ###
+### Rank Math beats all of its competitors hands down. ###
 
 See the features which are exclusive to Rank Math SEO plugin and to understand why Rank Math is possibly the **Best SEO Plugin for WordPress**.
 
@@ -379,7 +379,7 @@ No, you won't. When you install Rank Math, it will seamlessly import your settin
 If you setup Rank Math from scratch, then your search engine rankings will depend on how you configure it. But please be advised that Google and other search engines prefer good, useful content over anything else.
 
 = What are the technical requirements for using Rank Math? =
-Rank Math requires at least PHP 5.6, cURL lib, cron jobs, to be installed and enabled on the server. Those things are mostly installed on every good hosting server. When you initiate Rank Math's setup process, Rank Math will also perform a compatibility check to confirm if your server can run Rank Math. If your server has a lower configuration of any Software, please ask your hosting to update it to the latest version.
+Rank Math requires at least PHP 7.2, cURL lib, cron jobs, to be installed and enabled on the server. Those things are mostly installed on every good hosting server. When you initiate Rank Math's setup process, Rank Math will also perform a compatibility check to confirm if your server can run Rank Math. If your server has a lower configuration of any Software, please ask your hosting to update it to the latest version.
 
 = Can I use Rank Math on a WordPress.com website? =
 Yes, as the plugin is provided through WordPress.org, it is available on WordPress.com as well. However, you might be required to opt for the Business plan of WordPress.com
@@ -475,17 +475,28 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.58 [Feb 17, 2021] =
-* Improved: The [Local SEO](https://rankmath.com/kb/local-seo/) is much better with the Rank Math SEO plugin than ever
-* Improved: Query related to page search in the About & Contact page options of [local SEO settings](https://rankmath.com/kb/titles-and-meta/#local-seo)
-* Improved: Create tables related to different modules only if those modules are activated. This improves the speed of the plugin further
-* Improved: Updated CMB2 library to keep it updated to the latest version
-* Improved: The overall speed and security of the plugin
-* Fixed: ["Exclude Logged in Users"](https://rankmath.com/kb/connect-your-google-account/#4-connect-google-analytics-with-rank-math) option was not working in the [Analytics module](https://rankmath.com/kb/analytics/)
-* Fixed: Missing telephone & image data for the Attorney [Schema](https://rankmath.com/blog/schema-markup/)
-* Fixed: Few Business types in the Local Schema were showing invalid `hasMap` & `geo` attributes
-* Fixed: A PHP error related to analytics table after opening the analytics settings
-* Fixed: A fatal error happening on some installations when the site was [updating from Rank Math](https://rankmath.com/kb/update-rank-math-manually/) v1.0.48 or less
-* Fixed: CLI command to generate the [Sitemap](https://rankmath.com/kb/submit-sitemap-to-google/) in PHP 8 was not working
+= 1.0.61 [Apr 01, 2021] =
+* Added: [NEW!] Post author schema property prints gravatar, social profile URLs(`sameAs`), author archive URL(if enabled), and `worksFor` attribute
+* Added: [NEW!] Focus keywords as `keywords` attribute in the [Article Schema](https://rankmath.com/kb/article-schema/) output
+* Added: Video duration data in the [Recipe Schema](https://rankmath.com/kb/recipe-schema/) output
+* Added: Width and height data in the `ImageObject` Schema property
+* Improved: Feedback Messages related to the Rank Math's [Database tools](https://rankmath.com/kb/rank-math-status-and-tools/#tools)
+* Improved: Avoid saving General settings after hitting the enter button while editing any text field
+* Improved: Browser title for the [KML file](https://rankmath.com/kb/kml-sitemap/) in the sitemap
+* Improved: Replaced deprecated Javascript functions
+* Fixed: PHP notices showing right after installation on some installations
+* Fixed: Dashboard widget was throwing PHP errors sometimes due to cache clearing issue
+* Fixed: Rebuild Analytics Index tool was not indexing all available posts/pages
+* Fixed: `rankmath_google_api_failed_attempts_data` option was becoming too large on some websites
+* Fixed: [Star Rating](https://rankmath.com/kb/review-schema/) was not showing correctly on the frontend if a maximum value was more than 5
+* Fixed: Settings tab were hidden for a post type which has word 'Notice' in its name
+* Fixed: Remove Data fetch scheduled actions if Analytics Module is disabled
+* Fixed: [Sitemaps](https://rankmath.com/kb/configure-sitemaps/) were not working with the plain permalinks
+* Fixed: Sitemap was not updating when Scheduled posts were published
+* Fixed: Analytics Dashboard page was not loading due to console error on some setups
+* Fixed: Missing [schema markup](https://rankmath.com/kb/rich-snippets/) code on the Static Homepage
+* Fixed: Analytics Graphs were showing wrong data when the “7 Days” timeframe was Selected
+* Fixed: An error appearing in the PHP 8.0
+* Fixed: Title attribute was getting added after the ending slash in `img` tag
 
-Full changelog can be found here - **[Rank Math SEO changelog](https://rankmath.com/changelog/?utm_source=LP&utm_campaign=WP)**
+Full changelog can be found here - **[Rank Math SEO changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**

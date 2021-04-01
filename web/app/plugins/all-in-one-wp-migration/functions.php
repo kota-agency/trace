@@ -91,26 +91,6 @@ function ai1wm_archive_path( $params ) {
 }
 
 /**
- * Get export log absolute path
- *
- * @param  array  $params Request parameters
- * @return string
- */
-function ai1wm_export_path( $params ) {
-	return ai1wm_storage_path( $params ) . DIRECTORY_SEPARATOR . AI1WM_EXPORT_NAME;
-}
-
-/**
- * Get import log absolute path
- *
- * @param  array  $params Request parameters
- * @return string
- */
-function ai1wm_import_path( $params ) {
-	return ai1wm_storage_path( $params ) . DIRECTORY_SEPARATOR . AI1WM_IMPORT_NAME;
-}
-
-/**
  * Get multipart.list absolute path
  *
  * @param  array  $params Request parameters
@@ -198,6 +178,16 @@ function ai1wm_settings_path( $params ) {
  */
 function ai1wm_database_path( $params ) {
 	return ai1wm_storage_path( $params ) . DIRECTORY_SEPARATOR . AI1WM_DATABASE_NAME;
+}
+
+/**
+ * Get cookies.txt absolute path
+ *
+ * @param  array  $params Request parameters
+ * @return string
+ */
+function ai1wm_cookies_path( $params ) {
+	return ai1wm_storage_path( $params ) . DIRECTORY_SEPARATOR . AI1WM_COOKIES_NAME;
 }
 
 /**
@@ -315,8 +305,8 @@ function ai1wm_parse_size( $size, $default = null ) {
 	);
 
 	// Parse size format
-	if ( preg_match( '/([0-9]+)\s*(k|m|g)?(b?(ytes?)?)/i', $size, $match ) ) {
-		return $match[1] * $suffixes[ strtolower( $match[2] ) ];
+	if ( preg_match( '/([0-9]+)\s*(k|m|g)?(b?(ytes?)?)/i', $size, $matches ) ) {
+		return $matches[1] * $suffixes[ strtolower( $matches[2] ) ];
 	}
 
 	return $default;

@@ -91,6 +91,7 @@ class GTag {
 		} else {
 			// For non-AMP.
 			$this->action( 'wp_enqueue_scripts', 'enqueue_gtag_js' );
+			$this->action( 'wp_enqueue_scripts', 'gtag_js_config', 25 );
 		}
 	}
 
@@ -148,9 +149,13 @@ class GTag {
 	 */
 	public function enqueue_gtag_js() {
 		$property_id = $this->get( 'property_id' );
+
+		$url = 'https://www.googletagmanager.com/gtag/js?id=' . esc_attr( $property_id );
+		$url = $this->do_filter( 'analytics/ga_js_url', $url );
+
 		wp_enqueue_script( // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 			'google_gtagjs',
-			'https://www.googletagmanager.com/gtag/js?id=' . esc_attr( $property_id ),
+			$url,
 			false,
 			null,
 			false
@@ -169,11 +174,6 @@ class GTag {
 			];
 		}
 
-		if ( $this->get( 'anonymize_ip' ) ) {
-			// See https://developers.google.com/analytics/devguides/collection/gtagjs/ip-anonymization.
-			$gtag_opt['anonymize_ip'] = true;
-		}
-
 		if ( ! empty( $gtag_opt['linker'] ) ) {
 			wp_add_inline_script(
 				'google_gtagjs',
@@ -186,18 +186,22 @@ class GTag {
 			'google_gtagjs',
 			'gtag(\'js\', new Date());'
 		);
+	}
 
-		if ( empty( $gtag_opt ) ) {
-			wp_add_inline_script(
-				'google_gtagjs',
-				'gtag(\'config\', \'' . esc_attr( $property_id ) . '\');'
-			);
-		} else {
-			wp_add_inline_script(
-				'google_gtagjs',
-				'gtag(\'config\', \'' . esc_attr( $property_id ) . '\', ' . wp_json_encode( $gtag_opt ) . ' );'
-			);
-		}
+	/**
+	 * Add the config() call for gtag.js.
+	 *
+	 * @return void
+	 */
+	public function gtag_js_config() {
+		$property_id = $this->get( 'property_id' );
+
+		$gtag_config = [];
+		$gtag_config = $this->do_filter( 'analytics/gtag_config', $gtag_config );
+		wp_add_inline_script(
+			'google_gtagjs',
+			'gtag(\'config\', \'' . esc_attr( $property_id ) . '\', {' . join( ', ', $gtag_config ) . '} );'
+		);
 	}
 
 	/**
