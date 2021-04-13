@@ -1,0 +1,77 @@
+.page-template-temp-guide {
+	.masthead {
+		background: $color-primary;
+	}
+
+	.page-header {
+		h1 {
+			color: #d804f8;
+			text-transform: initial;
+			font-size: 4.4rem;
+
+	    @include media-breakpoint-down(lg) {
+	        font-size: 3rem;
+	    }
+		}
+
+		h6 {
+			font-size: 4.4rem;
+			font-weight: bold;
+			line-height: 1;
+
+	    @include media-breakpoint-down(lg) {
+	        font-size: 3rem;
+	    }
+		}
+
+		&__image {
+			top: -20px;
+			max-width: 46%;
+
+			@include media-breakpoint-down(sm) {
+				display: none;
+			}
+
+			&.mobile-only {
+				position: relative;
+				top: 0 !important;
+				right: 0;
+				display: block;
+				width: 100%;
+
+				@include media-breakpoint-up(md) {
+					display: none;
+				}	
+			}
+		}
+
+		.btn {
+			margin-top: 2rem;
+			background: #d804f8;
+			border-color: #d804f8;	 
+		}
+
+		&.tear-border::after {
+			z-index: -4;
+			background-size: cover;
+		}
+
+		&.block-space {
+			padding-bottom: 30px;
+			padding-top: 80px;
+			margin-top: 30px;
+
+			@include media-breakpoint-down(sm) {
+				padding-top: 30px;
+			}
+		}
+	}
+
+	.block-copy.block-space {
+		padding: 80px 0;
+
+		@include media-breakpoint-down(sm) {
+			padding: 20px 0;
+		}
+	}
+}
