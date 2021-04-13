@@ -2,6 +2,10 @@
     position: relative;
     z-index: 1;
 
+    #menu-header, .burger {
+        display: none;
+    }
+
     &.block-space {
         padding: 160px 0;
 
