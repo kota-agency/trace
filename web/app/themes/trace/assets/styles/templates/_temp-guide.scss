@@ -3,6 +3,10 @@
 		background: $color-primary;
 	}
 
+	#menu-header, .burger {
+      display: none;
+  }
+
 	.page-header {
 		h1 {
 			color: #d804f8;
