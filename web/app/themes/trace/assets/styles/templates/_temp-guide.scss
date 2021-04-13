@@ -58,6 +58,11 @@
 		&.tear-border::after {
 			z-index: -4;
 			background-size: cover;
+
+			@include media-breakpoint-down(sm) {
+				background-size: 100% 20px;
+    		background-position: top;
+			}
 		}
 
 		&.block-space {
@@ -65,8 +70,8 @@
 			padding-top: 80px;
 			margin-top: 30px;
 
-			@include media-breakpoint-down(sm) {
-				padding-top: 30px;
+			
+				// padding-top: 30px;
 			}
 		}
 	}
