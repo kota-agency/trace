@@ -14,9 +14,11 @@ $classes = ['full-width', 'tear-border', 'theme-secondary', 'bg-secondary',paddi
 $header = get_field('page_header');
 $label = $header['label'];
 $title = $header['title'];
-$cta = $header['cta'];
+// $cta = $header['cta'];
 $image = wp_get_attachment_image($header['image'], 'full');
 $copy = $header['copy'];
+$form_id = $header['form_id'];
+$cta_label = $header['cta_label'];
 
 ?>
 
@@ -39,11 +41,20 @@ $copy = $header['copy'];
                     </div>
                 <?php endif; ?>
 
-                <?php if ($cta) : ?>
+                <?php if($form_id): ?>
+                    <a 
+                        data-gravity-form="<?php echo $form_id ?>" 
+                        class="btn gated-file"
+                        >
+                        <?= $cta_label ?>
+                    </a>
+                <?php endif; ?>
+
+                <?php /*if ($cta) : ?>
                     <a class="btn" href="<?= $cta['url'] ?>" target="<?= $cta['target'] ?>">
                         <?= $cta['title']; ?>
                     </a>
-                <?php endif; ?>
+                <?php endif; */?>
             </div>
         </div>
 
