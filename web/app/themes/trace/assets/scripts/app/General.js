@@ -314,7 +314,7 @@ function General() {
     window.addEventListener('scroll', updateScroll);
     updateScroll();
 
-    $('.page-link').find('a').on('click', (e) => {
+    $('.page-link.redirect-link').find('a').on('click', (e) => {
         e.preventDefault();
 
         if (!animating) {
