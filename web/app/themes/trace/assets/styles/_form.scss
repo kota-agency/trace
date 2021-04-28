@@ -76,10 +76,15 @@
   }
 
   .gfield_label {
-    display: none;
     font-size: 1.8rem;
     font-weight: bold;
     color: $white;
+  }
+
+  .hidden_label {
+    .gfield_label {
+      display: none !important;
+    }
   }
 
   .gfield_required {
@@ -140,6 +145,7 @@
   font-size: 1.8rem;
   color: $white;
   max-width: 600px;
+  margin: auto;
 }
 
 .modal__inner {
@@ -334,4 +340,19 @@ select {
 
 select::-ms-expand {
   display: none;
+}
+
+// Password protect form
+form.post-password-form {
+  margin-top: 9rem;
+  margin-bottom: 9rem;
+  text-align: center;
+
+  input[type="submit"] {
+    @extend .btn;
+
+    max-width: 200px;
+    display: block;
+    margin: 2rem auto;
+  }
 }

@@ -10,8 +10,8 @@ class acfe_field_post_statuses extends acf_field{
     function __construct(){
         
         $this->name = 'acfe_post_statuses';
-        $this->label = __('Post statuses', 'acfe');
-        $this->category = 'relational';
+        $this->label = __('Post Statuses', 'acfe');
+        $this->category = 'WordPress';
         $this->defaults = array(
             'post_status'           => array(),
             'field_type'            => 'checkbox',
@@ -26,7 +26,7 @@ class acfe_field_post_statuses extends acf_field{
             'layout'                => '',
 			'toggle'                => 0,
 			'allow_custom'          => 0,
-			'return_format'         => 'name',
+			'return_format'         => 'object',
         );
         
         parent::__construct();
@@ -333,6 +333,17 @@ class acfe_field_post_statuses extends acf_field{
         
     }
     
+    function update_field($field){
+        
+        $field['default_value'] = acf_decode_choices($field['default_value'], true);
+        
+        if($field['field_type'] === 'radio')
+            $field['default_value'] = acfe_unarray($field['default_value']);
+        
+        return $field;
+        
+    }
+    
     function prepare_field($field){
         
         // Set Field Type
@@ -375,15 +386,8 @@ class acfe_field_post_statuses extends acf_field{
                 
                 foreach($value as $i => $v){
                     
-                    if($get_post_status_object = get_post_status_object($v)){
-                        
+                    if($get_post_status_object = get_post_status_object($v))
                         $value[$i] = $get_post_status_object;
-                        
-                    }else{
-                        
-                        $value[$i] = $i;
-                        
-                    }
                     
                 }
             

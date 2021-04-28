@@ -69,9 +69,6 @@ class Ai1wm_Import_Controller {
 							// Run function hook
 							$params = call_user_func_array( $hook['function'], array( $params ) );
 
-							// Log request
-							Ai1wm_Log::import( $params );
-
 						} catch ( Ai1wm_Import_Retry_Exception $e ) {
 							if ( defined( 'WP_CLI' ) ) {
 								WP_CLI::error( sprintf( __( 'Unable to import. Error code: %s. %s', AI1WM_PLUGIN_NAME ), $e->getCode(), $e->getMessage() ) );

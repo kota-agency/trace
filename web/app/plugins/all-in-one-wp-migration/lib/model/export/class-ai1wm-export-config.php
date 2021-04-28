@@ -155,6 +155,9 @@ class Ai1wm_Export_Config {
 		// Set upload URL path
 		$config['UploadsURL'] = get_option( 'upload_url_path' );
 
+		// Set server info
+		$config['Server'] = array( '.htaccess' => base64_encode( ai1wm_get_htaccess() ), 'web.config' => base64_encode( ai1wm_get_webconfig() ) );
+
 		// Save package.json file
 		$handle = ai1wm_open( ai1wm_package_path( $params ), 'w' );
 		ai1wm_write( $handle, json_encode( $config ) );

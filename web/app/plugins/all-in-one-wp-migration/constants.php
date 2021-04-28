@@ -35,7 +35,7 @@ define( 'AI1WM_DEBUG', false );
 // ==================
 // = Plugin Version =
 // ==================
-define( 'AI1WM_VERSION', '7.32' );
+define( 'AI1WM_VERSION', '7.40' );
 
 // ===============
 // = Plugin Name =
@@ -162,6 +162,16 @@ define( 'AI1WM_CONTENT_LIST_NAME', 'content.list' );
 // ===========================
 define( 'AI1WM_MEDIA_LIST_NAME', 'media.list' );
 
+// ============================
+// = Archive Tables List Name =
+// ============================
+define( 'AI1WM_TABLES_LIST_NAME', 'tables.list' );
+
+// =============================
+// = Archive Cookies Text Name =
+// =============================
+define( 'AI1WM_COOKIES_NAME', 'cookies.txt' );
+
 // =================================
 // = Archive Must-Use Plugins Name =
 // =================================
@@ -203,9 +213,14 @@ define( 'AI1WM_GD_SYSTEM_PLUGIN_NAME', 'gd-system-plugin.php' );
 define( 'AI1WM_WP_STACK_CACHE_NAME', 'wp-stack-cache.php' );
 
 // ===========================
-// = WP.com Site Helper Name =
+// = WP.com Site Loader Name =
 // ===========================
 define( 'AI1WM_WP_COMSH_LOADER_NAME', 'wpcomsh-loader.php' );
+
+// ===========================
+// = WP.com Site Helper Name =
+// ===========================
+define( 'AI1WM_WP_COMSH_HELPER_NAME', 'wpcomsh' );
 
 // ================================
 // = WP Engine System Plugin Name =
@@ -222,15 +237,10 @@ define( 'AI1WM_WPE_SIGN_ON_PLUGIN_NAME', 'wpe-wp-sign-on-plugin.php' );
 // ===================================
 define( 'AI1WM_WP_ENGINE_SECURITY_AUDITOR_NAME', 'wpengine-security-auditor.php' );
 
-// ===================
-// = Export Log Name =
-// ===================
-define( 'AI1WM_EXPORT_NAME', 'export.log' );
-
-// ===================
-// = Import Log Name =
-// ===================
-define( 'AI1WM_IMPORT_NAME', 'import.log' );
+// ===========================
+// = WP Cerber Security Name =
+// ===========================
+define( 'AI1WM_WP_CERBER_SECURITY_NAME', 'aaa-wp-cerber.php' );
 
 // ==================
 // = Error Log Name =
@@ -438,6 +448,11 @@ define( 'AI1WM_BACKUPS_WEBCONFIG', AI1WM_BACKUPS_PATH . DIRECTORY_SEPARATOR . 'w
 // = WordPress .htaccess File =
 // ============================
 define( 'AI1WM_WORDPRESS_HTACCESS', ABSPATH . DIRECTORY_SEPARATOR . '.htaccess' );
+
+// =============================
+// = WordPress web.config File =
+// =============================
+define( 'AI1WM_WORDPRESS_WEBCONFIG', ABSPATH . DIRECTORY_SEPARATOR . 'web.config' );
 
 // ================================
 // = WP Migration Plugin Base Dir =

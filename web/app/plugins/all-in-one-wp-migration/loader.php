@@ -247,6 +247,10 @@ require_once AI1WM_EXPORT_PATH .
 
 require_once AI1WM_EXPORT_PATH .
 			DIRECTORY_SEPARATOR .
+			'class-ai1wm-export-enumerate-tables.php';
+
+require_once AI1WM_EXPORT_PATH .
+			DIRECTORY_SEPARATOR .
 			'class-ai1wm-export-content.php';
 
 require_once AI1WM_EXPORT_PATH .
@@ -271,11 +275,11 @@ require_once AI1WM_EXPORT_PATH .
 
 require_once AI1WM_IMPORT_PATH .
 			DIRECTORY_SEPARATOR .
-			'class-ai1wm-import-compatibility.php';
+			'class-ai1wm-import-upload.php';
 
 require_once AI1WM_IMPORT_PATH .
 			DIRECTORY_SEPARATOR .
-			'class-ai1wm-import-upload.php';
+			'class-ai1wm-import-compatibility.php';
 
 require_once AI1WM_IMPORT_PATH .
 			DIRECTORY_SEPARATOR .
@@ -283,11 +287,15 @@ require_once AI1WM_IMPORT_PATH .
 
 require_once AI1WM_IMPORT_PATH .
 			DIRECTORY_SEPARATOR .
+			'class-ai1wm-import-confirm.php';
+
+require_once AI1WM_IMPORT_PATH .
+			DIRECTORY_SEPARATOR .
 			'class-ai1wm-import-blogs.php';
 
 require_once AI1WM_IMPORT_PATH .
 			DIRECTORY_SEPARATOR .
-			'class-ai1wm-import-confirm.php';
+			'class-ai1wm-import-permalinks.php';
 
 require_once AI1WM_IMPORT_PATH .
 			DIRECTORY_SEPARATOR .

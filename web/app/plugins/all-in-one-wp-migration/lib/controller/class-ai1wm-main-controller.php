@@ -157,6 +157,7 @@ class Ai1wm_Main_Controller {
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Config_File::execute', 60 );
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Enumerate_Content::execute', 100 );
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Enumerate_Media::execute', 110 );
+		add_filter( 'ai1wm_export', 'Ai1wm_Export_Enumerate_Tables::execute', 120 );
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Content::execute', 150 );
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Media::execute', 160 );
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Database::execute', 200 );
@@ -170,6 +171,7 @@ class Ai1wm_Main_Controller {
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Validate::execute', 50 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Confirm::execute', 100 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Blogs::execute', 150 );
+		add_filter( 'ai1wm_import', 'Ai1wm_Import_Permalinks::execute', 170 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Enumerate::execute', 200 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Content::execute', 250 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Mu_Plugins::execute', 270 );

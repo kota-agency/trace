@@ -37,9 +37,11 @@ $slick-loader-path: "../images/";
 @import "components/post-heading";
 @import "components/filter";
 @import "components/cookie-banner";
+@import "components/form-modal";
 
 //Templates
 @import "templates/error-block";
+@import "templates/temp-guide";
 
 //Blocks
 @import "blocks/hero";

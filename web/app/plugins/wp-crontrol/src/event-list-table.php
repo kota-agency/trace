@@ -37,6 +37,11 @@ class Table extends \WP_List_Table {
 	 */
 	protected static $count_by_hook;
 
+	/**
+	 * Array of all cron events.
+	 *
+	 * @var object[] Array of event objects.
+	 */
 	protected $all_events = array();
 
 	/**
@@ -201,10 +206,10 @@ class Table extends \WP_List_Table {
 		$hooks_type = ( ! empty( $_GET['hooks_type'] ) ? $_GET['hooks_type'] : 'all' );
 
 		$types = array(
-			'all'      => __( 'All hooks', 'wp-crontrol' ),
-			'noaction' => __( 'Hooks with no action', 'wp-crontrol' ),
-			'core'     => __( 'WordPress core hooks', 'wp-crontrol' ),
-			'custom'   => __( 'Custom hooks', 'wp-crontrol' ),
+			'all'      => __( 'All events', 'wp-crontrol' ),
+			'noaction' => __( 'Events with no action', 'wp-crontrol' ),
+			'core'     => __( 'WordPress core events', 'wp-crontrol' ),
+			'custom'   => __( 'Custom events', 'wp-crontrol' ),
 		);
 
 		$url = admin_url( 'tools.php?page=crontrol_admin_manage_page' );
@@ -253,7 +258,7 @@ class Table extends \WP_List_Table {
 			}
 		}
 
-		if ( is_late( $event ) ) {
+		if ( is_late( $event ) || is_too_frequent( $event ) ) {
 			$classes[] = 'crontrol-warning';
 		}
 
@@ -346,23 +351,35 @@ class Table extends \WP_List_Table {
 	 * Outputs the checkbox cell of a table row.
 	 *
 	 * @param stdClass $event The cron event for the current row.
+	 * @return string The cell output.
 	 */
 	protected function column_cb( $event ) {
-		if ( ! in_array( $event->hook, self::$persistent_core_hooks, true ) && ( ( 'crontrol_cron_job' !== $event->hook ) || self::$can_edit_files ) ) {
-			?>
-			<label class="screen-reader-text" for="">
-				<?php printf( esc_html__( 'Select this row', 'wp-crontrol' ) ); ?>
-			</label>
-			<?php
-				printf(
-					'<input type="checkbox" name="delete[%1$s][%2$s]" value="%3$s">',
-					esc_attr( $event->time ),
-					esc_attr( rawurlencode( $event->hook ) ),
-					esc_attr( $event->sig )
-				);
-			?>
-			<?php
+		$id = sprintf(
+			'wp-crontrol-delete-%1$s-%2$s-%3$s',
+			$event->time,
+			rawurlencode( $event->hook ),
+			$event->sig
+		);
+
+		if ( in_array( $event->hook, self::$persistent_core_hooks, true ) ) {
+			return sprintf(
+				'<span class="dashicons dashicons-wordpress" aria-hidden="true"></span>
+				<span class="screen-reader-text">%s</span>',
+				esc_html__( 'This is a WordPress core event and cannot be deleted', 'wp-crontrol' )
+			);
+		} elseif ( ( 'crontrol_cron_job' !== $event->hook ) || self::$can_edit_files ) {
+			return sprintf(
+				'<label class="screen-reader-text" for="%1$s">%2$s</label>
+				<input type="checkbox" name="delete[%3$s][%4$s]" value="%5$s" id="%1$s">',
+				esc_attr( $id ),
+				esc_html__( 'Select this row', 'wp-crontrol' ),
+				esc_attr( $event->time ),
+				esc_attr( rawurlencode( $event->hook ) ),
+				esc_attr( $event->sig )
+			);
 		}
+
+		return '';
 	}
 
 	/**
@@ -517,6 +534,17 @@ class Table extends \WP_List_Table {
 				return sprintf(
 					'<span class="status-crontrol-error"><span class="dashicons dashicons-warning" aria-hidden="true"></span> %s</span>',
 					esc_html( $schedule_name->get_error_message() )
+				);
+			} elseif ( is_too_frequent( $event ) ) {
+				return sprintf(
+					'%1$s<span class="status-crontrol-warning"><br><span class="dashicons dashicons-warning" aria-hidden="true"></span> %2$s</span>',
+					esc_html( $schedule_name ),
+					sprintf(
+						/* translators: 1: The name of the configuration constant, 2: The value of the configuration constant */
+						esc_html__( 'This interval is less than the %1$s constant which is set to %2$s seconds. Events that use it may not run on time.', 'wp-crontrol' ),
+						'<code>WP_CRON_LOCK_TIMEOUT</code>',
+						intval( WP_CRON_LOCK_TIMEOUT )
+					)
 				);
 			} else {
 				return esc_html( $schedule_name );

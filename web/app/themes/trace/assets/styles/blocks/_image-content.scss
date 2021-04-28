@@ -6,6 +6,13 @@
         text-align: center;
     }
 
+    &__copy {
+        a {
+            color: $color-quaternary;
+        }
+
+    }
+
     &--wide-heading {
         .image-content__content {
             padding-top: 100px;

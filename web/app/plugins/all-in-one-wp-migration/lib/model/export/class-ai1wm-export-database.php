@@ -37,6 +37,13 @@ class Ai1wm_Export_Database {
 			return $params;
 		}
 
+		// Set query offset
+		if ( isset( $params['query_offset'] ) ) {
+			$query_offset = (int) $params['query_offset'];
+		} else {
+			$query_offset = 0;
+		}
+
 		// Set table index
 		if ( isset( $params['table_index'] ) ) {
 			$table_index = (int) $params['table_index'];
@@ -71,6 +78,18 @@ class Ai1wm_Export_Database {
 		// Set progress
 		Ai1wm_Status::info( sprintf( __( 'Exporting database...<br />%d%% complete<br />%s records saved', AI1WM_PLUGIN_NAME ), $progress, number_format_i18n( $table_rows ) ) );
 
+		// Get tables list file
+		$tables_list = ai1wm_open( ai1wm_tables_list_path( $params ), 'r' );
+
+		// Loop over tables
+		$tables = array();
+		while ( $table_name = trim( fgets( $tables_list ) ) ) {
+			$tables[] = $table_name;
+		}
+
+		// Close the tables list file
+		ai1wm_close( $tables_list );
+
 		// Get database client
 		if ( empty( $wpdb->use_mysqli ) ) {
 			$mysql = new Ai1wm_Database_Mysql( $wpdb );
@@ -80,79 +99,57 @@ class Ai1wm_Export_Database {
 
 		// Exclude spam comments
 		if ( isset( $params['options']['no_spam_comments'] ) ) {
-			$mysql->set_table_where_clauses( ai1wm_table_prefix() . 'comments', array( "`comment_approved` != 'spam'" ) )
-				->set_table_where_clauses( ai1wm_table_prefix() . 'commentmeta', array( sprintf( "`comment_ID` IN ( SELECT `comment_ID` FROM `%s` WHERE `comment_approved` != 'spam' )", ai1wm_table_prefix() . 'comments' ) ) );
+			$mysql->set_table_where_query( ai1wm_table_prefix() . 'comments', "`comment_approved` != 'spam'" )
+				->set_table_where_query( ai1wm_table_prefix() . 'commentmeta', sprintf( "`comment_ID` IN ( SELECT `comment_ID` FROM `%s` WHERE `comment_approved` != 'spam' )", ai1wm_table_prefix() . 'comments' ) );
 		}
 
 		// Exclude post revisions
 		if ( isset( $params['options']['no_post_revisions'] ) ) {
-			$mysql->set_table_where_clauses( ai1wm_table_prefix() . 'posts', array( "`post_type` != 'revision'" ) );
+			$mysql->set_table_where_query( ai1wm_table_prefix() . 'posts', "`post_type` != 'revision'" );
 		}
 
 		$old_table_prefixes = $old_column_prefixes = array();
 		$new_table_prefixes = $new_column_prefixes = array();
 
-		// Set table prefixes
+		// Set table and column prefixes
 		if ( ai1wm_table_prefix() ) {
 			$old_table_prefixes[] = $old_column_prefixes[] = ai1wm_table_prefix();
 			$new_table_prefixes[] = $new_column_prefixes[] = ai1wm_servmask_prefix();
 		} else {
 			// Set table prefixes based on table name
-			foreach ( $mysql->get_tables() as $table_name ) {
+			foreach ( $tables as $table_name ) {
 				$old_table_prefixes[] = $table_name;
 				$new_table_prefixes[] = ai1wm_servmask_prefix() . $table_name;
 			}
 
 			// Set table prefixes based on column name
-			foreach ( array( 'user_roles' ) as $option_name ) {
-				$old_column_prefixes[] = $option_name;
-				$new_column_prefixes[] = ai1wm_servmask_prefix() . $option_name;
-			}
-
-			// Set table prefixes based on column name
-			foreach ( array( 'capabilities', 'user_level', 'dashboard_quick_press_last_post_id', 'user-settings', 'user-settings-time' ) as $meta_key ) {
-				$old_column_prefixes[] = $meta_key;
-				$new_column_prefixes[] = ai1wm_servmask_prefix() . $meta_key;
+			foreach ( array( 'user_roles', 'capabilities', 'user_level', 'dashboard_quick_press_last_post_id', 'user-settings', 'user-settings-time' ) as $column_prefix ) {
+				$old_column_prefixes[] = $column_prefix;
+				$new_column_prefixes[] = ai1wm_servmask_prefix() . $column_prefix;
 			}
 		}
 
-		$include_table_prefixes = array();
-		$exclude_table_prefixes = array();
-
-		// Include table prefixes
-		if ( ai1wm_table_prefix() ) {
-			$include_table_prefixes[] = ai1wm_table_prefix();
-		} else {
-			foreach ( $mysql->get_tables() as $table_name ) {
-				$include_table_prefixes[] = $table_name;
-			}
-		}
-
-		// Include table prefixes (Webba Booking)
-		foreach ( array( 'wbk_services', 'wbk_days_on_off', 'wbk_locked_time_slots', 'wbk_appointments', 'wbk_cancelled_appointments', 'wbk_email_templates', 'wbk_service_categories', 'wbk_gg_calendars', 'wbk_coupons' ) as $table_name ) {
-			$include_table_prefixes[] = $table_name;
-		}
-
-		// Set database options
-		$mysql->set_old_table_prefixes( $old_table_prefixes )
+		$mysql->set_tables( $tables )
+			->set_old_table_prefixes( $old_table_prefixes )
 			->set_new_table_prefixes( $new_table_prefixes )
 			->set_old_column_prefixes( $old_column_prefixes )
-			->set_new_column_prefixes( $new_column_prefixes )
-			->set_include_table_prefixes( $include_table_prefixes )
-			->set_exclude_table_prefixes( $exclude_table_prefixes );
+			->set_new_column_prefixes( $new_column_prefixes );
 
 		// Exclude site options
-		$mysql->set_table_where_clauses( ai1wm_table_prefix() . 'options', array( sprintf( "`option_name` NOT IN ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", AI1WM_ACTIVE_PLUGINS, AI1WM_ACTIVE_TEMPLATE, AI1WM_ACTIVE_STYLESHEET, AI1WM_STATUS, AI1WM_SECRET_KEY, AI1WM_AUTH_USER, AI1WM_AUTH_PASSWORD, AI1WM_BACKUPS_LABELS, AI1WM_SITES_LINKS ) ) );
+		$mysql->set_table_where_query( ai1wm_table_prefix() . 'options', sprintf( "`option_name` NOT IN ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", AI1WM_ACTIVE_PLUGINS, AI1WM_ACTIVE_TEMPLATE, AI1WM_ACTIVE_STYLESHEET, AI1WM_STATUS, AI1WM_SECRET_KEY, AI1WM_AUTH_USER, AI1WM_AUTH_PASSWORD, AI1WM_BACKUPS_LABELS, AI1WM_SITES_LINKS ) );
 
 		// Replace table prefix on columns
 		$mysql->set_table_prefix_columns( ai1wm_table_prefix() . 'options', array( 'option_name' ) )
 			->set_table_prefix_columns( ai1wm_table_prefix() . 'usermeta', array( 'meta_key' ) );
 
 		// Export database
-		if ( $mysql->export( ai1wm_database_path( $params ), $table_index, $table_offset, $table_rows ) ) {
+		if ( $mysql->export( ai1wm_database_path( $params ), $query_offset, $table_index, $table_offset, $table_rows ) ) {
 
 			// Set progress
 			Ai1wm_Status::info( __( 'Done exporting database.', AI1WM_PLUGIN_NAME ) );
+
+			// Unset query offset
+			unset( $params['query_offset'] );
 
 			// Unset table index
 			unset( $params['table_index'] );
@@ -171,14 +168,14 @@ class Ai1wm_Export_Database {
 
 		} else {
 
-			// Get total tables count
-			$total_tables_count = count( $mysql->get_tables() );
-
 			// What percent of tables have we processed?
 			$progress = (int) ( ( $table_index / $total_tables_count ) * 100 );
 
 			// Set progress
 			Ai1wm_Status::info( sprintf( __( 'Exporting database...<br />%d%% complete<br />%s records saved', AI1WM_PLUGIN_NAME ), $progress, number_format_i18n( $table_rows ) ) );
+
+			// Set query offset
+			$params['query_offset'] = $query_offset;
 
 			// Set table index
 			$params['table_index'] = $table_index;

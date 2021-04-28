@@ -125,7 +125,7 @@ trait WordPress {
 
 		// Makes sure the plugin functions are defined before trying to use them.
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
 
 		return is_plugin_active_for_network( plugin_basename( RANK_MATH_FILE ) ) ?
@@ -252,7 +252,11 @@ trait WordPress {
 	 */
 	public static function get_thumbnail_with_fallback( $post_id, $size = 'thumbnail' ) {
 		if ( has_post_thumbnail( $post_id ) ) {
-			return wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), $size );
+			$thumbnail_id     = get_post_thumbnail_id( $post_id );
+			$image            = wp_get_attachment_image_src( $thumbnail_id, $size );
+			$image['caption'] = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
+
+			return $image;
 		}
 
 		preg_match_all( '/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', get_the_content(), $matches );
@@ -262,15 +266,15 @@ trait WordPress {
 		}
 
 		$fb_image = Helper::get_post_meta( 'facebook_image_id', $post_id );
-		$tw_image = Helper::get_post_meta( 'twitter_image_id', $post_id );
+		$tw_image = Helper::get_post_meta( 'twitter_image_id', $post_id, Helper::get_settings( 'titles.open_graph_image_id' ) );
 		$og_image = $fb_image ? $fb_image : $tw_image;
-
-		if ( $og_image ) {
-			return wp_get_attachment_image_src( $og_image, $size );
+		if ( ! $og_image ) {
+			return false;
 		}
 
-		$default_og = Helper::get_settings( 'titles.open_graph_image_id' );
-		return $default_og ? wp_get_attachment_image_src( $default_og, $size ) : false;
+		$image            = wp_get_attachment_image_src( $og_image, $size );
+		$image['caption'] = get_post_meta( $og_image, '_wp_attachment_image_alt', true );
+		return $image;
 	}
 
 	/**
@@ -287,7 +291,7 @@ trait WordPress {
 
 		// Makes sure the plugin is defined before trying to use it.
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
 
 		if ( ! is_plugin_active_for_network( plugin_basename( RANK_MATH_FILE ) ) ) {
@@ -323,6 +327,10 @@ trait WordPress {
 	public static function get_robots_defaults() {
 		$screen = get_current_screen();
 		$robots = Helper::get_settings( 'titles.robots_global', [] );
+
+		if ( ! is_object( $screen ) ) {
+			return $robots;
+		}
 
 		if ( 'post' === $screen->base && Helper::get_settings( "titles.pt_{$screen->post_type}_custom_robots" ) ) {
 			$robots = Helper::get_settings( "titles.pt_{$screen->post_type}_robots", [] );
@@ -465,5 +473,60 @@ trait WordPress {
 		 * @param string $post_type         The post type being checked.
 		 */
 		return apply_filters( 'use_block_editor_for_post_type', true, $post_type );
+	}
+
+	/**
+	 * Generate classes.
+	 *
+	 * @return string
+	 */
+	public static function classnames() {
+		$args = func_get_args();
+
+		$data = array_reduce(
+			$args,
+			function( $carry, $arg ) {
+				if ( is_array( $arg ) ) {
+					return array_merge( $carry, $arg );
+				}
+
+				$carry[] = $arg;
+				return $carry;
+			},
+			[]
+		);
+
+		$classes = array_map(
+			function ( $key, $value ) {
+				$condition = $value;
+				$return    = $key;
+
+				if ( is_int( $key ) ) {
+					$condition = null;
+					$return    = $value;
+				}
+
+				$is_array             = is_array( $return );
+				$is_object            = is_object( $return );
+				$is_stringable_type   = ! $is_array && ! $is_object;
+				$is_stringable_object = $is_object && method_exists( $return, '__toString' );
+
+				if ( ! $is_stringable_type && ! $is_stringable_object ) {
+					return null;
+				}
+
+				if ( is_null( $condition ) ) {
+					return $return;
+				}
+
+				return $condition ? $return : null;
+			},
+			array_keys( $data ),
+			array_values( $data )
+		);
+
+		$classes = array_filter( $classes );
+
+		return implode( ' ', $classes );
 	}
 }

@@ -2,9 +2,9 @@
 Contributors: yani.iliev, bangelov, pimjitsawang
 Tags: move, transfer, copy, migrate, backup, clone, restore, db migration, wordpress migration, website migration, database export, database import, apoyo, sauvegarde, di riserva, バックアップ
 Requires at least: 3.3
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.2.17
-Stable tag: 7.32
+Stable tag: 7.40
 License: GPLv2 or later
 
 Move, transfer, copy, migrate, and backup a site with 1-click. Quick, easy, and reliable.
@@ -108,6 +108,55 @@ Alternatively you can download the plugin using the download button on this page
 All-in-One WP Migration **asks for your consent** to collect **requester's email address** when filling plugin's contact form. [GDPR Compliant Privacy Policy](https://www.iubenda.com/privacy-policy/946881)
 
 == Changelog ==
+= 7.40 =
+**Added**
+
+* Better support for WP Cerber plugin
+
+**Fixed**
+
+* Backup page style issues on narrow screens
+
+= 7.39 =
+**Fixed**
+
+* Remove deprecated jQuery methods
+
+= 7.38 =
+**Added**
+
+* Improved MySQL error handling
+
+= 7.37 =
+**Added**
+
+* Improved detection of pretty permalink support
+* Improved DB error handling
+
+= 7.36 =
+**Added**
+
+* Support for case sensitive table names in MySQL 8
+
+= 7.35 =
+**Added**
+
+* Support for Avada Fusion Builder
+
+= 7.34 =
+**Added**
+
+* Improved database export
+
+**Changed**
+
+* Facebook Recommed to Like button
+
+= 7.33 =
+**Added**
+
+* Improved database export
+
 = 7.32 =
 **Added**
 

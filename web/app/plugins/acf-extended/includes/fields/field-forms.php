@@ -11,7 +11,7 @@ class acfe_field_forms extends acf_field{
         
         $this->name = 'acfe_forms';
         $this->label = __('Forms', 'acfe');
-        $this->category = 'relational';
+        $this->category = apply_filters('acfe/form_field_type_category', 'relational');
         $this->defaults = array(
             'post_type'     => array(),
             'field_type'    => 'checkbox',
@@ -355,6 +355,16 @@ class acfe_field_forms extends acf_field{
         
     }
     
+    function update_field($field){
+        
+        $field['default_value'] = acf_decode_choices($field['default_value'], true);
+        
+        if($field['field_type'] === 'radio')
+            $field['default_value'] = acfe_unarray($field['default_value']);
+        
+        return $field;
+        
+    }
     
     function format_value($value, $post_id, $field){
         

@@ -89,7 +89,7 @@ class Ai1wm_Export_Content {
 		// Start time
 		$start = microtime( true );
 
-		// Get map file
+		// Get content list file
 		$content_list = ai1wm_open( ai1wm_content_list_path( $params ), 'r' );
 
 		// Set content pointer at the current index
