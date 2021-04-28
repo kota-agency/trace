@@ -19,6 +19,15 @@
         }
     }
 
+    ol, ul {
+        padding-left: 4.5rem;
+
+        li {
+            font-size: 15px;
+            margin-bottom: 0px;
+        }
+    }
+
     .wp-caption {
         padding: 30px 0;
         max-width: 100%;
@@ -130,6 +139,11 @@
     }
 }
 
-.single-post .half-width-content .container a {
+.single-post .half-width-content .container a,
+.page .half-width-content .container a:not(.btn) {
     color: $color-quaternary;
+}
+
+.single-post .half-width-content .container a.btn:hover {
+    color: black
 }

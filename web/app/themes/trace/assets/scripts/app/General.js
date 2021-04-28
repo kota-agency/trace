@@ -314,7 +314,7 @@ function General() {
     window.addEventListener('scroll', updateScroll);
     updateScroll();
 
-    $('.page-link').find('a').on('click', (e) => {
+    $('.page-link:not(.redirect-link)').find('a').on('click', (e) => {
         e.preventDefault();
 
         if (!animating) {
@@ -376,7 +376,7 @@ function General() {
 
     });
 
-    $('a').on('click', (e) => {
+    $('a:not(.gated-file)').on('click', (e) => {
         const $this = $(e.currentTarget);
         const hash = $this.attr('href').substring($this.attr('href').indexOf('#'));
 
@@ -413,8 +413,38 @@ function General() {
     $('#acceptCookies').on('click', () => {
         $('.cookie-banner').fadeOut();
         Cookies.set('trace_cookie_consent', 'on', {expires: 365});
+    });
+
+    $('.gated-file').on('click', function(e) {
+        e.preventDefault();
+        $('#form_modal').addClass('show')
+
+        var gravityFormId = $(this).attr('data-gravity-form');
+        var formContent = $('.form-popup__inner');
+        
+        formContent.html('');
+        $.ajax({  
+            type: 'GET',  
+            url: ajaxurl,  
+            data: { 
+                action : 'get_gravity_form',
+                gravity_form_id: gravityFormId
+            },  
+            success: function(res){  
+                formContent.html(res)
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(errorThrown);
+                console.log(XMLHttpRequest);
+            }
+        });  
 
     });
+
+    $('.form-popup .close').click(function(e) {
+      e.preventDefault();
+      $('#form_modal').removeClass('show')
+    })
 
 }
 

@@ -4,13 +4,7 @@
  * @package wp-crontrol
  */
 
-const header = document.getElementById( 'crontrol-header' );
-const wpbody = document.getElementById( 'wpbody-content' );
 let hashtimer = null;
-
-if ( header && wpbody ) {
-	wpbody.prepend( header );
-}
 
 if ( window.wpCrontrol && window.wpCrontrol.eventsHash && window.wpCrontrol.eventsHashInterval ) {
 	hashtimer = setInterval( crontrolCheckHash, ( 1000 * window.wpCrontrol.eventsHashInterval ) );
@@ -27,6 +21,10 @@ function crontrolCheckHash() {
 	} ).done( function( response ) {
 		if ( response.success && response.data && response.data !== window.wpCrontrol.eventsHash ) {
 			jQuery( '#crontrol-hash-message' ).slideDown();
+
+			if ( wp && wp.a11y && wp.a11y.speak ) {
+				wp.a11y.speak( jQuery( '#crontrol-hash-message' ).text() );
+			}
 
 			if ( hashtimer ) {
 				clearInterval( hashtimer );

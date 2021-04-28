@@ -13,7 +13,7 @@ add_filter('the_generator', function() {
 Admin Bar
 - hide the admin bar
  */
-add_filter('show_admin_bar', '__return_false');
+// add_filter('show_admin_bar', '__return_false');
 
 /**
  * Allow svgs to be uploaded in WordPress

@@ -1,17 +1,17 @@
-=== BunnyCDN - WordPress CDN Plugin ===
-Contributors: bunnycdn
+=== bunny.net - WordPress CDN Plugin ===
+Contributors: bunny.net
 Tags: cdn, content delivery network, performance, bandwidth
 Requires at least: 3.8
-Tested up to: 5.4.1
+Tested up to: 5.6
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-**Speed up your website with BunnyCDN** Content Delivery Network. This plugin allows you to easily **enable BunnyCDN on your WordPress** website and enjoy greatly improved loading times around the world.
+**Speed up your website with bunny.net** Content Delivery Network (BunnyCDN). This plugin allows you to easily **enable Bunny CDN on your WordPress** website and enjoy greatly improved loading times around the world.
 
 == Description ==
 
-**Speed up your website with BunnyCDN** Content Delivery Network. This plugin allows you to easily **enable BunnyCDN on your WordPress** 
+**Speed up your website with bunny.net** Content Delivery Network. This plugin allows you to easily **enable Bunny CDN on your WordPress** 
 and enjoy greatly improved loading times around the world. Even better, it takes just a minute to set up, just enter the name of your Pull Zone and you're all set.
 
 = How does it work? =
@@ -28,9 +28,12 @@ The plugin will automatically configure your website to replace existing static 
 * WordPress >=3.8
 
 = Author =
-* [BunnyCDN](https://bunnycdn.com "BunnyCDN")
+* [bunny.net](https://bunny.net "bunny.net")
 
 == Changelog ==
+
+= 1.0.8 =
+* Updated the branding to bunny.net
 
 = 1.0.7 =
 * Increased pull zone name length limit

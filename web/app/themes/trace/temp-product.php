@@ -83,12 +83,13 @@ if ($item_count2 <= 2) {
 						$heading = get_sub_field('heading');
 						$link = get_sub_field('link');
 						$copy = get_sub_field('copy');
+						$redirect = get_sub_field('link_redirect');
 
 						?>
 
 
 						<?php if ($link) : ?>
-							<div class="page-link">
+							<div class="page-link <?php if($redirect == true) { echo 'redirect-link'; } ?>">
 								<a href="<?= $link['url']; ?>" <?= $link['target'] ? 'target="_blank"' : ''; ?>>
 									<?php if ($heading) : ?>
 										<h3><?= $heading; ?></h3>
@@ -323,12 +324,12 @@ if ($item_count4 <= 2) {
 						$heading = get_sub_field('heading');
 						$link = get_sub_field('link');
 						$copy = get_sub_field('copy');
-
+						$redirect = get_sub_field('link_redirect');
 						?>
 
 
 						<?php if ($link) : ?>
-							<div class="page-link">
+							<div class="page-link <?php if($redirect == true) { echo 'redirect-link'; } ?>">
 								<a href="<?= $link['url']; ?>" <?= $link['target'] ? 'target="_blank"' : ''; ?>>
 									<?php if ($heading) : ?>
 										<h3><?= $heading; ?></h3>

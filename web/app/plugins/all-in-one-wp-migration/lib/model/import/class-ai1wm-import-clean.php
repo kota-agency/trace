@@ -40,7 +40,7 @@ class Ai1wm_Import_Clean {
 		}
 
 		// Flush mainsite tables
-		$mysql->set_include_table_prefixes( array( ai1wm_table_prefix( 'mainsite' ) ) );
+		$mysql->add_table_prefix_filter( ai1wm_table_prefix( 'mainsite' ) );
 		$mysql->flush();
 
 		// Delete storage files

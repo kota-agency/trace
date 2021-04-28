@@ -70,6 +70,12 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.14.0/css/all.css"
           integrity="sha384-VhBcF/php0Z/P5ZxlxaEx1GwqTQVIBu4G4giRWxTKOCjTxsPFETUDdVL5B6vYvOt" crossorigin="anonymous">
 
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var ajaxurl = '<?php echo admin_url( 'admin-ajax.php' ) ?>'
+        /* ]]> */
+    </script>
+
     <!-- <script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=zgfxsijgx8wxzlejxmhpxw" async="true"></script> -->
 
 </head>

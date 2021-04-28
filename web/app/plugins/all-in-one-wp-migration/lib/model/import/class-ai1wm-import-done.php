@@ -78,6 +78,8 @@ class Ai1wm_Import_Done {
 					ai1wm_discover_plugin_basename( 'wordpress-mu-domain-mapping/domain_mapping.php' ),
 					ai1wm_discover_plugin_basename( 'wordpress-starter/siteground-wizard.php' ),
 					ai1wm_discover_plugin_basename( 'pro-sites/pro-sites.php' ),
+					ai1wm_discover_plugin_basename( 'wpide/WPide.php' ),
+					ai1wm_discover_plugin_basename( 'page-optimize/page-optimize.php' ),
 				)
 			);
 
@@ -180,6 +182,8 @@ class Ai1wm_Import_Done {
 						ai1wm_discover_plugin_basename( 'wordpress-mu-domain-mapping/domain_mapping.php' ),
 						ai1wm_discover_plugin_basename( 'wordpress-starter/siteground-wizard.php' ),
 						ai1wm_discover_plugin_basename( 'pro-sites/pro-sites.php' ),
+						ai1wm_discover_plugin_basename( 'wpide/WPide.php' ),
+						ai1wm_discover_plugin_basename( 'page-optimize/page-optimize.php' ),
 					)
 				);
 
@@ -285,6 +289,8 @@ class Ai1wm_Import_Done {
 						ai1wm_discover_plugin_basename( 'wordpress-mu-domain-mapping/domain_mapping.php' ),
 						ai1wm_discover_plugin_basename( 'wordpress-starter/siteground-wizard.php' ),
 						ai1wm_discover_plugin_basename( 'pro-sites/pro-sites.php' ),
+						ai1wm_discover_plugin_basename( 'wpide/WPide.php' ),
+						ai1wm_discover_plugin_basename( 'page-optimize/page-optimize.php' ),
 					)
 				);
 
@@ -331,16 +337,25 @@ class Ai1wm_Import_Done {
 			}
 		}
 
+		// Clear auth cookie (WP Cerber)
+		if ( ai1wm_validate_plugin_basename( 'wp-cerber/wp-cerber.php' ) ) {
+			wp_clear_auth_cookie();
+		}
+
+		$should_reset_permalinks = false;
+
 		// Switch to default permalink structure
-		if ( ! ai1wm_got_url_permalinks() ) {
+		if ( ( $should_reset_permalinks = ai1wm_should_reset_permalinks( $params ) ) ) {
 			$wp_rewrite->set_permalink_structure( '' );
 		}
 
 		// Set progress
-		if ( ai1wm_validate_plugin_basename( 'oxygen/functions.php' ) ) {
-			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/oxygen' ) );
+		if ( ai1wm_validate_plugin_basename( 'fusion-builder/fusion-builder.php' ) ) {
+			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/avada', array( 'should_reset_permalinks' => $should_reset_permalinks ) ) );
+		} elseif ( ai1wm_validate_plugin_basename( 'oxygen/functions.php' ) ) {
+			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/oxygen', array( 'should_reset_permalinks' => $should_reset_permalinks ) ) );
 		} else {
-			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/done' ) );
+			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/done', array( 'should_reset_permalinks' => $should_reset_permalinks ) ) );
 		}
 
 		return $params;

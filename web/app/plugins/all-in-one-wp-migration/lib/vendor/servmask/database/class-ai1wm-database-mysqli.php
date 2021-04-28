@@ -32,18 +32,38 @@ class Ai1wm_Database_Mysqli extends Ai1wm_Database {
 	/**
 	 * Run MySQL query
 	 *
-	 * @param  string   $input SQL query
-	 * @return resource
+	 * @param  string $input SQL query
+	 * @return mixed
 	 */
 	public function query( $input ) {
-		if ( mysqli_real_query( $this->wpdb->dbh, $input ) ) {
-			// Copy results from the internal mysqlnd buffer into the PHP variables fetched
-			if ( defined( 'MYSQLI_STORE_RESULT_COPY_DATA' ) ) {
-				return mysqli_store_result( $this->wpdb->dbh, MYSQLI_STORE_RESULT_COPY_DATA );
+		if ( ! mysqli_real_query( $this->wpdb->dbh, $input ) ) {
+			$mysqli_errno = 0;
+
+			// Get MySQL error code
+			if ( ! empty( $this->wpdb->dbh ) ) {
+				if ( $this->wpdb->dbh instanceof mysqli ) {
+					$mysqli_errno = mysqli_errno( $this->wpdb->dbh );
+				} else {
+					$mysqli_errno = 2006;
+				}
 			}
 
-			return mysqli_store_result( $this->wpdb->dbh );
+			// MySQL server has gone away, try to reconnect
+			if ( empty( $this->wpdb->dbh ) || 2006 === $mysqli_errno ) {
+				if ( ! $this->wpdb->check_connection( false ) ) {
+					throw new Ai1wm_Database_Exception( __( 'Error reconnecting to the database. <a href="https://help.servmask.com/knowledgebase/mysql-error-reconnecting/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), 503 );
+				}
+
+				mysqli_real_query( $this->wpdb->dbh, $input );
+			}
 		}
+
+		// Copy results from the internal mysqlnd buffer into the PHP variables fetched
+		if ( defined( 'MYSQLI_STORE_RESULT_COPY_DATA' ) ) {
+			return mysqli_store_result( $this->wpdb->dbh, MYSQLI_STORE_RESULT_COPY_DATA );
+		}
+
+		return mysqli_store_result( $this->wpdb->dbh );
 	}
 
 	/**

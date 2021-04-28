@@ -95,15 +95,15 @@ class BunnyCDNSettings
 	public static function initialize()
 	{
 		add_menu_page(
-			"BunnyCDN", 				//$page_title
-			"BunnyCDN", 				//$menu_title
+			"bunny.net", 				//$page_title
+			"bunny.net", 				//$menu_title
 			"manage_options", 			//$capability
 			"bunnycdn", 				//$menu_slug
 			array(						//$function 
 				'BunnyCDNSettings',
 				'outputSettingsPage'
 			), 
-			"dashicons-location");		//$icon_url
+			"dashicons-carrot");		//$icon_url
 		
 		register_setting('bunnycdn', 'bunnycdn', array("BunnyCDN", "validateSettings"));
 	}
@@ -114,15 +114,15 @@ class BunnyCDNSettings
 		
 		?> 
 		<div class="tead" style="width: 550px; padding-top: 20px; margin-left: auto; margin-right: auto; position: relative;">
-			<a href="https://bunnycdn.com" target="_blank"><img width="250" src="<?php echo plugins_url('bunnycdn-logo.png', __FILE__ ); ?>?v=2"></img></a>
+			<a href="https://bunnycdn.com" target="_blank"><img width="250" src="<?php echo plugins_url('bunnynet-logo.svg', __FILE__ ); ?>?v=2"></img></a>
 			<?php
 				if(strlen(trim($options["cdn_domain_name"])) == 0)
 				{
-					echo '<h2>Enable BunnyCDN Content Delivery Network</h2>';
+					echo '<h2>Enable bunny.net Content Delivery Network</h2>';
 				}
 				else 
 				{
-					echo '<h2>Configure BunnyCDN Content Delivery Network</h2>';
+					echo '<h2>Configure bunny.net Content Delivery Network</h2>';
 				}
 			?>
 			
@@ -134,7 +134,7 @@ class BunnyCDNSettings
 
 				<!-- Simple settings -->
 				<div id="bunnycdn-simple-settings" <?php if($options["advanced_edit"]) { echo 'style="display: none;"'; }?>>
-					<p>To set up, enter the name of your Pull Zone that you have created on your BunnyCDN dashboard. If you haven't done that, you can <a href="https://bunnycdn.com/dashboard/pullzones/add?originUrl=<?php echo urlencode(get_option('home')); ?>" target="_blank">create a new pull zone now</a>. It should only take a minute. After that, just click on the Enable BunnyCDN button and enjoy a faster website.</p>
+					<p>To set up, enter the name of your Pull Zone that you have created on your bunny.net dashboard. If you haven't done that, you can <a href="https://bunnycdn.com/dashboard/pullzones/add?originUrl=<?php echo urlencode(get_option('home')); ?>" target="_blank">create a new pull zone now</a>. It should only take a minute. After that, just click on the Enable bunny.net button and enjoy a faster website.</p>
 					<table class="form-table">
 						<tr valign="top">
 							<th scope="row">
@@ -197,7 +197,7 @@ class BunnyCDNSettings
 						</th>
 						<td>
 							<input type="text" name="bunnycdn[api_key]" id="bunnycdn_api_key" value="<?php echo $options['api_key']; ?>" size="64" class="regular-text code" />
-							<p class="description">The BunnyCDN API key to manage the zone. Adding this will enable features such as cache purging. You can find the key in your <a href="https://bunnycdn.com/dashboard/account" target="_blank">account settings</a>.</p>
+							<p class="description">The bunny.net API key to manage the zone. Adding this will enable features such as cache purging. You can find the key in your <a href="https://bunnycdn.com/dashboard/account" target="_blank">account settings</a>.</p>
 							<p id="bunnycdn_api_key_notice" class="description" style="display: none; color: red;">To clear the cache, please first set your API key.</p>
 						</td>
 					</tr>
@@ -207,14 +207,14 @@ class BunnyCDNSettings
 							Disable CDN for admin user:
 						</th>
 						<td>
-							<p class="description"><input type="checkbox" id="bunnycdn_disable_admin_checkbox" class="regular-text code" <?php echo ($options['disable_admin'] == true ? "checked" : ""); ?> /> If checked, BunnyCDN will be disabled while signed in as an admin user.</p>
+							<p class="description"><input type="checkbox" id="bunnycdn_disable_admin_checkbox" class="regular-text code" <?php echo ($options['disable_admin'] == true ? "checked" : ""); ?> /> If checked, bunny.net will be disabled while signed in as an admin user.</p>
 						</td>
 					</tr>
 				</table>
 
 				<div>
 					<p class="submit">
-						<input type="submit" name="bunnycdn-save-button" id="bunnycdn-save-button" class="button submit" value="<?php echo (strlen(trim($options['cdn_domain_name'])) == 0 ? 'Enable BunnyCDN' : 'Update CDN Settings'); ?>">
+						<input type="submit" name="bunnycdn-save-button" id="bunnycdn-save-button" class="button submit" value="<?php echo (strlen(trim($options['cdn_domain_name'])) == 0 ? 'Enable bunny.net' : 'Update CDN Settings'); ?>">
 						&nbsp;
 						<input type="button" id="bunnycdn-clear-cache-button" class="button submit" value="Clear Cache">
 					</p>

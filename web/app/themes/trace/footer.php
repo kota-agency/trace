@@ -100,6 +100,7 @@ $agency_link = get_field('agency_link', 'options');
 </footer><!-- .mastfoot -->
 </div>
 
+<?php get_component('form-modal'); ?>
 
 <?php wp_footer(); ?>
 </body>

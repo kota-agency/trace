@@ -1,16 +1,16 @@
 <?php
 /*
-Plugin Name: BunnyCDN
-Text Domain: bunnycdn
-Description: Speed up your website with BunnyCDN Content Delivery Network. This plugin allows you to easily enable BunnyCDN on your WordPress website and enjoy greatly improved loading times around the world. Even better, it takes just a minute to set up.
-Author: BunnyCDN
-Author URI: https://bunnycdn.com
+Plugin Name: bunny.net
+Text Domain: bunny.net
+Description: Speed up your website with bunny.net Content Delivery Network. This plugin allows you to easily enable Bunny CDN on your WordPress website and enjoy greatly improved loading times around the world.
+Author: bunny.net
+Author URI: https://bunny.net
 License: GPLv2 or later
-Version: 1.0.7
+Version: 1.0.8
 */
 
 /*
-Copyright (C)  2017 BunnyCDN
+Copyright (C)  2017 bunny.net
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
