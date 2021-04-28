@@ -28,7 +28,7 @@
                 </div>
                 <?php endif; ?>
                 <?php if ($form_id) : ?>
-                    <?php gravity_form($form_id, false, false, false, null, true, $form_id * 50); ?>
+                    
                 <?php endif; ?>
             </div>
         </div>
