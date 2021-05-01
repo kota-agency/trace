@@ -26,72 +26,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Kangaroos cannot jump here' );
 }
+?>
 
-class Ai1wm_Updater_Controller {
-
-	public static function plugins_api( $result, $action = null, $args = null ) {
-		return Ai1wm_Updater::plugins_api( $result, $action, $args );
-	}
-
-	public static function pre_update_plugins( $transient ) {
-		if ( empty( $transient->checked ) ) {
-			return $transient;
-		}
-
-		// Check for updates
-		Ai1wm_Updater::check_for_updates();
-
-		return $transient;
-	}
-
-	public static function update_plugins( $transient ) {
-		return Ai1wm_Updater::update_plugins( $transient );
-	}
-
-	public static function check_for_updates() {
-		return Ai1wm_Updater::check_for_updates();
-	}
-
-	public static function plugin_row_meta( $links, $file ) {
-		return Ai1wm_Updater::plugin_row_meta( $links, $file );
-	}
-
-	public static function in_plugin_update_message( $plugin_data, $response ) {
-		$updater = get_option( AI1WM_UPDATER, array() );
-
-		// Get updater details
-		if ( isset( $updater[ $plugin_data['slug'] ] ) ) {
-			Ai1wm_Template::render( 'updater/message', array( 'updater' => $updater[ $plugin_data['slug'] ] ) );
-		}
-	}
-
-	public static function updater( $params = array() ) {
-		if ( check_ajax_referer( 'ai1wm_updater', 'ai1wm_nonce' ) ) {
-			ai1wm_setup_environment();
-
-			// Set params
-			if ( empty( $params ) ) {
-				$params = stripslashes_deep( $_POST );
-			}
-
-			// Set uuid
-			$uuid = null;
-			if ( isset( $params['ai1wm_uuid'] ) ) {
-				$uuid = trim( $params['ai1wm_uuid'] );
-			}
-
-			// Set extension
-			$extension = null;
-			if ( isset( $params['ai1wm_extension'] ) ) {
-				$extension = trim( $params['ai1wm_extension'] );
-			}
-
-			$extensions = Ai1wm_Extensions::get();
-
-			// Verify whether extension exists
-			if ( isset( $extensions[ $extension ] ) ) {
-				update_option( $extensions[ $extension ]['key'], $uuid );
-			}
-		}
-	}
-}
+<?php if ( ! empty( $updater['update_message'] ) ) : ?>
+	<br /><span class="ai1wm-update-message"><?php echo $updater['update_message']; ?></span>
+<?php endif; ?>

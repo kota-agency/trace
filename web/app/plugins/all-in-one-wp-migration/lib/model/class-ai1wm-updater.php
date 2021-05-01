@@ -46,14 +46,12 @@ class Ai1wm_Updater {
 		$extensions = Ai1wm_Extensions::get();
 
 		// View details page
-		if ( isset( $args->slug ) && isset( $extensions[ $args->slug ] ) && $action === 'plugin_information' ) {
-
-			// Get current updates
-			$updates = get_option( AI1WM_UPDATER, array() );
+		if ( isset( $extensions[ $args->slug ] ) && $action === 'plugin_information' ) {
+			$updater = get_option( AI1WM_UPDATER, array() );
 
 			// Plugin details
-			if ( isset( $updates[ $args->slug ] ) && ( $details = $updates[ $args->slug ] ) ) {
-				return (object) $details;
+			if ( isset( $updater[ $args->slug ] ) ) {
+				return (object) $updater[ $args->slug ];
 			}
 		}
 
@@ -78,10 +76,10 @@ class Ai1wm_Updater {
 		$extensions = Ai1wm_Extensions::get();
 
 		// Get current updates
-		$updates = get_option( AI1WM_UPDATER, array() );
+		$updater = get_option( AI1WM_UPDATER, array() );
 
 		// Get extension updates
-		foreach ( $updates as $slug => $update ) {
+		foreach ( $updater as $slug => $update ) {
 			if ( isset( $extensions[ $slug ] ) && ( $extension = $extensions[ $slug ] ) ) {
 				if ( ( $purchase_id = get_option( $extension['key'] ) ) ) {
 
@@ -122,12 +120,11 @@ class Ai1wm_Updater {
 	 * @return boolean
 	 */
 	public static function check_for_updates() {
-		// Get current updates
-		$updates = get_option( AI1WM_UPDATER, array() );
+		$updater = get_option( AI1WM_UPDATER, array() );
 
 		// Get extension updates
 		foreach ( Ai1wm_Extensions::get() as $slug => $extension ) {
-			$response = wp_remote_get(
+			$about = wp_remote_get(
 				$extension['about'],
 				array(
 					'timeout' => 15,
@@ -135,35 +132,39 @@ class Ai1wm_Updater {
 				)
 			);
 
-			// Add updates
-			if ( ! is_wp_error( $response ) ) {
-				if ( ( $response = json_decode( $response['body'], true ) ) ) {
-					// Slug is mandatory
-					if ( ! isset( $response['slug'] ) ) {
-						continue;
+			// Add plugin updates
+			if ( ! is_wp_error( $about ) ) {
+				$body = wp_remote_retrieve_body( $about );
+				if ( ( $data = json_decode( $body, true ) ) ) {
+					if ( isset( $data['slug'], $data['version'], $data['homepage'], $data['download_link'] ) ) {
+						$updater[ $slug ] = $data;
 					}
+				}
+			}
 
-					// Version is mandatory
-					if ( ! isset( $response['version'] ) ) {
-						continue;
+			// Add plugin messages
+			if ( ( $purchase_id = get_option( $extension['key'] ) ) ) {
+				$check = wp_remote_get(
+					add_query_arg( array( 'site_url' => get_site_url(), 'admin_email' => get_option( 'admin_email' ) ), sprintf( '%s/%s', $extension['check'], $purchase_id ) ),
+					array(
+						'timeout' => 15,
+						'headers' => array( 'Accept' => 'application/json' ),
+					)
+				);
+
+				// Add plugin checks
+				if ( ! is_wp_error( $check ) ) {
+					$body = wp_remote_retrieve_body( $check );
+					if ( ( $data = json_decode( $body, true ) ) ) {
+						if ( isset( $updater[ $slug ], $data['message'] ) ) {
+							$updater[ $slug ]['update_message'] = $data['message'];
+						}
 					}
-
-					// Homepage is mandatory
-					if ( ! isset( $response['homepage'] ) ) {
-						continue;
-					}
-
-					// Download link is mandatory
-					if ( ! isset( $response['download_link'] ) ) {
-						continue;
-					}
-
-					$updates[ $slug ] = $response;
 				}
 			}
 		}
 
-		return update_option( AI1WM_UPDATER, $updates );
+		return update_option( AI1WM_UPDATER, $updater );
 	}
 
 	/**

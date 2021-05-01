@@ -463,16 +463,20 @@ class Ai1wm_Import_Database {
 					// Get scheme
 					$new_scheme = parse_url( $blog['New']['WordPress']['UploadsURL'], PHP_URL_SCHEME );
 
-					// Add path with single quote
-					if ( ! in_array( sprintf( "='%s", trailingslashit( $old_path ) ), $old_replace_values ) ) {
-						$old_replace_values[] = sprintf( "='%s", trailingslashit( $old_path ) );
-						$new_replace_values[] = sprintf( "='%s", trailingslashit( $new_path ) );
-					}
+					// Replace Uploads URL Path
+					if ( basename( $old_path ) ) {
 
-					// Add path with double quote
-					if ( ! in_array( sprintf( '="%s', trailingslashit( $old_path ) ), $old_replace_values ) ) {
-						$old_replace_values[] = sprintf( '="%s', trailingslashit( $old_path ) );
-						$new_replace_values[] = sprintf( '="%s', trailingslashit( $new_path ) );
+						// Add path with single quote
+						if ( ! in_array( sprintf( "='%s", trailingslashit( $old_path ) ), $old_replace_values ) ) {
+							$old_replace_values[] = sprintf( "='%s", trailingslashit( $old_path ) );
+							$new_replace_values[] = sprintf( "='%s", trailingslashit( $new_path ) );
+						}
+
+						// Add path with double quote
+						if ( ! in_array( sprintf( '="%s', trailingslashit( $old_path ) ), $old_replace_values ) ) {
+							$old_replace_values[] = sprintf( '="%s', trailingslashit( $old_path ) );
+							$new_replace_values[] = sprintf( '="%s', trailingslashit( $new_path ) );
+						}
 					}
 
 					// Set Uploads URL scheme
@@ -757,16 +761,20 @@ class Ai1wm_Import_Database {
 				// Get scheme
 				$new_scheme = parse_url( ai1wm_get_uploads_url(), PHP_URL_SCHEME );
 
-				// Add path with single quote
-				if ( ! in_array( sprintf( "='%s", trailingslashit( $old_path ) ), $old_replace_values ) ) {
-					$old_replace_values[] = sprintf( "='%s", trailingslashit( $old_path ) );
-					$new_replace_values[] = sprintf( "='%s", trailingslashit( $new_path ) );
-				}
+				// Replace Uploads URL Path
+				if ( basename( $old_path ) ) {
 
-				// Add path with double quote
-				if ( ! in_array( sprintf( '="%s', trailingslashit( $old_path ) ), $old_replace_values ) ) {
-					$old_replace_values[] = sprintf( '="%s', trailingslashit( $old_path ) );
-					$new_replace_values[] = sprintf( '="%s', trailingslashit( $new_path ) );
+					// Add path with single quote
+					if ( ! in_array( sprintf( "='%s", trailingslashit( $old_path ) ), $old_replace_values ) ) {
+						$old_replace_values[] = sprintf( "='%s", trailingslashit( $old_path ) );
+						$new_replace_values[] = sprintf( "='%s", trailingslashit( $new_path ) );
+					}
+
+					// Add path with double quote
+					if ( ! in_array( sprintf( '="%s', trailingslashit( $old_path ) ), $old_replace_values ) ) {
+						$old_replace_values[] = sprintf( '="%s', trailingslashit( $old_path ) );
+						$new_replace_values[] = sprintf( '="%s', trailingslashit( $new_path ) );
+					}
 				}
 
 				// Add Uploads URL scheme
