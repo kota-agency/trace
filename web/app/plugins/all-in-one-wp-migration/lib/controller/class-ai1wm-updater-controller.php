@@ -38,6 +38,16 @@ class Ai1wm_Updater_Controller {
 			return $transient;
 		}
 
+		// Check for updates every 11 hours
+		if ( ( $last_check_for_updates = get_site_transient( AI1WM_LAST_CHECK_FOR_UPDATES ) ) ) {
+			if ( ( time() - $last_check_for_updates ) < 11 * HOUR_IN_SECONDS ) {
+				return $transient;
+			}
+		}
+
+		// Set last check for updates
+		set_site_transient( AI1WM_LAST_CHECK_FOR_UPDATES, time() );
+
 		// Check for updates
 		Ai1wm_Updater::check_for_updates();
 

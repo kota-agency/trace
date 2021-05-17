@@ -35,7 +35,7 @@ define( 'AI1WM_DEBUG', false );
 // ==================
 // = Plugin Version =
 // ==================
-define( 'AI1WM_VERSION', '7.42' );
+define( 'AI1WM_VERSION', '7.43' );
 
 // ===============
 // = Plugin Name =
@@ -341,6 +341,11 @@ define( 'AI1WM_BACKUPS_LABELS', 'ai1wm_backups_labels' );
 // = Sites Links =
 // ===============
 define( 'AI1WM_SITES_LINKS', 'ai1wm_sites_links' );
+
+// ==============================
+// = Last Check For Updates Key =
+// ==============================
+define( 'AI1WM_LAST_CHECK_FOR_UPDATES', 'ai1wm_last_check_for_updates' );
 
 // ===============
 // = Updater Key =

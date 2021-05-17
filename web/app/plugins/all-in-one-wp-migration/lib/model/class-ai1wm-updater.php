@@ -84,7 +84,7 @@ class Ai1wm_Updater {
 				if ( ( $purchase_id = get_option( $extension['key'] ) ) ) {
 
 					// Get download URL
-					if ( $update['slug'] === 'file-extension' ) {
+					if ( $slug === 'all-in-one-wp-migration-file-extension' ) {
 						$download_url = add_query_arg( array( 'siteurl' => get_site_url() ), sprintf( '%s', $update['download_link'] ) );
 					} else {
 						$download_url = add_query_arg( array( 'siteurl' => get_site_url() ), sprintf( '%s/%s', $update['download_link'], $purchase_id ) );
@@ -143,21 +143,23 @@ class Ai1wm_Updater {
 			}
 
 			// Add plugin messages
-			if ( ( $purchase_id = get_option( $extension['key'] ) ) ) {
-				$check = wp_remote_get(
-					add_query_arg( array( 'site_url' => get_site_url(), 'admin_email' => get_option( 'admin_email' ) ), sprintf( '%s/%s', $extension['check'], $purchase_id ) ),
-					array(
-						'timeout' => 15,
-						'headers' => array( 'Accept' => 'application/json' ),
-					)
-				);
+			if ( $slug !== 'all-in-one-wp-migration-file-extension' ) {
+				if ( ( $purchase_id = get_option( $extension['key'] ) ) ) {
+					$check = wp_remote_get(
+						add_query_arg( array( 'site_url' => get_site_url(), 'admin_email' => get_option( 'admin_email' ) ), sprintf( '%s/%s', $extension['check'], $purchase_id ) ),
+						array(
+							'timeout' => 15,
+							'headers' => array( 'Accept' => 'application/json' ),
+						)
+					);
 
-				// Add plugin checks
-				if ( ! is_wp_error( $check ) ) {
-					$body = wp_remote_retrieve_body( $check );
-					if ( ( $data = json_decode( $body, true ) ) ) {
-						if ( isset( $updater[ $slug ], $data['message'] ) ) {
-							$updater[ $slug ]['update_message'] = $data['message'];
+					// Add plugin checks
+					if ( ! is_wp_error( $check ) ) {
+						$body = wp_remote_retrieve_body( $check );
+						if ( ( $data = json_decode( $body, true ) ) ) {
+							if ( isset( $updater[ $slug ], $data['message'] ) ) {
+								$updater[ $slug ]['update_message'] = $data['message'];
+							}
 						}
 					}
 				}
