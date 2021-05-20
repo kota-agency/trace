@@ -46,14 +46,25 @@ class Ai1wm_Import_Upload {
 	public static function execute( $params ) {
 		self::validate();
 
-		$error   = $_FILES['upload-file']['error'];
-		$upload  = $_FILES['upload-file']['tmp_name'];
-		$archive = ai1wm_archive_path( $params );
+		$error  = $_FILES['upload-file']['error'];
+		$upload = $_FILES['upload-file']['tmp_name'];
+
+		// Verify file name extension
+		if ( ! ai1wm_is_filename_supported( ai1wm_archive_path( $params ) ) ) {
+			throw new Ai1wm_Import_Exception(
+				__(
+					'The file type that you have tried to upload is not compatible with this plugin. ' .
+					'Please ensure that your file is a <strong>.wpress</strong> file that was created with the All-in-One WP migration plugin. ' .
+					'<a href="https://help.servmask.com/knowledgebase/invalid-backup-file/" target="_blank">Technical details</a>',
+					AI1WM_PLUGIN_NAME
+				)
+			);
+		}
 
 		switch ( $error ) {
 			case UPLOAD_ERR_OK:
 				try {
-					ai1wm_copy( $upload, $archive );
+					ai1wm_copy( $upload, ai1wm_archive_path( $params ) );
 					ai1wm_unlink( $upload );
 				} catch ( Exception $e ) {
 					throw new Ai1wm_Import_Retry_Exception( sprintf( __( 'Unable to upload the file because %s', AI1WM_PLUGIN_NAME ), $e->getMessage() ), 400 );

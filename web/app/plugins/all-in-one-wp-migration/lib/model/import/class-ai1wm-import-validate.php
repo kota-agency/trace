@@ -33,7 +33,25 @@ class Ai1wm_Import_Validate {
 
 		// Verify file if size > 2GB and PHP = 32-bit
 		if ( ! ai1wm_is_filesize_supported( ai1wm_archive_path( $params ) ) ) {
-			throw new Ai1wm_Import_Exception( __( 'Your PHP is 32-bit. In order to import your file, please change your PHP version to 64-bit and try again. <a href="https://help.servmask.com/knowledgebase/php-32bit/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ) );
+			throw new Ai1wm_Import_Exception(
+				__(
+					'Your PHP is 32-bit. In order to import your file, please change your PHP version to 64-bit and try again. ' .
+					'<a href="https://help.servmask.com/knowledgebase/php-32bit/" target="_blank">Technical details</a>',
+					AI1WM_PLUGIN_NAME
+				)
+			);
+		}
+
+		// Verify file name extension
+		if ( ! ai1wm_is_filename_supported( ai1wm_archive_path( $params ) ) ) {
+			throw new Ai1wm_Import_Exception(
+				__(
+					'The file type that you have tried to import is not compatible with this plugin. ' .
+					'Please ensure that your file is a <strong>.wpress</strong> file that was created with the All-in-One WP migration plugin. ' .
+					'<a href="https://help.servmask.com/knowledgebase/invalid-backup-file/" target="_blank">Technical details</a>',
+					AI1WM_PLUGIN_NAME
+				)
+			);
 		}
 
 		// Set archive bytes offset

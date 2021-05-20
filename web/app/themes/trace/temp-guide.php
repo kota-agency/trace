@@ -48,6 +48,9 @@ $cta_label = $header['cta_label'];
                         >
                         <?= $cta_label ?>
                     </a>
+
+                    
+                    
                 <?php endif; ?>
 
                 <?php /*if ($cta) : ?>
@@ -84,3 +87,8 @@ $cta_label = $header['cta_label'];
 
 
 <?php get_footer();?>
+
+<div style="display:none">
+    <!-- This loads the event to the iframe that loads the confirmation/error message. Needed after upgrading Gravity form to 2.5 -->
+    <?php echo gravity_form($form_id, true, true, false, null, true); ?>
+</div>
