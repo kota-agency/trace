@@ -42,7 +42,7 @@
     <!-- End A1 script -->
 
     <!-- Lucky orange script -->
-    <!-- <script type='text/javascript'>
+    <script type='text/javascript'>
     window.__lo_site_id = 177182;
 
     (function() {
@@ -50,7 +50,7 @@
     wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
     })();
-    </script> -->
+    </script>
     <!-- End Lucky orange script -->
 
     <!-- Script for browser update -->
