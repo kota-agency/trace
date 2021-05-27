@@ -278,12 +278,16 @@ add_shortcode('gated_download', function ($atts, $content = null) {
         'style' => ''
     ), $atts );
      
-    $gf = '[gravityform id=' . $a["id"] . ']';
+    $gf = '[gravityform id=' . $a["id"] . ' ajax=true]';
     $hidden_form = '<div style="display:none;opacity:0;">' . do_shortcode($gf) . '</div>';
+    add_action('wp_footer', function() use ($hidden_form){
+    	echo $hidden_form;
+    	echo 'testtest';
+    });
     if($a['style'] == 'btn') {
-    	return $hidden_form . '<a class="gated-file btn" data-gravity-form="'.$a['id'].'">' . $content . '</a>' ;
+    	return '<a class="gated-file btn" data-gravity-form="'.$a['id'].'">' . $content . '</a>' ;
     }
-    return $hidden_form . '<a class="gated-file" data-gravity-form="'.$a['id'].'">' . $content . '</a>' ;
+    return '<a class="gated-file" data-gravity-form="'.$a['id'].'">' . $content . '</a>' ;
 } ); 
 
 add_action('wp_ajax_get_gravity_form', function() {
