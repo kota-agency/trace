@@ -295,6 +295,17 @@ function isValidFlyoutClick( e ) {
 }
 
 /**
+ * Determine whether a given rule needs to present a text input for the value.
+ *
+ * @param {object} e The rule object.
+ *
+ * @return {boolean}
+ */
+function ruleNeedsTextValue( rule ) {
+	return ['contains', 'starts_with', 'ends_with', '<', '>' ].indexOf ( rule.operator ) !== -1;
+}
+
+/**
  * Class GFConditionalLogic
  *
  * A JS class encapsulating all of the logic and state for a conditional flyout.
@@ -630,10 +641,11 @@ GFConditionalLogic.prototype.renderSelect = function( rule, idx ) {
  */
 GFConditionalLogic.prototype.renderRuleValue = function( rule, idx ) {
 	var fieldValueOptions = this.renderValueOptions( rule, idx );
-	var isSelect = fieldValueOptions.length;
-	var html = '';
+	var isSelect          = fieldValueOptions.length;
+	var html              = '';
+	var needsTextInput    = ruleNeedsTextValue( rule );
 
-	if ( ! isSelect ) {
+	if ( ! isSelect || needsTextInput ) {
 		html = this.renderInput( rule, idx );
 	} else {
 		html = this.renderSelect( rule, idx );
@@ -665,7 +677,16 @@ GFConditionalLogic.prototype.renderRuleValue = function( rule, idx ) {
 GFConditionalLogic.prototype.renderRule = function( rule, idx ) {
 	var field = getFieldById( rule.fieldId );
 
-	if ( !field ) {
+	// Field is select - if value doesn't exist, set it to the first choice.
+	if ( ! rule.value.length && field && field.choices.length && ! ruleNeedsTextValue( rule ) ) {
+		var found = field.choices.filter( function( choice ) { return rule.value == choice.value; } )[0];
+
+		if ( ! found && field.type !== 'multiselect' ) {
+			rule.value = field.choices[ 0 ].value;
+		}
+	}
+
+	if ( ! field ) {
 		field = {
 			choices: '',
 		};
@@ -727,10 +748,15 @@ GFConditionalLogic.prototype.gatherElements = function() {
  * @returns {{value: string, operator: string, fieldId: number}}
  */
 GFConditionalLogic.prototype.getDefaultRule = function() {
+	var fieldId = GetFirstRuleField();
+	var field = GetFieldById( fieldId );
+
+	var value = field && field.choices.length ? field.choices[0].value : '';
+
 	return {
 		fieldId: GetFirstRuleField(),
 		operator: 'is',
-		value: '',
+		value: value,
 	};
 };
 

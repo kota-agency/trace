@@ -431,7 +431,7 @@ html[dir="rtl"] .add-buttons {
 
 	}
 
-.add-buttons li button {
+.add-buttons li button, .add-buttons li button.button {
 			align-items: stretch;
 			background: transparent;
 			border: 1px solid #d5d7e9;
@@ -452,12 +452,12 @@ html[dir="rtl"] .add-buttons {
 
 		}
 
-.add-buttons li button:hover {
+.add-buttons li button:hover, .add-buttons li button.button:hover {
 				border-color: #3e7da6;
 				color: #3e7da6;
 			}
 
-.add-buttons li button:focus {
+.add-buttons li button:focus, .add-buttons li button.button:focus {
 				border: 1px solid #3985b7;
 				border-radius: 3px;
 				box-shadow: 0 0 0 2px #bed8ed;
@@ -1620,6 +1620,10 @@ li.pagination_setting, li.field_setting {
 	margin-bottom: 0.9375rem;
 }
 
+li.pagination_setting .percentage_style_setting ~ .percentage_custom_container {
+	margin-top: 0.9375rem;
+}
+
 .input_active_icon {
 	margin: 0.3rem 0 0 0;
 }
@@ -1829,8 +1833,7 @@ html[dir="rtl"] .field-choice-handle {
 }
 
 #gfield_settings_choices_container label {
-	padding: 0 0 0 0;
-	width: 1rem;
+	padding: 0;
 }
 
 html:not([dir="rtl"]) #gfield_settings_choices_container label:first-child {
@@ -1847,32 +1850,81 @@ html[dir="rtl"] #gfield_settings_choices_container label:first-child {
 
 #gfield_settings_choices_container .gfield_choice_header_label {
 	display: inline-block !important;
-	margin-right: 0.75rem;
-	width: 6.25rem;
+	width: calc(100% - 6rem);
 }
+
+.limits-enabled #gfield_settings_choices_container .gfield_choice_header_label {
+		width: calc(100% - 8.5rem);
+	}
+
+#gfield_settings_choices_container.choice_with_value .gfield_choice_header_label {
+	width: calc(50% - 3rem);
+}
+
+.limits-enabled #gfield_settings_choices_container.choice_with_value .gfield_choice_header_label {
+		width: calc(50% - 4.4375rem);
+	}
+
+#gfield_settings_choices_container .gfield_choice_header_value {
+	width: calc(50% - 3rem);
+}
+
+.limits-enabled #gfield_settings_choices_container .gfield_choice_header_value {
+		width: calc(50% - 4.4375rem);
+	}
 
 html[dir="rtl"] #gfield_settings_choices_container .gfield_choice_header_label + .gfield_choice_header_value {
 	margin-right: 0.75rem;
 }
 
-#gfield_settings_choices_container.choice_with_price .gfield_choice_header_price {
-	display: inline-block !important;
-	margin-right: 2px;
-	width: 120px !important;
-}
+.limits-enabled #gfield_settings_choices_container .gfield_choice_header_limit {
+			float: none;
+			margin-right: 0;
+			width: 2.5rem;
+		}
 
-#gfield_settings_choices_container.choice_with_price input {
-	width: 120px !important;
-}
+#gfield_settings_choices_container.choice_with_price > label {
+			width: calc(50% - 3rem);
+		}
 
-#gfield_settings_choices_container.choice_with_value_and_price .gfield_choice_header_price, #gfield_settings_choices_container.choice_with_value_and_price .gfield_choice_header_value, #gfield_settings_choices_container.choice_with_value_and_price .gfield_choice_header_label {
-	display: inline-block !important;
-	width: 80px !important;
-}
+.limits-enabled #gfield_settings_choices_container.choice_with_price > label {
+				width: calc(50% - 4.4375rem);
+			}
 
-#gfield_settings_choices_container.choice_with_value_and_price input, #gfield_settings_choices_container.choice_with_value.choice_with_price input {
-	width: 80px !important;
-}
+.limits-enabled #gfield_settings_choices_container.choice_with_price .gfield_choice_header_limit {
+				width: 2.5rem;
+			}
+
+#gfield_settings_choices_container.choice_with_price .field-choice-input {
+			flex-basis: calc(50% - 3rem);
+			width: calc(50% - 3rem);
+		}
+
+.limits-enabled #gfield_settings_choices_container.choice_with_price .field-choice-input {
+				flex-basis: auto;
+				width: calc(50% - 4.25rem);
+			}
+
+#gfield_settings_choices_container.choice_with_value_and_price > label {
+			width: calc(33.332% - 2rem);
+		}
+
+.limits-enabled #gfield_settings_choices_container.choice_with_value_and_price > label {
+				width: calc(33.332% - 2.8125rem);
+			}
+
+#gfield_settings_choices_container.choice_with_value_and_price .field-choice-price {
+			margin-left: 0.3125rem;
+		}
+
+#gfield_settings_choices_container.choice_with_value_and_price .field-choice-input:not(.field-choice-limit) {
+			flex-basis: calc(33.332% - 2rem);
+			width: calc(33.332% - 2rem);
+		}
+
+.limits-enabled #gfield_settings_choices_container.choice_with_value_and_price .field-choice-input:not(.field-choice-limit) {
+				width: calc(33.332% - 2.8125rem);
+			}
 
 .gfield_rule_input, .gfield_rule_value_dropdown {
 	display: none;
@@ -1937,7 +1989,11 @@ html[dir="rtl"] #gfield_settings_choices_container .gfield_choice_header_label +
 }
 
 #gform_input_mask {
-	padding-top: 0.25rem;
+	padding-top: 0.9375rem;
+}
+
+.maxlen_setting.field_setting {
+	min-height: 4.1875rem;
 }
 
 .gform_inline_options {

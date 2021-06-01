@@ -5563,7 +5563,7 @@ Content-Type: text/html;
 	 *
 	 * @return bool
 	 */
-	private static function requires_gf_hooks_javascript() {
+	public static function requires_gf_hooks_javascript() {
 		require_once self::get_base_path() . '/form_display.php';
 
 		// Script has already been output; bail to avoid duplicating it.
@@ -5744,8 +5744,7 @@ Content-Type: text/html;
 			return;
 		}
 
-		$hooks_javascript                = self::get_hooks_javascript_code();
-		GFFormDisplay::$hooks_js_printed = true;
+		$hooks_javascript = self::get_hooks_javascript_code();
 
 		echo '<script type="text/javascript">' . $hooks_javascript . '</script>';
 	}
@@ -5758,7 +5757,11 @@ Content-Type: text/html;
 	 * @return false|string
 	 */
 	public static function get_hooks_javascript_code() {
+		require_once self::get_base_path() . '/form_display.php';
+
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+
+		GFFormDisplay::$hooks_js_printed = true;
 
 		return file_get_contents( GFCommon::get_base_path() . '/js/gforms_hooks' . $min . '.js' );
 	}

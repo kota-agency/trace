@@ -417,13 +417,13 @@ class GFFormDetail {
 										<option value="custom">  <?php esc_html_e( 'Custom', 'gravityforms' ); ?>  </option>
 									</select>
 								</div>
-								<div class="percentage_custom_container" style="padding-left: 20px;">
+								<div class="percentage_custom_container">
 									<label for="percentage_background_color" style="display:block;">
 										<?php esc_html_e( 'Text Color', 'gravityforms' ); ?>
 									</label>
 									<?php self::color_picker( 'percentage_style_custom_color', '' ); ?>
 								</div>
-								<div class="percentage_custom_container" style="padding-left: 20px;">
+								<div class="percentage_custom_container">
 									<label for="percentage_background_bgcolor" style="display:block;">
 										<?php esc_html_e( 'Background Color', 'gravityforms' ); ?>
 									</label>
@@ -643,7 +643,7 @@ class GFFormDetail {
 									<?php esc_html_e( 'Content', 'gravityforms' ); ?>
 									<?php gform_tooltip( 'form_field_content' ); ?>
 								</label>
-								<textarea id="field_content" fieldheight-1 merge-tag-support mt-position-right mt-prepopulate"></textarea>
+								<textarea id="field_content" class="fieldheight-1 merge-tag-support mt-position-right mt-prepopulate"></textarea>
 
 							</li>
 
@@ -2696,9 +2696,7 @@ case 'invalid_json' :
 	 */
 	private static function display_buttons( $buttons ) {
 		foreach ( $buttons as $button ) {
-			unset( $button['class'] );
-
-			$button['data-icon']        = empty( $button['data-icon'] ) ? 'dashicons-admin-generic' : $button['data-icon'];
+			$button['data-icon']        = empty( $button['data-icon'] ) ? 'gform-icon--cog' : $button['data-icon'];
 			$button['data-description'] = empty( $button['data-description'] ) ? sprintf( esc_attr__( 'Add a %s field to your form.', 'gravityforms' ), $button['value'] ) : $button['data-description'];
 			?>
 			<li>

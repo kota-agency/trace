@@ -357,7 +357,7 @@ class GF_Field_CAPTCHA extends GF_Field {
 					return "<div class='ginput_container'><img class='gfield_captcha' src='" . GFCommon::get_base_url() . "/images/captcha_{$type_suffix}{$theme}.jpg' alt='{$alt}' /></div>";
 				}
 
-				if ( empty( $site_key ) || empty( $secret_key ) ) {
+				if ( empty( $this->site_key ) || empty( $this->secret_key ) ) {
 					GFCommon::log_error( __METHOD__ . sprintf( '(): reCAPTCHA secret keys not saved in the reCAPTCHA Settings (%s). The reCAPTCHA field will always fail validation during form submission.', admin_url( 'admin.php' ) . '?page=gf_settings&subview=recaptcha' ) );
 				}
 
@@ -484,8 +484,8 @@ class GF_Field_CAPTCHA extends GF_Field {
 	public function ensure_recaptcha_js(){
 		?>
 		<script type="text/javascript">
-			( function( $ ) {
-				$( document ).bind( 'gform_post_render', function() {
+			( function() {
+				function setCaptchaPoller() {
 					var gfRecaptchaPoller = setInterval( function() {
 						if( ! window.grecaptcha || ! window.grecaptcha.render ) {
 							return;
@@ -493,8 +493,9 @@ class GF_Field_CAPTCHA extends GF_Field {
 						renderRecaptcha();
 						clearInterval( gfRecaptchaPoller );
 					}, 100 );
-				} );
-			} )( jQuery );
+				}
+				gform.initializeOnLoaded( setCaptchaPoller );
+			} )();
 		</script>
 
 		<?php

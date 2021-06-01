@@ -1,3 +1,48 @@
+### 2.5.4 | 2021-05-27
+- Added the gform_force_hooks_js_output filter to allow plugins to control whether to output the hooks js in the head; defaults to true.
+- Fixed an issue which causes reCaptcha field to log errors when there are none.
+- Fixed an issue which causes forms that rely on Javascript to not render in certain contexts.
+- Fixed an issue which causes Javascript markup to be injected into some AJAX responses.
+
+### 2.5.3 | 2021-05-26
+- Added accessibility warnings to the datepicker and fields with hidden labels in the form editor.
+- Added enhanced support for plugins that concatenate scripts.
+- Added support for translations for all strings in the file upload field.
+- Fixed gf_hidden class to also apply to non legacy forms for backwards compatibility.
+- Fixed an issue where JavaScript errors which prevent form display when jQuery is included in the footer or deferred.
+- Fixed an issue which can prevent forms functioning when included by ajax after the page has loaded.
+- Fixed an issue which causes forms to become non-responsive when Total Field calculations are being performed.
+- Fixed an issue where the total field HTML does not keep the legacy markup when legacy markup is enabled for a form.
+- Fixed an issue with the choices ui that breaks its layout when more than 2 input columns are inserted.
+- Fixed an issue in JavaScript that causes errors with price calculation.
+- Fixed an issue that causes some add-ons to be unable to load the feed settings screen.
+- Fixed an issue which causes some forms to throw JavaScript errors due to missing head tag in the DOM.
+- Fixed an issue which causes JavaScript events not to fire when a form is loaded via AJAX.
+- Fixed an issue which causes some performance optimization plugins to break certain form JavaScript methods.
+- Fixed an issue where the gf_list_*col ready classes for radio and checkbox fields are showing the wrong number of columns.
+- Fixed an issue that causes sites with HTML5 disabled to have it enabled after updating to 2.5.
+- Fixed an issue which allows greater-than and less-than operators for Conditional Logic to be more useful.
+- Fixed an issue which causes custom values in the Conditional Logic flyout in the form editor to be overwritten.
+- Fixed an issue where confirmations redirect to the selected page even if page isn't selected as the redirect type.
+- Fixed an issue where a JavaScript errors on the last page of a paginated form with conditional logic.
+- Fixed an issue which prevents setting custom classes for the form editor fields' buttons.
+- API: Updated the settings API to automatically save custom form settings fields added with the gform_form_settings_fields filter.
+- API: Fixed an issue which causes some filters not to fire when on certain Admin screens.
+
+### 2.5.2 | 2021-05-19
+- Added security enhancements.
+- Added form editor sidebar settings style refinements.
+- Updated the section field so it no longer uses the description as a fallback when the label is empty.
+- Updated the frontend styles for better column alignment and better appearance in small containers.
+- Updated the section field so it no longer uses the description as a fallback when the label is empty.
+- Fixed an issue where the HTML field's content setting doesn't have a merge tags selector.
+- Fixed an issue which causes Javascript errors in the Form Editor when no Conditional Logic fields are present.
+- Fixed an issue which causes Conditional Logic to fail if the first choice for a given field is selected.
+- Fixed an issue that prevents users with unfiltered_html capabilities from saving raw markup in textarea settings.
+- Fixed an issue that prevents choice-based fields from utilizing the contains, starts with, and ends with Conditional Operators.
+- Fixed an issue which causes validation error messages in forms with legacy markup to use the incorrect classname.
+- AF: Fixed an issue which prevents payment add-ons from rendering delayed payment settings in the feed settings page.
+
 ### 2.5.1 | 2021-05-11
 - Added accessibility enhancements to the form editor to improve keyboard navigation.
 - Updated the form editor to notify users that resizing is not available when the legacy markup form setting is enabled.
@@ -6,12 +51,22 @@
 - Fixed an issue where the form description field doesn't allow HTML tags.
 - Fixed an issue where save and continue button is triggered when pressing return/enter.
 - Fixed a PHP notice that appears for the From Email for form notifications under certain circumstances.
+- Updated the save and continue button so that it isn't triggered when pressing return/enter.
+- Updated the form description field to allow HTML tags.
+- Updated icons in the WordPress admin to Gravity Forms 2.5 variants.
+- AF: Updated the setup fee settings in the payment add-on framework so that the product field is disabled instead of hidden if setup fee isn't checked.
+- AF: Fixed PHP notices that appear when editing a feed that has no associated form.
+- Fixed accessibility issue with the multi file upload field.
+- Fixed a PHP notice that appeared for the From Email for form notifications under certain circumstances.
 - Fixed a padding issue for suppressed WP notices in the admin area at smaller viewport sizes and refined notification vertical spacing.
 - Fixed an issue that causes single line text inputs added to a legacy mode editor instance to have size medium applied.
 - Fixed an issue that can cause dragging or resizing in the form editor to break the layout and/or delete the field.
 - Fixed issue when using a custom tab index and the post image field with all meta fields enabled where the alt text and post image shared the same tabindex. Credit: Jake Jackson (@jakejackson1).
 - Fixed an issue that causes radio and select fields to show invalid Conditional Logic options.
 - Fixed form editor layout issues present with Jetpack plugin on wordpress.com sites.
+- API: Fixed an issue which causes programmatically-created forms to break in the form editor.
+
+### 2.5.0.2
 - Fixed an issue which prevents certain add-ons from displaying Plugin Settings fields.
 - Fixed an issue which prevents non-admin users from accessing Form Settings when no add-ons are enabled.
 - Fixed an issue that causes certain fields to not trigger the settings tab to open in the form editor.
