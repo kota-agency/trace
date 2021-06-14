@@ -1,0 +1,73 @@
+{
+    "packages": [
+        {
+            "name": "nitropack/httpclient",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:nitropack/httpclient.git",
+                "reference": "2322728997a9a3e7f4adbb41229b347cce2ebab0"
+            },
+            "require": {
+                "nitropack/url": "dev-master"
+            },
+            "time": "2020-12-30T16:50:03+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-4": {
+                    "NitroPack\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Ivailo Hristov"
+                }
+            ],
+            "description": "HttpClient library written in PHP, without relying on cURL nor url_fopen",
+            "keywords": [
+                "client",
+                "http",
+                "library",
+                "php"
+            ],
+            "install-path": "../nitropack/httpclient"
+        },
+        {
+            "name": "nitropack/url",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:nitropack/url.git",
+                "reference": "d10e616a333f5a5107137f88313c7ceba638c8a0"
+            },
+            "time": "2020-11-04T10:08:34+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-4": {
+                    "NitroPack\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Ivailo Hristov"
+                }
+            ],
+            "description": "URL manipulation library",
+            "keywords": [
+                "library",
+                "manipulation",
+                "php",
+                "url"
+            ],
+            "install-path": "../nitropack/url"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}
