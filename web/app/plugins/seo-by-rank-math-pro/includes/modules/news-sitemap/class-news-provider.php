@@ -135,7 +135,7 @@ class News_Provider extends Post_Type {
 		 * The following code is a derivative work of the code from the Yoast(https://github.com/Yoast/wordpress-seo/), which is licensed under GPL v3.
 		 */
 		$sql = "
-			SELECT ID, post_content, post_name, post_author, post_parent, post_date_gmt, post_modified_gmt, post_date, post_date_gmt, post_title, post_type
+			SELECT *
 			FROM {$wpdb->posts}
 			WHERE post_status='publish'
 				AND ( TIMESTAMPDIFF( MINUTE, post_date_gmt, UTC_TIMESTAMP() ) <= ( 48 * 60 ) )
@@ -179,11 +179,6 @@ class News_Provider extends Post_Type {
 			return false;
 		}
 
-		$modified = max( $post->post_modified_gmt, $post->post_date_gmt );
-		if ( '0000-00-00 00:00:00' !== $modified ) {
-			$url['publication_date'] = $modified;
-		}
-
 		$canonical = Helper::get_post_meta( 'canonical', $post->ID );
 		if ( '' !== $canonical && $canonical !== $url['loc'] ) {
 			/*
@@ -193,35 +188,26 @@ class News_Provider extends Post_Type {
 			 */
 			return false;
 		}
-		unset( $canonical );
 
-		if ( 'post' !== $post->post_type ) {
-			$url['loc'] = trailingslashit( $url['loc'] );
-		}
-		$url['title']  = get_the_title( $post );
-		$url['images'] = ! is_null( $this->get_image_parser() ) ? $this->get_image_parser()->get_images( $post ) : [];
+		rank_math()->variables->setup();
 
-		$url['genres']        = $this->get_genres( $post->ID );
-		$url['genres']        = ! empty( $url['genres'] ) ? join( ',', $url['genres'] ) : '';
-		$url['stock_tickers'] = Helper::get_post_meta( 'news_sitemap_stock_tickers', $post->ID );
+		$url['title']            = $this->get_title( $post );
+		$url['publication_date'] = $post->post_date_gmt;
+		$url['images']           = ! is_null( $this->get_image_parser() ) ? $this->get_image_parser()->get_images( $post ) : [];
 
 		return $url;
 	}
 
 	/**
-	 * Get genres by post id.
+	 * Get Post Title.
 	 *
-	 * @param int $post_id Post ID.
+	 * @param WP_Post $post Post Object.
 	 *
-	 * @return array
+	 * @return string
 	 */
-	private function get_genres( $post_id ) {
-		$genres = Helper::get_post_meta( 'news_sitemap_genres', $post_id );
-		if ( ! empty( $genres ) ) {
-			return $genres;
-		}
-
-		return Helper::get_settings( 'sitemap.news_sitemap_default_genres', [] );
+	private function get_title( $post ) {
+		$title = Helper::get_post_meta( 'title', $post->ID );
+		return $title ? $title : $post->post_title;
 	}
 
 	/**
@@ -237,12 +223,13 @@ class News_Provider extends Post_Type {
 		}
 
 		foreach ( $posts as $key => $post ) {
-			$exclude_terms = Helper::get_settings( "sitemap.news_sitemap_exclude_{$post->post_type}_terms", [] );
+			$exclude_terms = current( Helper::get_settings( "sitemap.news_sitemap_exclude_{$post->post_type}_terms", [] ) );
 			if ( empty( $exclude_terms ) ) {
 				continue;
 			}
 
-			$taxonomies = get_object_taxonomies( $post->post_type, 'names' );
+			$exclude_terms = array_merge( ...array_values( $exclude_terms ) );
+			$taxonomies    = get_object_taxonomies( $post->post_type, 'names' );
 			if ( empty( $taxonomies ) ) {
 				continue;
 			}

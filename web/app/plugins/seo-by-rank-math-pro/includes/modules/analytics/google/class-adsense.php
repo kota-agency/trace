@@ -46,7 +46,7 @@ class Adsense {
 	}
 
 	/**
-	 * Query analytics data from google client api.
+	 * Query adsense data from google client api.
 	 *
 	 * @param string $start_date Start date.
 	 * @param string $end_date   End date.
@@ -70,6 +70,8 @@ class Adsense {
 		);
 		$response = Api::get()->http_get( $request );
 
+		Api::get()->log_failed_request( $response, 'adsense', $start_date, func_get_args() );
+
 		if ( ! Api::get()->is_success() || ! isset( $response['rows'] ) ) {
 			return false;
 		}
@@ -91,5 +93,19 @@ class Adsense {
 		}
 
 		return $rank_math_adsense_id;
+	}
+
+	/**
+	 * Is adsense connected.
+	 *
+	 * @return boolean
+	 */
+	public static function is_adsense_connected() {
+		$account = wp_parse_args(
+			get_option( 'rank_math_google_analytic_options' ),
+			[ 'adsense_id' => '' ]
+		);
+
+		return ! empty( $account['adsense_id'] );
 	}
 }

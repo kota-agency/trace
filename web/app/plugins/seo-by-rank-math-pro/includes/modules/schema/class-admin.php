@@ -17,6 +17,7 @@ use RankMath\Traits\Hooker;
 use RankMath\Rest\Sanitize;
 use MyThemeShop\Helpers\Str;
 use MyThemeShop\Helpers\Param;
+use WP_Screen;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -33,16 +34,17 @@ class Admin {
 	public function __construct() {
 		$this->action( 'admin_enqueue_scripts', 'overwrite_wplink', 100 );
 		$this->action( 'rank_math/admin/enqueue_scripts', 'admin_scripts' );
+		$this->action( 'wp_enqueue_scripts', 'admin_scripts' );
 		$this->action( 'rank_math/admin/enqueue_scripts', 'deregister_scripts', 99 );
 		$this->action( 'save_post', 'save', 10, 2 );
 		$this->action( 'edit_form_after_title', 'render_div' );
 		$this->filter( 'rank_math/filter_metadata', 'filter_metadata', 10, 2 );
 		$this->filter( 'rank_math/settings/snippet/types', 'add_pro_schema_types' );
 
-		if ( 'elementor' === Param::get( 'action' ) ) {
-			$this->action( 'elementor/editor/before_enqueue_scripts', 'elementor_scripts', 9 );
-			$this->action( 'elementor/editor/before_enqueue_scripts', 'overwrite_wplink', 99 );
-		}
+		new Taxonomy();
+
+		$this->action( 'wp_footer', 'enqueue', 11 );
+		$this->action( 'elementor/editor/before_enqueue_scripts', 'enqueue', 9 );
 	}
 
 	/**
@@ -106,8 +108,11 @@ class Admin {
 	/**
 	 * Elementor Scipts.
 	 */
-	public function elementor_scripts() {
-		Helper::add_json( 'schemaTemplates', $this->get_schema_templates() );
+	public function enqueue() {
+		if ( ! Helper::is_elementor_editor() && ! Helper::is_divi_frontend_editor() ) {
+			return;
+		}
+
 		wp_enqueue_style( 'rank-math-schema-pro', RANK_MATH_PRO_URL . 'includes/modules/schema/assets/css/schema.css', null, rank_math_pro()->version );
 		wp_enqueue_script(
 			'rank-math-pro-schema-filters',
@@ -131,7 +136,7 @@ class Admin {
 	 * @return void
 	 */
 	public function admin_scripts() {
-		if ( ! Helper::has_cap( 'onpage_snippet' ) || ! Admin_Helper::is_post_edit() || Admin_Helper::is_posts_page() ) {
+		if ( ! $this->can_enqueue_scripts() ) {
 			return;
 		}
 
@@ -142,6 +147,7 @@ class Admin {
 		Helper::add_json( 'activeTemplates', $this->get_active_templates() );
 		Helper::add_json( 'accessiblePostTypes', Helper::get_accessible_post_types() );
 		Helper::add_json( 'accessibleTaxonomies', Helper::get_accessible_taxonomies() );
+		Helper::add_json( 'postTaxonomies', $this->get_post_taxonomies() );
 		wp_enqueue_style( 'rank-math-schema-pro', RANK_MATH_PRO_URL . 'includes/modules/schema/assets/css/schema.css', null, rank_math_pro()->version );
 
 		wp_enqueue_script(
@@ -158,8 +164,8 @@ class Admin {
 			true
 		);
 
-		$screen = get_current_screen();
-		if ( 'rank_math_schema' === $screen->post_type ) {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : false;
+		if ( $screen instanceof WP_Screen && 'rank_math_schema' === $screen->post_type ) {
 			Helper::add_json( 'isTemplateScreen', true );
 			wp_enqueue_script(
 				'rank-math-pro-schema',
@@ -182,7 +188,14 @@ class Admin {
 			return;
 		}
 
-		$dep = Helper::is_block_editor() && \rank_math_is_gutenberg() ? [ 'rank-math-schema' ] : [ 'rank-math-metabox' ];
+		$dep = [ 'rank-math-metabox' ];
+		if (
+			Helper::is_divi_frontend_editor() ||
+			Helper::is_block_editor() &&
+			\rank_math_is_gutenberg()
+		) {
+			$dep = [ 'rank-math-schema' ];
+		}
 		wp_enqueue_script( 'rank-math-schema-pro', RANK_MATH_PRO_URL . 'includes/modules/schema/assets/js/schema.js', $dep, rank_math_pro()->version, true );
 	}
 
@@ -299,92 +312,11 @@ class Admin {
 	}
 
 	/**
-	 * Add active templates to the schemas json
-	 *
-	 * @return array
-	 */
-	public function get_active_templates() {
-		$screen = get_current_screen();
-
-		if ( 'rank_math_schema' === $screen->post_type ) {
-			return [];
-		}
-
-		$templates = $this->get_schema_templates();
-		if ( empty( $templates ) ) {
-			return [];
-		}
-
-		$schemas = [];
-		foreach ( $templates as $template ) {
-			if ( empty( $template['schema']['metadata']['displayConditions'] ) ) {
-				continue;
-			}
-
-			$conditions = $template['schema']['metadata']['displayConditions'];
-			$can_add    = false;
-			$data       = [];
-
-			foreach ( $conditions as $condition ) {
-				$category = $condition['category'];
-				if ( ! in_array( $category, [ 'singular', 'general' ], true ) ) {
-					continue;
-				}
-
-				$operator = $condition['condition'];
-				if ( ! empty( $data[ $category ] ) && 'exclude' !== $operator ) {
-					continue;
-				}
-
-				$type  = $condition['type'];
-				$value = $condition['value'];
-
-				if ( 'general' === $category ) {
-					$data[ $category ] = 'include' === $operator;
-					continue;
-				}
-
-				if ( $value && absint( Param::get( 'post' ) ) === $value ) {
-					$data[ $category ] = 'include' === $operator;
-					break;
-				}
-
-				if ( 'all' === $type ) {
-					$data[ $category ] = 'include' === $operator;
-				} elseif ( $type !== $screen->post_type ) {
-					$data[ $category ] = false;
-				} elseif ( ! $value ) {
-					$data[ $category ] = 'include' === $operator;
-				} elseif ( Param::get( 'post' ) !== $value ) {
-					$data[ $category ] = isset( $data[ $category ] ) ? $data[ $category ] : false;
-				} else {
-					$data[ $category ] = 'include' === $operator;
-				}
-			}
-
-			if ( isset( $data['singular'] ) ) {
-				$can_add = $data['singular'];
-			} else {
-				$can_add = ! empty( $data['general'] );
-			}
-
-			if ( $can_add ) {
-				$template['schema']['isTemplate'] = true;
-				$schemas[ $template['id'] ]       = $template['schema'];
-			}
-		}
-
-		return $schemas;
-	}
-
-	/**
 	 * [get_schema_templates description]
 	 *
 	 * @return array
 	 */
-	private function get_schema_templates() {
-		$templates = [];
-
+	protected function get_schema_templates() {
 		$posts = get_posts(
 			[
 				'post_type'      => 'rank_math_schema',
@@ -394,6 +326,11 @@ class Admin {
 			]
 		);
 
+		if ( empty( $posts ) ) {
+			return [];
+		}
+
+		$templates = [];
 		foreach ( $posts as $post ) {
 			$data          = DB::get_template_type( $post->ID );
 			$data['title'] = $post->post_title;
@@ -403,5 +340,75 @@ class Admin {
 		}
 
 		return $templates;
+	}
+
+	/**
+	 * Whether to enqueue schema scripts on the page.
+	 *
+	 * @return bool
+	 */
+	private function can_enqueue_scripts() {
+		if ( ! Helper::has_cap( 'onpage_snippet' ) ) {
+			return false;
+		}
+
+		if ( ! Helper::is_divi_frontend_editor() && ! is_admin() ) {
+			return false;
+		}
+
+		if ( Admin_Helper::is_term_edit() ) {
+			$taxonomy = Param::request( 'taxonomy' );
+			return true !== apply_filters(
+				'rank_math/snippet/remove_taxonomy_data',
+				Helper::get_settings( 'titles.remove_' . $taxonomy . '_snippet_data' ),
+				$taxonomy
+			);
+		}
+
+		return Admin_Helper::is_post_edit() && ! Admin_Helper::is_posts_page();
+	}
+
+	/**
+	 * Add active templates to the schemas json
+	 *
+	 * @return array
+	 */
+	private function get_active_templates() {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : false;
+
+		if ( ! $screen instanceof WP_Screen || 'rank_math_schema' === $screen->post_type ) {
+			return [];
+		}
+
+		$templates = Display_Conditions::get_schema_templates();
+		if ( empty( $templates ) ) {
+			return [];
+		}
+
+		$schemas = [];
+		foreach ( $templates as  $template ) {
+			$template['schema']['isTemplate'] = true;
+			$schemas[ $template['id'] ]       = $template['schema'];
+		}
+
+		return $schemas;
+	}
+
+	/**
+	 * Get Post taxonomies.
+	 */
+	private function get_post_taxonomies() {
+		$post_types = Helper::get_accessible_post_types();
+		$data       = [];
+		foreach ( $post_types as $post_type ) {
+			$taxonomies = Helper::get_object_taxonomies( $post_type );
+			if ( empty( $taxonomies ) ) {
+				continue;
+			}
+			unset( $taxonomies['off'] );
+			$data[ $post_type ] = [ 'all' => esc_html__( 'All Taxonomies', 'rank-math-pro' ) ] + $taxonomies;
+		}
+
+		return $data;
 	}
 }

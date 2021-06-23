@@ -69,7 +69,7 @@ class Location_Shortcode {
 
 		wp_register_script( 'rank-math-google-maps', '//maps.googleapis.com/maps/api/js?&key=' . rawurlencode( $this->api_key ), [], rank_math_pro()->version, true );
 		wp_register_script( 'rank-math-google-maps-cluster', 'https://developers-dot-devsite-v2-prod.appspot.com/maps/documentation/javascript/examples/markerclusterer/markerclustererplus@4.0.1.min.js', [], rank_math_pro()->version, true );
-		wp_register_script( 'rank-math-local', RANK_MATH_PRO_URL . 'assets/admin/js/rank-math-local.js', [ 'jquery', 'lodash', 'rank-math-google-maps', 'rank-math-google-maps-cluster' ], rank_math_pro()->version, true );
+		wp_register_script( 'rank-math-local', RANK_MATH_PRO_URL . 'includes/modules/local-seo/assets/js/rank-math-local.js', [ 'jquery', 'lodash', 'rank-math-google-maps', 'rank-math-google-maps-cluster' ], rank_math_pro()->version, true );
 	}
 
 	/**
@@ -91,14 +91,14 @@ class Location_Shortcode {
 		);
 
 		if ( ! $this->api_key && is_user_logged_in() && in_array( $this->atts['type'], [ 'store-locator', 'map' ], true ) ) {
-			/* translators: Local SEO Settings Link */
 			return sprintf(
+				/* Translators: %s expands to General Settings Link. */
 				esc_html__( 'This page can\'t load Google Maps correctly. Please add %s.', 'rank-math-pro' ),
-				'<a href="' . Helper::get_admin_url( 'rank-math-options-titles#setting-panel-local' ) . '" target="_blank">' . esc_html__( 'API Key', 'rank-math-pro' ) . '</a>'
+				'<a href="' . Helper::get_admin_url( 'options-titles#setting-panel-local' ) . '" target="_blank">' . esc_html__( 'API Key', 'rank-math-pro' ) . '</a>'
 			);
 		}
 
-		wp_enqueue_style( 'rank-math-local-business', RANK_MATH_PRO_URL . 'assets/front/css/local-business.css', null, rank_math_pro()->version );
+		wp_enqueue_style( 'rank-math-local-business', RANK_MATH_PRO_URL . 'includes/modules/local-seo/assets/css/local-business.css', null, rank_math_pro()->version );
 
 		if ( 'store-locator' === $this->atts['type'] ) {
 			return $this->store_locator->get_data( $this );
@@ -277,10 +277,10 @@ class Location_Shortcode {
 				continue;
 			}
 
-			$schema = current( $this->replace_variables( $schema ) );
+			$schema = current( $this->replace_variables( $schema, $location ) );
 
 			$data .= '<div class="rank-math-business-wrapper">';
-			$data .= $this->get_title( $location );
+			$data .= $this->get_title( $schema );
 			$data .= $this->get_image( $schema );
 
 			if ( 'address' === $this->atts['type'] ) {
@@ -300,16 +300,16 @@ class Location_Shortcode {
 	/**
 	 * Get Location Title.
 	 *
-	 * @param Object $location Current Location.
+	 * @param Object $schema Location schema data.
 	 *
 	 * @return string Shortcode data.
 	 */
-	public function get_title( $location ) {
-		if ( empty( $this->atts['show_company_name'] ) ) {
+	public function get_title( $schema ) {
+		if ( empty( $this->atts['show_company_name'] ) || empty( $schema['name'] ) ) {
 			return;
 		}
 
-		return '<h3 class="rank-math-business-name">' . esc_html( $location->post_title ) . '</h3>';
+		return '<h3 class="rank-math-business-name">' . esc_html( $schema['name'] ) . '</h3>';
 	}
 
 	/**
@@ -330,19 +330,20 @@ class Location_Shortcode {
 	/**
 	 * Replace variable.
 	 *
-	 * @param  array $schemas Schema to replace.
+	 * @param  array  $schemas  Schema to replace.
+	 * @param  object $location Location Post Object.
 	 * @return array
 	 */
-	public function replace_variables( $schemas ) {
+	public function replace_variables( $schemas, $location = [] ) {
 		$new_schemas = [];
 
 		foreach ( $schemas as $key => $schema ) {
 			if ( is_array( $schema ) ) {
-				$new_schemas[ $key ] = $this->replace_variables( $schema );
+				$new_schemas[ $key ] = $this->replace_variables( $schema, $location );
 				continue;
 			}
 
-			$new_schemas[ $key ] = Str::contains( '%', $schema ) ? Helper::replace_vars( $schema, get_queried_object() ) : $schema;
+			$new_schemas[ $key ] = Str::contains( '%', $schema ) ? Helper::replace_seo_fields( $schema, $location ) : $schema;
 		}
 
 		return $new_schemas;

@@ -10,19 +10,14 @@
 
 namespace RankMathPro\Analytics;
 
-use RankMath\Helper;
-use RankMath\Google\Api;
-use RankMath\Google\Console as Google_Analytics;
-use RankMath\Google\Authentication;
-use MyThemeShop\Helpers\Str;
 use MyThemeShop\Helpers\Param;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * AJAX class.
+ * Ajax class.
  */
-class AJAX {
+class Ajax {
 
 	use \RankMath\Traits\Ajax;
 
@@ -37,11 +32,21 @@ class AJAX {
 	 * Save adsense profile.
 	 */
 	public function save_adsense_account() {
-		check_ajax_referer( 'rank-math-ajax-nonce', 'security' );
+		$this->verify_nonce( 'rank-math-ajax-nonce' );
+		$this->has_cap_ajax( 'analytics' );
 
-		$values               = get_option( 'rank_math_google_analytic_options', [] );
-		$values['adsense_id'] = Param::post( 'accountID' );
-		update_option( 'rank_math_google_analytic_options', $values );
+		$prev                = get_option( 'rank_math_google_analytic_options', [] );
+		$value               = get_option( 'rank_math_google_analytic_options', [] );
+		$value['adsense_id'] = Param::post( 'accountID' );
+		update_option( 'rank_math_google_analytic_options', $value );
+
+		$days = Param::get( 'days', 90, FILTER_VALIDATE_INT );
+		\RankMath\Analytics\Workflow\Workflow::do_workflow(
+			'adsense',
+			$days,
+			$prev,
+			$value
+		);
 
 		$this->success();
 	}

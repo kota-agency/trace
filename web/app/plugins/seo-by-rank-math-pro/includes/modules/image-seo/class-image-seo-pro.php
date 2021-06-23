@@ -10,10 +10,10 @@
 
 namespace RankMathPro;
 
+use stdClass;
 use RankMath\Helper;
 use RankMath\Traits\Hooker;
 use MyThemeShop\Helpers\HTML;
-use MyThemeShop\Helpers\Param;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -64,7 +64,89 @@ class Image_Seo_Pro {
 			$this->filter( 'the_content', 'change_description_case', 110 );
 		}
 
-		$this->action( 'admin_init', 'enqueue', 20 );
+		$this->action( 'rank_math/vars/register_extra_replacements', 'register_replacements' );
+		$this->filter( 'cmb2_field_arguments', 'maybe_exclude_image_vars', 10, 2 );
+	}
+
+	/**
+	 * Registers variable replacements for the Image SEO Pro module.
+	 */
+	public function register_replacements() {
+		rank_math_register_var_replacement(
+			'imagealt',
+			[
+				'name'        => esc_html__( 'Image Alt', 'rank-math' ),
+				'description' => esc_html__( 'Alt text set for the current image.', 'rank-math' ),
+				'variable'    => 'imagealt',
+				'example'     => '',
+			],
+			[ $this, 'get_imagealt' ]
+		);
+
+		rank_math_register_var_replacement(
+			'imagetitle',
+			[
+				'name'        => esc_html__( 'Image Title', 'rank-math' ),
+				'description' => esc_html__( 'Title text set for the current image.', 'rank-math' ),
+				'variable'    => 'imagetitle',
+				'example'     => '',
+			],
+			[ $this, 'get_imagetitle' ]
+		);
+	}
+
+
+	/**
+	 * Filter CMB field arguments to exclude `imagealt` & `imagetitle` when they are not needed.
+	 *
+	 * @param array  $args  Arguments array.
+	 * @param object $field CMB Field object.
+	 * @return array
+	 */
+	public function maybe_exclude_image_vars( $args, $field ) {
+		if ( empty( $args['classes'] ) || strpos( $args['classes'], 'rank-math-supports-variables' ) === false ) {
+			return $args;
+		}
+
+		if ( strpos( $args['id'], 'img_' ) !== false ) {
+			return $args;
+		}
+
+		if ( ! isset( $args['attributes']['data-exclude-variables'] ) ) {
+			$args['attributes']['data-exclude-variables'] = '';
+		}
+
+		$args['attributes']['data-exclude-variables'] .= ',imagealt,imagetitle';
+
+		$args['attributes']['data-exclude-variables'] = trim( $args['attributes']['data-exclude-variables'], ',' );
+
+		return $args;
+	}
+
+	/**
+	 * Get the alt attribute of the attachment to use as a replacement.
+	 *
+	 * @return string|null
+	 */
+	public function get_imagealt( $var_args, $replacement_args = null ) {
+		if ( empty( $replacement_args->alttext ) ) {
+			return null;
+		}
+
+		return $replacement_args->alttext;
+	}
+
+	/**
+	 * Get the title attribute of the attachment to use as a replacement.
+	 *
+	 * @return string|null
+	 */
+	public function get_imagetitle( $var_args, $replacement_args = null ) {
+		if ( empty( $replacement_args->titletext ) ) {
+			return null;
+		}
+
+		return $replacement_args->titletext;
 	}
 
 	/**
@@ -511,22 +593,4 @@ class Image_Seo_Pro {
 		include_once dirname( __FILE__ ) . '/options.php';
 	}
 
-
-	/**
-	 * Enqueue assets.
-	 *
-	 * @return void
-	 */
-	public function enqueue() {
-		if ( Param::get( 'page' ) !== 'rank-math-options-general' ) {
-			return;
-		}
-
-		wp_enqueue_style(
-			'rank-math-pro-general-options',
-			RANK_MATH_PRO_URL . 'assets/admin/css/general-options.css',
-			null,
-			rank_math_pro()->version
-		);
-	}
 }

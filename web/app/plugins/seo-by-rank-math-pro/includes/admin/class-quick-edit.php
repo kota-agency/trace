@@ -37,7 +37,7 @@ class Quick_Edit {
 		$this->action( 'save_post', 'save_post' );
 
 		$taxonomies = Helper::get_accessible_taxonomies();
-		unset( $taxonomies['post_tag'], $taxonomies['post_format'], $taxonomies['product_tag'] );
+		unset( $taxonomies['post_format'] );
 		$taxonomies = wp_list_pluck( $taxonomies, 'label', 'name' );
 		foreach ( $taxonomies as $taxonomy => $label ) {
 			$this->filter( "manage_edit-{$taxonomy}_columns", 'add_tax_seo_column' );
@@ -68,10 +68,12 @@ class Quick_Edit {
 	 * @return string              New content.
 	 */
 	public function tax_seo_column_content( $string, $column_name, $term_id ) {
-		if ( 'rank_math_tax_seo_details' === $column_name ) {
-			ob_start();
-			$this->quick_edit_hidden_fields( $term_id, 'term' );
+		if ( 'rank_math_tax_seo_details' !== $column_name ) {
+			return $string;
 		}
+
+		ob_start();
+		$this->quick_edit_hidden_fields( $term_id, 'term' );
 		return ob_get_clean();
 	}
 
@@ -126,10 +128,8 @@ class Quick_Edit {
 		if ( 'post' === $object_type ) {
 			$canonical_placeholder = get_permalink( $object_id );
 		} elseif ( 'term' === $object_type ) {
-			$term                  = get_term( $object_id );
-			$canonical_placeholder = get_term_link( $term, $term->taxonomy );
+			$canonical_placeholder = get_term_link( $object_id );
 		}
-
 		?>
 
 		<input type="hidden" class="rank-math-title-value" id="rank-math-title-<?php echo esc_attr( $object_id ); ?>" value="<?php echo esc_attr( $title ); ?>">
@@ -253,8 +253,8 @@ class Quick_Edit {
 										<?php
 										wp_dropdown_categories(
 											[
-												'name'     => 'rank_math_primary_' . $taxonomy['name'],
-												'id'       => 'rank_math_primary_' . $taxonomy['name'],
+												'name'     => 'rank_math_primary_term',
+												'id'       => 'rank_math_primary_term',
 												'class'    => '',
 												'selected' => '0',
 												'orderby'  => 'name',
@@ -355,7 +355,7 @@ class Quick_Edit {
 			'robots',
 			'focus_keyword',
 			'canonical_url',
-			'primary_' . $taxonomy['name'],
+			'primary_term',
 		];
 
 		foreach ( $save_fields as $field ) {
@@ -379,14 +379,17 @@ class Quick_Edit {
 					array_shift( $current );
 				}
 				$field_value = join( ', ', $current );
-			} elseif ( 'primary_' . $taxonomy['name'] === $field ) {
+			} elseif ( 'primary_term' === $field ) {
 				if ( ! $field_value ) {
 					delete_post_meta( $post_id, $field_name );
 					continue;
 				}
+
 				if ( ! has_term( absint( $field_value ), $taxonomy['name'], $post_id ) ) {
 					continue;
 				}
+
+				$field_name = 'rank_math_primary_' . $taxonomy['name'];
 			}
 
 			if ( empty( $field_value ) || $field_value === $default_value ) {
@@ -448,5 +451,4 @@ class Quick_Edit {
 			update_term_meta( $term_id, $field_name, $field_value );
 		}
 	}
-
 }

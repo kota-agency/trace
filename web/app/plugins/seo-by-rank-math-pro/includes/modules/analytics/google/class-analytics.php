@@ -11,7 +11,6 @@
 namespace RankMathPro\Google;
 
 use RankMath\Google\Api;
-use RankMath\Helpers\Security;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -43,7 +42,7 @@ class Analytics {
 				],
 			],
 			'metrics'                => [
-				[ 'expression' => 'ga:pageviews' ],
+				[ 'expression' => 'ga:sessions' ],
 				[ 'expression' => 'ga:visitors' ],
 			],
 			'dimensions'             => [
@@ -78,6 +77,8 @@ class Analytics {
 				'reportRequests' => [ $args ],
 			]
 		);
+
+		Api::get()->log_failed_request( $response, 'analytics', $start_date, func_get_args() );
 
 		if ( ! Api::get()->is_success() || ! isset( $response['reports'], $response['reports'][0]['data']['rows'] ) ) {
 			return false;

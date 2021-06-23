@@ -67,6 +67,10 @@ class Map {
 			}
 		}
 
+		if ( empty( $options['locations'] ) ) {
+			return;
+		}
+
 		wp_enqueue_script( 'rank-math-local' );
 
 		$width  = ! empty( $atts['map_width'] ) ? $atts['map_width'] : '100%';

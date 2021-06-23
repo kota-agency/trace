@@ -75,13 +75,17 @@ class Post_Filters {
 			'Event'       => esc_html__( 'Event', 'rank-math-pro' ),
 			'JobPosting'  => esc_html__( 'Job Posting', 'rank-math-pro' ),
 			'Music'       => esc_html__( 'Music', 'rank-math-pro' ),
+			'Movie'       => esc_html__( 'Movie', 'rank-math-pro' ),
 			'Person'      => esc_html__( 'Person', 'rank-math-pro' ),
 			'Product'     => esc_html__( 'Product', 'rank-math-pro' ),
 			'Recipe'      => esc_html__( 'Recipe', 'rank-math-pro' ),
 			'Restaurant'  => esc_html__( 'Restaurant', 'rank-math-pro' ),
 			'Service'     => esc_html__( 'Service', 'rank-math-pro' ),
 			'Software'    => esc_html__( 'Software', 'rank-math-pro' ),
-			'Video'       => esc_html__( 'Video', 'rank-math-pro' ),
+			'VideoObject' => esc_html__( 'Video', 'rank-math-pro' ),
+			'Dataset'     => esc_html__( 'Dataset', 'rank-math-pro' ),
+			'FAQPage'     => esc_html__( 'FAQ', 'rank-math-pro' ),
+			'FactCheck'   => esc_html__( 'FactCheck', 'rank-math-pro' ),
 		];
 
 		$options  = $this->do_filter( 'manage_posts/schema_filter_options', $options, $post_type );
@@ -198,7 +202,13 @@ class Post_Filters {
 
 		if ( false === $filter ) {
 			return;
-		} elseif ( 'none' === $filter ) {
+		}
+
+		if ( 'none' === $filter ) {
+			$query[]           = [
+				'key'   => 'rank_math_rich_snippet',
+				'value' => 'off',
+			];
 			$this->filter( 'posts_where', 'posts_where_no_schema', 20, 2 );
 			return;
 		}

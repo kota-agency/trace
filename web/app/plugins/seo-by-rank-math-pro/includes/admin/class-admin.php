@@ -10,12 +10,11 @@
 
 namespace RankMathPro\Admin;
 
-use RankMath\Traits\Hooker;
-use RankMathPro\Admin\Bulk_Actions;
-use RankMathPro\Admin\Post_Filters;
-use RankMathPro\Admin\Quick_Edit;
-use RankMathPro\Admin\Trends_Tool;
+use RankMathPro\Updates;
+use RankMathPro\Status\System_Status;
 use RankMath\Helper;
+use RankMath\Traits\Hooker;
+use MyThemeShop\Helpers\Param;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -33,15 +32,12 @@ class Admin {
 	 */
 	public function __construct() {
 		$this->action( 'init', 'init_components' );
+		add_filter( 'rank_math/analytics/classic/pro_notice', '__return_empty_string' );
+		$this->filter( 'rank_math/settings/sitemap', 'special_seprator' );
 		$this->action( 'admin_enqueue_scripts', 'enqueue' );
-	}
 
-	/**
-	 * Enqueue styles and scripts.
-	 */
-	public function enqueue() {
-		Helper::add_json( 'isExpired', rank_math_pro()->is_plan_expired() );
-		wp_enqueue_script( 'rank-math-pro-dashboard', RANK_MATH_PRO_URL . 'assets/admin/js/dashboard.js', [ 'jquery', 'rank-math-dashboard' ], rank_math_pro()->version, true );
+		new Updates();
+		new System_Status();
 	}
 
 	/**
@@ -55,11 +51,9 @@ class Admin {
 			'quick_edit'              => 'RankMathPro\\Admin\\Quick_Edit',
 			'trends_tool'             => 'RankMathPro\\Admin\\Trends_Tool',
 			'setup_wizard'            => 'RankMathPro\\Admin\\Setup_Wizard',
-			'redirection'             => 'RankMathPro\\Admin\\Redirection',
 			'links'                   => 'RankMathPro\\Admin\\Links',
 			'misc'                    => 'RankMathPro\\Admin\\Misc',
 			'csv_import'              => 'RankMathPro\\Admin\\CSV_Import_Export\\CSV_Import_Export',
-			'csv_import_redirections' => 'RankMathPro\\Admin\\CSV_Import_Export_Redirections\\CSV_Import_Export_Redirections',
 		];
 
 		if ( Helper::is_amp_active() ) {
@@ -73,11 +67,49 @@ class Admin {
 	}
 
 	/**
+	 * Add Special seprator into sitemap option panel
+	 *
+	 * @param array $tabs Hold tabs for optional panel.
+	 *
+	 * @return array
+	 */
+	public function special_seprator( $tabs ) {
+		if ( Helper::is_module_active( 'news-sitemap' ) || Helper::is_module_active( 'video-sitemap' ) || Helper::is_module_active( 'local-seo' ) ) {
+			$tabs['special'] = [
+				'title' => esc_html__( 'Special Sitemaps:', 'rank-math-pro' ),
+				'type'  => 'seprator',
+			];
+		}
+
+		return $tabs;
+	}
+
+	/**
 	 * Load setup wizard.
 	 */
 	private function load_setup_wizard() {
-		if ( filter_input( INPUT_GET, 'page' ) === 'rank-math-wizard' || filter_input( INPUT_POST, 'action' ) === 'rank_math_save_wizard' ) {
+		if ( Helper::is_wizard() ) {
 			new Setup_Wizard();
 		}
 	}
+
+
+	/**
+	 * Enqueue assets.
+	 *
+	 * @return void
+	 */
+	public function enqueue() {
+		if ( Param::get( 'page' ) !== 'rank-math-options-general' ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'rank-math-pro-general-options',
+			RANK_MATH_PRO_URL . 'assets/admin/css/general-options.css',
+			null,
+			rank_math_pro()->version
+		);
+	}
+
 }

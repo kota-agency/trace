@@ -164,7 +164,8 @@ class Importer {
 			return [];
 		}
 
-		$this->column_headers = array_map( 'trim', explode( ',', $contents ) );
+		$csv_separator = apply_filters( 'rank_math/csv_import/separator', ',' );
+		$this->column_headers = array_map( 'trim', explode( $csv_separator, $contents ) );
 		return $this->column_headers;
 	}
 
@@ -195,7 +196,7 @@ class Importer {
 
 		$required_columns = [ 'id', 'object_type', 'slug' ];
 		if ( count( array_intersect( $headers, $required_columns ) ) !== count( $required_columns ) ) {
-			$this->add_error( esc_html__( 'Missing one ore more required columns.', 'rank-math-pro' ), 'missing_required_columns' );
+			$this->add_error( esc_html__( 'Missing one or more required columns.', 'rank-math-pro' ), 'missing_required_columns' );
 			return;
 		}
 
@@ -212,7 +213,8 @@ class Importer {
 			return;
 		}
 
-		$decoded = str_getcsv( $raw_data );
+		$csv_separator = apply_filters( 'rank_math/csv_import/separator', ',' );
+		$decoded = str_getcsv( $raw_data, $csv_separator );
 		if ( count( $headers ) !== count( $decoded ) ) {
 			$this->add_error( esc_html__( 'Columns number mismatch.', 'rank-math-pro' ), 'columns_number_mismatch' );
 			$this->row_failed( $line_number );

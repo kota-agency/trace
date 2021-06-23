@@ -9,7 +9,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Rank Math SEO PRO
- * Version:           2.0.2
+ * Version:           2.10.1
  * Plugin URI:        https://rankmath.com/wordpress/plugin/seo-suite/
  * Description:       Super-charge your website’s SEO with the Rank Math PRO options like Site Analytics, SEO Performance, Custom Schema Templates, News/Video Sitemaps, etc.
  * Author:            Rank Math
@@ -21,6 +21,7 @@
  */
 
 use RankMath\Helper;
+use MyThemeShop\Helpers\Param;
 use MyThemeShop\Helpers\Conditional;
 
 defined( 'ABSPATH' ) || exit;
@@ -37,7 +38,14 @@ final class RankMathPro {
 	 *
 	 * @var string
 	 */
-	public $version = '2.0.2';
+	public $version = '2.10.1';
+
+	/**
+	 * Minimum version of Rank Math SEO.
+	 *
+	 * @var string
+	 */
+	public $rank_math_min_version = '1.0.66';
 
 	/**
 	 * Holds various class instances
@@ -94,27 +102,17 @@ final class RankMathPro {
 		$this->includes();
 		new \RankMathPro\Installer();
 
+		add_action( 'plugins_loaded', [ $this, 'localization_setup' ] );
 		add_action( 'rank_math/loaded', [ $this, 'setup' ] );
+		add_filter( 'rank_math/license/activate_url', [ $this, 'add_query_arg' ] );
 	}
 
 	/**
 	 * Instantiate the plugin.
 	 */
 	public function setup() {
-		if ( ! $this->is_free_version_latest() ) {
+		if ( ! $this->is_free_version_compatible() ) {
 			$this->messages[] = esc_html__( 'Please update Rank Math Free to the latest version first before activating the PRO version.', 'rank-math-pro' );
-			add_action( 'admin_notices', [ $this, 'activation_error' ] );
-			return false;
-		}
-
-		if ( $this->is_plan_expired() ) {
-			$this->messages[] = sprintf(
-				// translators: Links to pricing page and help page.
-				wp_kses_post( __( 'Your account does not have any active subscription. <a href="%1$s" target="_blank">Please buy the Rank Math PRO version here</a> or <a href="%2$s">reconnect your account here</a>.', 'rank-math-pro' ) ),
-				'https://rankmath.com/pricing/?utm_source=Plugin&utm_medium=Upgrade%20Notice&utm_campaign=WP',
-				\RankMath\Helper::get_admin_url( '', 'view=help' )
-			);
-
 			add_action( 'admin_notices', [ $this, 'activation_error' ] );
 			return false;
 		}
@@ -135,10 +133,12 @@ final class RankMathPro {
 	 * @return bool
 	 */
 	private function are_requirements_met() {
-
+		$dont_load = false;
 		if ( $this->is_free_version_being_deactivated() ) {
 			// Todo: this message is not displayed because of a redirect.
 			$this->messages[] = esc_html__( 'Rank Math free version is required to run Rank Math Pro. Both plugins are now disabled.', 'rank-math-pro' );
+		} elseif ( $this->is_free_version_being_rolled_back() || $this->is_free_version_being_updated() || $this->is_troubleshooting() ) {
+			$dont_load = true;
 		} else {
 			if ( ! $this->is_free_version_installed() ) {
 				if ( ! $this->install_free_version() ) {
@@ -153,6 +153,10 @@ final class RankMathPro {
 			}
 		}
 
+		if ( $dont_load ) {
+			return false;
+		}
+
 		if ( empty( $this->messages ) ) {
 			return true;
 		}
@@ -164,7 +168,30 @@ final class RankMathPro {
 	}
 
 	/**
-	 * Auto-deactivate plugin if requirement not meet and display a notice.
+	 * Check if troubleshooting mode is enabled in Health Check plugin and if Rank Math Free version is not.
+	 *
+	 * @return boolean
+	 */
+	public function is_troubleshooting() {
+		return (bool) get_option( 'health-check-allowed-plugins' ) && ! $this->is_free_version_activated();
+	}
+
+	/**
+	 * Check if rollback is in progress, so that Pro doesn't get deactivated.
+	 *
+	 * @return boolean
+	 */
+	public function is_free_version_being_rolled_back() {
+		$reactivating = isset( $_GET['action'] )
+			&& 'activate-plugin' === $_GET['action']
+			&& isset( $_GET['plugin'] )
+			&& 'seo-by-rank-math/rank-math.php' === $_GET['plugin'];
+
+		return $reactivating || ( function_exists( 'rank_math' ) && rank_math()->version != get_option( 'rank_math_version' ) );
+	}
+
+	/**
+	 * Auto-deactivate plugin if requirement not met and display a notice.
 	 */
 	public function auto_deactivate() {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
@@ -210,6 +237,27 @@ final class RankMathPro {
 	 */
 	private function instantiate() {
 		new \RankMathPro\Modules();
+		$this->load_3rd_party();
+	}
+
+	/**
+	 * Load 3rd party modules.
+	 */
+	private function load_3rd_party() {
+
+		if ( defined( 'ELEMENTOR_VERSION' ) ) {
+			new \RankMathPro\Elementor\Elementor();
+		}
+
+		add_action(
+			'after_setup_theme',
+			function() {
+				if ( defined( 'ET_CORE' ) ) {
+					new \RankMathPro\Divi\Divi();
+				}
+			},
+			11
+		);
 	}
 
 	/**
@@ -223,6 +271,7 @@ final class RankMathPro {
 		add_action( 'rest_api_init', [ $this, 'init_rest_api' ] );
 		add_action( 'plugins_loaded', [ $this, 'init' ], 11 );
 		new \RankMathPro\Common();
+		new \RankMathPro\Register_Vars();
 	}
 
 	/**
@@ -259,11 +308,11 @@ final class RankMathPro {
 			new \RankMathPro\BBPress();
 		}
 
-		if ( Helper::is_module_active( 'local-seo' ) ) {
+		if ( Helper::is_module_active( 'local-seo', false ) ) {
 			new \RankMathPro\Local_Seo\Local_Seo();
 		}
 
-		if ( Helper::is_module_active( 'analytics' ) && ! $this->is_plan_expired() ) {
+		if ( Helper::is_module_active( 'analytics' ) ) {
 			new \RankMathPro\Analytics\Analytics();
 		}
 
@@ -273,6 +322,14 @@ final class RankMathPro {
 
 		if ( Helper::is_module_active( '404-monitor' ) ) {
 			new \RankMathPro\Monitor_Pro();
+		}
+
+		if ( Helper::is_module_active( 'redirections' ) ) {
+			new \RankMathPro\Redirections\Redirections_Pro();
+		}
+
+		if ( function_exists( 'acf' ) && Helper::is_module_active( 'acf' ) ) {
+			new \RankMathPro\ACF\ACF();
 		}
 
 		new \RankMathPro\Plugin_Update\Plugin_Update();
@@ -296,7 +353,8 @@ final class RankMathPro {
 		if ( false === load_textdomain( 'rank-math-pro', WP_LANG_DIR . '/plugins/seo-by-rank-math-pro-' . $locale . '.mo' ) ) {
 			load_textdomain( 'rank-math-pro', WP_LANG_DIR . '/seo-by-rank-math/seo-by-rank-math-pro-' . $locale . '.mo' );
 		}
-		load_plugin_textdomain( 'rank-math-pro', false, rank_math()->plugin_dir() . '/languages/' );
+
+		load_plugin_textdomain( 'rank-math-pro', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**
@@ -324,6 +382,7 @@ final class RankMathPro {
 	 * @return bool Whether install was successful.
 	 */
 	public function install_free_version() {
+		include_once ABSPATH . 'wp-includes/pluggable.php';
 		include_once ABSPATH . 'wp-admin/includes/misc.php';
 		include_once ABSPATH . 'wp-admin/includes/file.php';
 		include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
@@ -343,12 +402,30 @@ final class RankMathPro {
 	 */
 	public function is_free_version_activated() {
 		$active_plugins = get_option( 'active_plugins', [] );
+		return in_array( $this->free_version_plugin_path, $active_plugins, true );
+	}
 
-		if ( in_array( $this->free_version_plugin_path, $active_plugins, true ) ) {
-			return true;
+	/**
+	 * Checks if WP is in the process of updating the free one.
+	 *
+	 * @return boolean Whether we are in the process of updating the plugin or not.
+	 */
+	public function is_free_version_being_updated() {
+		$action = isset( $_POST['action'] ) && $_POST['action'] != -1 ? $_POST['action'] : '';
+		$plugins = isset( $_POST['plugin'] ) ? (array) $_POST['plugin'] : [];
+		if ( empty( $plugins ) ) {
+			$plugins = isset( $_POST['plugins'] ) ? (array) $_POST['plugins'] : [];
 		}
 
-		return false;
+		$update_plugin   = 'update-plugin';
+		$update_selected = 'update-selected';
+		$actions         = [ $update_plugin, $update_selected ];
+
+		if ( ! in_array( $action, $actions, true ) ) {
+			return false;
+		}
+
+		return in_array( $this->free_version_plugin_path, $plugins, true );
 	}
 
 	/**
@@ -357,17 +434,34 @@ final class RankMathPro {
 	 * @return boolean Whether we are in the process of deactivating the plugin or not.
 	 */
 	public function is_free_version_being_deactivated() {
-		// phpcs:disable
-		if (
-			! empty( $_GET['action'] ) &&
-			isset( $_GET['plugin'] ) &&
-			$_GET['plugin'] === $this->free_version_plugin_path
-		) {
-			return true;
+		if ( ! is_admin() ) {
+			return false;
 		}
-		// phpcs:enable
 
-		return false;
+		$action = isset( $_REQUEST['action'] ) && $_REQUEST['action'] != -1 ? $_REQUEST['action'] : '';
+		if ( ! $action ) {
+			$action = isset( $_REQUEST['action2'] ) && $_REQUEST['action2'] != -1 ? $_REQUEST['action2'] : '';
+		}
+		$plugin  = isset( $_REQUEST['plugin'] ) ? $_REQUEST['plugin'] : '';
+		$checked = isset( $_POST['checked'] ) && is_array( $_POST['checked'] ) ? $_POST['checked'] : [];
+
+		$deactivate          = 'deactivate';
+		$deactivate_selected = 'deactivate-selected';
+		$actions             = [ $deactivate, $deactivate_selected ];
+
+		if ( ! in_array( $action, $actions, true ) ) {
+			return false;
+		}
+
+		if ( $action === $deactivate && $plugin !== $this->free_version_plugin_path ) {
+			return false;
+		}
+
+		if ( $action === $deactivate_selected && ! in_array( $this->free_version_plugin_path, $checked, true ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -380,25 +474,21 @@ final class RankMathPro {
 	}
 
 	/**
-	 * Is free latest version.
+	 * Is free version compatible.
 	 *
 	 * @return bool
 	 */
-	public function is_free_version_latest() {
-		return defined( 'RANK_MATH_VERSION' ) && version_compare( RANK_MATH_VERSION, '1.0.52', '>=' );
+	public function is_free_version_compatible() {
+		return defined( 'RANK_MATH_VERSION' ) && version_compare( RANK_MATH_VERSION, $this->rank_math_min_version, '>=' );
 	}
 
 	/**
-	 * is plan expired.
+	 * Add query arg to activate url.
 	 *
-	 * @return bool
+	 * @param string $url Activate URL.
 	 */
-	public function is_plan_expired() {
-		if ( ! method_exists( '\RankMath\Admin\Admin_Helper', 'is_plan_expired' ) ) {
-			return true;
-		}
-
-		return \RankMath\Admin\Admin_Helper::is_plan_expired();
+	public function add_query_arg( $url ) {
+		return add_query_arg( [ 'pro' => 1 ], $url );
 	}
 }
 

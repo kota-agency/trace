@@ -13,6 +13,7 @@
 namespace RankMathPro;
 
 use RankMath\Helper;
+use RankMath\Analytics\Workflow\Workflow;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -121,14 +122,29 @@ class Installer {
 	 */
 	private function activate() {
 		\RankMathPro\Admin\Api::get()->get_settings();
-		( new \RankMathPro\Analytics\Installer() )->install();
-		$this->create_titles_sitemaps_options();
+		$this->create_sitemaps_options();
+
+		// Add Analytics Installer.
+		Workflow::do_workflow( 'analytics', 90, null, null );
+		Workflow::do_workflow( 'adsense', 90, null, null );
 
 		// Add action for scheduler.
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {
-			$fetch_gap = 3;
-			as_unschedule_all_actions( 'rank_math/analytics/daily_tasks' );
-			as_schedule_recurring_action( strtotime( 'tomorrow' ) + 180, DAY_IN_SECONDS * $fetch_gap, 'rank_math/analytics/daily_tasks' );
+			$task_name = 'rank_math/analytics/data_fetch';
+
+			if ( false === as_next_scheduled_action( $task_name ) ) {
+				$fetch_gap          = 3;
+				$schedule_in_minute = wp_rand( 3, 1380 );
+				$time_to_schedule   = ( strtotime( 'tomorrow' ) + ( $schedule_in_minute * MINUTE_IN_SECONDS ) );
+
+				as_schedule_recurring_action(
+					$time_to_schedule,
+					DAY_IN_SECONDS * $fetch_gap,
+					$task_name,
+					[],
+					'rank-math'
+				);
+			}
 		}
 	}
 
@@ -140,18 +156,15 @@ class Installer {
 	/**
 	 * Add default values.
 	 */
-	private function create_titles_sitemaps_options() {
-		$all_opts   = rank_math()->settings->all_raw();
-		$titles     = $all_opts['titles'];
-		$sitemap    = $all_opts['sitemap'];
-		$post_types = Helper::get_accessible_post_types();
-
-		foreach ( $post_types as $post_type ) {
-			$titles[ 'pt_' . $post_type . '_autodetect_video' ] = 'on';
+	private function create_sitemaps_options() {
+		$all_opts = rank_math()->settings->all_raw();
+		$sitemap  = $all_opts['sitemap'];
+		if ( ! empty( $sitemap['video_sitemap_post_type'] ) ) {
+			return;
 		}
 
-		$sitemap['video_sitemap_post_type'] = array_values( $post_types );
-
-		Helper::update_all_settings( null, $titles, $sitemap );
+		$sitemap['video_sitemap_post_type'] = array_values( Helper::get_accessible_post_types() );
+		Helper::update_all_settings( null, null, $sitemap );
 	}
+
 }
