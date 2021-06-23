@@ -2444,8 +2444,13 @@ class GFFormDisplay {
 			$assets[] = new GF_Script_Asset( 'gform_datepicker_init' );
 		}
 
+		if ( self::has_recaptcha_field( $form ) ) {
+			$language = self::get_recaptcha_language( $form );
+			$assets[] = new GF_Script_Asset( 'gform_recaptcha', esc_url( sprintf( 'https://www.google.com/recaptcha/api.js?hl=%s&render=explicit', $language ) ) );
+		}
+
 		if ( self::has_password_strength( $form ) ) {
-			$assets[] = new GF_Script_Asset( 'gforms_zxcvbn' );
+			$assets[] = new GF_Script_Asset( 'gforms_zxcvbn', includes_url( '/js/zxcvbn.min.js' ) );
 			$assets[] = new GF_Script_Asset( 'password-strength-meter' );
 		}
 
@@ -3325,6 +3330,29 @@ class GFFormDisplay {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Gets the language set for the recaptcha field on a form, defaults to english. Only one recaptcha field can be
+	 * used per form.
+	 *
+	 * @since 2.5.6
+	 *
+	 * @param $form
+	 *
+	 * @return string
+	 */
+
+	private static function get_recaptcha_language( $form ) {
+		if ( is_array( $form['fields'] ) ) {
+			foreach ( $form['fields'] as $field ) {
+				if ( ( $field->type == 'captcha' || $field->inputType == 'captcha' ) && ! in_array( $field->captchaType, array( 'simple_captcha', 'math' ) ) ) {
+					return empty( $field->captchaLanguage ) ? 'en' : $field->captchaLanguage;
+				}
+			}
+		}
+
+		return 'en';
 	}
 
 	private static function has_recaptcha_field( $form ) {
