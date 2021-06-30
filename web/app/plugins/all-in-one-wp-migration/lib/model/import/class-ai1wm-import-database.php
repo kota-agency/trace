@@ -915,6 +915,13 @@ class Ai1wm_Import_Database {
 			$new_table_prefixes[] = ai1wm_table_prefix() . $table_name;
 		}
 
+		// Since BuddyBoss Platform 2.0, non-multisite configurations have stored signups in
+		// the same way as Multisite configs traditionally have: in the wp_signups table
+		if ( ai1wm_validate_plugin_basename( 'buddyboss-platform/bp-loader.php' ) ) {
+			$old_table_prefixes[] = ai1wm_servmask_prefix( 'mainsite' ) . 'signups';
+			$new_table_prefixes[] = ai1wm_table_prefix() . 'signups';
+		}
+
 		// Set base table prefixes
 		foreach ( $blogs as $blog ) {
 			if ( ai1wm_is_mainsite( $blog['Old']['BlogID'] ) === true ) {

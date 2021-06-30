@@ -234,7 +234,7 @@ to no.
     }
 
     .gform_wrapper .top_label li.gfield.gf_left_third div:not(.ginput_container_date) input:not([type='radio']):not([type='checkbox']):not(.ginput_quantity),
-    .gform_wrapper .top_label li.gfield.gf_middle_third div:not(.ginput_container_date) input:not([type='radio']):not([type='checkbox']):not(.ginput_quantity),
+    .gform_wrapper .top_label li.gfield.gf_middle_third div:not(.ginput_container_date) input:not([type='radio']):not([type='checkbox']):not(.ginput_quantity):not(.ginput_container_time input),
     .gform_wrapper .top_label li.gfield.gf_right_third div:not(.ginput_container_date) input:not([type='radio']):not([type='checkbox']):not(.ginput_quantity),
     .gform_wrapper .top_label li.gfield.gf_left_third div:not(.ginput_container_date) select,
     .gform_wrapper .top_label li.gfield.gf_middle_third div:not(.ginput_container_date) select,

@@ -37,8 +37,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php _e( 'Import Site', AI1WM_PLUGIN_NAME ); ?>
 				</h1>
 
-				<?php include AI1WM_TEMPLATES_PATH . '/common/report-problem.php'; ?>
-
 				<?php if ( is_readable( AI1WM_STORAGE_PATH ) && is_writable( AI1WM_STORAGE_PATH ) ) : ?>
 
 					<form action="" method="post" id="ai1wm-import-form" class="ai1wm-clear" enctype="multipart/form-data">

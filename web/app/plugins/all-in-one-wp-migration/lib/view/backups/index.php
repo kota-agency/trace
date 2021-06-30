@@ -37,8 +37,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php _e( 'Backups', AI1WM_PLUGIN_NAME ); ?>
 				</h1>
 
-				<?php include AI1WM_TEMPLATES_PATH . '/common/report-problem.php'; ?>
-
 				<?php if ( is_readable( AI1WM_BACKUPS_PATH ) && is_writable( AI1WM_BACKUPS_PATH ) ) : ?>
 					<div id="ai1wm-backups-list">
 						<?php include AI1WM_TEMPLATES_PATH . '/backups/backups-list.php'; ?>

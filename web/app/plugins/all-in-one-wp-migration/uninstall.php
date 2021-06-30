@@ -38,6 +38,14 @@ require_once dirname( __FILE__ ) .
 if ( defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	global $wpdb, $wp_filesystem;
 
+	if ( Ai1wm_Cron::exists( 'ai1wm_storage_cleanup' ) ) {
+		Ai1wm_Cron::clear( 'ai1wm_storage_cleanup' );
+	}
+
+	if ( Ai1wm_Cron::exists( 'ai1wm_cleanup_cron' ) ) {
+		Ai1wm_Cron::clear( 'ai1wm_cleanup_cron' );
+	}
+
 	// Delete any options or other data stored in the database here
 	delete_option( AI1WM_STATUS );
 	delete_option( AI1WM_SECRET_KEY );

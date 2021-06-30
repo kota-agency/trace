@@ -213,10 +213,6 @@ require_once AI1WM_CONTROLLER_PATH .
 			DIRECTORY_SEPARATOR .
 			'class-ai1wm-feedback-controller.php';
 
-require_once AI1WM_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wm-report-controller.php';
-
 require_once AI1WM_EXPORT_PATH .
 			DIRECTORY_SEPARATOR .
 			'class-ai1wm-export-init.php';
@@ -348,10 +344,6 @@ require_once AI1WM_MODEL_PATH .
 require_once AI1WM_MODEL_PATH .
 			DIRECTORY_SEPARATOR .
 			'class-ai1wm-feedback.php';
-
-require_once AI1WM_MODEL_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wm-report.php';
 
 require_once AI1WM_MODEL_PATH .
 			DIRECTORY_SEPARATOR .
