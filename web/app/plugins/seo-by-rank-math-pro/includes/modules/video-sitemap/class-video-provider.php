@@ -39,16 +39,39 @@ class Video_Provider extends Post_Type {
 	 * @return array
 	 */
 	public function get_index_links( $max_entries ) {
+		$post_types = (array) Helper::get_settings( 'sitemap.video_sitemap_post_type', [] );
+		if ( empty( $post_types ) ) {
+			return [];
+		}
+
 		global $wpdb;
 
-		$index      = [];
-		$post_types = Helper::get_settings( 'sitemap.video_sitemap_post_type' );
+		$sql = "SELECT p.ID, p.post_modified_gmt FROM {$wpdb->postmeta} as pm
+						INNER JOIN {$wpdb->posts} as p ON pm.post_id = p.ID
+						WHERE pm.meta_key = 'rank_math_schema_VideoObject'
+						AND post_type IN ( '" . join( "', '", esc_sql( $post_types ) ) . "' )
+						AND post_status IN ( 'publish', 'inherit' )
+						GROUP BY p.ID
+						ORDER BY p.post_modified_gmt DESC";
 
-		$posts = $this->get_posts( $post_types, 1, 0 );
-		if ( ! empty( $posts ) ) {
-			$index[] = [
-				'loc'     => Router::get_base_url( 'video-sitemap.xml' ),
-				'lastmod' => $posts[0]->post_modified_gmt,
+		$posts       = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore
+		$total_count = count( $posts );
+		if ( 0 === $total_count ) {
+			return [];
+		}
+
+		$max_pages = 1;
+		if ( $total_count > $max_entries ) {
+			$max_pages = (int) ceil( $total_count / $max_entries );
+		}
+
+		$all_dates = array_chunk( $posts, $max_entries );
+		$index     = [];
+		for ( $page_counter = 0; $page_counter < $max_pages; $page_counter++ ) {
+			$current_page = ( $max_pages > 1 ) ? ( $page_counter + 1 ) : '';
+			$index[]      = [
+				'loc'     => Router::get_base_url( 'video-sitemap' . $current_page . '.xml' ),
+				'lastmod' => $all_dates[ $page_counter ][0]['post_modified_gmt'],
 			];
 		}
 
@@ -65,29 +88,13 @@ class Video_Provider extends Post_Type {
 	 */
 	public function get_sitemap_links( $type, $max_entries, $current_page ) {
 		rank_math()->variables->setup();
+
+		$post_types = (array) Helper::get_settings( 'sitemap.video_sitemap_post_type', [] );
 		$links      = [];
-		$post_types = (array) Helper::get_settings( 'sitemap.video_sitemap_post_type' );
-
-		if ( empty( $post_types ) ) {
-			return $links;
-		}
-
-		$steps     = min( 100, $max_entries );
-		$offset    = ( $current_page > 1 ) ? ( ( $current_page - 1 ) * $max_entries ) : 0;
-		$total     = ( $offset + $max_entries );
-		$typecount = 0;
-
-		foreach ( $post_types as $post_type ) {
-			$typecount += $this->get_post_type_count( $post_type );
-		}
-
-		if ( $total > $typecount ) {
-			$total = $typecount;
-		}
-
-		if ( 0 === $typecount ) {
-			return $links;
-		}
+		$steps      = min( 100, $max_entries );
+		$offset     = ( $current_page > 1 ) ? ( ( $current_page - 1 ) * $max_entries ) : 0;
+		$total      = ( $offset + $max_entries );
+		$typecount  = 0;
 
 		$stacked_urls = [];
 		while ( $total > $offset ) {
@@ -138,9 +145,7 @@ class Video_Provider extends Post_Type {
 	 * @return array|boolean
 	 */
 	protected function get_url( $post ) {
-		$meta = maybe_unserialize( $post->meta_value );
-		$post = get_post( $post->ID );
-		$url  = [];
+		$url = [];
 
 		/**
 		 * Filter the URL Rank Math SEO uses in the XML sitemap.
@@ -161,11 +166,6 @@ class Video_Provider extends Post_Type {
 			return false;
 		}
 
-		$modified = max( $post->post_modified_gmt, $post->post_date_gmt );
-		if ( '0000-00-00 00:00:00' !== $modified ) {
-			$url['publication_date'] = $modified;
-		}
-
 		$canonical = Helper::get_post_meta( 'canonical', $post->ID );
 		if ( '' !== $canonical && $canonical !== $url['loc'] ) {
 			/*
@@ -176,25 +176,32 @@ class Video_Provider extends Post_Type {
 			return false;
 		}
 		unset( $canonical );
+		$schemas = get_post_meta( $post->ID, 'rank_math_schema_VideoObject' );
+		if ( empty( $schemas ) ) {
+			return false;
+		}
 
 		if ( 'post' !== $post->post_type ) {
 			$url['loc'] = trailingslashit( $url['loc'] );
 		}
 
-		$url['title']           = ! empty( $meta['name'] ) ? Helper::replace_vars( $meta['name'], $post ) : '';
-		$url['thumbnail_loc']   = ! empty( $meta['thumbnailUrl'] ) ? Helper::replace_vars( $meta['thumbnailUrl'], $post ) : '';
-		$url['description']     = ! empty( $meta['description'] ) ? Helper::replace_vars( $meta['description'], $post ) : '';
-		$url['content_loc']     = ! empty( $meta['contentUrl'] ) ? $meta['contentUrl'] : '';
-		$url['player_loc']      = ! empty( $meta['embedUrl'] ) ? $meta['embedUrl'] : '';
-		$url['duration']        = ! empty( $meta['duration'] ) ? gmdate( 'h:i:s', Helper::duration_to_seconds( $meta['duration'] ) ) : '';
-		$url['category']        = ! empty( $meta['metadata']['category'] ) ? Helper::replace_vars( $meta['metadata']['category'], $post ) : '';
-		$url['tags']            = ! empty( $meta['metadata']['tags'] ) ? Helper::replace_vars( $meta['metadata']['tags'], $post ) : '';
-		$url['view_count']      = ! empty( $meta['interactionCount'] ) ? $meta['interactionCount'] : '';
-		$url['family_friendly'] = ! empty( $meta['family_friendly'] ) ? 'yes' : 'no';
-		$url['width']           = ! empty( $meta['width'] ) ? $meta['width'] : '';
-		$url['height']          = ! empty( $meta['height'] ) ? $meta['height'] : '';
-		$url['rating']          = ! empty( $meta['metadata']['rating'] ) ? $meta['metadata']['rating'] : '';
-		$url['author']          = $post->post_author;
+		$url['author'] = $post->post_author;
+		$url['videos'] = [];
+		foreach ( $schemas as $schema ) {
+			$url['videos'][] = [
+				'title'            => ! empty( $schema['name'] ) ? Helper::replace_vars( $schema['name'], $post ) : '',
+				'thumbnail_loc'    => ! empty( $schema['thumbnailUrl'] ) ? Helper::replace_vars( $schema['thumbnailUrl'], $post ) : '',
+				'description'      => ! empty( $schema['description'] ) ? Helper::replace_vars( $schema['description'], $post ) : '',
+				'publication_date' => ! empty( $schema['uploadDate'] ) ? Helper::replace_vars( $schema['uploadDate'], $post ) : '',
+				'content_loc'      => ! empty( $schema['contentUrl'] ) ? Helper::replace_vars( $schema['contentUrl'], $post ) : '',
+				'player_loc'       => ! empty( $schema['embedUrl'] ) ? Helper::replace_vars( $schema['embedUrl'], $post ) : '',
+				'duration'         => ! empty( $schema['duration'] ) ? Helper::duration_to_seconds( $schema['duration'] ) : '',
+				'category'         => ! empty( $schema['metadata']['category'] ) ? Helper::replace_vars( $schema['metadata']['category'], $post ) : '',
+				'tags'             => ! empty( $schema['metadata']['tags'] ) ? Helper::replace_vars( $schema['metadata']['tags'], $post ) : '',
+				'family_friendly'  => ! empty( $schema['isFamilyFriendly'] ) ? 'yes' : 'no',
+				'rating'           => ! empty( $schema['metadata']['rating'] ) ? $schema['metadata']['rating'] : '',
+			];
+		}
 
 		return $url;
 	}
@@ -210,24 +217,17 @@ class Video_Provider extends Post_Type {
 	 */
 	protected function get_posts( $post_types, $count, $offset ) { // phpcs:ignore
 		global $wpdb;
-
-		if ( empty( $post_types ) ) {
-			return [];
-		}
-
-		if ( ! is_array( $post_types ) ) {
-			$post_types = [ $post_types ];
-		}
-
-		$sql = "SELECT p.ID, p.post_modified_gmt, pm.meta_value FROM {$wpdb->postmeta} as pm
+		$sql = "SELECT p.* FROM {$wpdb->postmeta} as pm
 						INNER JOIN {$wpdb->posts} as p ON pm.post_id = p.ID
 						WHERE pm.meta_key = 'rank_math_schema_VideoObject'
 						AND post_type IN ( '" . join( "', '", esc_sql( $post_types ) ) . "' )
 						AND post_status IN ( 'publish', 'inherit' )
-						ORDER BY p.post_modified DESC";
+						AND post_password = ''
+						GROUP BY p.ID
+						ORDER BY p.post_modified DESC
+						LIMIT %d OFFSET %d";
 
-		$posts = $wpdb->get_results( $sql ); // phpcs:ignore
+		return $wpdb->get_results( $wpdb->prepare( $sql, $count, $offset ) ); // phpcs:ignore
 
-		return $posts;
 	}
 }

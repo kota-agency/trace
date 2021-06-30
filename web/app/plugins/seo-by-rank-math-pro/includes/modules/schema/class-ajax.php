@@ -10,7 +10,6 @@
 
 namespace RankMathPro\Schema;
 
-use RankMath\Helper;
 use MyThemeShop\Helpers\Param;
 
 defined( 'ABSPATH' ) || exit;
@@ -35,10 +34,11 @@ class Ajax {
 	 * Fetch from url.
 	 */
 	public function fetch_from_url() {
-		check_ajax_referer( 'rank-math-ajax-nonce', 'security' );
+		$this->verify_nonce( 'rank-math-ajax-nonce' );
+		$this->has_cap_ajax( 'general' );
 
-		$url = Param::post( 'url', false );
-		if ( ! $url ) {
+		$url = Param::post( 'url', false, FILTER_VALIDATE_URL );
+		if ( ! $url || strtolower( substr( $url, 0, 4 ) ) !== 'http' ) {
 			$this->error( esc_html__( 'No url found.', 'rank-math-pro' ) );
 		}
 
@@ -56,10 +56,16 @@ class Ajax {
 	 * Get posts/terms/author data.
 	 */
 	public function get_conditions_data() {
-		check_ajax_referer( 'rank-math-ajax-nonce', 'security' );
+		$this->verify_nonce( 'rank-math-ajax-nonce' );
+		$this->has_cap_ajax( 'general' );
 
 		$method = 'singular' === Param::get( 'category', false ) ? 'get_singular' : 'get_terms';
-		$data   = $this->{$method}( Param::get( 'userInput', false ), Param::get( 'type', false ), Param::get( 'value', false ) );
+		$data   = $this->{$method}(
+			Param::get( 'userInput', false ),
+			Param::get( 'type', false ),
+			Param::get( 'value', false ),
+			Param::get( 'postTaxonomy', false )
+		);
 
 		$this->success( [ 'data' => $data ] );
 	}
@@ -67,16 +73,47 @@ class Ajax {
 	/**
 	 * Get posts by searched string & post type.
 	 *
-	 * @param string $search Searched String.
-	 * @param string $type   Post Type.
-	 * @param int    $value  Post ID.
+	 * @param string $search   Searched String.
+	 * @param string $type     Post Type.
+	 * @param int    $value    Object ID.
+	 * @param int    $taxonomy Is taxonomy.
 	 */
-	private function get_singular( $search, $type, $value ) {
+	private function get_singular( $search, $type, $value, $taxonomy ) {
 		if ( 'null' === $search && $value ) {
-			$data = [
-				'value' => $value,
-				'title' => get_the_title( $value ),
-			];
+
+			if ( $taxonomy ) {
+				$data = [
+					'value' => $value,
+					'title' => get_term( $value )->name,
+				];
+			} else {
+				$data = [
+					'value' => $value,
+					'title' => get_the_title( $value ),
+				];
+			}
+
+			return $data;
+		}
+
+		if ( $taxonomy ) {
+			$terms = get_terms(
+				[
+					'taxonomy' => $taxonomy,
+					'fields'   => 'id=>name',
+				]
+			);
+
+			if ( empty( $terms ) ) {
+				return [];
+			}
+
+			foreach ( $terms as $id => $name ) {
+				$data[] = [
+					'value' => $id,
+					'title' => $name,
+				];
+			}
 
 			return $data;
 		}
@@ -111,7 +148,7 @@ class Ajax {
 	 * @param string $type   Taxonomy Name.
 	 * @param int    $value  Term ID.
 	 */
-	private function get_terms( $search, $type, $value ) {
+	private function get_terms( $search, $type, $value, $taxonomy ) {
 		$data = [];
 		if ( 'author' === $type ) {
 			return $this->get_authors( $search, $value );

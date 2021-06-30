@@ -138,7 +138,10 @@ class Setup_Wizard {
 	 * @return array
 	 */
 	public function steps( $steps ) {
-		$steps['sitemaps']['class'] = '\\RankMathPro\\Wizard\\Sitemap';
+		if ( isset( $steps['sitemaps'] ) ) {
+			$steps['sitemaps']['class'] = '\\RankMathPro\\Wizard\\Sitemap';
+		}
+
 		return $steps;
 	}
 

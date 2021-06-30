@@ -1,4 +1,4 @@
-# Copyright (C) 2020 rank-math-pro
+# Copyright (C) 2021 rank-math-pro
 # This file is distributed under the same license as the rank-math-pro package.
 msgid ""
 msgstr ""
@@ -16,10 +16,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Please update Rank Math Free to the latest version first before activating the PRO version."
-msgstr ""
-
-#. translators: Links to pricing page and help page.
-msgid "Your account does not have any active subscription. <a href=\"%1$s\" target=\"_blank\">Please buy the Rank Math PRO version here</a> or <a href=\"%2$s\">reconnect your account here</a>."
 msgstr ""
 
 msgid "Rank Math free version is required to run Rank Math Pro, but it could not be installed automatically. Please install and activate the free version first."
@@ -112,6 +108,12 @@ msgstr ""
 msgid "Bottom Right"
 msgstr ""
 
+msgid "Special Sitemaps:"
+msgstr ""
+
+msgid "&#8595; Rank Math"
+msgstr ""
+
 msgid "Set to noindex"
 msgstr ""
 
@@ -173,6 +175,9 @@ msgstr ""
 msgid "Example: /get/"
 msgstr ""
 
+msgid "Rank Math SEO Filters"
+msgstr ""
+
 msgid "Missing alt tag"
 msgstr ""
 
@@ -180,9 +185,6 @@ msgid "Missing or default title tag"
 msgstr ""
 
 msgid "Missing caption"
-msgstr ""
-
-msgid "SEO Filters"
 msgstr ""
 
 msgid "Custom Canonical URL"
@@ -230,6 +232,9 @@ msgstr ""
 msgid "Music"
 msgstr ""
 
+msgid "Movie"
+msgstr ""
+
 msgid "Person"
 msgstr ""
 
@@ -249,6 +254,15 @@ msgid "Software"
 msgstr ""
 
 msgid "Video"
+msgstr ""
+
+msgid "Dataset"
+msgstr ""
+
+msgid "FAQ"
+msgstr ""
+
+msgid "FactCheck"
 msgstr ""
 
 msgid "Clear Filter"
@@ -298,99 +312,6 @@ msgid "Primary %s"
 msgstr ""
 
 msgid "&mdash; Not Selected &mdash;"
-msgstr ""
-
-msgid "Sync to .htaccess"
-msgstr ""
-
-msgid "Copy all active redirections to the .htaccess file."
-msgstr ""
-
-msgid "Invalid nonce."
-msgstr ""
-
-msgid "Sorry, you are not allowed to export redirections on this site."
-msgstr ""
-
-msgid "The redirections could not be synced because the .htaccess file does not exist or it is not writable."
-msgstr ""
-
-msgid "No valid redirection found."
-msgstr ""
-
-msgid "Redirections successfully synced to the .htaccess file."
-msgstr ""
-
-msgid "Manage Categories"
-msgstr ""
-
-msgctxt "taxonomy general name"
-msgid "Redirection Categories"
-msgstr ""
-
-msgctxt "taxonomy singular name"
-msgid "Redirection Category"
-msgstr ""
-
-msgid "Search Redirection Categories"
-msgstr ""
-
-msgid "All Redirection Categories"
-msgstr ""
-
-msgid "Parent Category"
-msgstr ""
-
-msgid "Parent Category:"
-msgstr ""
-
-msgid "Edit Category"
-msgstr ""
-
-msgid "Update Category"
-msgstr ""
-
-msgid "Add New Category"
-msgstr ""
-
-msgid "New Category Name"
-msgstr ""
-
-msgid "Redirection Categories"
-msgstr ""
-
-msgid "Add to Category"
-msgstr ""
-
-msgid "No valid ID provided."
-msgstr ""
-
-#. translators: placeholder is the number of updated redirections.
-msgid "%d redirections have been assigned to the category."
-msgstr ""
-
-msgid "Add New"
-msgstr ""
-
-msgid "New Category"
-msgstr ""
-
-msgid "Redirection Category"
-msgstr ""
-
-msgid "Organize your redirections in categories."
-msgstr ""
-
-msgid "Category"
-msgstr ""
-
-msgid "Uncategorized"
-msgstr ""
-
-msgid "Select Category"
-msgstr ""
-
-msgid "Filter"
 msgstr ""
 
 msgid "Upload"
@@ -461,6 +382,12 @@ msgstr ""
 msgid "Enable updates"
 msgstr ""
 
+msgid "Automatic updates are not available."
+msgstr ""
+
+msgid "This update will install a beta version of Rank Math SEO PRO."
+msgstr ""
+
 msgid "Rank Math SEO PRO For WordPress"
 msgstr ""
 
@@ -478,8 +405,14 @@ msgstr ""
 msgid "It seems that you don't have an active subscription for %1$s. Please see %2$sdetails and pricing%3$s."
 msgstr ""
 
-#. translators: 1: Pricing Link's opening HTML anchor tag, 2: Plugin name, 3: Pricing Link's closing HTML anchor tag.
-msgid "Please %1$sconnect %2$s%3$s for automatic updates."
+#. translators: 1: Link's opening HTML anchor tag, 2: Link's closing HTML anchor tag.
+msgid "Please %1$s connect Rank Math SEO PRO %2$s for automatic updates."
+msgstr ""
+
+msgid "Rank Math PRO"
+msgstr ""
+
+msgid "https://rankmath.com/changelog/"
 msgstr ""
 
 msgid "Close panel"
@@ -588,6 +521,66 @@ msgstr ""
 msgid "Include deactivated redirections"
 msgstr ""
 
+msgid "Rank Math FAQ Schema"
+msgstr ""
+
+msgid "Add FAQ Schema Markup"
+msgstr ""
+
+msgid "Added by the Rank Math SEO Plugin."
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Breadcrumbs"
+msgstr ""
+
+msgid "Breadcrumbs are disabled in the Rank Math SEO"
+msgstr ""
+
+msgid "Breadcrumbs Panel"
+msgstr ""
+
+msgid "Alignment"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Center"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
+msgid "HTML Tag"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "Additional settings are available in the Rank Math SEO"
+msgstr ""
+
+msgid "Text Color"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Link Color"
+msgstr ""
+
+msgid "Hover"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
 msgid "Are you sure you want to import meta data from this CSV file?"
 msgstr ""
 
@@ -598,6 +591,9 @@ msgid "CSV import is in progress..."
 msgstr ""
 
 msgid "Please select at least one object type to export."
+msgstr ""
+
+msgid "Invalid nonce."
 msgstr ""
 
 msgid "Sorry, you are not allowed to export the content of this site."
@@ -676,7 +672,7 @@ msgstr ""
 msgid "Missing CSV headers."
 msgstr ""
 
-msgid "Missing one ore more required columns."
+msgid "Missing one or more required columns."
 msgstr ""
 
 msgid "Empty column data."
@@ -686,48 +682,6 @@ msgid "Columns number mismatch."
 msgstr ""
 
 msgid "Unknown object type."
-msgstr ""
-
-#. translators: placeholder is a comma-separated list of columns.
-msgid "Use the following columns in the CSV file (the order does not matter): %s"
-msgstr ""
-
-#. translators: placeholder is the column name.
-msgid "If the numeric ID is specified in the %s column, then the redirection will be edited. If it is not set or empty, then a new redirection will be created."
-msgstr ""
-
-#. translators: placeholders are the column names.
-msgid "You can specify multiple source URLs by using JSON format in the %1$s column. The value must be an array of objects with %2$s properties. The %3$s column will be ignored in this case."
-msgstr ""
-
-#. translators: 1 is the command name, 2 is the column name.
-msgid "Use %1$s (case-sensitive) as the value for the %2$s column to delete a redirection."
-msgstr ""
-
-msgid "CSV Import"
-msgstr ""
-
-#. translators: placeholder is a comma-separated list of columns.
-msgid "Import a CSV file to create or update redirections. The file must include at least the following columns: %s"
-msgstr ""
-
-msgid "More details"
-msgstr ""
-
-msgid "Import & Export"
-msgstr ""
-
-msgid "Sorry, you are not allowed to import redirections on this site."
-msgstr ""
-
-msgid "Are you sure you want to import redirections from this CSV file?"
-msgstr ""
-
-#. translators: placeholder is numeric redirection id.
-msgid "Could not update redirection #%d"
-msgstr ""
-
-msgid "Could not import redirection."
 msgstr ""
 
 msgid "Sitemap"
@@ -821,6 +775,15 @@ msgstr ""
 msgid "Nonce error. Please try again."
 msgstr ""
 
+msgid "Include Images from the ACF Fields."
+msgstr ""
+
+msgid "Include images added in the ACF fields."
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
 msgid "Post Analytics"
 msgstr ""
 
@@ -838,6 +801,120 @@ msgstr ""
 
 #. translators: Link to kb article
 msgid "This option allows you to monitor the SEO performance of all of your sites in one centralized dashboard on RankMath.com, so you can check up on sites at a glance. <a href=\"%1$s\" target=\"_blank\">Learn more</a>."
+msgstr ""
+
+msgid "Logo"
+msgstr ""
+
+msgid "Every 15 Days"
+msgstr ""
+
+msgid "Include Only Tracked Keywords"
+msgstr ""
+
+msgid "When enabled, the Winning Keywords section will only show Tracked Keywords."
+msgstr ""
+
+msgid "Every 7 Days"
+msgstr ""
+
+msgid "Report Email Address"
+msgstr ""
+
+msgid "Address where the reports will be sent. You can add multiple recipients separated with commas."
+msgstr ""
+
+msgid "Report Email Subject"
+msgstr ""
+
+msgid "Subject of the report emails."
+msgstr ""
+
+msgid "Report Logo"
+msgstr ""
+
+msgid "Logo appearing in the header part of the report."
+msgstr ""
+
+msgid "Logo Link"
+msgstr ""
+
+msgid "URL where the logo link should point to."
+msgstr ""
+
+msgid "Report Header Background"
+msgstr ""
+
+msgid "Color hex code or any other valid value for the <code>background:</code> CSS property."
+msgstr ""
+
+msgid "Link to Full Report"
+msgstr ""
+
+msgid "Select whether to include a link to the Full Report admin page in the email or not."
+msgstr ""
+
+msgid "Report Top Text"
+msgstr ""
+
+msgid "Text or basic HTML to insert below the title."
+msgstr ""
+
+msgid "Include Sections"
+msgstr ""
+
+msgid "Select which tables to show in the report."
+msgstr ""
+
+msgid "Basic Summary"
+msgstr ""
+
+msgid "Positions Summary"
+msgstr ""
+
+msgid "Top Winning Posts"
+msgstr ""
+
+msgid "Top Losing Posts"
+msgstr ""
+
+msgid "Top Winning Keywords"
+msgstr ""
+
+msgid "Top Losing Keywords"
+msgstr ""
+
+msgid "When enabled, the Winning Keywords and Losing Keywords sections will only show Tracked Keywords."
+msgstr ""
+
+msgid "Report Footer Text"
+msgstr ""
+
+msgid "Text or basic HTML to insert in the footer area."
+msgstr ""
+
+msgid "Additional CSS code"
+msgstr ""
+
+msgid "Additional CSS code to customize the appearance of the reports. Insert the CSS code directly, without the wrapping style tag. Please note that the CSS support is limited in email clients and the appearance may vary greatly."
+msgstr ""
+
+#. translators: placeholder is a link to the homepage.
+msgid "This email was sent to you as a registered member of %s."
+msgstr ""
+
+#. translators: placeholder is a link to the settings, with "click here" as the anchor text.
+msgid "To update your email preferences, %s. ###ADDRESS###"
+msgstr ""
+
+msgid "click here"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+#. translators: placeholder is the site URL.
+msgid "Rank Math [SEO Report] - %s"
 msgstr ""
 
 msgid "Sorry, no keyword found."
@@ -952,6 +1029,16 @@ msgstr ""
 msgid "Caption"
 msgstr ""
 
+msgid "Local Sitemap"
+msgstr ""
+
+msgid "KML is a file format used to display geographic data in an Earth browser such as Google Earth. More information: <a href=\"https://rankmath.com/kb/kml-sitemap/?utm_source=Plugin&utm_campaign=WP\" target=\"_blank\">Locations KML</a>"
+msgstr ""
+
+#. translators: KML File Url
+msgid "Your Locations KML file can be found here: %s"
+msgstr ""
+
 #. translators: Post Type Plural Name
 msgid "All %s"
 msgstr ""
@@ -1013,7 +1100,13 @@ msgstr ""
 msgid "Search categories"
 msgstr ""
 
-#. translators: Local SEO Settings Link
+msgid "Parent Category"
+msgstr ""
+
+msgid "Parent Category:"
+msgstr ""
+
+#. translators: %s expands to General Settings Link.
 msgid "This page can't load Google Maps correctly. Please add %s."
 msgstr ""
 
@@ -1039,41 +1132,8 @@ msgstr ""
 msgid "Using noindex allows you to prevent articles from appearing in Google News."
 msgstr ""
 
-msgid "Blog"
-msgstr ""
-
-msgid "Press Release"
-msgstr ""
-
-msgid "Satire"
-msgstr ""
-
-msgid "Op-Ed"
-msgstr ""
-
-msgid "Opinion"
-msgstr ""
-
-msgid "User Generated"
-msgstr ""
-
-msgid "Genres"
-msgstr ""
-
-msgid "Label(s) characterizing the content of the article."
-msgstr ""
-
-msgid "Stock Tickers"
-msgstr ""
-
-msgid "A comma-separated list of up to 5 stock tickers of the companies, mutual funds, or other financial entities that are the main subject of the article. Relevant primarily for business articles."
-msgstr ""
-
-msgid "Default Genres"
-msgstr ""
-
-#. translators: Taxonomy Name
-msgid "Exclude %s"
+#. translators: Post Type
+msgid "Exclude %s Terms "
 msgstr ""
 
 #. translators: 1. Taxonomy Name 2. Post Type
@@ -1084,20 +1144,20 @@ msgid "XML Sitemap"
 msgstr ""
 
 #. translators: link to rankmath.com
-#. translators: link to rankmath.com
 msgid "This XML Sitemap is generated by <a href=\"%s\" target=\"_blank\">Rank Math WordPress SEO Plugin</a>. It is what search engines like Google use to crawl and re-crawl posts/pages/products/images/archives on your website."
 msgstr ""
 
-#. translators: link to rankmath.com
 #. translators: link to rankmath.com
 msgid "Learn more about <a href=\"%s\" target=\"_blank\">XML Sitemaps</a>."
 msgstr ""
 
 #. translators: xsl value count
+#. translators: xsl value count
 msgid "This XML Sitemap contains <strong>%s</strong> URLs."
 msgstr ""
 
 #. translators: xsl value count
+#. translators: Sitemap index link.
 msgid "<a href=\"%s\">&#8592; Sitemap Index</a>"
 msgstr ""
 
@@ -1107,13 +1167,97 @@ msgstr ""
 msgid "Publication Date"
 msgstr ""
 
+msgid "Sync to .htaccess"
+msgstr ""
+
+msgid "Copy all active redirections to the .htaccess file."
+msgstr ""
+
+msgid "Sorry, you are not allowed to export redirections on this site."
+msgstr ""
+
+msgid "The redirections could not be synced because the .htaccess file does not exist or it is not writable."
+msgstr ""
+
+msgid "No valid redirection found."
+msgstr ""
+
+msgid "Redirections successfully synced to the .htaccess file."
+msgstr ""
+
+msgid "Manage Categories"
+msgstr ""
+
+msgctxt "taxonomy general name"
+msgid "Redirection Categories"
+msgstr ""
+
+msgctxt "taxonomy singular name"
+msgid "Redirection Category"
+msgstr ""
+
+msgid "Search Redirection Categories"
+msgstr ""
+
+msgid "All Redirection Categories"
+msgstr ""
+
+msgid "Edit Category"
+msgstr ""
+
+msgid "Update Category"
+msgstr ""
+
+msgid "Add New Category"
+msgstr ""
+
+msgid "New Category Name"
+msgstr ""
+
+msgid "Redirection Categories"
+msgstr ""
+
+msgid "Add to Category"
+msgstr ""
+
+msgid "No valid ID provided."
+msgstr ""
+
+#. translators: placeholder is the number of updated redirections.
+msgid "%d redirections have been assigned to the category."
+msgstr ""
+
+msgid "Add New"
+msgstr ""
+
+msgid "New Category"
+msgstr ""
+
+msgid "Redirection Category"
+msgstr ""
+
+msgid "Organize your redirections in categories."
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Uncategorized"
+msgstr ""
+
+msgid "Select Category"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "&larr; Go Back to the Redirections"
+msgstr ""
+
 msgid "DataSet"
 msgstr ""
 
 msgid "Fact Check"
-msgstr ""
-
-msgid "Movie"
 msgstr ""
 
 msgid "None (Click here to set one)"
@@ -1144,6 +1288,9 @@ msgid "Use in Schema Markup"
 msgstr ""
 
 msgid "Link Title"
+msgstr ""
+
+msgid "All Taxonomies"
 msgstr ""
 
 msgid "No url found."
@@ -1214,17 +1361,46 @@ msgstr ""
 msgid "Materials:"
 msgstr ""
 
-msgid "Learn more"
+msgid "Rank Math: Added Video Schema to posts successfully."
 msgstr ""
 
-msgid "Post Types:"
+msgid "Autodetect Video"
 msgstr ""
 
-msgid "Attachments"
+msgid "Populate automatic Video Schema by auto-detecting any video in the content."
 msgstr ""
 
-#. translators: 1. post type name 2. link
-msgid "Change Global SEO, Schema, and other settings for %1$s. %2$s"
+msgid "Autogenerate Image"
+msgstr ""
+
+msgid "Auto-generate image for the auto detected video."
+msgstr ""
+
+msgid "Remove Media Data from RSS feed"
+msgstr ""
+
+msgid "Generate Video Schema for Old Posts/Pages"
+msgstr ""
+
+msgid "Add Video schema to posts which have YouTube or Vimeo Video in the content. Applies to only those Posts/Pages/CPTs in which Autodetect Video Option is On."
+msgstr ""
+
+msgid "Are you sure you want to add Video Schema to the posts/pages with the video in the content? This action is irreversible."
+msgstr ""
+
+msgid "Generate"
+msgstr ""
+
+msgid "No posts found to convert."
+msgstr ""
+
+msgid "Conversion started. A success message will be shown here once the process completes. You can close this page."
+msgstr ""
+
+msgid "Free version"
+msgstr ""
+
+msgid "PRO version"
 msgstr ""
 
 msgid "Video Sitemaps give search engines information about video content on your site. More information: <a href=\"https://rankmath.com/kb/video-sitemap/?utm_source=Plugin&utm_campaign=WP\" target=\"_blank\">Video Sitemaps</a>"
@@ -1246,10 +1422,86 @@ msgstr ""
 msgid "List of custom fields name to check for video content. Add one per line."
 msgstr ""
 
+#. translators: link to rankmath.com
+msgid "This Video Sitemap is generated by <a href=\"%s\" target=\"_blank\">Rank Math WordPress SEO Plugin</a>. It is what search engines like Google use to find and understand the video content on your website."
+msgstr ""
+
+#. translators: link to rankmath.com
+msgid "Learn more about <a href=\"%s\" target=\"_blank\">Video Sitemap</a>."
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Last Mod."
+msgstr ""
+
+msgid "Select Brand"
+msgstr ""
+
+msgid "Select Product Brand Taxonomy to use in Schema.org & OpenGraph markup."
+msgstr ""
+
+msgid "Brand"
+msgstr ""
+
+msgid "Brand value to use in Schema.org & OpenGraph markup."
+msgstr ""
+
+msgid "Global Identifier"
+msgstr ""
+
+msgid "Global Identifier key to use in the Product Schema."
+msgstr ""
+
+msgid "GTIN-8"
+msgstr ""
+
+msgid "GTIN-12"
+msgstr ""
+
+msgid "GTIN-13"
+msgstr ""
+
+msgid "GTIN-14"
+msgstr ""
+
+msgid "ISBN"
+msgstr ""
+
+msgid "MPN"
+msgstr ""
+
+msgid "Show Global Identifier"
+msgstr ""
+
+msgid "Display the Global Identified on Product Page along with other product details."
+msgstr ""
+
+msgid "Global Identifier label"
+msgstr ""
+
+msgid "Global Identifier label to show on Product Page."
+msgstr ""
+
 msgid "Noindex Hidden Products"
 msgstr ""
 
 msgid "Set Product Pages to noindex when WooCommerce Catalog visibility is set to hidden."
+msgstr ""
+
+msgid "GTIN"
+msgstr ""
+
+#. translators: Global Identifier name.
+msgid "%s value to use in the Product schema."
+msgstr ""
+
+#. translators: Global Identifier name.
+msgid "%s value to use in Product schema."
 msgstr ""
 
 msgid "Phone"
@@ -1313,6 +1565,12 @@ msgid "Your location:"
 msgstr ""
 
 msgid "Show route"
+msgstr ""
+
+msgid "Include KML File in the Sitemap"
+msgstr ""
+
+msgid "locations.kml Sitemap is generated automatically when the Local SEO module is enabled, and the geo-coordinates are added."
 msgstr ""
 
 msgid "Choose a country"
@@ -2065,9 +2323,6 @@ msgstr ""
 msgid "Your name or company name"
 msgstr ""
 
-msgid "Logo"
-msgstr ""
-
 msgid "<strong>Min Size: 160Χ90px, Max Size: 1920X1080px</strong>.<br /> A squared image is preferred by the search engines."
 msgstr ""
 
@@ -2078,12 +2333,6 @@ msgid "Use Multiple Locations"
 msgstr ""
 
 msgid "Once you save the changes, we will create a new custom post type called \"Locations\" where you can add multiple locations of your business/organization."
-msgstr ""
-
-msgid "Default"
-msgstr ""
-
-msgid "Custom"
 msgstr ""
 
 msgid "Search engines display your email address."
@@ -2164,12 +2413,6 @@ msgstr ""
 msgid "Don't add opening hours data in Schema"
 msgstr ""
 
-msgid "No"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
 msgid "Closed label"
 msgstr ""
 
@@ -2179,10 +2422,16 @@ msgstr ""
 msgid "Open 24/7 label"
 msgstr ""
 
+msgid "Select the text to display alongside your opening hours when your store is open 24/7."
+msgstr ""
+
 msgid "Open 24h label"
 msgstr ""
 
 msgid "Measurement system"
+msgstr ""
+
+msgid "Select your preferred measurement system (miles or kilometers)."
 msgstr ""
 
 msgid "Kilometers"
@@ -2192,6 +2441,9 @@ msgid "Miles"
 msgstr ""
 
 msgid "Map Style"
+msgstr ""
+
+msgid "Select the map style you wish to use on the frontend of your website."
 msgstr ""
 
 msgid "Hybrid"
@@ -2209,13 +2461,19 @@ msgstr ""
 msgid "Maximum number of locations to show"
 msgstr ""
 
+msgid "Limit the number of locations shown on your website to those nearest your user."
+msgstr ""
+
 msgid "Primary Country"
 msgstr ""
 
-msgid "From which country does your business mainly operate? This will improve the accuracy of the store locator."
+msgid "Select your organization’s primary country of operation. This helps improve the accuracy of the store locator."
 msgstr ""
 
 msgid "Show Route label"
+msgstr ""
+
+msgid "Customize the label of the option users can use can click to get directions to your business location on the frontend."
 msgstr ""
 
 msgid "Location Detection"
@@ -2227,6 +2485,9 @@ msgstr ""
 msgid "All Locations are part of the same Organization"
 msgstr ""
 
+msgid "Enable if all of the locations where you serve customers are a part of the same legal entity."
+msgstr ""
+
 msgid "Enhanced Search"
 msgstr ""
 
@@ -2236,11 +2497,11 @@ msgstr ""
 msgid "Google Maps API Key"
 msgstr ""
 
-#. translators: %s expands to "Google Maps Javascript API" https://developers.google.com/maps/documentation/embed/
+#. translators: %s expands to "Google Maps Embed API" https://developers.google.com/maps/documentation/embed/
 msgid "An API Key is required to display embedded Google Maps on your site. Get it here: %s"
 msgstr ""
 
-msgid "Google Maps Javascript API"
+msgid "Google Maps Embed API"
 msgstr ""
 
 msgid "Geo Coordinates"
@@ -2255,16 +2516,16 @@ msgstr ""
 msgid "Locations Category Base"
 msgstr ""
 
-msgid "Locations Post Type label"
+msgid "Location Post Type Name"
 msgstr ""
 
-msgid "Add New RM Locations"
+msgid "The label that appears in the sidebar for the custom post type where you can add & manage locations."
 msgstr ""
 
-msgid "Locations Post Type Plural label"
+msgid "Locations Post Type Name (Plural)"
 msgstr ""
 
-msgid "Search RM Locations"
+msgid "As above, but the label that would be applicable for more than one location (default: RM Locations)."
 msgstr ""
 
 msgid "Select Page"
@@ -2277,6 +2538,57 @@ msgid "Select a page on your site where you want to show the LocalBusiness meta 
 msgstr ""
 
 msgid "Contact Page"
+msgstr ""
+
+#. translators: placeholder is a comma-separated list of columns.
+msgid "Use the following columns in the CSV file (the order does not matter): %s"
+msgstr ""
+
+#. translators: placeholder is the column name.
+msgid "If the numeric ID is specified in the %s column, then the redirection will be edited. If it is not set or empty, then a new redirection will be created."
+msgstr ""
+
+#. translators: placeholders are the column names.
+msgid "You can specify multiple source URLs by using JSON format in the %1$s column. The value must be an array of objects with %2$s properties. The %3$s column will be ignored in this case."
+msgstr ""
+
+#. translators: 1 is the command name, 2 is the column name.
+msgid "Use %1$s (case-sensitive) as the value for the %2$s column to delete a redirection."
+msgstr ""
+
+msgid "CSV Import"
+msgstr ""
+
+#. translators: placeholder is a comma-separated list of columns.
+msgid "Import a CSV file to create or update redirections. The file must include at least the following columns: %s"
+msgstr ""
+
+msgid "More details"
+msgstr ""
+
+msgid "Import & Export"
+msgstr ""
+
+msgid "Sorry, you are not allowed to import redirections on this site."
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid "Updated"
+msgstr ""
+
+msgid "Deleted"
+msgstr ""
+
+msgid "Are you sure you want to import redirections from this CSV file?"
+msgstr ""
+
+#. translators: placeholder is numeric redirection id.
+msgid "Could not update redirection #%d (not found)"
+msgstr ""
+
+msgid "Could not import redirection."
 msgstr ""
 
 msgid "Author Name"
@@ -2315,9 +2627,6 @@ msgstr ""
 msgid "Special Coverage"
 msgstr ""
 
-msgid "Description"
-msgstr ""
-
 msgid "Data Sets"
 msgstr ""
 
@@ -2330,209 +2639,104 @@ msgstr ""
 msgid "Total Time"
 msgstr ""
 
+msgid "Salary"
+msgstr ""
+
+msgid "Salary Currency"
+msgstr ""
+
+msgid "Payroll"
+msgstr ""
+
+msgid "Date Posted"
+msgstr ""
+
+msgid "Posting Expiry Date"
+msgstr ""
+
+msgid "Unpublish when expired"
+msgstr ""
+
+msgid "Employment Type "
+msgstr ""
+
+msgid "Hiring Organization "
+msgstr ""
+
+msgid "Organization URL"
+msgstr ""
+
+msgid "Organization Logo"
+msgstr ""
+
+msgid "Job Type"
+msgstr ""
+
+msgid "Job Location"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Education Required"
+msgstr ""
+
+msgid "Experience Required"
+msgstr ""
+
+msgid "Months"
+msgstr ""
+
 msgid "Director"
 msgstr ""
 
 msgid "Date Created"
 msgstr ""
 
-msgid "Show SEO Score"
+msgid "Product SKU"
 msgstr ""
 
-#. translators: %s is the shortcode
-msgid "Show the calculated SEO Score as a badge on the front end for selected post types. It can be disabled for specific posts."
+msgid "Product Brand"
 msgstr ""
 
-msgid "SEO Score Post Types"
+msgid "Product Currency"
 msgstr ""
 
-msgid "SEO Score Template"
+msgid "Product Price"
 msgstr ""
 
-msgid "Change the styling for the front end SEO score badge."
+msgid "Price Valid Until"
 msgstr ""
 
-msgid "Circle"
+msgid "Product In-Stock"
 msgstr ""
 
-msgid "Square"
+msgid "We handle the Schema on Archive page automatically. Please add schema from this tab only if you are sure what you are doing."
 msgstr ""
 
-msgid "SEO Score Position"
+msgid "VIEW DETAILED ANALYTICS"
 msgstr ""
 
-#. translators: 1.SEO Score Shortcode 2. SEO Score function
-msgid "Display the badges automatically, or insert the %1$s shortcode in your posts and the %2$s template tag in your theme template files."
+msgid "Impressions"
 msgstr ""
 
-msgid "Below Content"
+msgid "Position"
 msgstr ""
 
-msgid "Above Content"
+msgid "Post"
 msgstr ""
 
-msgid "Above & Below Content"
+msgid "Search Traffic"
 msgstr ""
 
-msgid "Custom (use shortcode)"
+msgid "Total Impressions"
 msgstr ""
 
-msgid "Support Us with a Link"
+msgid "Total Clicks"
 msgstr ""
 
-#. translators: %s is the word "nofollow" code tag and second one for the filter link
-msgid "If you are showing the SEO scores on the front end, this option will insert a %1$s backlink to RankMath.com to show your support. You can change the link & the text by using this %2$s."
+msgid "Total Keywords"
 msgstr ""
 
-msgid "filter"
-msgstr ""
-
-msgid "Remove Media Data from RSS feed"
-msgstr ""
-
-msgid "RSS Before Content"
-msgstr ""
-
-msgid "Add content before each post in your site feeds."
-msgstr ""
-
-msgid "RSS After Content"
-msgstr ""
-
-msgid "Add content after each post in your site feeds."
-msgstr ""
-
-msgid "To configure attachment-related meta tags disable attachment redirection to parent."
-msgstr ""
-
-#. translators: post type name
-msgid "Single %s Title"
-msgstr ""
-
-#. translators: post type name
-msgid "Default title tag for single %s pages. This can be changed on a per-post basis on the post editor screen."
-msgstr ""
-
-#. translators: post type name
-msgid "Single %s Description"
-msgstr ""
-
-#. translators: post type name
-msgid "Default description for single %s pages. This can be changed on a per-post basis on the post editor screen."
-msgstr ""
-
-#. translators: post type name
-msgid "%s Archive Title"
-msgstr ""
-
-#. translators: post type name
-msgid "Title for %s archive pages."
-msgstr ""
-
-#. translators: post type name
-msgid "%s Archive Description"
-msgstr ""
-
-#. translators: post type name
-msgid "Description for %s archive pages."
-msgstr ""
-
-msgid "Schema Type"
-msgstr ""
-
-msgid "Default rich snippet selected when creating a new post of this type. "
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Headline"
-msgstr ""
-
-msgid "Default rich snippet selected when creating a new product."
-msgstr ""
-
-#. translators: Google article snippet doc link
-msgid "Google does not allow Person as the Publisher for articles. Organization will be used instead. You can read more about this <a href=\"%s\" target=\"_blank\">here</a>."
-msgstr ""
-
-msgid "Article Type"
-msgstr ""
-
-msgid "Autodetect Video"
-msgstr ""
-
-msgid "Populate automatic Video Schema by auto-detecting any video in the content."
-msgstr ""
-
-#. translators: post type name
-#. translators: post type name
-msgid "%s Robots Meta"
-msgstr ""
-
-#. translators: post type name
-msgid "Select custom robots meta, such as <code>nofollow</code>, <code>noarchive</code>, etc. for single %s pages. Otherwise the default meta will be used, as set in the Global Meta tab."
-msgstr ""
-
-#. translators: post type name
-msgid "Custom values for robots meta tag on %s."
-msgstr ""
-
-#. translators: post type name
-msgid "%s Advanced Robots Meta"
-msgstr ""
-
-msgid "Link Suggestions"
-msgstr ""
-
-msgid "Enable Link Suggestions meta box for this post type, along with the Pillar Content feature."
-msgstr ""
-
-msgid "Link Suggestion Titles"
-msgstr ""
-
-msgid "Use the Focus Keyword as the default text for the links instead of the post titles."
-msgstr ""
-
-msgid "Titles"
-msgstr ""
-
-msgid "Focus Keywords"
-msgstr ""
-
-msgid "Primary Taxonomy"
-msgstr ""
-
-#. translators: post type name
-msgid "Select taxonomy to show in the Breadcrumbs when a single %1$s is being viewed."
-msgstr ""
-
-msgid "Thumbnail for Facebook"
-msgstr ""
-
-msgid "Image displayed when your page is shared on Facebook and other social networks. Use images that are at least 1200 x 630 pixels for the best display on high resolution devices."
-msgstr ""
-
-msgid "Add SEO Meta Box"
-msgstr ""
-
-msgid "Add the SEO Meta Box for the editor screen to customize SEO options for posts in this post type."
-msgstr ""
-
-msgid "Bulk Editing"
-msgstr ""
-
-msgid "Add bulk editing columns to the post listing screen."
-msgstr ""
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-msgid "Read Only"
-msgstr ""
-
-msgid "List of custom fields name to include in the Page analysis. Add one per line."
+msgid "Average Position"
 msgstr ""

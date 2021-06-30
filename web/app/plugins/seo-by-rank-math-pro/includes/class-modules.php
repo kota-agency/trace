@@ -13,6 +13,7 @@ namespace RankMathPro;
 use RankMath\Helper;
 use RankMath\Traits\Hooker;
 use MyThemeShop\Helpers\Conditional;
+use MyThemeShop\Helpers\Param;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -32,6 +33,7 @@ class Modules {
 		}
 
 		$this->filter( 'rank_math/modules', 'setup_core', 1 );
+		$this->action( 'admin_enqueue_scripts', 'enqueue' );
 	}
 
 	/**
@@ -42,10 +44,6 @@ class Modules {
 	 * @return array
 	 */
 	public function setup_core( $modules ) {
-		if ( rank_math_pro()->is_plan_expired() ) {
-			return $modules;
-		}
-
 		$active_modules = get_option( 'rank_math_modules', [] );
 
 		$modules['news-sitemap'] = [
@@ -74,5 +72,15 @@ class Modules {
 		$modules['rich-snippet']['class'] = '\RankMathPro\Schema\Schema';
 
 		return $modules;
+	}
+
+	/**
+	 * Enqueue styles and scripts.
+	 */
+	public function enqueue() {
+		if ( 'rank-math' !== Param::get( 'page' ) ) {
+			return;
+		}
+		wp_enqueue_script( 'rank-math-pro-dashboard', RANK_MATH_PRO_URL . 'assets/admin/js/dashboard.js', [ 'jquery' ], rank_math_pro()->version, true );
 	}
 }

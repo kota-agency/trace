@@ -29,16 +29,18 @@ class Frontend {
 	 * The Constructor.
 	 */
 	public function __construct() {
-		$this->action( 'rank_math/json_ld', 'add_template_schema', 11, 2 );
 		$this->action( 'rank_math/json_ld', 'add_about_mention_attributes', 11 );
+		$this->action( 'rank_math/json_ld', 'add_template_schema', 8, 2 );
+		$this->action( 'rank_math/json_ld', 'add_schema_from_shortcode', 8, 2 );
 		$this->action( 'rank_math/json_ld', 'convert_schema_to_item_list', 99, 2 );
 		$this->action( 'rank_math/json_ld', 'validate_schema_data', 999 );
-		$this->filter( 'rank_math/snippet/rich_snippet_ItemList_entity', 'filter_item_list_schema' );
+		$this->action( 'rank_math/json_ld', 'add_subjectof_property', 99 );
+		$this->action( 'rank_math/schema/preview/validate', 'validate_preview_data' );
+		$this->filter( 'rank_math/snippet/rich_snippet_itemlist_entity', 'filter_item_list_schema' );
 		$this->filter( 'rank_math/schema/valid_types', 'valid_types' );
-		$this->action( 'rank_math/json_ld', 'add_schema_from_shortcode', 12, 2 );
+		$this->filter( 'rank_math/snippet/rich_snippet_product_entity', 'add_manufacturer_property' );
 
-		$this->conditions = [];
-
+		new Display_Conditions();
 		new Snippet_Pro_Shortcode();
 
 		if ( $this->do_filter( 'link/remove_schema_attribute', false ) ) {
@@ -65,7 +67,7 @@ class Frontend {
 	 * Add endpoint
 	 */
 	public function add_endpoint() {
-		add_rewrite_endpoint( 'schema-preview', EP_PERMALINK );
+		add_rewrite_endpoint( 'schema-preview', EP_PERMALINK | EP_PAGES | EP_ROOT );
 	}
 
 	/**
@@ -74,8 +76,11 @@ class Frontend {
 	public function schema_preview_template() {
 		global $wp_query;
 
-		// if this is not a request for schema preview or a singular object then bail.
-		if ( ! isset( $wp_query->query_vars['schema-preview'] ) || ! is_singular() ) {
+		// if this is not a request for schema preview or a singular or home object then bail.
+		if (
+			! isset( $wp_query->query_vars['schema-preview'] ) ||
+			( ! is_singular() && ! is_home() && ! is_category() && ! is_tag() && ! is_tax() )
+		) {
 			return;
 		}
 
@@ -124,6 +129,105 @@ class Frontend {
 	}
 
 	/**
+	 * Validate Code Validation Schema data before displaying it in Preview window.
+	 *
+	 * @param  array $schemas Array of json-ld data.
+	 * @return array
+	 *
+	 * @since 2.6.1
+	 */
+	public function validate_preview_data( $schemas ) {
+		foreach ( $schemas as $schema_key => $schema ) {
+			if ( empty( $schema['subjectOf'] ) ) {
+				continue;
+			}
+
+			foreach ( $schema['subjectOf'] as $key => $property ) {
+				if ( empty( $schemas[ $key ] ) ) {
+					continue;
+				}
+
+				$schema['subjectOf'][ $key ] = $schemas[ $key ];
+				unset( $schemas[ $key ] );
+			}
+
+			$schema['subjectOf']    = array_values( $schema['subjectOf'] );
+			$schemas[ $schema_key ] = $schema;
+		}
+
+		return $schemas;
+	}
+
+	/**
+	 * Add FAQ/HowTo schema in subjectOf property of primary schema.
+	 *
+	 * @param  array $schemas Array of json-ld data.
+	 * @return array
+	 *
+	 * @since 1.0.62
+	 */
+	public function add_subjectof_property( $schemas ) {
+		if ( empty( $schemas ) ) {
+			return $schemas;
+		}
+
+		foreach ( $schemas as $id => $schema ) {
+			if ( ! Str::starts_with( 'schema-', $id ) && 'richSnippet' !== $id ) {
+				continue;
+			}
+
+			$this->add_prop_subjectof( $schema, $schemas );
+			if ( ! empty( $schema['subjectOf'] ) ) {
+				$schemas[ $id ] = $schema;
+				break;
+			}
+		}
+
+		return $schemas;
+	}
+
+	/**
+	 * Add subjectOf property in current schema entity.
+	 *
+	 * @param array $entity  Schema Entity.
+	 * @param array $schemas Array of json-ld data.
+	 *
+	 * @since 1.0.62
+	 */
+	private function add_prop_subjectof( &$entity, &$schemas ) {
+		if (
+			! isset( $entity['@type'] ) ||
+			empty( $entity['isPrimary'] ) ||
+			! empty( $entity['isCustom'] ) ||
+			in_array( $entity['@type'], [ 'FAQPage', 'HowTo' ], true )
+		) {
+			return;
+		}
+
+		global $wp_query;
+		$subject_of = [];
+		foreach ( $schemas as $key => $schema ) {
+			if ( ! isset( $schema['@type'] ) || ! in_array( $schema['@type'], [ 'FAQPage', 'HowTo' ], true ) ) {
+				continue;
+			}
+
+			if ( isset( $schema['isPrimary'] ) ) {
+				unset( $schema['isPrimary'] );
+			}
+
+			if ( isset( $wp_query->query_vars['schema-preview'] ) ) {
+				$subject_of[ $key ] = $schema;
+				continue;
+			}
+
+			$subject_of[] = $schema;
+			unset( $schemas[ $key ] );
+		}
+
+		$entity['subjectOf'] = $subject_of;
+	}
+
+	/**
 	 * Get Default Schema Data.
 	 *
 	 * @param array  $data   Array of json-ld data.
@@ -135,11 +239,11 @@ class Frontend {
 		$schemas = array_filter(
 			$data,
 			function( $schema ) {
-				if ( ! in_array( $schema['@type'], [ 'Course', 'Movie', 'Recipe', 'Restaurant' ], true ) ) {
-					return false;
+				if ( isset( $schema['@type'] ) && in_array( $schema['@type'], [ 'Course', 'Movie', 'Recipe', 'Restaurant' ], true ) ) {
+					return true;
 				}
 
-				return true;
+				return false;
 			}
 		);
 
@@ -157,6 +261,10 @@ class Frontend {
 			unset( $data[ $id ] );
 			$schema['url'] = $jsonld->parts['url'] . '#' . $id;
 
+			if ( isset( $schema['isPrimary'] ) ) {
+				unset( $schema['isPrimary'] );
+			}
+
 			$data['itemList']['itemListElement'][] = [
 				'@type'    => 'ListItem',
 				'position' => $count,
@@ -170,7 +278,7 @@ class Frontend {
 	}
 
 	/**
-	 * Get Default Schema Data.
+	 * Add Schema data from Schem Templates.
 	 *
 	 * @param array  $data   Array of json-ld data.
 	 * @param JsonLD $jsonld Instance of jsonld.
@@ -178,7 +286,7 @@ class Frontend {
 	 * @return array
 	 */
 	public function add_template_schema( $data, $jsonld ) {
-		$schemas = $this->get_schema_templates( $data, $jsonld );
+		$schemas = Display_Conditions::get_schema_templates( $data, $jsonld );
 		if ( empty( $schemas ) ) {
 			return $data;
 		}
@@ -359,6 +467,24 @@ class Frontend {
 	}
 
 	/**
+	 * Add Manufacturer property to Product schema.
+	 *
+	 * @param array $schema Product schema data.
+	 * @return array
+	 */
+	public function add_manufacturer_property( $schema ) {
+		if ( empty( $schema['manufacturer'] ) ) {
+			return $schema;
+		}
+
+		$type = Helper::get_settings( 'titles.knowledgegraph_type' );
+		$type = 'company' === $type ? 'organization' : 'person';
+
+		$schema['manufacturer'] = [ '@id' => home_url( "/#{$type}" ) ];
+		return $schema;
+	}
+
+	/**
 	 * Get Schema data by ID.
 	 *
 	 * @param string $id   Schema shortcode ID.
@@ -381,166 +507,15 @@ class Frontend {
 			return [];
 		}
 
+		$post_id = isset( $schemas['post_id'] ) ? $schemas['post_id'] : $post_id;
 		$schemas = isset( $schemas['schema'] ) ? [ $schemas['schema'] ] : $schemas;
-		$schemas = $jsonld->replace_variables( $schemas );
+		$schemas = $jsonld->replace_variables( $schemas, get_post( $post_id ) );
 		$schemas = $jsonld->filter( $schemas, $jsonld, $data );
 
-		if ( ! empty( $schemas[0]['isPrimary'] ) ) {
+		if ( isset( $schemas[0]['isPrimary'] ) ) {
 			unset( $schemas[0]['isPrimary'] );
 		}
 
 		return $schemas;
-	}
-
-	/**
-	 * Get Schema data from Schema Templates post type.
-	 *
-	 * @param array  $data   Array of json-ld data.
-	 * @param JsonLD $jsonld Instance of jsonld.
-	 *
-	 * @return array
-	 */
-	private function get_schema_templates( $data, $jsonld ) {
-		$templates = get_posts(
-			[
-				'post_type'   => 'rank_math_schema',
-				'numberposts' => -1,
-				'fields'      => 'ids',
-			]
-		);
-
-		if ( empty( $templates ) ) {
-			return;
-		}
-
-		$newdata = [];
-		foreach ( $templates as $template ) {
-			$schema = DB::get_schemas( $template );
-			if ( ! $this->can_add( current( $schema ) ) ) {
-				continue;
-			}
-
-			$schema = $jsonld->replace_variables( $schema );
-			$schema = $jsonld->filter( $schema, $jsonld, $data );
-
-			$newdata[] = $schema;
-		}
-
-		return $newdata;
-	}
-
-	/**
-	 * Whether schema can be added to current page
-	 *
-	 * @param array $schema Schema Data.
-	 *
-	 * @return boolean
-	 */
-	private function can_add( $schema ) {
-		if ( empty( $schema ) || empty( $schema['metadata']['displayConditions'] ) ) {
-			return false;
-		}
-
-		foreach ( $schema['metadata']['displayConditions'] as $condition ) {
-			$operator = $condition['condition'];
-			$category = $condition['category'];
-			$type     = $condition['type'];
-			$value    = $condition['value'];
-
-			$method = "can_add_{$category}";
-
-			$this->conditions[ $category ] = $this->$method( $operator, $type, $value );
-		}
-
-		if ( is_singular() && isset( $this->conditions['singular'] ) ) {
-			return $this->conditions['singular'];
-		}
-
-		if ( ( is_archive() || is_search() ) && isset( $this->conditions['archive'] ) ) {
-			return $this->conditions['archive'];
-		}
-
-		return ! empty( $this->conditions['general'] );
-	}
-
-	/**
-	 * Whether schema can be added to current page
-	 *
-	 * @param string $operator Comparision Operator.
-	 *
-	 * @return boolean
-	 */
-	private function can_add_general( $operator ) {
-		return 'include' === $operator;
-	}
-
-	/**
-	 * Whether schema can be added on archive page
-	 *
-	 * @param string $operator Comparision Operator.
-	 * @param string $type     Post/Taxonoy type.
-	 * @param string $value    Post/Term ID.
-	 *
-	 * @return boolean
-	 */
-	private function can_add_archive( $operator, $type, $value ) {
-		if ( 'search' === $type ) {
-			return 'include' === $operator && is_search();
-		}
-
-		if ( ! is_archive() ) {
-			return false;
-		}
-
-		if ( 'all' === $type ) {
-			return 'include' === $operator;
-		}
-
-		if ( 'author' === $type ) {
-			return is_author() && 'include' === $operator && is_author( $value );
-		}
-
-		if ( 'category' === $type ) {
-			return ! is_category() ? $this->conditions['archive'] : 'include' === $operator && is_category( $value );
-		}
-
-		if ( 'post_tag' === $type ) {
-			return ! is_tag() ? $this->conditions['archive'] : 'include' === $operator && is_tag( $value );
-		}
-
-		return 'include' === $operator && is_tax( $type, $value );
-	}
-
-	/**
-	 * Whether schema can be added on single page
-	 *
-	 * @param string $operator Comparision Operator.
-	 * @param string $type     Post/Taxonoy type.
-	 * @param string $value    Post/Term ID.
-	 *
-	 * @return boolean
-	 */
-	private function can_add_singular( $operator, $type, $value ) {
-		if ( ! is_singular() ) {
-			return false;
-		}
-
-		if ( 'all' === $type ) {
-			return 'include' === $operator;
-		}
-
-		if ( ! is_singular( $type ) ) {
-			return false;
-		}
-
-		if ( ! $value ) {
-			return 'include' === $operator;
-		}
-
-		if ( ! is_single( $value ) && ! is_page( $value ) ) {
-			return $this->conditions['singular'];
-		}
-
-		return 'include' === $operator;
 	}
 }

@@ -8,6 +8,8 @@
 
 namespace RankMathPro\Admin\CSV_Import_Export_Redirections;
 
+defined( 'ABSPATH' ) || exit;
+
 $import_in_progress = (bool) get_option( 'rank_math_csv_import_redirections' );
 ?>
 <h2><?php esc_html_e( 'Redirections CSV', 'rank-math-pro' ); ?></h2>
@@ -50,7 +52,7 @@ $import_in_progress = (bool) get_option( 'rank_math_csv_import_redirections' );
 					<input type="hidden" name="object_id" value="csv-import-redirections-plz">
 					<input type="hidden" name="action" value="wp_handle_upload">
 					<?php if ( $import_in_progress ) : ?>
-						<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( [ 'rank_math_cancel_csv_redirections_import' => 1 ] ), 'rank_math_pro_cancel_csv_redirections_import' ) ); ?>" id="csv-import-cancel" class="button button-link-delete csv-import-redirections-cancel"><?php esc_html_e( 'Cancel Import', 'rank-math-pro' ); ?></a>
+						<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( [ 'rank_math_cancel_csv_import_redirections' => 1 ] ), 'rank_math_cancel_csv_import_redirections' ) ); ?>" id="csv-import-cancel" class="button button-link-delete csv-import-redirections-cancel"><?php esc_html_e( 'Cancel Import', 'rank-math-pro' ); ?></a>
 						<span class="input-loading" style="visibility: visible;"></span>
 					<?php else: ?>
 						<button type="submit" class="button button-primary"><?php esc_html_e( 'Import', 'rank-math-pro' ); ?></button>

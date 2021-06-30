@@ -16,8 +16,8 @@ use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Controller;
-use RankMath\Helper;
 use RankMath\Admin\Admin_Helper;
+use RankMathPro\Admin\Admin_Helper as ProAdminHelper;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -73,8 +73,12 @@ class Rest extends WP_REST_Controller {
 		$data['plan'] = $request->get_param( 'plan' );
 
 		Admin_Helper::get_registration_data( $data );
-		update_option( 'rank_math_keyword_quota', $request->get_param( 'keywords' ) );
-		cmb2_update_option( 'rank-math-options-general', 'sync_global_setting', $response['settings']['analytics'] );
+		update_option( 'rank_math_keyword_quota', json_decode( $request->get_param( 'keywords' ) ) );
+
+		$settings = json_decode( $request->get_param( 'settings' ), true );
+		if ( ! ProAdminHelper::is_business_plan() && ! empty( $settings['analytics'] ) ) {
+			cmb2_update_option( 'rank-math-options-general', 'sync_global_setting', $settings['analytics'] );
+		}
 
 		return true;
 	}

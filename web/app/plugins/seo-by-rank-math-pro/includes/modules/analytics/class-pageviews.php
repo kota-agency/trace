@@ -10,12 +10,7 @@
 
 namespace RankMathPro\Analytics;
 
-use Exception;
-use RankMath\Helper;
-use RankMath\Google\Api;
-use RankMath\Traits\Hooker;
 use RankMath\Analytics\Stats;
-use MyThemeShop\Helpers\Param;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -93,28 +88,30 @@ class Pageviews {
 		$args = wp_parse_args(
 			$args,
 			[
-				'dates' => ' AND created BETWEEN %s AND %s',
-				'limit' => '',
+				'order'     => 'DESC',
+				'dates'     => ' AND created BETWEEN %s AND %s',
+				'limit'     => '',
+				'sub_where' => '',
 			]
 		);
 
-		$limit = $args['limit'];
-		$dates = $args['dates'];
+		$order    = $args['order'];
+		$limit    = $args['limit'];
+		$dates    = $args['dates'];
+		$subwhere = $args['sub_where'];
 
 		// phpcs:disable
 		$query = $wpdb->prepare(
-			"WITH traffic AS (
-			    SELECT t1.page as page, COALESCE( t1.pageviews, 0 ) as pageviews, COALESCE( t1.pageviews - t2.pageviews, 0 ) as difference
+			"SELECT SQL_CALC_FOUND_ROWS o.*, COALESCE( traffic.pageviews, 0 ) as pageviews, COALESCE( traffic.difference, 0 ) as difference
+			FROM {$wpdb->prefix}rank_math_analytics_objects as o
+			LEFT JOIN (SELECT t1.page as page, COALESCE( t1.pageviews, 0 ) as pageviews, COALESCE( t1.pageviews - t2.pageviews, 0 ) as difference
 				FROM
 			    	( SELECT page, SUM(pageviews) as pageviews FROM {$wpdb->prefix}rank_math_analytics_ga WHERE 1=1{$dates} GROUP BY page ) as t1
 				LEFT JOIN
 			    	( SELECT page, SUM(pageviews) as pageviews FROM {$wpdb->prefix}rank_math_analytics_ga WHERE 1=1{$dates} GROUP BY page ) as t2
-				ON t1.page = t2.page
-			)
-			SELECT SQL_CALC_FOUND_ROWS o.*, COALESCE( t.pageviews, 0 ) as pageviews, COALESCE( t.difference, 0 ) as difference
-			FROM {$wpdb->prefix}rank_math_analytics_objects as o
-			LEFT JOIN traffic as t ON o.page = t.page
-			ORDER BY pageviews DESC
+				ON t1.page = t2.page ) traffic ON o.page = traffic.page
+			WHERE o.is_indexable = '1'{$subwhere}
+			ORDER BY pageviews {$order}
 			{$limit}",
 			Stats::get()->start_date,
 			Stats::get()->end_date,

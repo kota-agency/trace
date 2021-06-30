@@ -60,12 +60,12 @@ class Schema {
 			'rank-math-howto-block',
 			RANK_MATH_PRO_URL . 'assets/admin/js/blocks.js',
 			[],
-			rank_math()->version,
+			rank_math_pro()->version,
 			true
 		);
 
 		if ( Helper::is_module_active( 'local-seo' ) ) {
-			Helper::add_json( 'previewImage', RANK_MATH_PRO_URL . 'assets/admin/img/map-placeholder.jpg' );
+			Helper::add_json( 'previewImage', RANK_MATH_PRO_URL . 'includes/modules/local-seo/assets/img/map-placeholder.jpg' );
 			Helper::add_json( 'mapStyle', Helper::get_settings( 'titles.map_style', 'roadmap' ) );
 			Helper::add_json( 'limitLocations', Helper::get_settings( 'titles.limit_results', 10 ) );
 		}

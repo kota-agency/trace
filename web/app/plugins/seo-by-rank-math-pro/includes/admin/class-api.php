@@ -255,7 +255,7 @@ class Api {
 			[
 				'username' => $registered['username'],
 				'api_key'  => $registered['api_key'],
-				'site_url' => esc_url( site_url() ),
+				'site_url' => esc_url( home_url() ),
 			]
 		);
 
@@ -277,12 +277,12 @@ class Api {
 		}
 
 		$this->is_blocking = false;
-		$response = $this->http_get(
+		$response = $this->http_post(
 			'siteSettings',
 			[
 				'username'  => $registered['username'],
 				'api_key'   => $registered['api_key'],
-				'site_url'  => esc_url( site_url() ),
+				'site_url'  => esc_url( home_url() ),
 				'analytics' => $analytics,
 			]
 		);
@@ -301,7 +301,7 @@ class Api {
 			[
 				'username' => $username,
 				'api_key'  => $api_key,
-				'site_url' => esc_url( site_url() ),
+				'site_url' => esc_url( home_url() ),
 			]
 		);
 	}
@@ -314,32 +314,23 @@ class Api {
 		$this->http_post( 'siteStats', $summary );
 	}
 
-	public function can_add_keyword( $username, $api_key ) {
+	/**
+	 * Send keywords count data to RankMath.com.
+	 *
+	 * @param string $username Username.
+	 * @param string $api_key  Api key.
+	 * @param int    $count    Total keywords count.
+	 *
+	 * @return array|false The respnose of API.
+	 */
+	public function keywords_info( $username, $api_key, $count ) {
 		$response = $this->http_post(
 			'keywordsInfo',
 			[
 				'username' => $username,
 				'apiKey'   => $api_key,
-				'siteUrl'  => esc_url( site_url() ),
-				'number'   => 1,
-			]
-		);
-
-		if ( ! $this->is_success() ) {
-			return false;
-		}
-
-		return $response;
-	}
-
-	public function delete_keyword( $username, $api_key ) {
-		$response = $this->http_delete(
-			'keywordsInfo',
-			[
-				'username' => $username,
-				'apiKey'   => $api_key,
-				'siteUrl'  => esc_url( site_url() ),
-				'number'   => 1,
+				'siteUrl'  => esc_url( home_url() ),
+				'count'    => $count,
 			]
 		);
 

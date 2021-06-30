@@ -13,6 +13,7 @@
 namespace RankMathPro\Admin;
 
 use RankMath\Helper;
+use RankMath\Admin\Admin_Helper as Free_Admin_Helper;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -34,7 +35,7 @@ class Admin_Helper {
 			return 0;
 		}
 
-		$id = Helper::get_post_meta( 'primary_' . $taxonomy['name'], $post_id ? $post_id : get_the_ID() );
+		$id = get_post_meta( $post_id ? $post_id : get_the_ID(), 'rank_math_primary_' . $taxonomy['name'], true );
 
 		return $id ? absint( $id ) : 0;
 	}
@@ -89,5 +90,15 @@ class Admin_Helper {
 		];
 
 		return $primary_taxonomy;
+	}
+
+	/**
+	 * Check if current plan is business.
+	 *
+	 * @return boolean
+	 */
+	public static function is_business_plan() {
+		$registered = Free_Admin_Helper::get_registration_data();
+		return ( isset( $registered['plan'] ) && 'business' === $registered['plan'] );
 	}
 }

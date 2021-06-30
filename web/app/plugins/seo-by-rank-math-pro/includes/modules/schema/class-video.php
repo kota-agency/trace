@@ -10,11 +10,9 @@
 
 namespace RankMathPro\Schema;
 
-use RankMath\KB;
 use RankMath\Helper;
 use RankMath\Traits\Hooker;
-use RankMath\Schema\DB;
-use MyThemeShop\Helpers\Str;
+use MyThemeShop\Helpers\Conditional;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,71 +27,103 @@ class Video {
 	 * The Constructor.
 	 */
 	public function __construct() {
-		$this->action( 'save_post', 'save_post', 10, 2 );
-		$this->filter( 'rank_math/settings/title', 'add_title_settings' );
-		$this->filter( 'rank_math/settings/general', 'add_general_settings' );
-		$this->action( 'rank_math/opengraph/facebook', 'add_video_tags', 99 );
+		Video_Schema_Generator::get();
 
+		if ( Conditional::is_rest() ) {
+			$this->filter( 'rank_math/tools/generate_video_schema', 'generate_video_schema' );
+		}
+
+		$this->action( 'rank_math/pre_update_metadata', 'detect_video_in_content', 10, 2 );
+		if ( is_admin() ) {
+			$this->action( 'cmb2_admin_init', 'add_video_settings' );
+			$this->action( 'rank_math/admin/settings/others', 'add_media_rss_field' );
+			$this->filter( 'rank_math/database/tools', 'generate_video_schema_tool' );
+
+			return;
+		}
+
+		$this->action( 'rank_math/opengraph/facebook', 'add_video_tags', 99 );
 		new Media_RSS();
 	}
 
 	/**
-	 * Add post Settings in titles optional panel.
-	 *
-	 * @param array $tabs Array of option panel tabs.
-	 *
-	 * @return array
+	 * Add auto-detect Video fields in Titles & Meta settings.
 	 */
-	public function add_general_settings( $tabs ) {
-		$tabs['others']['file'] = dirname( __FILE__ ) . '/views/others.php';
-		return $tabs;
+	public function add_video_settings() {
+		foreach ( Helper::get_accessible_post_types() as $post_type ) {
+			$this->action( "rank_math/admin/settings/post-type-{$post_type}", 'add_video_schema_fields', 10, 2 );
+		}
 	}
 
 	/**
-	 * Add post Settings in titles optional panel.
+	 * Add auto-generate video schema settings.
 	 *
-	 * @param array $tabs Array of option panel tabs.
-	 *
-	 * @return array
+	 * @param object $cmb CMB2 instance.
+	 * @param array  $tab Current settings tab.
 	 */
-	public function add_title_settings( $tabs ) {
-		$icons = Helper::choices_post_type_icons();
-		$links = [
-			'post'       => '<a href="' . KB::get( 'post-settings' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math-pro' ) . '</a>.',
-			'page'       => '<a href="' . KB::get( 'page-settings' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math-pro' ) . '</a>.',
-			'product'    => '<a href="' . KB::get( 'product-settings' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math-pro' ) . '</a>.',
-			'attachment' => '<a href="' . KB::get( 'media-settings' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math-pro' ) . '</a>.',
-		];
-
-		$names = [
-			'post'       => 'single %s',
-			'page'       => 'single %s',
-			'product'    => 'product pages',
-			'attachment' => 'media %s',
-		];
-
-		$tabs['p_types'] = [
-			'title' => esc_html__( 'Post Types:', 'rank-math-pro' ),
-			'type'  => 'seprator',
-		];
-
-		foreach ( Helper::get_accessible_post_types() as $post_type ) {
-			$obj      = get_post_type_object( $post_type );
-			$link     = isset( $links[ $obj->name ] ) ? $links[ $obj->name ] : '';
-			$obj_name = isset( $names[ $obj->name ] ) ? sprintf( $names[ $obj->name ], $obj->name ) : $obj->name;
-
-			$tabs[ 'post-type-' . $obj->name ] = [
-				'title'     => 'attachment' === $post_type ? esc_html__( 'Attachments', 'rank-math-pro' ) : $obj->label,
-				'icon'      => isset( $icons[ $obj->name ] ) ? $icons[ $obj->name ] : $icons['default'],
-				/* translators: 1. post type name 2. link */
-				'desc'      => sprintf( esc_html__( 'Change Global SEO, Schema, and other settings for %1$s. %2$s', 'rank-math-pro' ), $obj_name, $link ),
-				'post_type' => $obj->name,
-				'file'      => dirname( __FILE__ ) . '/views/post-types.php',
-				'classes'   => 'attachment' === $post_type ? 'rank-math-advanced-option' : '',
-			];
+	public function add_video_schema_fields( $cmb, $tab ) {
+		if ( 'attachment' === $tab['post_type'] ) {
+			return;
 		}
 
-		return $tabs;
+		$field_ids      = wp_list_pluck( $cmb->prop( 'fields' ), 'id' );
+		$field_position = array_search( "pt_{$tab['post_type']}_default_article_type", array_keys( $field_ids ), true ) + 1;
+
+		$cmb->add_field(
+			[
+				'id'      => 'pt_' . $tab['post_type'] . '_autodetect_video',
+				'type'    => 'toggle',
+				'name'    => esc_html__( 'Autodetect Video', 'rank-math-pro' ),
+				'desc'    => esc_html__( 'Populate automatic Video Schema by auto-detecting any video in the content.', 'rank-math-pro' ),
+				'options' => [
+					'off' => esc_html__( 'Default', 'rank-math-pro' ),
+					'on'  => esc_html__( 'Custom', 'rank-math-pro' ),
+				],
+				'default' => 'on',
+			],
+			++$field_position
+		);
+
+		$cmb->add_field(
+			[
+				'id'      => 'pt_' . $tab['post_type'] . '_autogenerate_image',
+				'type'    => 'toggle',
+				'name'    => esc_html__( 'Autogenerate Image', 'rank-math-pro' ),
+				'desc'    => esc_html__( 'Auto-generate image for the auto detected video.', 'rank-math-pro' ),
+				'options' => [
+					'off' => esc_html__( 'Default', 'rank-math-pro' ),
+					'on'  => esc_html__( 'Custom', 'rank-math-pro' ),
+				],
+				'default' => 'off',
+				'dep'     => [ [ 'pt_' . $tab['post_type'] . '_autodetect_video', 'on' ] ],
+			],
+			++$field_position
+		);
+	}
+
+	/**
+	 * Add new settings.
+	 *
+	 * @param object $cmb CMB2 instance.
+	 */
+	public function add_media_rss_field( $cmb ) {
+		$field_ids      = wp_list_pluck( $cmb->prop( 'fields' ), 'id' );
+		$field_position = array_search( 'rss_after_content', array_keys( $field_ids ), true ) + 1;
+
+		$cmb->add_field(
+			[
+				'id'      => 'disable_media_rss',
+				'type'    => 'toggle',
+				'name'    => esc_html__( 'Remove Media Data from RSS feed', 'rank-math-pro' ),
+				'desc'    => esc_html__( 'Remove Media Data from RSS feed', 'rank-math-pro' ),
+				'options' => [
+					'off' => esc_html__( 'Default', 'rank-math-pro' ),
+					'on'  => esc_html__( 'Custom', 'rank-math-pro' ),
+				],
+				'default' => 'off',
+			],
+			++$field_position
+		);
 	}
 
 	/**
@@ -115,8 +145,6 @@ class Video {
 		}
 
 		$tags = [
-			'og:video'           => ! empty( $video_data['contentUrl'] ) ? $video_data['contentUrl'] : $video_data['embedUrl'],
-			'og:video:duration'  => ! empty( $video_data['duration'] ) ? Helper::duration_to_seconds( $video_data['duration'] ) : '',
 			'ya:ovs:adult'       => ! empty( $video_data['isFamilyFriendly'] ) ? false : true,
 			'ya:ovs:upload_date' => ! empty( $video_data['uploadDate'] ) ? Helper::replace_vars( $video_data['uploadDate'], $post ) : '',
 			'ya:ovs:allow_embed' => ! empty( $video_data['embedUrl'] ) ? 'true' : 'false',
@@ -130,251 +158,60 @@ class Video {
 	/**
 	 * Automatically add Video Schema when post is updated.
 	 *
-	 * @param  int    $post_id Post id.
-	 * @param  object $post    Post object.
+	 * @param int    $post_id Post id.
+	 * @param string $content Updated post content.
 	 */
-	public function save_post( $post_id, $post ) {
-		if (
-			wp_is_post_revision( $post->ID ) ||
-			in_array( $post->post_status, [ 'auto-draft', 'trash' ], true ) ||
-			! Helper::get_settings( "titles.pt_{$post->post_type}_autodetect_video" )
-		) {
-			return $post_id;
+	public function detect_video_in_content( $post_id, $content = '' ) {
+		$post = get_post( $post_id );
+		if ( $content ) {
+			$post->post_content = $content;
 		}
 
-		$content = trim( $post->post_content . ' ' . $this->get_custom_fields_data( $post_id ) );
-		if ( empty( trim( $content ) ) ) {
-			return $post_id;
+		( new Video\Parser( $post ) )->save();
+	}
+
+	/**
+	 * Add database tools.
+	 *
+	 * @param array $tools Array of tools.
+	 *
+	 * @return array
+	 */
+	public function generate_video_schema_tool( $tools ) {
+		$posts = Video_Schema_Generator::get()->find_posts();
+		if ( empty( $posts ) ) {
+			return $tools;
 		}
 
-		$video_schema_exists = get_post_meta( $post_id, 'rank_math_schema_VideoObject', true );
-		if ( ! empty( $video_schema_exists ) ) {
-			return $post_id;
-		}
-
-		$content             = apply_filters( 'the_content', $content );
-		$allowed_media_types = apply_filters( 'media_embedded_in_content_allowed_types', [ 'video', 'embed', 'iframe' ] );
-		$tags                = implode( '|', $allowed_media_types );
-		$video_src           = [];
-
-		preg_match_all( '#<(?P<tag>' . $tags . ')[^<]*?(?:>[\s\S]*?<\/(?P=tag)>|\s*\/>)#', $content, $matches );
-		if ( empty( $matches ) || empty( $matches[0] ) ) {
-			return $post_id;
-		}
-
-		foreach ( $matches[0] as $links ) {
-			$video_src = $this->get_video_src( $links, $post_id );
-			if ( ! empty( $video_src ) ) {
-				break;
-			}
-		}
-
-		if ( empty( $video_src ) ) {
-			return $post_id;
-		}
-
-		$schemas   = empty( DB::get_schemas( $post_id ) ) ? $this->get_default_schema_data( $post->post_type ) : [];
-		$schemas[] = [
-			'@type'            => 'VideoObject',
-			'metadata'         => [
-				'title'                   => 'Video',
-				'type'                    => 'template',
-				'shortcode'               => uniqid( 's-' ),
-				'isPrimary'               => empty( $schemas ),
-				'reviewLocationShortcode' => '[rank_math_rich_snippet]',
-				'category'                => '%categories%',
-				'tags'                    => '%tags%',
+		$generate_video_schema = [
+			'generate_video_schema' => [
+				'title'        => esc_html__( 'Generate Video Schema for Old Posts/Pages', 'rank-math-pro' ),
+				'description'  => esc_html__( 'Add Video schema to posts which have YouTube or Vimeo Video in the content. Applies to only those Posts/Pages/CPTs in which Autodetect Video Option is On.', 'rank-math-pro' ),
+				'confirm_text' => esc_html__( 'Are you sure you want to add Video Schema to the posts/pages with the video in the content? This action is irreversible.', 'rank-math-pro' ),
+				'button_text'  => esc_html__( 'Generate', 'rank-math-pro' ),
 			],
-			'name'             => '%seo_title%',
-			'description'      => '%seo_description%',
-			'uploadDate'       => '%date(Y-m-dTH:i:sP)%',
-			'thumbnailUrl'     => ! empty( $video_src['thumbnail'] ) ? $video_src['thumbnail'] : '%post_thumbnail%',
-			'embedUrl'         => $video_src['embed'] ? $video_src['src'] : '',
-			'contentUrl'       => ! $video_src['embed'] ? $video_src['src'] : '',
-			'duration'         => '',
-			'width'            => $video_src['width'],
-			'height'           => $video_src['height'],
-			'isFamilyFriendly' => true,
 		];
 
-		foreach ( array_filter( $schemas ) as $schema ) {
-			update_post_meta( $post_id, "rank_math_schema_{$schema['@type']}", $schema );
-		}
+		$index = array_search( 'recreate_tables', array_keys( $tools ), true );
+		$pos   = false === $index ? count( $tools ) : $index + 1;
+		$tools = array_slice( $tools, 0, $pos, true ) + $generate_video_schema + array_slice( $tools, $pos, count( $tools ) - 1, true );
+
+		return $tools;
 	}
 
 	/**
-	 * Get default schema data.
+	 * Detect Video in the content and add schema.
 	 *
-	 * @param string $post_type Post type.
+	 * @return string
 	 */
-	private function get_default_schema_data( $post_type ) {
-		$default_type = ucfirst( Helper::get_default_schema_type( $post_type ) );
-		if ( ! in_array( $default_type, [ 'Article', 'NewsArticle', 'BlogPosting' ], true ) ) {
-			return [];
+	public function generate_video_schema() {
+		$posts = Video_Schema_Generator::get()->find_posts();
+		if ( empty( $posts ) ) {
+			return esc_html__( 'No posts found to convert.', 'rank-math-pro' );
 		}
 
-		return [
-			[
-				'@type'         => $default_type,
-				'metadata'      => [
-					'title'     => 'Article',
-					'type'      => 'template',
-					'isPrimary' => true,
-				],
-				'headline'      => Helper::get_settings( "titles.pt_{$post_type}_default_snippet_name" ),
-				'description'   => Helper::get_settings( "titles.pt_{$post_type}_default_snippet_desc" ),
-				'datePublished' => '%date(Y-m-dTH:i:sP)%',
-				'dateModified'  => '%modified(Y-m-dTH:i:sP)%',
-				'image'         => [
-					'@type' => 'ImageObject',
-					'url'   => '%post_thumbnail%',
-				],
-				'author'        => [
-					'@type' => 'Person',
-					'name'  => '%name%',
-				],
-			]
-		];
-	}
+		Video_Schema_Generator::get()->start( $posts );
 
-	/**
-	 * Get Custom fields data.
-	 *
-	 * @param int $post_id Post id.
-	 */
-	private function get_custom_fields_data( $post_id ) {
-		$custom_fields = Str::to_arr_no_empty( Helper::get_settings( 'sitemap.video_sitemap_custom_fields' ) );
-		if ( empty( $custom_fields ) ) {
-			return;
-		}
-
-		$content = '';
-		foreach ( $custom_fields as $custom_field ) {
-			$content = $content . ' ' . get_post_meta( $post_id, $custom_field, true );
-		}
-
-		return trim( $content );
-	}
-
-	/**
-	 * Get Video source from the content.
-	 *
-	 * @param array $links   Video Links.
-	 * @param int   $post_id Current Post ID.
-	 *
-	 * @return array
-	 */
-	private function get_video_src( $links, $post_id ) {
-		preg_match_all( '@src="([^"]+)"@', $links, $matches );
-		if ( empty( $matches ) || empty( $matches[1] ) ) {
-			return false;
-		}
-
-		return $this->validate_video( $matches[1][0], $post_id );
-	}
-
-	/**
-	 * Validate Video source.
-	 *
-	 * @param string $src     Video Source.
-	 * @param int    $post_id Current Post ID.
-	 *
-	 * @return array
-	 *
-	 * Credits to Leedo @ https://noembed.com/
-	 */
-	private function validate_video( $src, $post_id ) {
-		if (
-			preg_match( '#^https?://(?:www\.)?(?:youtube\.com/|youtu\.be/)#', $src ) ||
-			preg_match( '#^https?://(.+\.)?vimeo\.com/.*#', $src )
-		) {
-			$data = \json_decode( file_get_contents( "http://noembed.com/embed?url={$src}" ), true );
-			return [
-				'src'       => $src,
-				'embed'     => true,
-				'width'     => ! empty( $data['width'] ) ? $data['width'] : '',
-				'height'    => ! empty( $data['height'] ) ? $data['height'] : '',
-				'thumbnail' => ! empty( $data['thumbnail_url'] ) ? $this->get_video_thumbnail_url( $data['thumbnail_url'], $post_id ) : '',
-			];
-		}
-
-		$src           = preg_replace( '/\?.*/', '', $src ); // Remove query string from URL before chcking for the supported type.
-		$default_types = wp_get_video_extensions();
-		$type          = wp_check_filetype( $src, wp_get_mime_types() );
-
-		if ( in_array( strtolower( $type['ext'] ), $default_types, true ) ) {
-			$data          = [];
-			$attachment_id = attachment_url_to_postid( $src );
-			if ( $attachment_id ) {
-				$video_details = wp_get_attachment_metadata( $attachment_id );
-				$data          = [
-					'width'  => ! empty( $video_details['width'] ) ? $video_details['width'] : '',
-					'height' => ! empty( $video_details['height'] ) ? $video_details['height'] : '',
-				];
-			}
-			return array_merge(
-				[
-					'src'   => $src,
-					'embed' => false,
-				],
-				$data
-			);
-		}
-
-		return [];
-	}
-
-	/**
-	 * Validate Video source.
-	 *
-	 * @param string $url            Thumbnail URL.
-	 * @param int    $parent_post_id Current Post ID.
-	 *
-	 * @return array
-	 *
-	 * Credits to m1r0 @ https://gist.github.com/m1r0/f22d5237ee93bcccb0d9
-	 */
-	private function get_video_thumbnail_url( $url, $parent_post_id = 0 ) {
-		if ( ! class_exists( 'WP_Http' ) ) {
-			include_once( ABSPATH . WPINC . '/class-http.php' );
-		}
-
-		$http     = new \WP_Http();
-		$response = $http->request( $url );
-		if ( 200 !== $response['response']['code'] ) {
-			return false;
-		}
-
-		$upload = wp_upload_bits( basename( $url ), null, $response['body'] );
-		if ( ! empty( $upload['error'] ) ) {
-			return false;
-		}
-
-		$file_path        = $upload['file'];
-		$file_name        = basename( $file_path );
-		$file_type        = wp_check_filetype( $file_name, null );
-		$attachment_title = sanitize_file_name( pathinfo( $file_name, PATHINFO_FILENAME ) );
-		$wp_upload_dir    = wp_upload_dir();
-
-		$post_info = [
-			'guid'           => $wp_upload_dir['url'] . '/' . $file_name,
-			'post_mime_type' => $file_type['type'],
-			'post_title'     => $attachment_title,
-			'post_content'   => '',
-			'post_status'    => 'inherit',
-		];
-
-		$attach_id = wp_insert_attachment( $post_info, $file_path, $parent_post_id );
-
-		// Include image.php.
-		require_once( ABSPATH . 'wp-admin/includes/image.php' );
-
-		// Define attachment metadata.
-		$attach_data = wp_generate_attachment_metadata( $attach_id, $file_path );
-
-		// Assign metadata to attachment.
-		wp_update_attachment_metadata( $attach_id, $attach_data );
-
-		return wp_get_attachment_url( $attach_id );
+		return esc_html__( 'Conversion started. A success message will be shown here once the process completes. You can close this page.', 'rank-math-pro' );
 	}
 }

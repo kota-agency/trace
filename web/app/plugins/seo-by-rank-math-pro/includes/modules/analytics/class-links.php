@@ -10,7 +10,6 @@
 
 namespace RankMathPro\Analytics;
 
-use Exception;
 use RankMath\Helper;
 
 defined( 'ABSPATH' ) || exit;
