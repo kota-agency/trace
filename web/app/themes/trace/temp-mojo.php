@@ -384,6 +384,34 @@ if($intro_copy3) {
 <?php
 
 /**
+ * Block: Video
+ */
+
+$classes5 = ['full-width', padding_classes()];
+
+$embed5 = get_field('video_vimeo_embed');
+$placeholder5 = wp_get_attachment_image_url(get_field('video_placeholder'), 'full');
+
+?>
+
+
+<?php if ($embed5 && $placeholder5) : ?>
+	<section <?= block_id(); ?> class="video <?= implode('', $classes5); ?>" data-aos="trigger" data-aos-delay="1000"
+                                data-aos-offset="500">
+        <div class="container">
+            <div class="video__wrapper">
+                <?= $embed5; ?>
+                <div class="video__image bg-cover" style="background-image: url(<?= $placeholder5; ?>);">
+                    <span class="play"></span>
+                </div>
+            </div>
+        </div>
+    </section><!-- .video -->
+<?php endif; ?>
+
+<?php
+
+/**
  * Block: Content Modals
  */
 
