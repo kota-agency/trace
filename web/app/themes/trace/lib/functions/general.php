@@ -282,7 +282,6 @@ add_shortcode('gated_download', function ($atts, $content = null) {
     $hidden_form = '<div style="display:none;opacity:0;">' . do_shortcode($gf) . '</div>';
     add_action('wp_footer', function() use ($hidden_form){
     	echo $hidden_form;
-    	echo 'testtest';
     });
     if($a['style'] == 'btn') {
     	return '<a class="gated-file btn" data-gravity-form="'.$a['id'].'">' . $content . '</a>' ;
