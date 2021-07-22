@@ -938,3 +938,19 @@ div.dataTables_wrapper {
 hr {
     border-top: 1px solid #9589d6;
 }
+
+.fancybox {
+
+    &-bg {
+        opacity: 0.5;
+        background: #000;
+    }
+
+    &-button--close {
+        background: #4FDDC2;
+        border-radius: 50%;
+        color: white;
+        right: 20px;
+        top: 20px;
+    }
+}

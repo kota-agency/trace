@@ -323,6 +323,28 @@ if($intro_copy3) {
 									<?= $image3; ?>
 								</div>
 							<?php endif; ?>
+
+							<?php
+								$url = get_field('text_layout_video_url');
+								$preview = wp_get_attachment_image_url(get_field('text_layout_video_preview'), 'full');
+								$title = get_field('text_layout_video_title')
+								?>
+
+							<?php if ($url && $preview) : ?>
+								<a 
+									class="text-layout__video"
+									data-fancybox
+									href="<?= $url ?>" data-fancybox
+									>
+						            <div class="text-layout__video__wrapper">
+						                <div class="text-layout__video__image bg-cover" style="background-image: url(<?= $preview; ?>);">
+						                    <span class="play"></span>
+						                </div>
+						            </div>
+						            <?= $title; ?>
+							    </a><!-- .video -->
+							<?php endif; ?>
+
 						</div>
 						<div class="col-md-6">
 							<?php if (have_rows('text_layout_b_columns')) : ?>
@@ -381,33 +403,7 @@ if($intro_copy3) {
 	</div>
 </section><!-- .services -->
 
-<?php
 
-/**
- * Block: Video
- */
-
-$classes5 = ['full-width', padding_classes()];
-
-$embed5 = get_field('video_vimeo_embed');
-$placeholder5 = wp_get_attachment_image_url(get_field('video_placeholder'), 'full');
-
-?>
-
-
-<?php if ($embed5 && $placeholder5) : ?>
-	<section <?= block_id(); ?> class="video <?= implode('', $classes5); ?>" data-aos="trigger" data-aos-delay="1000"
-                                data-aos-offset="500">
-        <div class="container">
-            <div class="video__wrapper">
-                <?= $embed5; ?>
-                <div class="video__image bg-cover" style="background-image: url(<?= $placeholder5; ?>);">
-                    <span class="play"></span>
-                </div>
-            </div>
-        </div>
-    </section><!-- .video -->
-<?php endif; ?>
 
 <?php
 

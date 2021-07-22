@@ -44,6 +44,60 @@
     //    }
     //}
 
+    &__video {
+        max-width: 480px;
+        display: block;
+        margin-top: 40px;
+
+        @include media-breakpoint-down(sm) {
+            margin-bottom: 50px;
+        }
+
+        &__image {
+            position: relative;
+            top: 0;
+            left: 0;
+            padding-top: 60%;
+            cursor: pointer;
+            transition: $transition;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: 0.5s ease all;
+
+            &:hover, &:focus {
+                transform: scale(1.02);
+
+                .play {
+                    &:after {
+                        opacity: 0;
+                        visibility: hidden;
+                        pointer-events: none;
+                    }
+
+                    &:before {
+                        opacity: 1;
+                        visibility: visible;
+                        pointer-events: auto;
+                    }
+                }
+            }
+
+
+            // &.active {
+            //     opacity: 0;
+            //     visibility: hidden;
+            //     pointer-events: none;
+            // }
+        }
+
+        .play {
+
+        }
+
+    }
+
     &--image-right {
         .text-layout__image {
             right: -25px;
