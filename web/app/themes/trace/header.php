@@ -41,18 +41,6 @@
     </script>
     <!-- End A1 script -->
 
-    <!-- Lucky orange script -->
-    <script type='text/javascript'>
-    window.__lo_site_id = 177182;
-
-    (function() {
-    var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
-    wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
-    })();
-    </script>
-    <!-- End Lucky orange script -->
-
     <!-- Script for browser update -->
     <script> 
         var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,api:2020.10 }; 
