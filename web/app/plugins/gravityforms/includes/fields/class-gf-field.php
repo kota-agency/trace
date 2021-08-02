@@ -336,6 +336,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 		$admin_hidden_markup = ( $this->visibility == 'hidden' ) ? $this->get_hidden_admin_markup() : '';
 
 		$description = $this->get_description( $this->description, 'gfield_description' );
+
 		if ( $this->is_description_above( $form ) ) {
 			$clear         = $is_admin ? "<div class='gf_clear'></div>" : '';
 			$field_content = sprintf( "%s%s<$label_tag class='%s' $for_attribute >%s%s</$label_tag>%s{FIELD}%s$clear", $admin_buttons, $admin_hidden_markup, esc_attr( $this->get_field_label_class() ), $field_label, $required_div, $description, $validation_message );
@@ -1513,6 +1514,11 @@ class GF_Field extends stdClass implements ArrayAccess {
 		$is_admin        = $is_form_editor || $is_entry_detail;
 		$id              = "gfield_description_{$this->formId}_{$this->id}";
 
+		// Strip description tags when on edit page to avoid invalid markup breaking the editor.
+		if ( $this->is_form_editor() ) {
+			$description = strip_tags( $description );
+		}
+
 		return $is_admin || ! empty( $description ) ? "<div class='$css_class' id='$id'>" . $description . '</div>' : '';
 	}
 
@@ -1578,14 +1584,40 @@ class GF_Field extends stdClass implements ArrayAccess {
 
 
 	/**
+	 * Whether this field has been submitted,
+	 * is on the current page of a multi-page form,
+	 * or is required and should be validated.
+	 *
+	 * @since 2.5.7
+	 *
+	 * @return bool
+	 */
+	public function should_be_validated() {
+		if ( empty( rgpost( 'is_submit_' . $this->formId ) ) ) {
+			return false;
+		}
+
+		if ( GFFormDisplay::get_source_page( $this->formId ) != $this->pageNumber ) {
+			return false;
+		}
+
+		if ( ! $this->isRequired ) {
+			return false;
+		}
+
+		return true;
+	}
+
+
+	/**
 	 * Generates an array that contains aria-describedby attribute for each input.
 	 *
 	 * Depending on each input's validation state, aria-describedby takes the value of the validation message container ID, the description only or nothing.
 	 *
 	 * @since 2.5
 	 *
-	 * @param array $required_inputs_ids IDs of required field inputs.
-	 * @param array|string $values       Inputs values.
+	 * @param array        $required_inputs_ids IDs of required field inputs.
+	 * @param array|string $values              Inputs values.
 	 *
 	 * @return array
 	 */
@@ -1601,8 +1633,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 			$describedby_attributes[ $input_id ] = '';
 		}
 
-		// If form is not submitted or field not required, describedby should be empty.
-		if ( empty( $_POST[ 'is_submit_' . $this->formId ] ) || ! $this->isRequired ) {
+		if ( ! $this::should_be_validated() ) {
 			return $describedby_attributes;
 		}
 
@@ -1651,8 +1682,8 @@ class GF_Field extends stdClass implements ArrayAccess {
 	 *
 	 * @since 2.5
 	 *
-	 * @param array $required_inputs_ids IDs of required field inputs.
-	 * @param array|string $values       Inputs values.
+	 * @param array        $required_inputs_ids IDs of required field inputs.
+	 * @param array|string $values              Inputs values.
 	 *
 	 * @return array
 	 */
@@ -1667,8 +1698,8 @@ class GF_Field extends stdClass implements ArrayAccess {
 			$input_id = str_replace( $this->id . '.', '', $input['id'] );
 			$invalid_attributes[ $input_id ] = '';
 		}
-		// If form is not submitted or field not required, invalid attribute should not exist.
-		if ( empty( $_POST[ 'is_submit_' . $this->formId ] ) || ! $this->isRequired ) {
+
+		if ( ! $this::should_be_validated() ) {
 			return $invalid_attributes;
 		}
 

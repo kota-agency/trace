@@ -94,8 +94,8 @@ class Ai1wm_Import_Content {
 		// Set the file pointer to the one that we have saved
 		$archive->set_file_pointer( $archive_bytes_offset );
 
-		$old_paths = array();
-		$new_paths = array();
+		$old_paths = array( 'plugins' );
+		$new_paths = array( ai1wm_get_plugins_dir() );
 
 		// Set extract paths
 		foreach ( $blogs as $blog ) {
@@ -178,6 +178,9 @@ class Ai1wm_Import_Content {
 					AI1WM_MUPLUGINS_NAME,
 				)
 			);
+
+			// Exclude theme files
+			$exclude_files = array_merge( $exclude_files, array( AI1WM_THEMES_FUNCTIONS_NAME ) );
 
 			// Exclude Elementor files
 			$exclude_files = array_merge( $exclude_files, array( AI1WM_ELEMENTOR_CSS_NAME ) );

@@ -121,6 +121,16 @@ function ai1wm_media_list_path( $params ) {
 }
 
 /**
+ * Get plugins.list absolute path
+ *
+ * @param  array  $params Request parameters
+ * @return string
+ */
+function ai1wm_plugins_list_path( $params ) {
+	return ai1wm_storage_path( $params ) . DIRECTORY_SEPARATOR . AI1WM_PLUGINS_LIST_NAME;
+}
+
+/**
  * Get tables.list absolute path
  *
  * @param  array  $params Request parameters
@@ -762,166 +772,34 @@ function ai1wm_content_filters( $filters = array() ) {
  * @return array
  */
 function ai1wm_plugin_filters( $filters = array() ) {
-	// WP Migration Plugin
-	if ( defined( 'AI1WM_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WM_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration';
-	}
-
-	// Microsoft Azure Extension
-	if ( defined( 'AI1WMZE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMZE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-azure-storage-extension';
-	}
-
-	// Backblaze B2 Extension
-	if ( defined( 'AI1WMAE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMAE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-b2-extension';
-	}
-
-	// Backup Plugin
-	if ( defined( 'AI1WMVE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMVE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-backup';
-	}
-
-	// Box Extension
-	if ( defined( 'AI1WMBE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMBE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-box-extension';
-	}
-
-	// DigitalOcean Spaces Extension
-	if ( defined( 'AI1WMIE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMIE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-digitalocean-extension';
-	}
-
-	// Direct Extension
-	if ( defined( 'AI1WMXE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMXE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-direct-extension';
-	}
-
-	// Dropbox Extension
-	if ( defined( 'AI1WMDE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMDE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-dropbox-extension';
-	}
-
-	// File Extension
-	if ( defined( 'AI1WMTE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMTE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-file-extension';
-	}
-
-	// FTP Extension
-	if ( defined( 'AI1WMFE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMFE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-ftp-extension';
-	}
-
-	// Google Cloud Storage Extension
-	if ( defined( 'AI1WMCE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMCE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-gcloud-storage-extension';
-	}
-
-	// Google Drive Extension
-	if ( defined( 'AI1WMGE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMGE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-gdrive-extension';
-	}
-
-	// Amazon Glacier Extension
-	if ( defined( 'AI1WMRE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMRE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-glacier-extension';
-	}
-
-	// Mega Extension
-	if ( defined( 'AI1WMEE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMEE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-mega-extension';
-	}
-
-	// Multisite Extension
-	if ( defined( 'AI1WMME_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMME_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-multisite-extension';
-	}
-
-	// OneDrive Extension
-	if ( defined( 'AI1WMOE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMOE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-onedrive-extension';
-	}
-
-	// pCloud Extension
-	if ( defined( 'AI1WMPE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMPE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-pcloud-extension';
-	}
-
-	// Pro Plugin
-	if ( defined( 'AI1WMKE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMKE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-pro';
-	}
-
-	// S3 Client Extension
-	if ( defined( 'AI1WNE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMNE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-s3-client-extension';
-	}
-
-	// Amazon S3 Extension
-	if ( defined( 'AI1WMSE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMSE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-s3-extension';
-	}
-
-	// Unlimited Extension
-	if ( defined( 'AI1WMUE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMUE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-unlimited-extension';
-	}
-
-	// URL Extension
-	if ( defined( 'AI1WMLE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMLE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-url-extension';
-	}
-
-	// WebDAV Extension
-	if ( defined( 'AI1WMWE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMWE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-webdav-extension';
-	}
+	return array_merge(
+		$filters,
+		array(
+			AI1WM_PLUGIN_BASEDIR,
+			AI1WMZE_PLUGIN_BASEDIR,
+			AI1WMAE_PLUGIN_BASEDIR,
+			AI1WMVE_PLUGIN_BASEDIR,
+			AI1WMBE_PLUGIN_BASEDIR,
+			AI1WMIE_PLUGIN_BASEDIR,
+			AI1WMXE_PLUGIN_BASEDIR,
+			AI1WMDE_PLUGIN_BASEDIR,
+			AI1WMTE_PLUGIN_BASEDIR,
+			AI1WMFE_PLUGIN_BASEDIR,
+			AI1WMCE_PLUGIN_BASEDIR,
+			AI1WMGE_PLUGIN_BASEDIR,
+			AI1WMRE_PLUGIN_BASEDIR,
+			AI1WMEE_PLUGIN_BASEDIR,
+			AI1WMME_PLUGIN_BASEDIR,
+			AI1WMOE_PLUGIN_BASEDIR,
+			AI1WMPE_PLUGIN_BASEDIR,
+			AI1WMKE_PLUGIN_BASEDIR,
+			AI1WMNE_PLUGIN_BASEDIR,
+			AI1WMSE_PLUGIN_BASEDIR,
+			AI1WMUE_PLUGIN_BASEDIR,
+			AI1WMLE_PLUGIN_BASEDIR,
+			AI1WMWE_PLUGIN_BASEDIR,
+		)
+	);
 
 	return $filters;
 }
@@ -1732,6 +1610,15 @@ function ai1wm_get_filters( $tag ) {
 	}
 
 	return $filters;
+}
+
+/**
+ * Get WordPress plugins directory
+ *
+ * @return string
+ */
+function ai1wm_get_plugins_dir() {
+	return untrailingslashit( WP_PLUGIN_DIR );
 }
 
 /**

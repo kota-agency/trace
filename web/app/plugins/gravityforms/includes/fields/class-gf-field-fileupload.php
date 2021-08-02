@@ -315,8 +315,8 @@ class GF_Field_FileUpload extends GF_Field {
 				$delete_button_url   = GFCommon::get_base_url() . '/images/delete.png';
 				$preview .= "<div id='preview_file_{$file_index}' class='ginput_preview'>
 								<a href='{$file_url}' target='_blank' aria-label='{$view_file_text}'>{$display_file_url}</a>
-								<a href='{$file_url}' target='_blank' aria-label='{$download_file_text}'>
-								<img src='{$download_button_url}' alt='' style='margin-left:10px;'/></a><a href='javascript:void(0);' aria-label='{$delete_file_text}' onclick='DeleteFile({$lead_id},{$id},this);' onkeypress='DeleteFile({$lead_id},{$id},this);' ><img src='{$delete_button_url}' alt='' style='margin-left:10px;'/></a>
+								<a href='{$file_url}' target='_blank' aria-label='{$download_file_text}' class='ginput_preview_control gform-icon gform-icon--circle-arrow-down'></a>
+								<a href='javascript:void(0);' aria-label='{$delete_file_text}' onclick='DeleteFile({$lead_id},{$id},this);' onkeypress='DeleteFile({$lead_id},{$id},this);' class='ginput_preview_control gform-icon gform-icon--circle-delete'></a>
 							</div>";
 			}
 
@@ -415,6 +415,14 @@ class GF_Field_FileUpload extends GF_Field {
 				$uploaded_temp_files = GFFormsModel::$uploaded_files[ $form_id ][ $input_name ];
 				$uploaded_files      = array();
 				foreach ( $uploaded_temp_files as $i => $file_info ) {
+
+					// File was previously uploaded to form; do not process temp.
+					if ( ! isset( $file_info['temp_filename'] ) ) {
+						$uploaded_path        = GFFormsModel::get_file_upload_path( $form_id, $file_info['uploaded_filename'], false );
+						$uploaded_files[ $i ] = $uploaded_path['url'];
+						continue;
+					}
+
 					$temp_filepath = GFFormsModel::get_upload_path( $form_id ) . '/tmp/' . wp_basename( $file_info['temp_filename'] );
 					if ( $file_info && file_exists( $temp_filepath ) ) {
 						$uploaded_files[ $i ] = $this->move_temp_file( $form_id, $file_info );
@@ -436,9 +444,38 @@ class GF_Field_FileUpload extends GF_Field {
 			$_gf_uploaded_files[ $input_name ] = $value;
 		}
 
+		if ( ! GFCommon::is_json( $value ) ) {
+			$value = $this->get_parsed_list_of_files( $value, $form_id, $input_name );
+		}
+
 		$value_safe = $this->sanitize_entry_value( $value, $form_id );
 
 		return $value_safe;
+	}
+
+	/**
+	 * Given the comma-delimited string of file paths, get the JSON array representing
+	 * any which still exist (i.e., haven't been deleted using the UI).
+	 *
+	 * @since 2.5.8
+	 *
+	 * @param string $value      A comma-delimited list of file paths.
+	 * @param int    $form_id    The form ID for this entry.
+	 * @param string $input_name The input name holding the current list of files.
+	 *
+	 * @return false|string
+	 */
+	public function get_parsed_list_of_files( $value, $form_id, $input_name ) {
+		$parts    = explode( ',', $value );
+		$uploaded = rgars( GFFormsModel::$uploaded_files, $form_id . '/' . $input_name, array() );
+		$uploaded = wp_list_pluck( $uploaded, 'uploaded_filename' );
+		$parts    = array_filter( $parts, function ( $part ) use ( $uploaded ) {
+			$basename = wp_basename( trim( $part ) );
+
+			return in_array( $basename, $uploaded, true );
+		} );
+
+		return wp_json_encode( $parts );
 	}
 
 	public function get_single_file_value( $form_id, $input_name ) {

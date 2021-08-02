@@ -31,20 +31,20 @@ class Ai1wm_Export_Enumerate_Media {
 
 	public static function execute( $params ) {
 
-		$exclude_filters = $user_filters = array();
+		$exclude_filters = array();
 
 		// Get total media files count
 		if ( isset( $params['total_media_files_count'] ) ) {
 			$total_media_files_count = (int) $params['total_media_files_count'];
 		} else {
-			$total_media_files_count = 0;
+			$total_media_files_count = 1;
 		}
 
 		// Get total media files size
 		if ( isset( $params['total_media_files_size'] ) ) {
 			$total_media_files_size = (int) $params['total_media_files_size'];
 		} else {
-			$total_media_files_size = 0;
+			$total_media_files_size = 1;
 		}
 
 		// Set progress
@@ -52,14 +52,11 @@ class Ai1wm_Export_Enumerate_Media {
 
 		// Exclude selected files
 		if ( isset( $params['options']['exclude_files'], $params['excluded_files'] ) ) {
-			$excluded_files = explode( ',', $params['excluded_files'] );
-			if ( $excluded_files ) {
+			if ( ( $excluded_files = explode( ',', $params['excluded_files'] ) ) ) {
 				foreach ( $excluded_files as $excluded_path ) {
-					$user_filters[] = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . untrailingslashit( $excluded_path );
+					$exclude_filters[] = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . untrailingslashit( $excluded_path );
 				}
 			}
-
-			$exclude_filters = array_merge( $exclude_filters, $user_filters );
 		}
 
 		// Create media list file

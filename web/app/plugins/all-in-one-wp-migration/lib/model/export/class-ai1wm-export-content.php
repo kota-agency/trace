@@ -74,11 +74,7 @@ class Ai1wm_Export_Content {
 		}
 
 		// What percent of files have we processed?
-		if ( empty( $total_content_files_size ) ) {
-			$progress = 100;
-		} else {
-			$progress = (int) min( ( $processed_files_size / $total_content_files_size ) * 100, 100 );
-		}
+		$progress = (int) min( ( $processed_files_size / $total_content_files_size ) * 100, 100 );
 
 		// Set progress
 		Ai1wm_Status::info( sprintf( __( 'Archiving %d content files...<br />%d%% complete', AI1WM_PLUGIN_NAME ), $total_content_files_count, $progress ) );
@@ -92,7 +88,7 @@ class Ai1wm_Export_Content {
 		// Get content list file
 		$content_list = ai1wm_open( ai1wm_content_list_path( $params ), 'r' );
 
-		// Set content pointer at the current index
+		// Set the file pointer at the current index
 		if ( fseek( $content_list, $content_bytes_offset ) !== -1 ) {
 
 			// Open the archive file for writing
@@ -117,11 +113,7 @@ class Ai1wm_Export_Content {
 				$processed_files_size += $file_bytes_written;
 
 				// What percent of files have we processed?
-				if ( empty( $total_content_files_size ) ) {
-					$progress = 100;
-				} else {
-					$progress = (int) min( ( $processed_files_size / $total_content_files_size ) * 100, 100 );
-				}
+				$progress = (int) min( ( $processed_files_size / $total_content_files_size ) * 100, 100 );
 
 				// Set progress
 				Ai1wm_Status::info( sprintf( __( 'Archiving %d content files...<br />%d%% complete', AI1WM_PLUGIN_NAME ), $total_content_files_count, $progress ) );

@@ -31,20 +31,20 @@ class Ai1wm_Export_Enumerate_Content {
 
 	public static function execute( $params ) {
 
-		$exclude_filters = array( ai1wm_get_uploads_dir() );
+		$exclude_filters = array( ai1wm_get_uploads_dir(), ai1wm_get_plugins_dir() );
 
 		// Get total content files count
 		if ( isset( $params['total_content_files_count'] ) ) {
 			$total_content_files_count = (int) $params['total_content_files_count'];
 		} else {
-			$total_content_files_count = 0;
+			$total_content_files_count = 1;
 		}
 
 		// Get total content files size
 		if ( isset( $params['total_content_files_size'] ) ) {
 			$total_content_files_size = (int) $params['total_content_files_size'];
 		} else {
-			$total_content_files_size = 0;
+			$total_content_files_size = 1;
 		}
 
 		// Set progress
@@ -58,20 +58,12 @@ class Ai1wm_Export_Enumerate_Content {
 		// Exclude themes
 		if ( isset( $params['options']['no_themes'] ) ) {
 			$exclude_filters[] = 'themes';
-		} else {
-			$inactive_themes = array();
-
-			// Exclude inactive themes
-			if ( isset( $params['options']['no_inactive_themes'] ) ) {
-				foreach ( search_theme_directories() as $theme => $info ) {
-					// Exclude current parent and child themes
-					if ( ! in_array( $theme, array( get_template(), get_stylesheet() ) ) ) {
-						$inactive_themes[] = 'themes' . DIRECTORY_SEPARATOR . $theme;
-					}
+		} elseif ( isset( $params['options']['no_inactive_themes'] ) ) {
+			foreach ( search_theme_directories() as $theme_name => $theme_info ) {
+				if ( ! in_array( $theme_name, array( get_template(), get_stylesheet() ) ) ) {
+					$exclude_filters[] = 'themes' . DIRECTORY_SEPARATOR . $theme_name;
 				}
 			}
-
-			$exclude_filters = array_merge( $exclude_filters, $inactive_themes );
 		}
 
 		// Exclude must-use plugins
@@ -79,41 +71,18 @@ class Ai1wm_Export_Enumerate_Content {
 			$exclude_filters[] = 'mu-plugins';
 		}
 
-		// Exclude plugins
-		if ( isset( $params['options']['no_plugins'] ) ) {
-			$exclude_filters[] = 'plugins';
-		} else {
-			$inactive_plugins = array();
-
-			// Exclude inactive plugins
-			if ( isset( $params['options']['no_inactive_plugins'] ) ) {
-				foreach ( get_plugins() as $plugin => $info ) {
-					if ( is_plugin_inactive( $plugin ) ) {
-						$inactive_plugins[] = 'plugins' . DIRECTORY_SEPARATOR . ( ( dirname( $plugin ) === '.' ) ? basename( $plugin ) : dirname( $plugin ) );
-					}
-				}
-			}
-
-			$exclude_filters = array_merge( $exclude_filters, ai1wm_plugin_filters( $inactive_plugins ) );
-		}
-
 		// Exclude media
 		if ( isset( $params['options']['no_media'] ) ) {
 			$exclude_filters[] = 'blogs.dir';
 		}
 
-		$user_filters = array();
-
 		// Exclude selected files
 		if ( isset( $params['options']['exclude_files'], $params['excluded_files'] ) ) {
-			$excluded_files = explode( ',', $params['excluded_files'] );
-			if ( $excluded_files ) {
+			if ( ( $excluded_files = explode( ',', $params['excluded_files'] ) ) ) {
 				foreach ( $excluded_files as $excluded_path ) {
-					$user_filters[] = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . untrailingslashit( $excluded_path );
+					$exclude_filters[] = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . untrailingslashit( $excluded_path );
 				}
 			}
-
-			$exclude_filters = array_merge( $exclude_filters, $user_filters );
 		}
 
 		// Create content list file

@@ -164,12 +164,11 @@ class autoptimizeStyles extends autoptimizeBase
     public function read( $options )
     {
         $noptimize_css = apply_filters( 'autoptimize_filter_css_noptimize', false, $this->content );
-        if ( $noptimize_css ) {
+        if ( $noptimize_css  || false === autoptimizeConfig::get_post_meta_ao_settings( 'ao_post_css_optimize' )) {
             return false;
         }
 
         $allowlist_css = apply_filters( 'autoptimize_filter_css_allowlist', '', $this->content );
-        $allowlist_css = apply_filters( 'autoptimize_filter_css_whitelist', $allowlist_css, $this->content ); // fixme: to be removed in next version.
         if ( ! empty( $allowlist_css ) ) {
             $this->allowlist = array_filter( array_map( 'trim', explode( ',', $allowlist_css ) ) );
         }
@@ -220,6 +219,11 @@ class autoptimizeStyles extends autoptimizeBase
         // value: true / false.
         $this->defer = $options['defer'];
         $this->defer = apply_filters( 'autoptimize_filter_css_defer', $this->defer, $this->content );
+
+        // If page/ post check post_meta to see if optimize is off.
+        if ( $this->defer && false === autoptimizeConfig::get_post_meta_ao_settings( 'ao_post_ccss' ) ) {
+             $this->defer = false;
+        }
 
         // Should we inline while deferring?
         // value: inlined CSS.
@@ -272,14 +276,18 @@ class autoptimizeStyles extends autoptimizeBase
                     // Get the media.
                     if ( false !== strpos( $tag, 'media=' ) ) {
                         preg_match( '#media=(?:"|\')([^>]*)(?:"|\')#Ui', $tag, $medias );
-                        $medias = explode( ',', $medias[1] );
-                        $media  = array();
-                        foreach ( $medias as $elem ) {
-                            if ( empty( $elem ) ) {
-                                $elem = 'all';
-                            }
+                        if ( !empty( $medias ) ) {
+                            $medias = explode( ',', $medias[1] );
+                            $media  = array();
+                            foreach ( $medias as $elem ) {
+                                if ( empty( $elem ) ) {
+                                    $elem = 'all';
+                                }
 
-                            $media[] = $elem;
+                                $media[] = $elem;
+                            }
+                        } else {
+                            $media = array( 'all' );
                         }
                     } else {
                         // No media specified - applies to all.
@@ -355,6 +363,11 @@ class autoptimizeStyles extends autoptimizeBase
                         if ( '' !== $new_tag ) {
                             // Optionally defer (preload) non-aggregated CSS.
                             $new_tag = $this->optionally_defer_excluded( $new_tag, $url );
+                            
+                            // Check if we still need to CDN (esp. for already minified resources).
+                            if ( ! empty( $this->cdn_url ) || has_filter( 'autoptimize_filter_base_replace_cdn' ) ) {
+                                $new_tag = str_replace( $url, $this->url_replace_cdn( $url ), $new_tag );
+                            }
                         }
 
                         // And replace!

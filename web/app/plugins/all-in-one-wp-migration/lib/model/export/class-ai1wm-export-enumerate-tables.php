@@ -41,7 +41,7 @@ class Ai1wm_Export_Enumerate_Tables {
 		if ( isset( $params['total_tables_count'] ) ) {
 			$total_tables_count = (int) $params['total_tables_count'];
 		} else {
-			$total_tables_count = 0;
+			$total_tables_count = 1;
 		}
 
 		// Set progress

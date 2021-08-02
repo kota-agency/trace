@@ -3,9 +3,9 @@ Contributors: futtta, optimizingmatters, zytzagoo, turl
 Tags: optimize, minify, performance, images, core web vitals, lazy-load, pagespeed, google fonts
 Donate link: http://blog.futtta.be/2013/10/21/do-not-donate-to-me/
 Requires at least: 4.9
-Tested up to: 5.7
+Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.8.4
+Stable tag: 2.9.0
 
 Autoptimize speeds up your website by optimizing JS, CSS, images (incl. lazy-load), HTML and Google Fonts, asyncing JS, removing emoji cruft and more.
 
@@ -287,6 +287,15 @@ location ~* /wp-content/cache/autoptimize/.*\.(js|css)$ {
     try_files $uri $uri/ /wp-content/autoptimize_404_handler.php;
 }`
 
+And this a nice alternative approach (provided by fboylovesyou);
+
+`location ~* /wp-content/cache/autoptimize/.*\.(css)$ {
+    try_files $uri $uri/ /wp-content/cache/autoptimize/css/autoptimize_fallback.css;
+}
+location ~* /wp-content/cache/autoptimize/.*\.(js)$ {
+    try_files $uri $uri/ /wp-content/cache/autoptimize/js/autoptimize_fallback.js;
+}`
+
 = What open source software/ projects are used in Autoptimize? =
 
 The following great open source projects are used in Autoptimize in some form or another:
@@ -319,11 +328,20 @@ Just [fork Autoptimize on Github](https://github.com/futtta/autoptimize) and cod
 
 == Changelog ==
 
+= 2.9.0 =
+* New: per page/ post Autoptimize settings so one can disable specific optimizations (needs to be enabled on the main settings page under "Misc Options").
+* New: "defer inline JS" as sub-option of "do not aggregate but defer" allowing to defer (almost) all JS.
+* Improvement: Image optimization now automatically switches between AVIF & WebP & Jpeg even if lazyload is not active (AVIF has to be explicitly enabled).
+* Improvement: re-ordering of "JavaScript optimization" settings
+* Misc. other minor fixes, see the [GitHub commit log](https://github.com/futtta/autoptimize/commits/beta)
+
+This release coincides with my father's 76th birthday, who continues to be a big inspritation to me. He's a mechanical engineer who after retirement focused his technical insights, experience and never-ending inquisitiveness on fountain pen design and prototyping, inventing a new bulkfiller mechanism in the process. Search the web for `Fountainbel` to find out more about him (or read [this older blogpost I wrote in Dutch](https://blog.futtta.be/2008/04/09/mijn-vader-is-een-tovenaar/)). Love you pops!
+
 = 2.8.4 =
 * fix for an authenticated XSS vulnerability
 
 = 2.8.3 =
-* fix for missing ao-minify-html.php file
+* fix for missing ao-minify-html.php
 
 = 2.8.2 =
 * Images: only show "did you know shortpixel" notice on Autoptimize settings pages (no more littering all over the backend)

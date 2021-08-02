@@ -111,7 +111,7 @@ $cmb->add_field(
 		'dep'        => $dep,
 		'attributes' => [
 			'class'                  => 'cmb2-textarea-small wp-exclude-emoji',
-			'data-gramm_editor'      => 'false',
+			'data-gramm'             => 'false',
 			'rows'                   => 2,
 			'data-exclude-variables' => 'seo_title,seo_description',
 		],
@@ -122,8 +122,8 @@ $cmb->add_field(
 	[
 		'id'      => 'author_add_meta_box',
 		'type'    => 'toggle',
-		'name'    => esc_html__( 'Add SEO Meta Box for Users', 'rank-math' ),
-		'desc'    => esc_html__( 'Add SEO Meta Box for user profile pages. Access to the Meta Box can be fine tuned with code, using a special filter hook.', 'rank-math' ),
+		'name'    => esc_html__( 'Add SEO Controls', 'rank-math' ),
+		'desc'    => esc_html__( 'Add SEO Controls for user profile pages. Access to the Meta Box can be fine tuned with code, using a special filter hook.', 'rank-math' ),
 		'default' => 'on',
 		'classes' => 'rank-math-advanced-option',
 		'dep'     => $dep,
