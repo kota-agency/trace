@@ -94,8 +94,8 @@ class Ai1wm_Import_Content {
 		// Set the file pointer to the one that we have saved
 		$archive->set_file_pointer( $archive_bytes_offset );
 
-		$old_paths = array( 'plugins' );
-		$new_paths = array( ai1wm_get_plugins_dir() );
+		$old_paths = array( 'plugins', 'themes' );
+		$new_paths = array( ai1wm_get_plugins_dir(), get_theme_root() );
 
 		// Set extract paths
 		foreach ( $blogs as $blog ) {

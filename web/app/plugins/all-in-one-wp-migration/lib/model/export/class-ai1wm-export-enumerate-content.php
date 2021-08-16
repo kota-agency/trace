@@ -31,7 +31,7 @@ class Ai1wm_Export_Enumerate_Content {
 
 	public static function execute( $params ) {
 
-		$exclude_filters = array( ai1wm_get_uploads_dir(), ai1wm_get_plugins_dir() );
+		$exclude_filters = array_merge( array( ai1wm_get_uploads_dir(), ai1wm_get_plugins_dir() ), ai1wm_get_themes_dirs() );
 
 		// Get total content files count
 		if ( isset( $params['total_content_files_count'] ) ) {
@@ -53,17 +53,6 @@ class Ai1wm_Export_Enumerate_Content {
 		// Exclude cache
 		if ( isset( $params['options']['no_cache'] ) ) {
 			$exclude_filters[] = 'cache';
-		}
-
-		// Exclude themes
-		if ( isset( $params['options']['no_themes'] ) ) {
-			$exclude_filters[] = 'themes';
-		} elseif ( isset( $params['options']['no_inactive_themes'] ) ) {
-			foreach ( search_theme_directories() as $theme_name => $theme_info ) {
-				if ( ! in_array( $theme_name, array( get_template(), get_stylesheet() ) ) ) {
-					$exclude_filters[] = 'themes' . DIRECTORY_SEPARATOR . $theme_name;
-				}
-			}
 		}
 
 		// Exclude must-use plugins

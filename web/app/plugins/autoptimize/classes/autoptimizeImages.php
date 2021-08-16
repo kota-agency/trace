@@ -186,7 +186,7 @@ class autoptimizeImages
      *
      * @return bool
      */
-    public function should_disable_core_lazyload( $flag, $tag, $context ) {
+    public function should_disable_core_lazyload( $flag = true, $tag = '', $context = '' ) {
         if ( 'img' === $tag ) {
             return false;
         }
@@ -391,7 +391,7 @@ class autoptimizeImages
     {
         $in = $this->normalize_img_url( $in );
 
-        if ( $this->can_optimize_image( $in ) ) {
+        if ( $this->can_optimize_image( $in ) && false === strpos( $in, $this->get_imgopt_host() ) ) {
             return $this->build_imgopt_url( $in, '', '' );
         } else {
             return $in;

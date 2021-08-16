@@ -160,6 +160,7 @@ class Screen implements IScreen {
 					'futureSeo'        => KB::get( 'pro-general-g' ),
 					'researchesTests'  => $this->get_analysis(),
 					'hasRedirection'   => Helper::is_module_active( 'redirections' ),
+					'hasBreadcrumb'    => Helper::is_breadcrumbs_enabled(),
 				],
 				'isPro'              => defined( 'RANK_MATH_PRO_FILE' ),
 				'is_front_page'      => Admin_Helper::is_home_page(),
@@ -274,7 +275,7 @@ class Screen implements IScreen {
 	 * @return array
 	 */
 	private function normalize_robots( $robots ) {
-		if ( empty( $robots ) ) {
+		if ( ! is_array( $robots ) || empty( $robots ) ) {
 			$robots = Helper::get_robots_defaults();
 		}
 

@@ -405,9 +405,9 @@ class autoptimizeUtils
         static $_found_pagecache = null;
 
         if ( null === $_found_pagecache ) {
-            $_page_cache_constants   = array( 'NGINX_HELPER_BASENAME', 'KINSTA_CACHE_ZONE', 'PL_INSTANCE_REF', 'WP_NINUKIS_WP_NAME', 'CACHE_ENABLER_VERSION', 'SBP_PLUGIN_NAME', 'SERVEBOLT_PLUGIN_FILE', 'SWCFPC_PLUGIN_PATH' );
+            $_page_cache_constants   = array( 'NGINX_HELPER_BASENAME', 'KINSTA_CACHE_ZONE', 'PL_INSTANCE_REF', 'WP_NINUKIS_WP_NAME', 'CACHE_ENABLER_VERSION', 'SBP_PLUGIN_NAME', 'SERVEBOLT_PLUGIN_FILE', 'SWCFPC_PLUGIN_PATH', 'CACHIFY_CACHE_DIR', 'WP_ROCKET_CACHE_PATH', 'WPO_VERSION', 'NGINX_HELPER_BASEURL' );
             $_page_cache_classes     = array( 'Swift_Performance_Cache', 'WpFastestCache', 'c_ws_plugin__qcache_purging_routines', 'zencache', 'comet_cache', 'WpeCommon', 'FlywheelNginxCompat', 'PagelyCachePurge' );
-            $_page_cache_functions   = array( 'wp_cache_clear_cache', 'cachify_flush_cache', 'w3tc_pgcache_flush', 'wp_fast_cache_bulk_delete_all', 'rapidcache_clear_cache', 'sg_cachepress_purge_cache', 'prune_super_cache', 'after_rocket_clean_domain', 'wpo_cache_flush', 'rt_nginx_helper_after_fastcgi_purge_all', 'hyper_cache_purged' );
+            $_page_cache_functions   = array( 'wp_cache_clear_cache', 'w3tc_pgcache_flush', 'wp_fast_cache_bulk_delete_all', 'rapidcache_clear_cache', 'sg_cachepress_purge_cache', 'prune_super_cache' );
             $_ao_pagecache_transient = 'autoptimize_pagecache_check';
             $_found_pagecache        = get_transient( $_ao_pagecache_transient );
 
@@ -457,5 +457,47 @@ class autoptimizeUtils
     public static function is_ao_settings() {
         $_is_ao_settings = ( str_replace( array( 'autoptimize', 'autoptimize_imgopt', 'ao_critcss', 'autoptimize_extra', 'ao_partners' ), '', $_SERVER['REQUEST_URI'] ) !== $_SERVER['REQUEST_URI'] ? true : false );
         return $_is_ao_settings;
+    }
+
+    /**
+     * Returns false if no conflicting plugins are found, the name if the plugin if found.
+     *
+     * @return bool|string
+     */
+    public static function find_potential_conflicts() {
+        if ( defined( 'WPFC_WP_CONTENT_BASENAME' ) ) {
+            $_wpfc_options =  json_decode( get_option( 'WpFastestCache' ) );
+            foreach ( array( 'wpFastestCacheMinifyCss', 'wpFastestCacheCombineCss','wpFastestCacheCombineJs' ) as $_wpfc_conflicting ) {
+                if ( isset( $_wpfc_options->$_wpfc_conflicting ) && $_wpfc_options->$_wpfc_conflicting === 'on' ) {
+                    return 'WP Fastest Cache';
+                }
+            }
+        } else if ( defined( 'W3TC_VERSION' ) ) {
+            $w3tcConfig     = file_get_contents( WP_CONTENT_DIR . '/w3tc-config/master.php' );
+            $w3tc_minify_on = strpos( $w3tcConfig, '"minify.enabled": true' );
+            if ( $w3tc_minify ) {
+                return 'W3 Total Cache';
+            }
+        } else if ( defined('SiteGround_Optimizer\VERSION') ) {
+            if ( get_option('siteground_optimizer_optimize_css') == 1 || get_option('siteground_optimizer_optimize_javascript') == 1 || get_option('siteground_optimizer_combine_javascript') == 1 || get_option('siteground_optimizer_combine_css') == 1 ) {
+                return 'Siteground Optimizer';
+            }
+        } else if ( defined( 'WPO_VERSION' ) ) {
+            $_wpo_options = get_site_option( 'wpo_minify_config' );
+            if ( is_array( $_wpo_options ) && $_wpo_options['enabled'] == 1 && ( $_wpo_options['enable_css'] == 1 || $_wpo_options['enable_js'] == 1 ) ) {
+                return 'WP Optimize';
+            }
+        } else if ( defined( 'WPACU_PLUGIN_VERSION' ) || defined( 'WPACU_PRO_PLUGIN_VERSION' ) ) {
+            $wpacuSettingsClass = new \WpAssetCleanUp\Settings();
+            $wpacuSettings      = $wpacuSettingsClass->getAll();
+
+            if ( $wpacuSettings['minify_loaded_css'] || $wpacuSettings['minify_loaded_js'] || $wpacuSettings['combine_loaded_js'] || $wpacuSettings['combine_loaded_css'] ) {
+                return 'Asset Cleanup';
+            }
+        } else if ( function_exists( 'fvm_get_settings' ) ) {
+            return 'Fast Velocity Minify';
+        }
+
+        return false;
     }
 }

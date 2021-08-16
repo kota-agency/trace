@@ -251,6 +251,10 @@ require_once AI1WM_EXPORT_PATH .
 
 require_once AI1WM_EXPORT_PATH .
 			DIRECTORY_SEPARATOR .
+			'class-ai1wm-export-enumerate-themes.php';
+
+require_once AI1WM_EXPORT_PATH .
+			DIRECTORY_SEPARATOR .
 			'class-ai1wm-export-content.php';
 
 require_once AI1WM_EXPORT_PATH .
@@ -260,6 +264,10 @@ require_once AI1WM_EXPORT_PATH .
 require_once AI1WM_EXPORT_PATH .
 			DIRECTORY_SEPARATOR .
 			'class-ai1wm-export-plugins.php';
+
+require_once AI1WM_EXPORT_PATH .
+			DIRECTORY_SEPARATOR .
+			'class-ai1wm-export-themes.php';
 
 require_once AI1WM_EXPORT_PATH .
 			DIRECTORY_SEPARATOR .

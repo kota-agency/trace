@@ -35,7 +35,7 @@ define( 'AI1WM_DEBUG', false );
 // ==================
 // = Plugin Version =
 // ==================
-define( 'AI1WM_VERSION', '7.45' );
+define( 'AI1WM_VERSION', '7.46' );
 
 // ===============
 // = Plugin Name =
@@ -161,6 +161,11 @@ define( 'AI1WM_MEDIA_LIST_NAME', 'media.list' );
 // = Archive Plugins List Name =
 // =============================
 define( 'AI1WM_PLUGINS_LIST_NAME', 'plugins.list' );
+
+// ============================
+// = Archive Themes List Name =
+// ============================
+define( 'AI1WM_THEMES_LIST_NAME', 'themes.list' );
 
 // ============================
 // = Archive Tables List Name =

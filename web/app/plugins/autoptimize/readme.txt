@@ -5,7 +5,7 @@ Donate link: http://blog.futtta.be/2013/10/21/do-not-donate-to-me/
 Requires at least: 4.9
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.9.0
+Stable tag: 2.9.1
 
 Autoptimize speeds up your website by optimizing JS, CSS, images (incl. lazy-load), HTML and Google Fonts, asyncing JS, removing emoji cruft and more.
 
@@ -328,11 +328,20 @@ Just [fork Autoptimize on Github](https://github.com/futtta/autoptimize) and cod
 
 == Changelog ==
 
+= 2.9.1 =
+* New: logic to detect possibly conflicting plugins, with notification if found.
+* Improvement: to be reviewed critical css rules UI change.
+* Improvement: automatically save critical CSS rules when changed.
+* Fix for no CCSS jobs being created when "aggregate CSS" is off and all files are minified.
+* Fix for some page caches not being detected correctly leading to notification being shown when it should not (thanks @optimocha for warning me!)
+* Fix for a (rare) lazyload-regression in 2.9.0.
+* Fix for a (rare) image optimization issue when the same image is referenced multiple times as background-image in optimized CSS.
+
 = 2.9.0 =
 * New: per page/ post Autoptimize settings so one can disable specific optimizations (needs to be enabled on the main settings page under "Misc Options").
 * New: "defer inline JS" as sub-option of "do not aggregate but defer" allowing to defer (almost) all JS.
 * Improvement: Image optimization now automatically switches between AVIF & WebP & Jpeg even if lazyload is not active (AVIF has to be explicitly enabled).
-* Improvement: re-ordering of "JavaScript optimization" settings
+* Improvement: re-ordering of "JavaScript optimization" settings & copy improvements.
 * Misc. other minor fixes, see the [GitHub commit log](https://github.com/futtta/autoptimize/commits/beta)
 
 This release coincides with my father's 76th birthday, who continues to be a big inspritation to me. He's a mechanical engineer who after retirement focused his technical insights, experience and never-ending inquisitiveness on fountain pen design and prototyping, inventing a new bulkfiller mechanism in the process. Search the web for `Fountainbel` to find out more about him (or read [this older blogpost I wrote in Dutch](https://blog.futtta.be/2008/04/09/mijn-vader-is-een-tovenaar/)). Love you pops!
