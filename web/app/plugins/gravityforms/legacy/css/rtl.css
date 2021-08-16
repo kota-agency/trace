@@ -291,6 +291,12 @@ body .gform_legacy_markup_wrapper.gf_rtl_wrapper img.ui-datepicker-trigger {
 	margin: 4px 2px 0 0;
 }
 
+html[dir="rtl"] .gform-legacy-datepicker.ui-datepicker:not(.gform-preview-datepicker) .ui-datepicker-header .ui-datepicker-year,
+html[dir="rtl"] .gform-legacy-datepicker.ui-datepicker:not(.gform-preview-datepicker) .ui-datepicker-header .ui-datepicker-month {
+	background-position: left 1px top 60%;
+	padding-left: 15px;
+}
+
 html[dir="rtl"] .gform_legacy_markup_wrapper .gf_progressbar_percentage span,
 body.rtl .gform_legacy_markup_wrapper .gf_progressbar_percentage span,
 body .gform_legacy_markup_wrapper.gf_rtl_wrapper .gf_progressbar_percentage span {

@@ -335,8 +335,9 @@ class GFFormDisplay {
 
 		//Creating temp folder if it does not exist
 		$target_path = $form_upload_path . '/tmp/';
-		wp_mkdir_p( $target_path );
-		GFCommon::recursive_add_index_file( $form_upload_path );
+		if ( ! is_dir( $target_path ) && wp_mkdir_p( $target_path ) ) {
+			GFCommon::recursive_add_index_file( $target_path );
+		}
 
 		foreach ( $form['fields'] as $field ) {
 			$input_name = "input_{$field->id}";

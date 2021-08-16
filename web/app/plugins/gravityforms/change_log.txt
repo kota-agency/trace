@@ -1,3 +1,14 @@
+### 2.5.9 | 2021-08-11
+- Added security enhancements.
+- Fixed an issue where the header of the datepicker in legacy forms has the wrong background color and the dropdowns are not aligned correctly.
+- Fixed an issue where "This field is required" appears twice in the time field validation message.
+- Fixed an issue in the submission time performance for hosting environments where the form has lots of directories in its uploads folder.
+- Fixed an issue when submitting form in form preview where the required JS hooks are not being included.
+- AF: Fixed a display issue with poll results where the text gets cut off if labels are long.
+- AF: Fixed the display of visual radio choices in settings.
+- AF: Fixed an issue for get_icon_markup where all style implementations of font awesome are getting an additional class of "fa" prefixed to the output icon classes.
+- AF: Fixed an issue with dynamic field map settings fields that prevents options from appearing in the value dropdown.
+
 ### 2.5.8 | 2021-07-28
 - Fixed an issue for inputs where Gravity Form styles are overriding and breaking WordPress admin styles for certain inputs, textareas, and selects.
 - Fixed an issue of incorrect styles for the tel input type when in the entry edit view.

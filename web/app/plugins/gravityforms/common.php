@@ -7033,8 +7033,15 @@ Content-Type: text/html;
 			return $icon;
 		} else if ( filter_var( $icon, FILTER_VALIDATE_URL ) ) {
 			return sprintf( '<img src="%s" />', esc_attr( $icon ) );
-		} else if ( strpos( $icon, 'fa' ) === 0 ) {
-			return sprintf( '<i class="fa %s"></i>', esc_attr( $icon ) );
+		} else if ( strpos( $icon, 'fa-' ) !== false ) {
+			// Allow for custom types of font awesome implementation.
+			// Keys in on: "fa-icon-name fa*" or "fa* fa-icon-name"
+			preg_match('/(fa[a-z])?(?:[\s]?fa-[a-zA-Z0-9]+[\s]?)(fa[a-z])?/', $icon, $matches );
+			if ( count( $matches ) < 2 ) {
+				return sprintf( '<i class="fa %s"></i>', esc_attr( $icon ) );
+			} else {
+				return sprintf( '<i class="%s"></i>', esc_attr( $icon ) );
+			}
 		} else if ( strpos( $icon, 'dashicons' ) === 0 ) {
 			return sprintf( '<i class="dashicons %s"></i>', esc_attr( $icon ) );
 		} else if ( strpos( $icon, 'gform-icon' ) === 0 ) {

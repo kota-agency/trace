@@ -334,7 +334,7 @@
 
 .gfield_validation_message ul {
 	padding-left: 24px;
-	margin: 16px 0;
+	margin: 16px 0
 }
 
 .gfield_validation_message ul:empty {
@@ -425,7 +425,7 @@
 	padding: 8px;
 	margin: 2.4px;
 	display: none;
-	box-shadow: 0 1px 5px rgba( 0, 0, 0, 0.1 );
+	box-shadow: 0 1px 5px rgba( 0, 0, 0, 0.1 )
 }
 
 .ui-datepicker:not(.gform-legacy-datepicker)[style] {
@@ -441,7 +441,7 @@
 
 .ui-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-prev, .ui-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-next {
 		position: absolute;
-		cursor: pointer;
+		cursor: pointer
 	}
 
 .ui-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-prev:before, .ui-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-next:before {
@@ -467,7 +467,7 @@
 	}
 
 .ui-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-next {
-		right: 16px;
+		right: 16px
 	}
 
 .ui-datepicker:not(.gform-legacy-datepicker) .ui-datepicker-next:before {
@@ -504,7 +504,7 @@
 		text-align: center;
 		color: #222;
 		text-decoration: none;
-		border-radius: 50%;
+		border-radius: 50%
 	}
 
 .ui-datepicker:not(.gform-legacy-datepicker) a.ui-state-default:hover {
@@ -1191,14 +1191,7 @@ to no.
 */
 
 @media only screen and (min-width: 641px) {
-
-.gform_wrapper {
         /* horizontal list columns */
-
-        /* vertical list columns */
-
-        /* list item heights */
-}
             .gform_wrapper .gfield.gf_list_2col .gfield_checkbox, .gform_wrapper .gfield.gf_list_2col .gfield_radio {
                 display: -ms-grid;
                 display: grid;
@@ -1243,6 +1236,8 @@ to no.
                     .gform_wrapper .gfield.gf_list_inline .gfield_checkbox .gchoice label, .gform_wrapper .gfield.gf_list_inline .gfield_radio .gchoice label {
                         max-width: none;
                     }
+
+        /* vertical list columns */
             .gform_wrapper .gf_list_2col_vertical .gfield_checkbox, .gform_wrapper .gf_list_2col_vertical .gfield_radio {
                 -moz-column-count: 2;
                 column-count: 2;
@@ -1263,6 +1258,8 @@ to no.
                 column-count: 5;
                 grid-column-gap: 32px;
             }
+
+        /* list item heights */
                 .gform_wrapper .gfield.gf_list_height_25 .gfield_checkbox .gchoice, .gform_wrapper .gfield.gf_list_height_25 .gfield_radio .gchoice {
                     height: 25px;
                 }
@@ -1286,6 +1283,11 @@ to no.
             /* need to figure out how to do this */
         }
     }
+
+.gform_wrapper {
+
+    /* simple horizontal form ready class - very simple implementation for up to 5 fields and a button */
+}
 
 .gform_wrapper .gf_hide_ampm .gfield_time_ampm {
         display: none !important;
@@ -1346,8 +1348,6 @@ to no.
             text-shadow: #E0F1FF 1px 1px;
             color: #314475;
         }
-
-/* simple horizontal form ready class - very simple implementation for up to 5 fields and a button */
 
 .gform_wrapper .gf_simple_horizontal {
         width: calc(100% - 16px);
@@ -1514,7 +1514,7 @@ to no.
 */
 
 .gform_wrapper.gravity-theme .gfield textarea {
-			width: 100%;
+			width: 100%
 		}
 
 .gform_wrapper.gravity-theme .gfield textarea.small {
@@ -1530,7 +1530,7 @@ to no.
 			}
 
 .gform_wrapper.gravity-theme .gfield input, .gform_wrapper.gravity-theme .gfield select {
-			max-width: 100%;
+			max-width: 100%
 		}
 
 .gform_wrapper.gravity-theme .gfield input.small, .gform_wrapper.gravity-theme .gfield select.small {
@@ -1846,7 +1846,7 @@ html[dir="rtl"] .gform_wrapper.gravity-theme .ginput_complex:not(.ginput_contain
 			height: 32px;
 			margin-right: 4.8px;
 			text-indent: -9000px;
-			width: 40px;
+			width: 40px
 		}
 
 .gform_wrapper.gravity-theme .gform_card_icon_container div.gform_card_icon.gform_card_icon_amex {
@@ -1874,7 +1874,7 @@ html[dir="rtl"] .gform_wrapper.gravity-theme .ginput_complex:not(.ginput_contain
 			}
 
 .gform_wrapper.gravity-theme .gform_card_icon_container div.gform_card_icon.gform_card_icon_selected {
-				position: relative;
+				position: relative
 			}
 
 .gform_wrapper.gravity-theme .gform_card_icon_container div.gform_card_icon.gform_card_icon_selected:after {
