@@ -254,7 +254,7 @@ if ( is_network_admin() && autoptimizeOptionWrapper::is_ao_active_for_network() 
 <?php _e( 'Individual JS-files will be minified and deferred, making them non-render-blocking.', 'autoptimize' ); ?></label></td>
 </tr>
 <tr valign="top" id="js_defer_inline" class="js_sub js_not_aggregate hidden">
-<th scope="row">&emsp;<?php _e( 'Also defer inline JS?', 'autoptimize' ); ?> (beta)</th>
+<th scope="row">&emsp;<?php _e( 'Also defer inline JS?', 'autoptimize' ); ?></th>
 <td><label class="cb_label"><input type="checkbox" name="autoptimize_js_defer_inline" <?php echo autoptimizeOptionWrapper::get_option( 'autoptimize_js_defer_inline' ) ? 'checked="checked" ' : ''; ?>/>
 <?php _e( 'Also defer inline JS. Generally this will allow all JS to be deferred, so you should remove default exclusions, test and only exclude specific items if still needed.', 'autoptimize' ); ?></label></td>
 </tr>
@@ -1001,7 +1001,8 @@ $_rapidload_link = 'https://misc.optimizingmatters.com/partners/?from=csssetting
 
         static $_meta_value = null;
         if ( null === $_meta_value ) {
-            if ( is_page() || is_single() ) {
+            global $wp_query;
+            if ( isset( $wp_query ) && ( is_page() || is_single() ) ) {
                 $_meta_value = get_post_meta( get_the_ID(), 'ao_post_optimize', true );
             } else {
                 $_meta_value = false;

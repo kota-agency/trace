@@ -121,6 +121,13 @@ abstract class Ai1wm_Database {
 	protected $table_where_query = array();
 
 	/**
+	 * Table select columns
+	 *
+	 * @var array
+	 */
+	protected $table_select_columns = array();
+
+	/**
 	 * Table prefix columns
 	 *
 	 * @var array
@@ -404,6 +411,33 @@ abstract class Ai1wm_Database {
 	public function get_table_where_query( $table_name ) {
 		if ( isset( $this->table_where_query[ strtolower( $table_name ) ] ) ) {
 			return $this->table_where_query[ strtolower( $table_name ) ];
+		}
+	}
+
+	/**
+	 * Set table select columns
+	 *
+	 * @param  string $table_name   Table name
+	 * @param  array  $column_names Column names
+	 * @return object
+	 */
+	public function set_table_select_columns( $table_name, $column_names ) {
+		foreach ( $column_names as $column_name => $column_expression ) {
+			$this->table_select_columns[ strtolower( $table_name ) ][ strtolower( $column_name ) ] = $column_expression;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Get table select columns
+	 *
+	 * @param  string $table_name Table name
+	 * @return array
+	 */
+	public function get_table_select_columns( $table_name ) {
+		if ( isset( $this->table_select_columns[ strtolower( $table_name ) ] ) ) {
+			return $this->table_select_columns[ strtolower( $table_name ) ];
 		}
 	}
 
@@ -827,8 +861,8 @@ abstract class Ai1wm_Database {
 					// Get primary keys
 					$primary_keys = $this->get_primary_keys( $table_name );
 
-					// Get table columns
-					$table_columns = $this->get_column_types( $table_name );
+					// Get column types
+					$column_types = $this->get_column_types( $table_name );
 
 					// Get prefix columns
 					$prefix_columns = $this->get_table_prefix_columns( $table_name );
@@ -851,8 +885,15 @@ abstract class Ai1wm_Database {
 								$table_where = 1;
 							}
 
+							// Set table select columns
+							if ( ! ( $select_columns = $this->get_table_select_columns( $table_name ) ) ) {
+								$select_columns = array( 't1.*' );
+							}
+
+							$select_columns = implode( ', ', $select_columns );
+
 							// Set query with offset and rows count
-							$query = sprintf( 'SELECT t1.* FROM `%s` AS t1 JOIN (SELECT %s FROM `%s` WHERE %s ORDER BY %s LIMIT %d, %d) AS t2 USING (%s)', $table_name, $table_keys, $table_name, $table_where, $table_keys, $table_offset, AI1WM_MAX_SELECT_RECORDS, $table_keys );
+							$query = sprintf( 'SELECT %s FROM `%s` AS t1 JOIN (SELECT %s FROM `%s` WHERE %s ORDER BY %s LIMIT %d, %d) AS t2 USING (%s)', $select_columns, $table_name, $table_keys, $table_name, $table_where, $table_keys, $table_offset, AI1WM_MAX_SELECT_RECORDS, $table_keys );
 
 						} else {
 
@@ -863,8 +904,15 @@ abstract class Ai1wm_Database {
 								$table_where = 1;
 							}
 
+							// Set table select columns
+							if ( ! ( $select_columns = $this->get_table_select_columns( $table_name ) ) ) {
+								$select_columns = array( '*' );
+							}
+
+							$select_columns = implode( ', ', $select_columns );
+
 							// Set query with offset and rows count
-							$query = sprintf( 'SELECT * FROM `%s` WHERE %s ORDER BY %s LIMIT %d, %d', $table_name, $table_where, $table_keys, $table_offset, AI1WM_MAX_SELECT_RECORDS );
+							$query = sprintf( 'SELECT %s FROM `%s` WHERE %s ORDER BY %s LIMIT %d, %d', $select_columns, $table_name, $table_where, $table_keys, $table_offset, AI1WM_MAX_SELECT_RECORDS );
 						}
 
 						// Run SQL query
@@ -898,7 +946,7 @@ abstract class Ai1wm_Database {
 										$value = $this->replace_column_prefixes( $value, 0 );
 									}
 
-									$items[] = $this->prepare_table_values( $value, $table_columns[ strtolower( $key ) ] );
+									$items[] = $this->prepare_table_values( $value, $column_types[ strtolower( $key ) ] );
 								}
 
 								// Set table values
@@ -1332,6 +1380,29 @@ abstract class Ai1wm_Database {
 		$this->free_result( $result );
 
 		return $column_types;
+	}
+
+	/**
+	 * Get MySQL column names
+	 *
+	 * @param  string $table_name Table name
+	 * @return array
+	 */
+	public function get_column_names( $table_name ) {
+		$column_names = array();
+
+		// Get column types
+		$result = $this->query( "SHOW COLUMNS FROM `{$table_name}`" );
+		while ( $row = $this->fetch_assoc( $result ) ) {
+			if ( isset( $row['Field'] ) ) {
+				$column_names[ strtolower( $row['Field'] ) ] = $row['Field'];
+			}
+		}
+
+		// Close result cursor
+		$this->free_result( $result );
+
+		return $column_names;
 	}
 
 	/**

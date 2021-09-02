@@ -122,5 +122,11 @@ Improvements
 = 2.6.0 =
 Improvements
 
+= 2.7.0 =
+Improvements & Fixes
+
+= 2.8.0 =
+Improvements & Fixes
+
 == Upgrade Notice ==
 Always keep updated. We frequently provide latest updates to run plugin smoothly with all other WordPress plugins and themes.
