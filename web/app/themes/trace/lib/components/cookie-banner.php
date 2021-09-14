@@ -9,7 +9,7 @@ $copy = str_replace(['<p>', '</p>'], '', get_field('cookie_copy', 'options'));
 
 ?>
 
-<?php if (!isset($_COOKIE['trace_cookie_consent'])) : ?>
+<?php if ( $_COOKIE['trace_cookie_consent'] != 'on' ) : ?>
     <?php if ($heading || $copy) : ?>
         <div class="cookie-banner theme-dark">
             <div class="cookie-banner__inner">
