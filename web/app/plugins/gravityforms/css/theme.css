@@ -866,6 +866,15 @@ html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_date img.ui-datepic
 			order: 1;
 		}
 
+.gform_wrapper.gravity-theme .gsection {
+		border-bottom: 1px solid #ccc;
+		padding: 0 16px 8px 0;
+	}
+
+html[dir="rtl"] .gform_wrapper.gravity-theme .gsection {
+			padding: 0 0 8px 16px;
+		}
+
 /*
 * Progress bar.
 *

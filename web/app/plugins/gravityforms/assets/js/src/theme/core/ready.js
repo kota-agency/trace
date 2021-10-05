@@ -5,20 +5,7 @@
  */
 
 import common from '../../common';
-
-const ready = ( fn ) => {
-	if ( document.readyState !== 'loading' ) {
-		fn();
-	} else if ( document.addEventListener ) {
-		document.addEventListener( 'DOMContentLoaded', fn );
-	} else {
-		document.attachEvent( 'onreadystatechange', () => {
-			if ( document.readyState !== 'loading' ) {
-				fn();
-			}
-		} );
-	}
-};
+import { ready } from '@gravityforms/utils';
 
 /**
  * @function bindEvents

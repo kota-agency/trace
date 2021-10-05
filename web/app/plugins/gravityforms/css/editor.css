@@ -2387,6 +2387,10 @@ html[dir="rtl"] .right ul#gf_merge_tag_list {
 		color: #a16938;
 	}
 
+.gform-admin .gform-c-error-text {
+		color: #dd301d;
+	}
+
 .gform-admin .gform-c-red {
 		color: #dd301d;
 	}

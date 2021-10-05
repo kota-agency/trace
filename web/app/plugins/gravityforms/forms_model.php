@@ -4,6 +4,8 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+use \Gravity_Forms\Gravity_Forms\License;
+
 require_once( ABSPATH . WPINC . '/post.php' );
 require_once( 'includes/legacy/forms_model_legacy.php' );
 
@@ -3144,7 +3146,7 @@ class GFFormsModel {
 		foreach ( $fields as $field ) {
 			if ( $field instanceof GF_Field_Repeater && isset( $field->fields ) && is_array( $field->fields ) ) {
 				/* @var GF_Field_Repeater $field */
-				$entry = $field->hydrate( $entry, $form, $apply_filters );
+				$entry = $field->hydrate( $entry, $form );
 			}
 		}
 	}
@@ -6100,31 +6102,39 @@ class GFFormsModel {
 	 */
 	public static function save_key( $new_key ) {
 
-		$new_key = trim( $new_key );
+		$new_key      = trim( $new_key );
+		$new_key_md5  = md5( $new_key );
 		$previous_key = get_option( 'rg_gforms_key' );
+
+		/**
+		 * @var License\GF_License_API_Connector $license_connector
+		 */
+		$license_connector = GFForms::get_service_container()->get( License\GF_License_Service_Provider::LICENSE_API_CONNECTOR );
+		$license_connector->clear_cache_for_key( $new_key_md5 );
+
+		// Delete gform_version_info so GF will ping version.php to send site record update.
+		delete_option( 'gform_version_info' );
 
 		if ( empty( $new_key ) ) {
 
 			delete_option( 'rg_gforms_key' );
 
-			GFCommon::update_site_registration( '' );
+			// Unlink the site with the license key on Gravity API.
+			$license_connector->update_site_registration( '' );
 
-		} else if ( $previous_key != $new_key ) {
+		} elseif ( $previous_key != $new_key ) {
+			update_option( 'rg_gforms_key', $new_key_md5 );
 
-			$key_md5 = md5( $new_key );
+			// Updating site registration with Gravity Server.
+			$result = $license_connector->update_site_registration( $new_key_md5, true );
 
-			// Saving new key
-			update_option( 'rg_gforms_key', $key_md5 );
-
-			// Updating site registration with Gravity Server
-			GFCommon::update_site_registration( $key_md5, true );
-
+			// New key is invalid, revert to old key.
+			if ( ! $result->can_be_used() ) {
+				update_option( 'rg_gforms_key', $previous_key );
+			}
 		} else {
-
-			// Updating site registration even if keys did not change.
-			// This will boost site registration from sites that already have a license key entered
-			GFCommon::update_site_registration( $new_key, true );
-
+			// Updating site registration with Gravity Server.
+			$license_connector->update_site_registration( $new_key_md5, true );
 		}
 
 	}

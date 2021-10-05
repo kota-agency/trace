@@ -414,11 +414,11 @@ class GFFormDisplay {
 		$fields = array();
 		foreach ( $form['fields'] as $field ) {
 			/* @var GF_Field $field */
-			if ( GFCommon::is_product_field( $field->type ) || $field->type == 'donation' || $field->type === 'consent' ) {
+			if ( $field->is_state_validation_supported() ) {
 				$value = RGFormsModel::get_field_value( $field, $field_values, false );
 				$value = $field->get_value_default_if_empty( $value );
 
-				switch ( $field->inputType ) {
+				switch ( $field->get_input_type() ) {
 					case 'calculation' :
 					case 'singleproduct' :
 					case 'hiddenproduct' :
@@ -2051,12 +2051,7 @@ class GFFormDisplay {
 
 		global $_gf_state;
 
-		//if field can be populated dynamically, disable state validation
-		if ( $field->allowsPrepopulate ) {
-			return false;
-		} else if ( ! GFCommon::is_product_field( $field->type ) && $field->type != 'donation' && $field->type != 'consent' ) {
-			return false;
-		} else if ( ! in_array( $field->inputType, array( 'singleshipping', 'singleproduct', 'hiddenproduct', 'checkbox', 'radio', 'select', 'consent' ) ) ) {
+		if ( ! $field->is_state_validation_supported() ) {
 			return false;
 		}
 

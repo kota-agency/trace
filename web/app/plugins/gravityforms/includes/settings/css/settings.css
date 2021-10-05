@@ -2197,6 +2197,10 @@ html:not([dir="rtl"]) .gform-settings-input__container--with-merge-tag .wp-edito
 
 }
 
+.gform-table.gform-table--license-ui .gform-icon--cog {
+		font-size: 1.125rem;
+	}
+
 .gform-results {
 
 	display: flex;

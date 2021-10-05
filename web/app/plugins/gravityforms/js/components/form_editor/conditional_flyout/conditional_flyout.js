@@ -150,7 +150,7 @@ function getCorrectDefaultFieldId( field ) {
 		return null;
 	}
 
-	if ( ! field.inputs || ! field.inputs.length ) {
+	if ( field.type === 'checkbox' || field.type === 'radio' || ! field.inputs || ! field.inputs.length ) {
 		return field.id;
 	}
 

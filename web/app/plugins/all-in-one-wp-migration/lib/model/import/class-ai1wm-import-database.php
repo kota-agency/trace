@@ -915,11 +915,12 @@ class Ai1wm_Import_Database {
 			$new_table_prefixes[] = ai1wm_table_prefix() . $table_name;
 		}
 
-		// Since BuddyBoss Platform 2.0, non-multisite configurations have stored signups in
-		// the same way as Multisite configs traditionally have: in the wp_signups table
-		if ( ai1wm_validate_plugin_basename( 'buddyboss-platform/bp-loader.php' ) ) {
-			$old_table_prefixes[] = ai1wm_servmask_prefix( 'mainsite' ) . 'signups';
-			$new_table_prefixes[] = ai1wm_table_prefix() . 'signups';
+		// Set BuddyPress table prefixes
+		if ( ai1wm_validate_plugin_basename( 'buddyboss-platform/bp-loader.php' ) || ai1wm_validate_plugin_basename( 'buddypress/bp-loader.php' ) ) {
+			foreach ( array( 'signups', 'bp_activity', 'bp_activity_meta', 'bp_friends', 'bp_groups', 'bp_groups_groupmeta', 'bp_groups_members', 'bp_invitations', 'bp_messages_messages', 'bp_messages_meta', 'bp_messages_notices', 'bp_messages_recipients', 'bp_notifications', 'bp_notifications_meta', 'bp_optouts', 'bp_user_blogs', 'bp_user_blogs_blogmeta', 'bp_xprofile_data', 'bp_xprofile_fields', 'bp_xprofile_groups', 'bp_xprofile_meta' ) as $table_name ) {
+				$old_table_prefixes[] = ai1wm_servmask_prefix( 'mainsite' ) . $table_name;
+				$new_table_prefixes[] = ai1wm_table_prefix() . $table_name;
+			}
 		}
 
 		// Set base table prefixes

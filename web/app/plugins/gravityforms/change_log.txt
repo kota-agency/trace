@@ -1,4 +1,39 @@
-### 2.5.9 | 2021-08-11
+### 2.5.12 | 2021-10-01
+- Fixed an issue with the address field merge tag when selecting the option to use the values from a previous address field
+- Fixed an issue for the list field where multi-column headers are misaligned when max rows are set to 1.
+- Fixed an issue which causes calls to the License API to occur more often than necessary.
+
+### 2.5.11 | 2021-09-29
+- Added security enhancements.
+- Added a new UI for License Settings which shows more-thorough details about your License Key.
+- Updated logo to reflect new branding.
+- Fixed an issue which causes compatibility errors when third-party code extends the Gravity API class.
+- Fixed a PHP fatal error that occurs during translation installation when the hosting environment is configured to block external requests.
+- Fixed an issue for thickbox where RTL is not being respected, but only within the context of Gravity Forms admin pages.
+- API: Updated the logic that determines when to show custom form settings fields.
+
+### 2.5.10 | 2021-09-08
+- Added alt text and title attribute for accessibility to the date field datepicker field icon.
+- Fixed an issue where the form button text doesn't properly update for page conditional logic.
+- Fixed an issue where forms with pricing fields throw PHP notices if fields are removed before the form is rendered.
+- Fixed an issue with our block script loading that breaks the Gutenberg editor in WordPress 5.8.x and up.
+- Fixed an issue that causes some screens in the admin to have JavaScript errors in WordPress versions previous to 5.0.
+- Fixed an issue which causes field calculations with references to the calculated field to infinitely loop.
+- Fixed an issue that causes the Form Switcher to break on certain Admin views.
+- Fixed an issue which causes fields with multiple inputs to have incorrect aria-validate attributes.
+- Fixed an issue for the conditional flyout logic where checkbox and radio field based conditionals are not being respected.
+- Fixed an issue which causes fields with whitespace to break certain Add-on Feeds.
+- Fixed an issue where the border for the section field type is missing for the frontend form display when legacy markup mode is not enabled.
+- Fixed an issue for the generic map settings field not rendering when editing an existing feed where the setting was previously configured.
+- Fixed an issue that causes gfCalc events to be bound to the same listener multiple times.
+- Updated the reCAPTCHA settings link for the Captcha field "To use the reCAPTCHA field" message in the form editor.
+- Updated the UI of the update button in the form editor.
+- Updated the feed settings to run on admin_init instead of init to ensure they never trigger on the front end.
+- Updated some instances of strings not being translatable for the System Status view.
+- API: Fixed an issue where field map fields don't auto populate with default options.
+- AF: Added the ability to overwrite the uninstall message.
+
+### 2.5.9 | 2021-08-10
 - Added security enhancements.
 - Fixed an issue where the header of the datepicker in legacy forms has the wrong background color and the dropdowns are not aligned correctly.
 - Fixed an issue where "This field is required" appears twice in the time field validation message.

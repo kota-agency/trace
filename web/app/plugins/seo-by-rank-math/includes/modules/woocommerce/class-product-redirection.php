@@ -12,6 +12,7 @@ namespace RankMath\WooCommerce;
 
 use RankMath\Helper;
 use RankMath\Traits\Hooker;
+use RankMath\Helpers\Sitepress;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -85,12 +86,18 @@ class Product_Redirection {
 		$base     = explode( '/', ltrim( $base, '/' ) );
 		$new_link = $uri;
 
+		// Early Bail if new_link length is less then the base.
+		if ( count( explode( '/', $new_link ) ) <= count( $base ) ) {
+			return false;
+		}
+
 		// On Single product page redirect base with shop and product.
 		if ( $is_product ) {
 			$base[] = 'product';
 			$base[] = 'shop';
-
+			Sitepress::get()->remove_home_url_filter();
 			$new_link = ! is_feed() ? trim( str_replace( get_home_url(), '', get_permalink() ), '/' ) : $new_link;
+			Sitepress::get()->restore_home_url_filter();
 		}
 
 		foreach ( array_unique( $base ) as $remove ) {
@@ -101,7 +108,28 @@ class Product_Redirection {
 		}
 
 		$new_link = implode( '/', array_map( 'rawurlencode', explode( '/', $new_link ) ) ); // encode everything but slashes.
-		return $new_link === $uri ? false : trailingslashit( home_url( strtolower( $new_link ) ) );
+
+		return $new_link === $this->strip_ignored_parts( $uri ) ? false : trailingslashit( home_url( strtolower( $new_link ) ) );
+	}
+
+	/**
+	 * Remove unneeded parts from the URI.
+	 *
+	 * @param string $uri Original URI.
+	 *
+	 * @return string
+	 */
+	private function strip_ignored_parts( $uri ) {
+		$ignore_url_parts = [
+			'#/comment-page-([0-9]{1,})$#',
+		];
+
+		$ignore_url_parts = $this->do_filter( 'woocommerce/product_redirection_ignore_url_parts', $ignore_url_parts );
+		foreach ( $ignore_url_parts as $pattern ) {
+			$uri = preg_replace( $pattern, '', $uri );
+		}
+
+		return implode( '/', array_map( 'rawurlencode', explode( '/', $uri ) ) );
 	}
 
 	/**

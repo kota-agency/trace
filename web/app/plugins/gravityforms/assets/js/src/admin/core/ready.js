@@ -5,20 +5,7 @@
  */
 
 import common from 'common';
-
-const ready = ( fn ) => {
-	if ( document.readyState !== 'loading' ) {
-		fn();
-	} else if ( document.addEventListener ) {
-		document.addEventListener( 'DOMContentLoaded', fn );
-	} else {
-		document.attachEvent( 'onreadystatechange', () => {
-			if ( document.readyState !== 'loading' ) {
-				fn();
-			}
-		} );
-	}
-};
+import { ready } from '@gravityforms/utils';
 
 /**
  * @function bindEvents
@@ -40,6 +27,14 @@ const init = () => {
 	// initialize common modules
 
 	common();
+
+	// if ( document.getElementById( 'gf_toolbar_buttons_container' ) ) {
+	// 	import( '../react' /* webpackChunkName:"admin-example" */ ).then(
+	// 		( module ) => {
+	// 			module.default( document.getElementById( 'gf_toolbar_buttons_container' ) );
+	// 		}
+	// 	);
+	// }
 
 	// initialize admin modules
 

@@ -301,6 +301,10 @@ a .gform-icon {
 		color: #a16938;
 	}
 
+.gform-admin .gform-c-error-text {
+		color: #dd301d;
+	}
+
 .gform-admin .gform-c-red {
 		color: #dd301d;
 	}
@@ -852,14 +856,31 @@ html[dir="rtl"] .gform-alert__dismiss {
 
 #gf_toolbar_buttons_container .update-form {
 		margin: 0 0.75rem 0 0.1875rem;
+		padding: 0.4065rem 1.125rem;
 	}
+
+#gf_toolbar_buttons_container .update-form .gform-button__icon {
+			font-size: 1.5rem;
+			line-height: 0;
+			top: unset;
+			width: 24px;
+		}
 
 #gf_toolbar_buttons_container .preview-form {
 		margin: 0 0.1875rem 0 0.75rem;
 	}
 
+.gforms_edit_form #gf_toolbar_buttons_container .preview-form {
+	padding: 0.4065rem 1.125rem;
+}
+
 html[dir="rtl"] #gf_toolbar_buttons_container .update-form {
 		margin: 0 0.1875rem 0 0.75rem;
+	}
+
+html[dir="rtl"] #gf_toolbar_buttons_container .update-form.gform-button--icon-leading .gform-button__icon {
+		margin-left: 0.5rem;
+		margin-right: unset;
 	}
 
 html[dir="rtl"] #gf_toolbar_buttons_container .preview-form {
@@ -3197,6 +3218,11 @@ div.push-alert-red {
 			position: relative;
 		}
 
+.gform-status-indicator.gform-status--no-icon {
+		padding-left: 0.65rem;
+		padding-right: 0.65rem;
+	}
+
 .gform-status-indicator:focus, .gform-status-indicator:hover, .gform-status-indicator:active {
 		border-color: #3e7da6;
 		box-shadow: 0 0 0 1px #bed8ed;
@@ -3208,14 +3234,18 @@ div.push-alert-red {
 }
 
 html[dir="rtl"] .gform-status-indicator {
-
-	padding-left: 0.75rem;
+	padding-left: 0.5rem;
 	padding-right: 1.5rem;
 }
 
 html[dir="rtl"] .gform-status-indicator svg {
 		left: auto;
 		right: 0.25rem;
+	}
+
+html[dir="rtl"] .gform-status-indicator.gform-status--no-icon {
+		padding-left: 0.65rem;
+		padding-right: 0.65rem;
 	}
 
 /*
@@ -4470,7 +4500,7 @@ to no.
 ----------------------------------------------------------------
 */
 
-html[dir="rtl"] .gform_wrapper *, html[dir="rtl"] .gform_wrapper form, html[dir="rtl"] .gform_wrapper .gform_body, html[dir="rtl"] .gform_wrapper ul li, html[dir="rtl"] .gform_wrapper ul li.gfield, html[dir="rtl"] .gform_wrapper ul li.gfield.gfield_html, html[dir="rtl"] .gform_wrapper ul li.gfield input, html[dir="rtl"] .gform_wrapper ul li.gfield textarea, html[dir="rtl"] .gform_wrapper textarea, html[dir="rtl"] .gform_wrapper ul li.gfield select, html[dir="rtl"] .gform_wrapper select, html[dir="rtl"] .gform_wrapper input[type="text"], html[dir="rtl"] .gform_wrapper input[type="email"], html[dir="rtl"] .gform_wrapper input[type="password"], html[dir="rtl"] .gform_wrapper input[type="url"], html[dir="rtl"] .gform_wrapper input[type="tel"], html[dir="rtl"] .gform_wrapper input[type="submit"], html[dir="rtl"] .gform_wrapper input[type="button"], html[dir="rtl"] .gform_wrapper button, html[dir="rtl"] .gform_wrapper table tr td.gfield_list_icons, html[dir="rtl"] .gform_wrapper div.validation_error, html[dir="rtl"] .gform_wrapper h3.gform_title, html[dir="rtl"] .gform_wrapper span.gform_description, html[dir="rtl"] .gform_wrapper .gform_footer {
+html[dir="rtl"] .gform_wrapper *, html[dir="rtl"] .gform_wrapper form, html[dir="rtl"] .gform_wrapper .gform_body, html[dir="rtl"] .gform_wrapper ul li, html[dir="rtl"] .gform_wrapper ul li.gfield, html[dir="rtl"] .gform_wrapper ul li.gfield.gfield_html, html[dir="rtl"] .gform_wrapper ul li.gfield input, html[dir="rtl"] .gform_wrapper ul li.gfield textarea, html[dir="rtl"] .gform_wrapper textarea, html[dir="rtl"] .gform_wrapper ul li.gfield select, html[dir="rtl"] .gform_wrapper select, html[dir="rtl"] .gform_wrapper input[type="text"], html[dir="rtl"] .gform_wrapper input[type="email"], html[dir="rtl"] .gform_wrapper input[type="password"], html[dir="rtl"] .gform_wrapper input[type="url"], html[dir="rtl"] .gform_wrapper input[type="tel"], html[dir="rtl"] .gform_wrapper input[type="submit"], html[dir="rtl"] .gform_wrapper input[type="button"], html[dir="rtl"] .gform_wrapper button, html[dir="rtl"] .gform_wrapper div.validation_error, html[dir="rtl"] .gform_wrapper h3.gform_title, html[dir="rtl"] .gform_wrapper span.gform_description, html[dir="rtl"] .gform_wrapper .gform_footer {
 	text-align: right;
 	direction: rtl;
 }
@@ -4494,7 +4524,7 @@ html[dir="rtl"] .gform_wrapper table.gfield_list th, html[dir="rtl"] .gform_wrap
 	padding-right: 0;
 }
 
-.gform_wrapper table.gfield_list tr td.gfield_list_icons, .gform_wrapper table.gfield_list tr td:last-child {
+.gform_legacy_markup_wrapper table.gfield_list tbody td.gfield_list_icons, .gform_legacy_markup_wrapper table.gfield_list thead tr td:last-child {
 	padding: 0 4px 0 0 !important;
 }
 
@@ -4516,7 +4546,7 @@ html[dir="rtl"] .gform_wrapper .chosen-container ul.chosen-choices li.search-fie
 	float: right !important;
 }
 
-body.rtl .gform_wrapper *, body.rtl .gform_wrapper form, body.rtl .gform_wrapper .gform_body, body.rtl .gform_wrapper ul li, body.rtl .gform_wrapper ul li.gfield, body.rtl .gform_wrapper ul li.gfield.gfield_html, body.rtl .gform_wrapper ul li.gfield input, body.rtl .gform_wrapper ul li.gfield textarea, body.rtl .gform_wrapper textarea, body.rtl .gform_wrapper ul li.gfield select, body.rtl .gform_wrapper select, body.rtl .gform_wrapper input[type="text"], body.rtl .gform_wrapper input[type="email"], body.rtl .gform_wrapper input[type="password"], body.rtl .gform_wrapper input[type="url"], body.rtl .gform_wrapper input[type="tel"], body.rtl .gform_wrapper input[type="submit"], body.rtl .gform_wrapper input[type="button"], body.rtl .gform_wrapper button, body.rtl .gform_wrapper table tr td.gfield_list_icons, body.rtl .gform_wrapper div.validation_error, body.rtl .gform_wrapper h3.gform_title, body.rtl .gform_wrapper span.gform_description, body.rtl .gform_wrapper .gform_footer, body .gform_wrapper.gf_rtl_wrapper ul li, body .gform_wrapper.gf_rtl_wrapper ul li.gfield, body .gform_wrapper.gf_rtl_wrapper ul li.gfield.gfield_html, body .gform_wrapper.gf_rtl_wrapper ul li.gfield input, body .gform_wrapper.gf_rtl_wrapper ul li.gfield textarea, body .gform_wrapper.gf_rtl_wrapper textarea, body .gform_wrapper.gf_rtl_wrapper ul li.gfield select, body .gform_wrapper.gf_rtl_wrapper select, body .gform_wrapper.gf_rtl_wrapper input[type="text"], body .gform_wrapper.gf_rtl_wrapper input[type="email"], body .gform_wrapper.gf_rtl_wrapper input[type="password"], body .gform_wrapper.gf_rtl_wrapper input[type="url"], body .gform_wrapper.gf_rtl_wrapper input[type="tel"], body .gform_wrapper.gf_rtl_wrapper input[type="submit"], body .gform_wrapper.gf_rtl_wrapper input[type="button"], body .gform_wrapper.gf_rtl_wrapper button, body .gform_wrapper.gf_rtl_wrapper table tr td.gfield_list_icons, body .gform_wrapper.gf_rtl_wrapper div.validation_error, body .gform_wrapper.gf_rtl_wrapper .gform_heading, body .gform_wrapper.gf_rtl_wrapper h3.gform_title, body .gform_wrapper.gf_rtl_wrapper span.gform_description, body .gform_wrapper.gf_rtl_wrapper .gform_footer {
+body.rtl .gform_wrapper *, body.rtl .gform_wrapper form, body.rtl .gform_wrapper .gform_body, body.rtl .gform_wrapper ul li, body.rtl .gform_wrapper ul li.gfield, body.rtl .gform_wrapper ul li.gfield.gfield_html, body.rtl .gform_wrapper ul li.gfield input, body.rtl .gform_wrapper ul li.gfield textarea, body.rtl .gform_wrapper textarea, body.rtl .gform_wrapper ul li.gfield select, body.rtl .gform_wrapper select, body.rtl .gform_wrapper input[type="text"], body.rtl .gform_wrapper input[type="email"], body.rtl .gform_wrapper input[type="password"], body.rtl .gform_wrapper input[type="url"], body.rtl .gform_wrapper input[type="tel"], body.rtl .gform_wrapper input[type="submit"], body.rtl .gform_wrapper input[type="button"], body.rtl .gform_wrapper button, body.rtl .gform_wrapper div.validation_error, body.rtl .gform_wrapper h3.gform_title, body.rtl .gform_wrapper span.gform_description, body.rtl .gform_wrapper .gform_footer, body .gform_wrapper.gf_rtl_wrapper ul li, body .gform_wrapper.gf_rtl_wrapper ul li.gfield, body .gform_wrapper.gf_rtl_wrapper ul li.gfield.gfield_html, body .gform_wrapper.gf_rtl_wrapper ul li.gfield input, body .gform_wrapper.gf_rtl_wrapper ul li.gfield textarea, body .gform_wrapper.gf_rtl_wrapper textarea, body .gform_wrapper.gf_rtl_wrapper ul li.gfield select, body .gform_wrapper.gf_rtl_wrapper select, body .gform_wrapper.gf_rtl_wrapper input[type="text"], body .gform_wrapper.gf_rtl_wrapper input[type="email"], body .gform_wrapper.gf_rtl_wrapper input[type="password"], body .gform_wrapper.gf_rtl_wrapper input[type="url"], body .gform_wrapper.gf_rtl_wrapper input[type="tel"], body .gform_wrapper.gf_rtl_wrapper input[type="submit"], body .gform_wrapper.gf_rtl_wrapper input[type="button"], body .gform_wrapper.gf_rtl_wrapper button, body .gform_wrapper.gf_rtl_wrapper div.validation_error, body .gform_wrapper.gf_rtl_wrapper .gform_heading, body .gform_wrapper.gf_rtl_wrapper h3.gform_title, body .gform_wrapper.gf_rtl_wrapper span.gform_description, body .gform_wrapper.gf_rtl_wrapper .gform_footer {
 	text-align: right !important;
 	direction: rtl !important;
 }
@@ -7815,6 +7845,15 @@ tr.gf-locking.wp-locked img.gform_active_icon {
 	text-decoration: none;
 }
 
+/* List field */
+
+@media (max-width: 640px) {
+
+	html[dir="rtl"] .gforms_edit_form .gform_wrapper.gravity-theme .ginput_list input {
+			float: none !important
+	}
+		}
+
 .gf-pagebreak {
 	align-items: center;
 	color: #6c7781;
@@ -7948,18 +7987,29 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	color: #444;
 }
 
-.wp-admin #TB_overlay {
+html[dir="rtl"] .gform-admin #TB_window, html[dir="rtl"] .gform-admin #TB_ajaxContent {
+		text-align: right;
+	}
+
+.gform-admin #TB_ajaxContent {
+	box-sizing: border-box;
+	padding: 0 2rem 80px;
+	position: relative;
+	width: auto !important;
+}
+
+.gform-admin #TB_overlay {
 	background: #1c1f3f;
 	opacity: 0.72;
 }
 
-.wp-admin #TB_window {
+.gform-admin #TB_window {
 	background: #fff;
 	border-radius: 6px;
 	box-shadow: 0 16px 80px rgba(5, 17, 50, 0.66);
 }
 
-.wp-admin #TB_title {
+.gform-admin #TB_title {
 	background: transparent;
 	border-bottom: none;
 	display: flex;
@@ -7968,7 +8018,7 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	padding: 1.875rem 2rem 1.375rem;
 }
 
-.wp-admin #TB_ajaxWindowTitle {
+.gform-admin #TB_ajaxWindowTitle {
 	color: #242748;
 	font-size: 1rem;
 	font-weight: normal;
@@ -7977,7 +8027,7 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	white-space: normal;
 }
 
-.wp-admin #TB_closeWindowButton {
+.gform-admin #TB_closeWindowButton {
 	position: relative;
 }
 
@@ -7997,6 +8047,11 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	width: 2.6875rem;
 }
 
+html[dir="rtl"] .gform-admin .tb-title__logo::before {
+		margin-left: 0.74375rem;
+		margin-right: 0;
+	}
+
 .tb-title__main {
 	color: #242748;
 	font-size: 1rem;
@@ -8009,7 +8064,7 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	font-weight: normal;
 }
 
-.wp-admin .tb-close-icon {
+.gform-admin .tb-close-icon {
 	background: #fff center no-repeat url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xLjE4MyAxLjE4M2EuNjI1LjYyNSAwIDAwMCAuODg0TDUuMTE2IDYgMS4xODMgOS45MzNhLjYyNS42MjUgMCAxMC44ODQuODg0TDYgNi44ODRsMy45MzMgMy45MzNhLjYyNS42MjUgMCAxMC44ODQtLjg4NEw2Ljg4NCA2bDMuOTMzLTMuOTMzYS42MjUuNjI1IDAgMTAtLjg4NC0uODg0TDYgNS4xMTYgMi4wNjcgMS4xODNhLjYyNS42MjUgMCAwMC0uODg0IDB6IiBmaWxsPSIjM0U3REE2Ii8+PHBhdGggZD0iTTEuMTgzIDIuMDY3TC44MyAyLjQybC4zNTMtLjM1M3ptMC0uODg0TC44My44M2wuMzUzLjM1M3pNNS4xMTYgNmwuMzU0LjM1NEw1LjgyMyA2bC0uMzUzLS4zNTRMNS4xMTYgNnpNMS4xODMgOS45MzNMLjgzIDkuNThsLjM1My4zNTR6bTAgLjg4NGwtLjM1My4zNTQuMzUzLS4zNTR6TTYgNi44ODRsLjM1NC0uMzU0TDYgNi4xNzdsLS4zNTQuMzUzLjM1NC4zNTR6bTMuOTMzIDMuOTMzbC4zNTQtLjM1NC0uMzU0LjM1NHptLjg4NC0uODg0bC0uMzU0LjM1NC4zNTQtLjM1NHpNNi44ODQgNmwtLjM1NC0uMzU0TDYuMTc3IDZsLjM1My4zNTRMNi44ODQgNnptMy45MzMtNC44MTdMMTEuMTcuODNsLS4zNTQuMzUzem0tLjg4NCAwTDkuNTguODNsLjM1NC4zNTN6TTYgNS4xMTZsLS4zNTQuMzU0LjM1NC4zNTMuMzU0LS4zNTNMNiA1LjExNnpNMi4wNjcgMS4xODNMMi40Mi44M2wtLjM1My4zNTN6bS0uNTMuNTNhLjEyNS4xMjUgMCAwMTAtLjE3NkwuODMuODNjLS40NC40MzktLjQ0IDEuMTUxIDAgMS41OWwuNzA3LS43MDd6TTUuNDcgNS42NDZMMS41MzcgMS43MTNsLS43MDcuNzA4IDMuOTMzIDMuOTMzLjcwNy0uNzA4em0tMy45MzMgNC42NEw1LjQ3IDYuMzU1bC0uNzA3LS43MDhMLjgzIDkuNThsLjcwNy43MDh6bTAgLjE3N2EuMTI1LjEyNSAwIDAxMC0uMTc2TC44MyA5LjU3OWMtLjQ0LjQ0LS40NCAxLjE1MiAwIDEuNTkxbC43MDctLjcwN3ptLjE3NiAwYS4xMjUuMTI1IDAgMDEtLjE3NiAwbC0uNzA3LjcwOGMuNDM5LjQzOSAxLjE1MS40MzkgMS41OSAwbC0uNzA3LS43MDh6TTUuNjQ2IDYuNTNsLTMuOTMzIDMuOTMzLjcwOC43MDggMy45MzMtMy45MzQtLjcwOC0uNzA3em00LjY0IDMuOTMzTDYuMzU1IDYuNTNsLS43MDguNzA3IDMuOTMzIDMuOTM0LjcwOC0uNzA4em0uMTc3IDBhLjEyNS4xMjUgMCAwMS0uMTc2IDBsLS43MDguNzA4Yy40NC40MzkgMS4xNTIuNDM5IDEuNTkxIDBsLS43MDctLjcwOHptMC0uMTc2YS4xMjUuMTI1IDAgMDEwIC4xNzZsLjcwOC43MDhjLjQzOS0uNDQuNDM5LTEuMTUyIDAtMS41OTFsLS43MDguNzA3ek02LjUzIDYuMzU0bDMuOTMzIDMuOTMzLjcwOC0uNzA4LTMuOTM0LTMuOTMzLS43MDcuNzA4em0zLjkzMy00LjY0TDYuNTMgNS42NDVsLjcwNy43MDggMy45MzQtMy45MzMtLjcwOC0uNzA4em0wLS4xNzdhLjEyNS4xMjUgMCAwMTAgLjE3NmwuNzA4LjcwOGMuNDM5LS40NC40MzktMS4xNTIgMC0xLjU5MWwtLjcwOC43MDd6bS0uMTc2IDBhLjEyNS4xMjUgMCAwMS4xNzYgMGwuNzA4LS43MDdhMS4xMjUgMS4xMjUgMCAwMC0xLjU5MSAwbC43MDcuNzA3ek02LjM1NCA1LjQ3bDMuOTMzLTMuOTMzTDkuNTc5LjgzIDUuNjQ2IDQuNzYzbC43MDguNzA3em0tNC42NC0zLjkzM0w1LjY0NSA1LjQ3bC43MDgtLjcwN0wyLjQyLjgzbC0uNzA4LjcwN3ptLS4xNzcgMGEuMTI1LjEyNSAwIDAxLjE3NiAwTDIuNDIxLjgzQTEuMTI1IDEuMTI1IDAgMDAuODMuODNsLjcwNy43MDd6IiBmaWxsPSIjM0U3REE2Ii8+PC9zdmc+);
 	background-size: 0.625rem;
 	border: 1px solid #d5d7e9;
@@ -8020,15 +8075,8 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	width: 1.625rem;
 }
 
-.wp-admin .tb-close-icon::before {
+.gform-admin .tb-close-icon::before {
 	content: none;
-}
-
-.wp-admin #TB_ajaxContent {
-	box-sizing: border-box;
-	padding: 0 2rem 80px;
-	position: relative;
-	width: auto !important;
 }
 
 #TB_window .modal_footer {
@@ -8040,10 +8088,6 @@ ul.gform_fields.left_label li.gfield.gfield_html .gfield_label, ul.gform_fields.
 	padding: 20px 32px;
 	position: absolute;
 	right: 0;
-}
-
-html[dir="rtl"] .modal_footer {
-	text-align: right;
 }
 
 .modal_footer .button, .modal_footer .button-primary {
@@ -8063,11 +8107,15 @@ html[dir="rtl"] .modal_footer {
 	min-height: 30px;
 	padding: 0.125rem 1.125rem;
 	transition: all 0.3s ease;
-	white-space: nowrap;
+	white-space: nowrap
 }
 
-.modal_footer .button-primary, .modal_footer .button.primary {
+.modal_footer .button:hover, .modal_footer .button-primary:hover {
+		box-shadow: 0 4px 6px rgba(28, 31, 63, 0.0837013);
+		transform: translate(0, -2px);
+	}
 
+.modal_footer .button-primary, .modal_footer .button.primary {
 	background: #3e7da6;
 	border: 1px solid transparent;
 	border-radius: 3px;
@@ -8079,21 +8127,13 @@ html[dir="rtl"] .modal_footer {
 	height: initial;
 	line-height: 1;
 	padding: 0.625rem 1.125rem;
-	transition: all 0.3s ease;
-
+	transition: all 0.3s ease
 }
 
 .modal_footer .button-primary:hover, .modal_footer .button.primary:hover {
-
-	box-shadow: 0 4px 6px rgba(28, 31, 63, 0.0837013);
-	transform: translate(0, -2px);
-
-}
-
-.modal_footer .button:hover, .modal_footer .button-primary:hover {
-	box-shadow: 0 4px 6px rgba(28, 31, 63, 0.0837013);
-	transform: translate(0, -2px);
-}
+		box-shadow: 0 4px 6px rgba(28, 31, 63, 0.0837013);
+		transform: translate(0, -2px);
+	}
 
 /* New form modal */
 
@@ -8152,6 +8192,7 @@ html[dir="rtl"] .modal_footer {
 
 .gform_new_form .gform_new_form_modal_container .setting-row textarea {
 	height: 110px;
+	max-height: 200px;
 }
 
 .gform_new_form .gform_new_form_modal_container #gf_new_form_error_message {
