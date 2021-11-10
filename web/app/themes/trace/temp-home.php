@@ -311,65 +311,6 @@ $button_sector_cta = get_field('sectors_button');
     </div>
 </section><!-- .sectors -->
 
-<?php
-
-/**
- * Block: Video
- */
-
-$classes5 = ['full-width', padding_classes()];
-
-$embed5 = get_field('video_vimeo_embed');
-$placeholder5 = wp_get_attachment_image_url(get_field('video_placeholder'), 'full');
-
-?>
-
-<?php if ($embed5 && $placeholder5) : ?>
-    <section <?= block_id(); ?> class="video <?= implode('', $classes5); ?>" data-aos="trigger" data-aos-delay="1000"
-                                data-aos-offset="500">
-        <div class="container">
-            <div class="video__wrapper">
-                <?= $embed5; ?>
-                <div class="video__image bg-cover" style="background-image: url(<?= $placeholder5; ?>);">
-                    <span class="play"></span>
-                </div>
-            </div>
-        </div>
-
-        <?php if (have_rows('links_v_links')) : ?>
-            <div class="buttons">
-                <?php while (have_rows('links_v_links')) : the_row(); ?>
-                    <?php
-
-                    $button = get_sub_field('link');
-                    $link_type = get_sub_field('style');
-
-                    if ($button) {
-                        switch ($link_type) {
-                            case "Button":
-                                get_component('button', $button);
-                                break;
-                            case "Link":
-                                get_component('link', $button);
-                                break;
-                            case "Video Link":
-                                $button['attr'] = 'data-fancybox';
-                                $button['classes'] = 'link--video';
-                                $button['icon'] = '<i class="far fa-play-circle"></i>';
-                                get_component('link', $button);
-                                break;
-                            default:
-                                get_component('button', $button);
-                        }
-
-                    }
-
-                    ?>
-                <?php endwhile; ?>
-            </div>
-        <?php endif; ?>
-    </section><!-- .video -->
-<?php endif; ?>
 
 <?php
 
@@ -515,6 +456,66 @@ $copy7 = get_field('content_&_video_copy');
         <?php endif; ?>
     </div>
 </section><!-- .content-video -->
+
+<?php
+
+/**
+ * Block: Video
+ */
+
+$classes5 = ['full-width', padding_classes()];
+
+$embed5 = get_field('video_vimeo_embed');
+$placeholder5 = wp_get_attachment_image_url(get_field('video_placeholder'), 'full');
+
+?>
+
+<?php if ($embed5 && $placeholder5) : ?>
+    <section <?= block_id(); ?> class="video <?= implode('', $classes5); ?>" data-aos="trigger" data-aos-delay="1000"
+                                data-aos-offset="500">
+        <div class="container">
+            <div class="video__wrapper">
+                <?= $embed5; ?>
+                <div class="video__image bg-cover" style="background-image: url(<?= $placeholder5; ?>);">
+                    <span class="play"></span>
+                </div>
+            </div>
+        </div>
+
+        <?php if (have_rows('links_v_links')) : ?>
+            <div class="buttons">
+                <?php while (have_rows('links_v_links')) : the_row(); ?>
+                    <?php
+
+                    $button = get_sub_field('link');
+                    $link_type = get_sub_field('style');
+
+                    if ($button) {
+                        switch ($link_type) {
+                            case "Button":
+                                get_component('button', $button);
+                                break;
+                            case "Link":
+                                get_component('link', $button);
+                                break;
+                            case "Video Link":
+                                $button['attr'] = 'data-fancybox';
+                                $button['classes'] = 'link--video';
+                                $button['icon'] = '<i class="far fa-play-circle"></i>';
+                                get_component('link', $button);
+                                break;
+                            default:
+                                get_component('button', $button);
+                        }
+
+                    }
+
+                    ?>
+                <?php endwhile; ?>
+            </div>
+        <?php endif; ?>
+    </section><!-- .video -->
+<?php endif; ?>
 
 <?php
 
