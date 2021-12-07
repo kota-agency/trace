@@ -1779,7 +1779,7 @@ html[dir="rtl"] .gform-settings-field__text-append {
 
 }
 
-.gform-settings-field__date_time button {
+.gform-settings-field__date_time .ui-datepicker-trigger {
 
 	-webkit-appearance: none;
 	-moz-appearance: none;

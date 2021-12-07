@@ -81,6 +81,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 }
 
+/* Media Queries */
+
 /* -----------------------------------------------------------------------------
  *
  * Mixins
@@ -199,8 +201,15 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gform_wrapper.gravity-theme .left_label .gfield_label, .gform_wrapper.gravity-theme .right_label .gfield_label {
 		width: 30%;
 		margin: 0;
-		padding: 0;
+		padding: 0
 	}
+
+@media (max-width: 640px) {
+
+	.gform_wrapper.gravity-theme .left_label .gfield_label, .gform_wrapper.gravity-theme .right_label .gfield_label {
+			width: 100%
+	}
+		}
 
 .gform_wrapper.gravity-theme .gform_fields.left_label fieldset, .gform_wrapper.gravity-theme .gform_fields.right_label fieldset {
 				clear: both;
@@ -208,23 +217,51 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform_wrapper.gravity-theme .gform_fields.left_label fieldset .ginput_container, .gform_wrapper.gravity-theme .gform_fields.right_label fieldset .ginput_container {
 					float: left;
-					width: 70%;
+					width: 70%
 				}
+
+@media (max-width: 640px) {
+
+				.gform_wrapper.gravity-theme .gform_fields.left_label fieldset .ginput_container, .gform_wrapper.gravity-theme .gform_fields.right_label fieldset .ginput_container {
+						width: 100%
+				}
+					}
+
+@media (max-width: 640px) {
+
+				.gform_wrapper.gravity-theme .gform_fields.left_label fieldset > .ginput_complex, .gform_wrapper.gravity-theme .gform_fields.right_label fieldset > .ginput_complex {
+						width: 100%
+				}
+					}
 
 .gform_wrapper.gravity-theme .gform_fields.left_label legend.gfield_label, .gform_wrapper.gravity-theme .gform_fields.right_label legend.gfield_label {
 					display: block;
 					float: left;
 					padding-right: 1em;
-					width: 30%;
+					width: 30%
 				}
+
+@media (max-width: 640px) {
+
+				.gform_wrapper.gravity-theme .gform_fields.left_label legend.gfield_label, .gform_wrapper.gravity-theme .gform_fields.right_label legend.gfield_label {
+						width: 100%
+				}
+					}
 
 .gform_wrapper.gravity-theme .left_label .ginput_complex .ginput_container, .gform_wrapper.gravity-theme .right_label .ginput_complex .ginput_container {
 		width: auto;
 	}
 
 .gform_wrapper.gravity-theme .left_label div.gfield > div:not(.ui-resizable-handle):not(.gfield-admin-icons), .gform_wrapper.gravity-theme .right_label div.gfield > div:not(.ui-resizable-handle):not(.gfield-admin-icons) {
-		width: 70%;
+		width: 70%
 	}
+
+@media (max-width: 640px) {
+
+	.gform_wrapper.gravity-theme .left_label div.gfield > div:not(.ui-resizable-handle):not(.gfield-admin-icons), .gform_wrapper.gravity-theme .right_label div.gfield > div:not(.ui-resizable-handle):not(.gfield-admin-icons) {
+			width: 100%
+	}
+		}
 
 .gform_wrapper.gravity-theme .right_label .gfield_label {
 		text-align: right;
