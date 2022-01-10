@@ -1,4 +1,4 @@
-# Copyright (C) 2021 rank-math
+# Copyright (C) 2022 rank-math
 # This file is distributed under the same license as the rank-math package.
 msgid ""
 msgstr ""
@@ -588,6 +588,15 @@ msgid ".htaccess file updated successfully."
 msgstr ""
 
 msgid "Panel"
+msgstr ""
+
+msgid "Take your SEO to the Next Level!"
+msgstr ""
+
+msgid "Get Rank Math PRO!"
+msgstr ""
+
+msgid "Click here to see all the exciting features."
 msgstr ""
 
 msgid "Save Changes"
@@ -1428,6 +1437,40 @@ msgid "PRO"
 msgstr ""
 
 msgid "NEW!"
+msgstr ""
+
+msgid "Take SEO to the Next Level!"
+msgstr ""
+
+msgid "Unlimited personal websites"
+msgstr ""
+
+msgid "Free 15 Content AI Credits"
+msgstr ""
+
+msgid "Track 500 Keywords"
+msgstr ""
+
+msgid "Powerful Schema Generator"
+msgstr ""
+
+msgid "24/7 Support"
+msgstr ""
+
+msgid "Buy"
+msgstr ""
+
+#. translators: %d: minutes
+#. translators: %s expands to a unit of time (e.g. 1 minute).
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Less than a minute"
+msgstr ""
+
+msgid "Items"
 msgstr ""
 
 msgid "Post ID"
@@ -3389,7 +3432,7 @@ msgstr ""
 msgid "%s archives"
 msgstr ""
 
-msgid "Exclude this image from sitemap"
+msgid "Exclude this attachment from sitemap"
 msgstr ""
 
 #. translators: the placeholder is for the sitemap base url.
@@ -3972,6 +4015,12 @@ msgstr ""
 msgid "Author archive meta description. SEO options for specific author archives can be set with the meta box in the user profiles."
 msgstr ""
 
+msgid "Slack Enhanced Sharing"
+msgstr ""
+
+msgid "When the option is enabled and an author archive is shared on Slack, additional information will be shown (name & total number of posts)."
+msgstr ""
+
 msgid "Add SEO Controls"
 msgstr ""
 
@@ -4158,6 +4207,19 @@ msgstr ""
 msgid "To configure attachment-related meta tags disable attachment redirection to parent."
 msgstr ""
 
+#. translators: Post type name.
+msgid "When the option is enabled and a %s is shared on Slack, additional information will be shown (estimated time to read and author)."
+msgstr ""
+
+msgid "When the option is enabled and a product is shared on Slack, additional information will be shown (price)."
+msgstr ""
+
+msgid "When the option is enabled and a product is shared on Slack, additional information will be shown (price & availability)."
+msgstr ""
+
+msgid "When the option is enabled and a page is shared on Slack, additional information will be shown (estimated time to read)."
+msgstr ""
+
 #. translators: post type name
 msgid "Single %s Title"
 msgstr ""
@@ -4191,6 +4253,12 @@ msgid "Description for %s archive pages."
 msgstr ""
 
 msgid "Headline"
+msgstr ""
+
+msgid "Default rich snippet selected when creating a new location."
+msgstr ""
+
+msgid "Local Business"
 msgstr ""
 
 #. translators: post type name
@@ -4323,6 +4391,9 @@ msgstr ""
 
 #. translators: taxonomy name
 msgid "%s Archives Advanced Robots Meta"
+msgstr ""
+
+msgid "When the option is enabled and a term from this taxonomy is shared on Slack, additional information will be shown (the total number of items with this term)."
 msgstr ""
 
 msgid "Add the SEO Controls for the term editor screen to customize SEO options for individual terms in this taxonomy."
@@ -5057,12 +5128,6 @@ msgstr[1] ""
 #. translators: %s expands to a unit of time (e.g. 1 hour).
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
-
-#. translators: %s expands to a unit of time (e.g. 1 minute).
-msgid "%d minute"
-msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
