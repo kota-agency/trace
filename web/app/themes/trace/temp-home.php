@@ -12,6 +12,15 @@ $classes = ['full-width', 'theme-primary', 'bg-primary', padding_classes()];
 
 $title = get_field('title');
 $background_text = get_field('background_text');
+$video = get_field('video');
+
+if($video['vimeo_embed'])
+    preg_match('/src="([^"]+)"/', $video['vimeo_embed'], $match);
+
+if($video['youtube_embed'])
+    preg_match('/src="([^"]+)"/', $video['youtube_embed'], $match);
+$video_url = $match[1];
+
 $image = wp_get_attachment_image(get_field('image'), 'full');
 ?>
 
@@ -36,6 +45,11 @@ $image = wp_get_attachment_image(get_field('image'), 'full');
             <div class="hero__image">
                 <div data-aos="fade-left" data-aos-delay="500">
                     <?= $image; ?>
+                    <?php if($video_url): ?>
+                        <a href="<?= $video_url ?>" data-fancybox>
+                            <span class="play"></span>
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
 
