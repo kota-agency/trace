@@ -1,13 +1,13 @@
 #!/bin/sh
 
-DEVDIR="web/app/uploads/"
-DEVSITE="http://trace.test"
+#DEVDIR="web/app/uploads/"
+#DEVSITE="http://trace.test"
 
 STAGDIR="forge@178.62.99.195:/home/forge/trace.in-beta.link/web/app/uploads/"
 STAGSITE="https://trace.in-beta.link"
 
 PRODDIR="forge@178.62.121.111:/home/forge/www.tracesolutions.co.uk/web/app/uploads/"
-PRODSITE="http://www.tracesolutions.co.uk"
+PRODSITE="https://www.tracesolutions.co.uk"
 
 FROM=$1
 TO=$2
@@ -27,5 +27,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   wp "@$TO" db export &&
   wp "@$FROM" db export - | wp "@$TO" db import - &&
   wp "@$TO" search-replace "$FROMSITE" "$TOSITE" &&
+  wp cache flush &&
+  wp rewrite flush &&
   rsync -az --progress "$FROMDIR" "$TODIR"
 fi
