@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '08f5f9c2da167b9ca795484f45e48343c199cff2',
+    'reference' => '08ad574c4db124083cb6d88a1c78fa03f004f4d1',
     'name' => 'rankmath/seo-by-rank-math',
   ),
   'versions' => 
@@ -46,12 +46,12 @@ private static $installed = array (
     ),
     'cmb2/cmb2' => 
     array (
-      'pretty_version' => 'v2.9.0',
-      'version' => '2.9.0.0',
+      'pretty_version' => 'v2.10.1',
+      'version' => '2.10.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'cacbc8cedbfdf8ffe0e840858e6860f9333c33f2',
+      'reference' => '4afc4bb7b92ab6d93aac2247c9a84af773e42532',
     ),
     'donatj/phpuseragentparser' => 
     array (
@@ -64,12 +64,12 @@ private static $installed = array (
     ),
     'mythemeshop/wordpress-helpers' => 
     array (
-      'pretty_version' => 'v1.1.16',
-      'version' => '1.1.16.0',
+      'pretty_version' => 'v1.1.18',
+      'version' => '1.1.18.0',
       'aliases' => 
       array (
       ),
-      'reference' => '2d9bddc0995fe1d2e81c42ac80fd115ff15dd560',
+      'reference' => '6294c995e9365bee25fcfa8f3c045800620a5278',
     ),
     'rankmath/seo-by-rank-math' => 
     array (
@@ -78,7 +78,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '08f5f9c2da167b9ca795484f45e48343c199cff2',
+      'reference' => '08ad574c4db124083cb6d88a1c78fa03f004f4d1',
     ),
     'woocommerce/action-scheduler' => 
     array (

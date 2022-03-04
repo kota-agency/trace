@@ -246,7 +246,7 @@ class Frontend {
 			$schemas
 		);
 
-		$faq_key = ! empty( $faq_data ) ? key( array_filter( $faq_data ) ) : '';
+		$faq_key = is_array( $faq_data ) && ! empty( $faq_data ) ? key( array_filter( $faq_data ) ) : '';
 		if ( ! $faq_key ) {
 			return $schemas;
 		}
@@ -254,11 +254,8 @@ class Frontend {
 		if ( in_array( $faq_key, array_keys( $schemas ), true ) ) {
 			$schemas['WebPage']['@type'] =
 				! empty( $types )
-					? [
-						$schemas['WebPage']['@type'],
-						'FAQPage',
-					]
-					: 'FAQPage';
+				? array_merge( (array) $schemas['WebPage']['@type'], [ 'FAQPage' ] )
+				: 'FAQPage';
 
 			$schemas['WebPage']['mainEntity'] = $schemas[ $faq_key ]['mainEntity'];
 
