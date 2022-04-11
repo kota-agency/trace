@@ -41,7 +41,6 @@ class Post_Screen implements IScreen {
 	 */
 	public function __construct() {
 		$this->filter( 'rank_math/researches/tests', 'remove_tests', 10, 2 );
-		$this->action( 'rank_math/metabox/process_fields', 'save_general_meta' );
 	}
 
 	/**
@@ -123,8 +122,7 @@ class Post_Screen implements IScreen {
 	 * @return array
 	 */
 	public function get_values() {
-		$post_type        = $this->get_current_post_type();
-		$sample_permalink = get_sample_permalink( $this->get_object_id(), null, null );
+		$post_type = $this->get_current_post_type();
 
 		return [
 			'parentDomain'           => Url::get_domain( home_url() ),
@@ -137,17 +135,13 @@ class Post_Screen implements IScreen {
 				'linkSuggestions' => Helper::get_settings( 'titles.pt_' . $post_type . '_link_suggestions' ),
 				'useFocusKeyword' => 'focus_keywords' === Helper::get_settings( 'titles.pt_' . $post_type . '_ls_use_fk' ),
 			],
-			'siteFavIcon'            => $this->get_site_icon(),
 			'frontEndScore'          => Frontend_SEO_Score::show_on(),
 			'postName'               => get_post_field( 'post_name', get_post() ),
-			'permalinkFormat'        => isset( $sample_permalink[0] ) ? $sample_permalink[0] : home_url(),
+			'permalinkFormat'        => $this->get_permalink_format(),
 			'assessor'               => [
 				'hasTOCPlugin'     => $this->has_toc_plugin(),
 				'sentimentKbLink'  => KB::get( 'sentiments' ),
 				'focusKeywordLink' => admin_url( 'edit.php?focus_keyword=%focus_keyword%&post_type=%post_type%' ),
-				'futureSeo'        => KB::get( 'pro-general-g' ),
-				'hasBreadcrumb'    => Helper::is_breadcrumbs_enabled(),
-				'hasRedirection'   => Helper::is_module_active( 'redirections' ),
 				'isUserEdit'       => Admin_Helper::is_user_edit(),
 				'socialPanelLink'  => Helper::get_admin_url( 'options-titles#setting-panel-social' ),
 				'primaryTaxonomy'  => $this->get_primary_taxonomy(),
@@ -165,8 +159,8 @@ class Post_Screen implements IScreen {
 
 		return [
 			'primaryTerm'         => $this->get_primary_term_id(),
-			'authorName'          => get_the_author_meta( 'display_name' ),
-			'titleTemplate'       => Helper::get_settings( "titles.pt_{$post->post_type}_title", '%%title%% %%sep%% %%sitename%%' ),
+			'authorName'          => get_the_author_meta( 'display_name', $post->post_author ),
+			'titleTemplate'       => Helper::get_settings( "titles.pt_{$post->post_type}_title", '%title% %sep% %sitename%' ),
 			'descriptionTemplate' => Helper::get_settings( "titles.pt_{$post->post_type}_description", '' ),
 			'showScoreFrontend'   => ! Helper::get_post_meta( 'dont_show_seo_score', $this->get_object_id() ),
 		];
@@ -200,6 +194,7 @@ class Post_Screen implements IScreen {
 			'titleSentiment'            => true,
 			'titleHasPowerWords'        => true,
 			'titleHasNumber'            => true,
+			'hasContentAI'              => true,
 		];
 
 		return $tests;
@@ -222,16 +217,26 @@ class Post_Screen implements IScreen {
 	}
 
 	/**
-	 * Save handler for metadata.
+	 * Function to get the permalink format.
 	 *
-	 * @param CMB2 $cmb CMB2 instance.
+	 * @since 1.0.69.2
 	 */
-	public function save_general_meta( $cmb ) {
-		if ( Helper::get_settings( "titles.pt_{$cmb->data_to_save['post_type']}_title" ) === $cmb->data_to_save['rank_math_title'] ) {
-			$cmb->data_to_save['rank_math_title'] = '';
+	private function get_permalink_format() {
+		$post_id = $this->get_object_id();
+		$post    = get_post( $post_id );
+
+		if ( 'attachment' === $post->post_type ) {
+			return str_replace( $post->post_name, '%postname%', get_permalink( $post ) );
 		}
 
-		return $cmb;
+		if ( 'auto-draft' !== $post->post_status || 'post' !== $post->post_type ) {
+			$sample_permalink = get_sample_permalink( $post_id, null, null );
+			return isset( $sample_permalink[0] ) ? $sample_permalink[0] : home_url();
+		}
+
+		$post_temp              = $post;
+		$post_temp->post_status = 'publish';
+		return get_permalink( $post_temp, true );
 	}
 
 	/**
@@ -270,21 +275,10 @@ class Post_Screen implements IScreen {
 	}
 
 	/**
-	 * Get site fav icon.
-	 *
-	 * @return string
-	 */
-	private function get_site_icon() {
-		$favicon = get_site_icon_url( 16 );
-
-		return ! empty( $favicon ) ? $favicon : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABs0lEQVR4AWL4//8/RRjO8Iucx+noO0MWUDo16FYABMGP6ZfUcRnWtm27jVPbtm3bttuH2t3eFPcY9pLz7NxiLjCyVd87pKnHyqXyxtCs8APd0rnyxiu4qSeA3QEDrAwBDrT1s1Rc/OrjLZwqVmOSu6+Lamcpp2KKMA9PH1BYXMe1mUP5qotvXTywsOEEYHXxrY+3cqk6TMkYpNr2FeoY3KIr0RPtn9wQ2unlA+GMkRw6+9TFw4YTwDUzx/JVvARj9KaedXRO8P5B1Du2S32smzqUrcKGEyA+uAgQjKX7zf0boWHGfn71jIKj2689gxp7OAGShNcBUmLMPVjZuiKcA2vuWHHDCQxMCz629kXAIU4ApY15QwggAFbfOP9DhgBJ+nWVJ1AZAfICAj1pAlY6hCADZnveQf7bQIwzVONGJonhLIlS9gr5mFg44Xd+4S3XHoGNPdJl1INIwKyEgHckEhgTe1bGiFY9GSFBYUwLh1IkiJUbY407E7syBSFxKTszEoiE/YdrgCEayDmtaJwCI9uu8TKMuZSVfSa4BpGgzvomBR/INhLGzrqDotp01ZR8pn/1L0JN9d9XNyx0AAAAAElFTkSuQmCC';
-	}
-
-	/**
 	 * Enqueque scripts common for all builders.
 	 */
 	private function enqueue_commons() {
-		wp_register_style( 'rank-math-post-metabox', rank_math()->plugin_url() . 'assets/admin/css/gutenberg.css', [], rank_math()->version );
+		wp_register_style( 'rank-math-editor', rank_math()->plugin_url() . 'assets/admin/css/gutenberg.css', [], rank_math()->version );
 	}
 
 	/**
@@ -308,14 +302,13 @@ class Post_Screen implements IScreen {
 	 * Enqueue scripts for gutenberg screen.
 	 */
 	private function enqueue_for_gutenberg() {
-		wp_enqueue_style( 'rank-math-post-metabox' );
+		wp_enqueue_style( 'rank-math-editor' );
 		wp_enqueue_script( 'rank-math-formats' );
 		wp_enqueue_script(
-			'rank-math-gutenberg',
+			'rank-math-editor',
 			rank_math()->plugin_url() . 'assets/admin/js/gutenberg.js',
 			[
 				'clipboard',
-				'tagify',
 				'wp-autop',
 				'wp-blocks',
 				'wp-components',
@@ -326,6 +319,7 @@ class Post_Screen implements IScreen {
 				'wp-plugins',
 				'wp-wordcount',
 				'rank-math-analyzer',
+				'rank-math-app',
 			],
 			rank_math()->version,
 			true
@@ -338,12 +332,13 @@ class Post_Screen implements IScreen {
 	 * @return string
 	 */
 	private function get_current_post_type() {
+		$post_type = get_post_type();
 		if ( function_exists( 'get_current_screen' ) ) {
-			$screen = get_current_screen();
-			return $screen->post_type;
+			$screen    = get_current_screen();
+			$post_type = isset( $screen->post_type ) ? $screen->post_type : $post_type;
 		}
 
-		return get_post_type();
+		return $post_type;
 	}
 
 	/**

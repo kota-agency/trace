@@ -50,6 +50,11 @@ class Cache {
 	public function __construct() {
 		$this->wp_filesystem = WordPress::get_filesystem();
 		$this->mode          = $this->is_writable() ? 'file' : 'db';
+
+		/**
+		 * Change sitemap caching mode (can be "file" or "db").
+		 */
+		$this->mode = apply_filters( 'rank_math/sitemap/cache_mode', $this->mode );
 	}
 
 	/**
@@ -58,6 +63,10 @@ class Cache {
 	 * @return bool
 	 */
 	public function is_writable() {
+		if ( is_null( $this->wp_filesystem ) || ! Helper::is_filesystem_direct() ) {
+			return false;
+		}
+
 		$directory_separator = '/';
 		$folder_path         = $this->get_cache_directory();
 		$test_file           = $folder_path . $this->get_storage_key();
@@ -90,7 +99,7 @@ class Cache {
 	 */
 	public function get_sitemap( $type, $page ) {
 		$filename = $this->get_storage_key( $type, $page );
-		if ( false === $filename ) {
+		if ( false === $filename || is_null( $this->wp_filesystem ) ) {
 			return false;
 		}
 
@@ -113,7 +122,7 @@ class Cache {
 	 */
 	public function store_sitemap( $type, $page, $sitemap ) {
 		$filename = $this->get_storage_key( $type, $page );
-		if ( false === $filename ) {
+		if ( false === $filename || is_null( $this->wp_filesystem ) ) {
 			return false;
 		}
 
@@ -192,8 +201,12 @@ class Cache {
 	 * @param null|string $type The type to get the key for. Null for all caches.
 	 */
 	public static function invalidate_storage( $type = null ) {
-		$directory     = self::get_cache_directory();
 		$wp_filesystem = WordPress::get_filesystem();
+		if ( is_null( $wp_filesystem ) ) {
+			return;
+		}
+
+		$directory = self::get_cache_directory();
 
 		if ( is_null( $type ) ) {
 			$wp_filesystem->delete( $directory, true );

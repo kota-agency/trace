@@ -18,6 +18,12 @@
     &__content {
         position: relative;
         z-index: 2;
+
+        @include media-breakpoint-up(sm) {
+            h1 {
+                font-size: 10.1rem;
+            }
+        }
     }
 
     &__image {

@@ -117,6 +117,15 @@ abstract class GFAddOn {
 	private static $_registered_addons = array( 'active' => array(), 'inactive' => array() );
 
 	/**
+	 * Stores instances of the add-ons that implement the results/sales pages.
+	 *
+	 * @since 2.5.13
+	 *
+	 * @var array
+	 */
+	private static $results_addons = [];
+
+	/**
 	 * Class constructor which hooks the instance into the WordPress init action
 	 */
 	function __construct() {
@@ -321,6 +330,8 @@ abstract class GFAddOn {
 			$results_capabilities = rgar( $results_page_config, 'capabilities' );
 			if ( $results_page_config && $this->current_user_can_any( $results_capabilities ) ) {
 				$this->results_page_init( $results_page_config );
+				// Store the configuration as it will be used later to decide which forms have results/sales page.
+				self::$results_addons[] = $this->get_results_page_config();
 			}
 		}
 
@@ -337,6 +348,17 @@ abstract class GFAddOn {
 		add_filter( 'gform_noconflict_styles', array( $this, 'register_noconflict_styles' ) );
 		add_action( 'gform_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10, 2 );
 
+	}
+
+	/**
+	 * Returns instances of the add-ons that implement the results/sales pages.
+	 *
+	 * @since 2.5.13
+	 *
+	 * @return array
+	 */
+	public static function get_results_addon() {
+		return self::$results_addons;
 	}
 
 	/**
@@ -3884,7 +3906,7 @@ abstract class GFAddOn {
 			add_action( 'gform_form_settings_page_' . $this->_slug, array( $this, 'form_settings_page' ) );
 
 			// Let feed add-ons handle initializing their settings.
-			if ( ! $this->method_is_overridden( 'feed_settings_init' ) ) {
+			if ( $this->method_is_overridden( 'form_settings_fields' ) ) {
 
 				// Get current form.
 				$form = $this->get_current_form();
@@ -4954,6 +4976,20 @@ abstract class GFAddOn {
 	//--------------  Uninstall  ---------------
 
 	/**
+	 * Override this function to customize the uninstall message displayed on the uninstall page.
+	 *
+	 * @since 2.5.9.4
+	 *
+	 * @return string
+	 */
+	public function uninstall_message() {
+		return sprintf(
+				__( 'This operation deletes ALL %s settings.', 'gravityforms' ),
+				$this->get_short_title()
+		);
+	}
+
+	/**
 	 * Override this function to customize the markup for the uninstall section on the plugin settings page.
 	 *
 	 * @since Unknown
@@ -4976,7 +5012,7 @@ abstract class GFAddOn {
 					<div class="addon-logo dashicons"><?php echo $icon_markup; ?></div>
 					<div class="addon-uninstall-text">
 						<h4 class="gform-settings-panel__title"><?php printf( esc_html__( '%s', 'gravityforms' ), $this->get_short_title() ) ?></h4>
-						<div><?php printf( esc_html__( 'This operation deletes ALL %s settings.', 'gravityforms' ), $this->get_short_title() ) ?></div>
+						<div><?php echo esc_html( $this->uninstall_message() ); ?></div>
 					</div>
 					<div class="addon-uninstall-button">
 						<input id="addon" name="addon" type="hidden" value="<?php echo $this->get_short_title(); ?>">
@@ -6155,33 +6191,31 @@ abstract class GFAddOn {
 	/**
 	 * Displays all installed addons with their uninstall buttons.
 	 *
-	 * @since  2.5
-	 * @param array $installed_addons array of installed addons to display.
+	 * Add-ons which override this method will display a button with a link instead. The add-on's overridden output
+	 * will be displayed on the settings page for that add-on.
 	 *
+	 * @see GFAddOn::uninstall_addon()
+	 *
+	 * @since  2.5
+	 *
+	 * @param array $uninstallable_addons Array of GFAddOn objects.
 	 */
-	public static function addons_for_uninstall( $installed_addons ) {
+	public static function addons_for_uninstall( $uninstallable_addons ) {
 		?>
 		<div class="gform-addons-uninstall-panel">
 			<?php
-			foreach ( $installed_addons as $addon ) {
+			/* @var GFAddOn $addon An add-on instance. */
+			foreach ( $uninstallable_addons as $addon ) {
+				ob_start();
+				$addon->render_uninstall();
+				$panel_markup = ob_get_clean();
 
-				$addon = call_user_func( array( $addon, 'get_instance' ) );
-
-				// If the render_uninstall method has been overridden, show the settings button instead.
-				if ( ! $addon->method_is_overridden( 'render_uninstall' ) ) {
-					$addon->render_uninstall();
-				} else {
-					ob_start();
-					$addon->render_uninstall();
-					$output = ob_get_contents();
-					ob_end_clean();
-					// If the render uninstall button was overridden to show nothing, default to the render_uninstall function.
-					if ( $output == '' ) {
-						$addon->render_uninstall();
-					} else {
-						$addon->render_settings_button();
-					}
+				if ( $addon->method_is_overridden( 'render_uninstall' ) && ! empty( $panel_markup ) ) {
+					$addon->render_settings_button();
+					continue;
 				}
+
+				echo $panel_markup; // @codingStandardsIgnoreLine - markup prepared in render_install.
 			}
 			?>
 		</div>

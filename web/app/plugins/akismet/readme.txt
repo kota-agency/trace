@@ -1,9 +1,9 @@
 === Akismet Spam Protection ===
 Contributors: matt, ryan, andy, mdawaffe, tellyworth, josephscott, lessbloat, eoigal, cfinke, automattic, jgs, procifer, stephdau
 Tags: comments, spam, antispam, anti-spam, contact form, anti spam, comment moderation, comment spam, contact form spam, spam comments
-Requires at least: 4.6
-Tested up to: 5.7
-Stable tag: 4.1.9
+Requires at least: 5.0
+Tested up to: 5.9
+Stable tag: 4.2.2
 License: GPLv2 or later
 
 The best anti-spam protection to block spam comments and spam in a contact form. The most trusted antispam solution for WordPress and WooCommerce.
@@ -29,6 +29,48 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 1, 2, 3: You're done!
 
 == Changelog ==
+
+= 4.2.2 =
+*Release Date - 24 January 2022*
+
+* Improved compatibility with Formidable Forms
+* Fixed a bug that could cause issues when multiple contact forms appear on one page.
+* Updated delete_comment and deleted_comment actions to pass two arguments to match WordPress core since 4.9.0.
+* Add a filter that allows comment types to be excluded when counting users' approved comments.
+
+= 4.2.1 =
+*Release Date - 1 October 2021*
+
+* Fixed a bug causing AMP validation to fail on certain pages with forms.
+
+= 4.2 =
+*Release Date - 30 September 2021*
+
+* Added links to additional information on API usage notifications.
+* Reduced the number of network requests required for a comment page when running Akismet.
+* Improved compatibility with the most popular contact form plugins.
+* Improved API usage buttons for clarity on what upgrade is needed.
+
+= 4.1.12 =
+*Release Date - 3 September 2021*
+
+* Fixed "Use of undefined constant" notice.
+* Improved styling of alert notices.
+
+= 4.1.11 =
+*Release Date - 23 August 2021*
+
+* Added support for Akismet API usage notifications on Akismet settings and edit-comments admin pages.
+* Added support for the deleted_comment action when bulk-deleting comments from Spam.
+ 
+= 4.1.10 =
+*Release Date - 6 July 2021*
+
+* Simplified the code around checking comments in REST API and XML-RPC requests.
+* Updated Plus plan terminology in notices to match current subscription names.
+* Added `rel="noopener"` to the widget link to avoid warnings in Google Lighthouse.
+* Set the Akismet JavaScript as deferred instead of async to improve responsiveness.
+* Improved the preloading of screenshot popups on the edit comments admin page.
 
 = 4.1.9 =
 *Release Date - 2 March 2021*

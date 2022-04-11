@@ -199,7 +199,6 @@ class Installer {
 				uri VARCHAR(255) NOT NULL,
 				accessed DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
 				times_accessed BIGINT(20) unsigned NOT NULL DEFAULT 1,
-				ip VARCHAR(50) NOT NULL DEFAULT '',
 				referer VARCHAR(255) NOT NULL DEFAULT '',
 				user_agent VARCHAR(255) NOT NULL DEFAULT '',
 				PRIMARY KEY id (id),
@@ -269,6 +268,7 @@ class Installer {
 		$this->create_misc_options();
 		$this->create_general_options();
 		$this->create_titles_sitemaps_options();
+		$this->create_instant_indexing_options();
 	}
 
 	/**
@@ -289,6 +289,8 @@ class Installer {
 			'bbpress',
 			'acf',
 			'web-stories',
+			'content-ai',
+			'instant-indexing',
 		];
 
 		// Role Manager.
@@ -315,6 +317,11 @@ class Installer {
 	 * Add defaults for general options.
 	 */
 	private function create_general_options() {
+		$post_types = Helper::get_accessible_post_types();
+		if ( isset( $post_types['attachment'] ) ) {
+			unset( $post_types['attachment'] );
+		}
+
 		add_option(
 			'rank-math-options-general',
 			$this->do_filter(
@@ -361,8 +368,8 @@ class Installer {
 					'frontend_seo_score'                  => 'off',
 					'frontend_seo_score_post_types'       => [ 'post' ],
 					'frontend_seo_score_position'         => 'top',
-					'frontend_seo_score'                  => 'off',
 					'setup_mode'                          => 'advanced',
+					'content_ai_post_types'               => array_keys( $post_types ),
 				]
 			)
 		);
@@ -427,6 +434,8 @@ class Installer {
 		array_push( $post_types, 'product', 'web-story' );
 
 		$titles['pt_download_default_rich_snippet'] = 'product';
+		$titles['author_slack_enhanced_sharing']    = 'on';
+
 		foreach ( $post_types as $post_type ) {
 			$defaults = $this->get_post_type_defaults( $post_type );
 
@@ -441,6 +450,12 @@ class Installer {
 
 			if ( $this->has_archive( $post_type ) ) {
 				$titles[ 'pt_' . $post_type . '_archive_title' ] = '%title% %page% %sep% %sitename%';
+			}
+
+			// Slack enhanced sharing is off by default, except for posts, pages, products, and downloads.
+			$titles[ 'pt_' . $post_type . '_slack_enhanced_sharing' ] = 'off';
+			if ( in_array( $post_type, [ 'post', 'page', 'product', 'download' ], true ) ) {
+				$titles[ 'pt_' . $post_type . '_slack_enhanced_sharing' ] = 'on';
 			}
 
 			if ( in_array( $post_type, [ 'attachment', 'web-story' ], true ) ) {
@@ -519,11 +534,12 @@ class Installer {
 		foreach ( $taxonomies as $taxonomy => $object ) {
 			$defaults = $this->get_taxonomy_defaults( $taxonomy );
 
-			$titles[ 'tax_' . $taxonomy . '_title' ]         = '%term% %sep% %sitename%';
-			$titles[ 'tax_' . $taxonomy . '_robots' ]        = $defaults['robots'];
-			$titles[ 'tax_' . $taxonomy . '_add_meta_box' ]  = $defaults['metabox'];
-			$titles[ 'tax_' . $taxonomy . '_custom_robots' ] = $defaults['is_custom'];
-			$titles[ 'tax_' . $taxonomy . '_description' ]   = '%term_description%';
+			$titles[ 'tax_' . $taxonomy . '_title' ]                  = '%term% %sep% %sitename%';
+			$titles[ 'tax_' . $taxonomy . '_robots' ]                 = $defaults['robots'];
+			$titles[ 'tax_' . $taxonomy . '_add_meta_box' ]           = $defaults['metabox'];
+			$titles[ 'tax_' . $taxonomy . '_custom_robots' ]          = $defaults['is_custom'];
+			$titles[ 'tax_' . $taxonomy . '_description' ]            = '%term_description%';
+			$titles[ 'tax_' . $taxonomy . '_slack_enhanced_sharing' ] = 'on';
 
 			$sitemap[ 'tax_' . $taxonomy . '_sitemap' ] = 'category' === $taxonomy ? 'on' : 'off';
 		}
@@ -645,6 +661,23 @@ class Installer {
 
 		// On deactivation.
 		add_action( 'shutdown', 'flush_rewrite_rules' );
+	}
+
+	/**
+	 * Add defaults for the Instant Indexing module options.
+	 *
+	 * @return void
+	 */
+	private function create_instant_indexing_options() {
+		add_option(
+			'rank-math-options-instant-indexing',
+			$this->do_filter(
+				'settings/defaults/instant-indexing',
+				[
+					'bing_post_types' => [ 'post', 'page' ],
+				]
+			)
+		);
 	}
 
 }

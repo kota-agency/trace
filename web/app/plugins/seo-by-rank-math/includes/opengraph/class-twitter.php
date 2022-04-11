@@ -14,7 +14,9 @@
 namespace RankMath\OpenGraph;
 
 use RankMath\Helper;
+use RankMath\Post;
 use MyThemeShop\Helpers\Str;
+use MyThemeShop\Helpers\Arr;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -86,7 +88,7 @@ class Twitter extends OpenGraph {
 	 */
 	public function use_facebook() {
 		$use_facebook = ( is_category() || is_tag() || is_tax() ) ? Helper::get_term_meta( 'twitter_use_facebook' ) :
-			Helper::get_post_meta( 'twitter_use_facebook', 0, true );
+			Helper::get_post_meta( 'twitter_use_facebook', Post::is_shop_page() ? Post::get_shop_page_id() : 0, true );
 
 		if ( $use_facebook ) {
 			$this->prefix = 'facebook';
@@ -148,7 +150,7 @@ class Twitter extends OpenGraph {
 
 		$size = Helper::get_post_meta( 'twitter_player_size' );
 		if ( $size ) {
-			$size = array_map( 'trim', explode( 'x', $size ) );
+			$size = Arr::from_string( $size, 'x' );
 			if ( isset( $size[1] ) ) {
 				$twitter_meta['twitter:player:width']  = (int) $size[0];
 				$twitter_meta['twitter:player:height'] = (int) $size[1];
@@ -190,7 +192,7 @@ class Twitter extends OpenGraph {
 	public function image() {
 		$images = new Image( false, $this );
 		foreach ( $images->get_images() as $image_url => $image_meta ) {
-			$img_url = $this->get_overlay_image( $this->prefix ) ? admin_url( "admin-ajax.php?action=rank_math_overlay_thumb&id={$image_meta['id']}&type={$this->get_overlay_image( $this->prefix )}" ) : $image_url;
+			$img_url = $this->get_overlay_image( $this->prefix ) && ! empty( $image_meta['id'] ) ? admin_url( "admin-ajax.php?action=rank_math_overlay_thumb&id={$image_meta['id']}&type={$this->get_overlay_image( $this->prefix )}" ) : $image_url;
 			$this->tag( 'twitter:image', esc_url_raw( $img_url ) );
 		}
 	}

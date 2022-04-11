@@ -67,8 +67,8 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles {
 	 * @since    1.7.0
 	 */
 	public function __construct() {
-		if ( defined( 'PLUGIN_NAME_VERSION' ) ) {
-			$this->version = PLUGIN_NAME_VERSION;
+		if ( defined( 'HIDE_ADMIN_BAR_BASED_ON_USER_ROLES' ) ) {
+			$this->version = HIDE_ADMIN_BAR_BASED_ON_USER_ROLES;
 		} else {
 			$this->version = '1.7.0';
 		}

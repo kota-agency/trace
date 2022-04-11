@@ -12,15 +12,13 @@ gform.addAction( 'gform_input_change', function( elem, formId, fieldId ) {
 }, 10 );
 
 function gf_apply_rules(formId, fields, isInit){
-	var rule_applied = 0;
+
 	jQuery(document).trigger( 'gform_pre_conditional_logic', [ formId, fields, isInit ] );
 	for(var i=0; i < fields.length; i++){
 		gf_apply_field_rule(formId, fields[i], isInit, function(){
-			rule_applied++;
-			if(rule_applied == fields.length){
-				jQuery(document).trigger('gform_post_conditional_logic', [formId, fields, isInit]);
-				if(window["gformCalculateTotalPrice"])
-					window["gformCalculateTotalPrice"](formId);
+			jQuery(document).trigger('gform_post_conditional_logic', [formId, fields, isInit]);
+			if(window["gformCalculateTotalPrice"]){
+				window["gformCalculateTotalPrice"](formId);
 			}
 		});
 	}
@@ -138,13 +136,18 @@ function gf_is_match( formId, rule ) {
 		$inputs = $( 'input[id="input_{0}_{1}"], input[id^="input_{0}_{1}_"], input[id^="choice_{0}_{1}_"], select#input_{0}_{1}, textarea#input_{0}_{1}'.format( formId, fieldId ) );
 	}
 
-	var isCheckable = $.inArray( $inputs.attr( 'type' ), [ 'checkbox', 'radio' ] ) !== -1,
-		isMatch     = isCheckable ? gf_is_match_checkable( $inputs, rule, formId, fieldId ) : gf_is_match_default( $inputs.eq( 0 ), rule, formId, fieldId );
+	var isCheckable = $.inArray( $inputs.attr( 'type' ), [ 'checkbox', 'radio' ] ) !== -1;
+	var isMatch     = isCheckable ? gf_is_match_checkable( $inputs, rule, formId, fieldId ) : gf_is_match_default( $inputs.eq( 0 ), rule, formId, fieldId );
 
 	return gform.applyFilters( 'gform_is_value_match', isMatch, formId, rule );
 }
 
 function gf_is_match_checkable( $inputs, rule, formId, fieldId ) {
+
+	// Rule is checking if the checkable is/isn't blank. Return a specific check for that use-case.
+	if ( rule.value === '' ) {
+		return rule.operator === 'is' ? gf_is_checkable_empty( $inputs ) : ! gf_is_checkable_empty( $inputs );
+	}
 
 	var isMatch = false;
 
@@ -177,6 +180,26 @@ function gf_is_match_checkable( $inputs, rule, formId, fieldId ) {
 	} );
 
 	return isMatch;
+}
+
+/**
+ * Check if a collection of checkable inputs has any checked,
+ * or if they are all unchecked.
+ *
+ * @param {jQuery} $inputs A collection of inputs to check.
+ *
+ * @returns {boolean}
+ */
+function gf_is_checkable_empty( $inputs ) {
+	var isEmpty = true;
+
+	$inputs.each( function() {
+		if ( jQuery( this ).is( ':checked' ) ) {
+			isEmpty = false;
+		}
+	} );
+
+	return isEmpty;
 }
 
 function gf_is_match_default( $input, rule, formId, fieldId ) {
@@ -342,7 +365,6 @@ function gf_do_next_button_action(formId, action, fieldId, isInit){
 }
 
 function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, callback, formId){
-
 	var $target = jQuery( targetId );
 
 	/**
@@ -366,7 +388,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 			if($target.length > 0){
 				$target.find(':input:hidden:not(.gf-default-disabled)').removeAttr( 'disabled' );
 				if ( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
-					$target.removeAttr( 'disabled' );
+					$target.removeAttr( 'disabled' ).css( 'display', '' );
 					if ( '1' == gf_legacy.is_legacy ) {
 						// for legacy markup, remove screen reader class.
 						$target.removeClass( 'screen-reader-text' );
@@ -381,15 +403,15 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 			var display = $target.data('gf_display');
 
-			//defaults to list-item if previous (saved) display isn't set for any reason
+			// set display if previous (saved) display isn't set for any reason
 			if ( display == '' || display == 'none' ){
-				display = 'list-item';
+				display = '1' === gf_legacy.is_legacy ? 'list-item' : 'block';
 			}
 			$target.find(':input:hidden:not(.gf-default-disabled)').removeAttr( 'disabled' );
 
 			// Handle conditional submit and next buttons.
 			if ( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
-				$target.removeAttr( 'disabled' );
+				$target.removeAttr( 'disabled' ).css( 'display', '' );
 				if ( '1' == gf_legacy.is_legacy ) {
 					// for legacy markup, remove screen reader class.
 					$target.removeClass( 'screen-reader-text' );
@@ -428,7 +450,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 		if(useAnimation && !isInit){
 			if( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
-				$target.attr( 'disabled', 'disabled' );
+				$target.attr( 'disabled', 'disabled' ).hide();
 				if ( '1' === gf_legacy.is_legacy ) {
 					// for legacy markup, let screen readers read the button.
 					$target.addClass( 'screen-reader-text' );
@@ -442,7 +464,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 			// Handle conditional submit and next buttons.
 			if ( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
-				$target.attr( 'disabled', 'disabled' );
+				$target.attr( 'disabled', 'disabled' ).hide();
 				if ( '1' === gf_legacy.is_legacy ) {
 					// for legacy markup, let screen readers read the button.
 					$target.addClass( 'screen-reader-text' );
@@ -563,6 +585,7 @@ function gf_reset_to_default(targetId, defaultValue){
 			if( gf_is_hidden_pricing_input( element ) ) {
 				var ids = gf_get_ids_by_html_id( element.parents( '.gfield' ).attr( 'id' ) );
 				jQuery( '#input_' + ids[0] + '_' + ids[1] ).text( gformFormatMoney( element.val() ) );
+				element.val( gformFormatMoney( element.val() ) );
 			}
 		}
 		else{
@@ -601,13 +624,13 @@ function gf_reset_to_default(targetId, defaultValue){
 
 function gf_is_hidden_pricing_input( element ) {
 
-	if( element.attr( 'type' ) !== 'hidden' ) {
-		return false;
-	}
-
 	// Check for Single Product fields.
 	if( element.attr( 'id' ) && element.attr( 'id' ).indexOf( 'ginput_base_price' ) === 0 ) {
 		return true;
+	}
+
+	if( element.attr( 'type' ) !== 'hidden' ) {
+		return false;
 	}
 
 	// Check for Shipping fields.

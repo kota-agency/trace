@@ -160,7 +160,11 @@ var MappingValueField = /*#__PURE__*/function (_Component) {
       var _this = this;
 
       this.$input = jQuery(this.input);
-      this.mergeTagsObj = new gfMergeTagsObj(form, this.$input);
+
+      if (typeof form !== 'undefined') {
+        this.mergeTagsObj = new gfMergeTagsObj(form, this.$input);
+      }
+
       this.$input.on('propertychange', function (e) {
         _this.props.updateMapping(_objectSpread(_objectSpread({}, _this.props.mapping), {}, {
           custom_value: e.target.value
@@ -177,7 +181,10 @@ var MappingValueField = /*#__PURE__*/function (_Component) {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       this.$input.off('propertychange');
-      this.mergeTagsObj.destroy();
+
+      if (typeof this.mergeTagsObj !== 'undefined') {
+        this.mergeTagsObj.destroy();
+      }
     }
   }, {
     key: "render",
@@ -363,6 +370,12 @@ var FieldMap = /*#__PURE__*/function (_Component) {
     _classCallCheck(this, FieldMap);
 
     _this = _super.apply(this, arguments);
+    /**
+     * State is managed via the value attribute on a hidden input that
+     * is output via the markup() method in class-generic-map.php. This value
+     * is set on initial load via that method in the php.
+     */
+
     _this.state = {
       mapping: JSON.parse(document.querySelector("[name=\"".concat(_this.props.input, "\"]")).value)
     };
@@ -1052,7 +1065,14 @@ var Mapping = /*#__PURE__*/function (_Component) {
           choice = _this$props7.choice,
           valueField = _this$props7.valueField;
       var allow_custom = valueField.allow_custom;
-      var choices = choice.choices || valueField.choices;
+      var choiceKey = choice.name && valueField.choice_keys && valueField.choice_keys[choice.name] ? valueField.choice_keys[choice.name] : 'default'; // if no name is present, use default values.
+
+      var choices = choice.choices || valueField.choices[choiceKey]; // Safety check to ensure choices are an array.
+
+      if (!choices) {
+        choices = [];
+      }
+
       var values = choices.map(function (c) {
         return c.value;
       }); // Add custom key if enabled and is not already present.

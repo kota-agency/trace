@@ -106,7 +106,7 @@ class Post_Filters implements Runner {
 			return;
 		}
 
-		$focus_keyword = Param::get( 'focus_keyword', '' );
+		$focus_keyword = Param::get( 'focus_keyword', '', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_BACKTICK );
 		if ( 1 === absint( $focus_keyword ) ) {
 			$query->set(
 				'meta_query',
@@ -173,7 +173,7 @@ class Post_Filters implements Runner {
 			'noindexed' => esc_html__( 'Articles noindexed', 'rank-math' ),
 		];
 
-		$options = $this->do_filter( 'manage_posts/seo_filter_options', $options, $post_type );
+		$options  = $this->do_filter( 'manage_posts/seo_filter_options', $options, $post_type );
 		$selected = Param::get( 'seo-filter' );
 		?>
 		<select name="seo-filter" id="rank-math-seo-filter">
@@ -279,9 +279,16 @@ class Post_Filters implements Runner {
 		if ( in_array( $filter, $seo_score_filters, true ) ) {
 			$query['relation'] = 'AND';
 			$query[]           = [
-				'key'     => 'rank_math_robots',
-				'value'   => 'noindex',
-				'compare' => 'NOT LIKE',
+				'relation' => 'OR',
+				[
+					'key'     => 'rank_math_robots',
+					'value'   => 'noindex',
+					'compare' => 'NOT LIKE',
+				],
+				[
+					'key'     => 'rank_math_robots',
+					'compare' => 'NOT EXISTS',
+				],
 			];
 			$query[]           = [
 				'key'     => 'rank_math_focus_keyword',

@@ -40,109 +40,8 @@ class Admin extends Base {
 		parent::__construct();
 
 		$this->action( 'cmb2_admin_init', 'add_kb_links', 50 );
-		$this->action( 'rank_math/admin/enqueue_scripts', 'enqueue' );
-		$this->filter( 'rank_math/metabox/tabs', 'add_metabox_tab' );
-		$this->action( 'rank_math/metabox/process_fields', 'save_schemas' );
-		$this->action( 'rank_math/metabox/process_fields', 'delete_schemas' );
+		$this->action( 'rank_math/admin/editor_scripts', 'enqueue' );
 		$this->action( 'rank_math/post/column/seo_details', 'display_schema_type' );
-		$this->action( 'elementor/editor/before_enqueue_scripts', 'elementor_enqueue', 9 );
-	}
-
-	/**
-	 * Add Schema tab to the metabox.
-	 *
-	 * @param array $tabs Array of tabs.
-	 *
-	 * @return array
-	 */
-	public function add_metabox_tab( $tabs ) {
-
-		if ( Admin_Helper::is_term_profile_page() || Admin_Helper::is_posts_page() ) {
-			return $tabs;
-		}
-
-		Arr::insert(
-			$tabs,
-			[
-				'schema' => [
-					'icon'       => 'dashicons-schema',
-					'title'      => '',
-					'desc'       => '',
-					'file'       => $this->directory . '/views/metabox-options.php',
-					'capability' => 'onpage_snippet',
-				],
-			],
-			Helper::is_advanced_mode() ? 3 : 2
-		);
-
-		return $tabs;
-	}
-
-	/**
-	 * Save handler for schema data.
-	 *
-	 * @param CMB2 $cmb CMB2 instance.
-	 */
-	public function save_schemas( $cmb ) {
-		if ( 'post' !== $cmb->object_type ) {
-			return;
-		}
-
-		/**
-		 * Fires once before updating schema data. This hook is needed in the Pro version to detect videos in the content.
-		 *
-		 * @param int $cmb->object_id The current object ID.
-		 */
-		$this->do_action( 'pre_update_metadata', $cmb->object_id );
-		if ( empty( $cmb->data_to_save['rank-math-schemas'] ) ) {
-			return;
-		}
-
-		$schemas = \json_decode( stripslashes( $cmb->data_to_save['rank-math-schemas'] ), true );
-		foreach ( $schemas as $meta_id => $schema ) {
-			$meta_key = 'rank_math_schema_' . $schema['@type'];
-			$schema   = wp_kses_post_deep( $schema );
-
-			// Add new.
-			if ( Str::starts_with( 'new-', $meta_id ) ) {
-				$new_ids[ $meta_id ] = add_post_meta( $cmb->object_id, $meta_key, $schema );
-				continue;
-			}
-
-			// Update old.
-			$db_id      = absint( str_replace( 'schema-', '', $meta_id ) );
-			$prev_value = update_metadata_by_mid( 'post', $db_id, $schema, $meta_key );
-		}
-
-		/**
-		 * Fires once the schema data is updated.
-		 *
-		 * @param int   $cmb->object_id The current object ID.
-		 * @param array $schemas        Array of schema data.
-		 */
-		do_action( 'rank_math/schema/update', $cmb->object_id, $schemas );
-	}
-
-	/**
-	 * Delete handler for schema data.
-	 *
-	 * @param CMB2 $cmb CMB2 instance.
-	 */
-	public function delete_schemas( $cmb ) {
-		if ( empty( $cmb->data_to_save['rank-math-schemas-delete'] ) ) {
-			return;
-		}
-
-		$schemas = \json_decode( stripslashes( $cmb->data_to_save['rank-math-schemas-delete'] ), true );
-		if ( empty( $schemas ) ) {
-			return;
-		}
-
-		foreach ( $schemas as $meta_id ) {
-			\delete_metadata_by_mid( 'post', absint( \str_replace( 'schema-', '', $meta_id ) ) );
-		}
-
-		update_post_meta( $cmb->data_to_save['post_ID'], 'rank_math_rich_snippet', 'off' );
 	}
 
 	/**
@@ -179,58 +78,13 @@ class Admin extends Base {
 		Helper::add_json( 'schemas', $this->get_schema_data( $cmb->object_id() ) );
 		Helper::add_json( 'customSchemaImage', esc_url( rank_math()->plugin_url() . 'includes/modules/schema/assets/img/custom-schema-builder.jpg' ) );
 
-		$is_gutenberg = Helper::is_block_editor() && \rank_math_is_gutenberg();
-		$is_elementor = Helper::is_elementor_editor();
-
-		if ( ! $is_elementor ) {
-			wp_enqueue_style( 'rank-math-schema', rank_math()->plugin_url() . 'includes/modules/schema/assets/css/schema.css', [ 'wp-components', 'rank-math-post-metabox' ], rank_math()->version );
-			$this->enqueue_translation();
-		}
-		if ( $is_gutenberg ) {
-			wp_enqueue_script( 'rank-math-schema', rank_math()->plugin_url() . 'includes/modules/schema/assets/js/schema-gutenberg.js', null, rank_math()->version, true );
-		}
+		wp_enqueue_style( 'rank-math-schema', rank_math()->plugin_url() . 'includes/modules/schema/assets/css/schema.css', [ 'wp-components', 'rank-math-editor' ], rank_math()->version );
+		$this->enqueue_translation();
 
 		$screen = get_current_screen();
-		if ( ! $is_gutenberg && ! $is_elementor && 'rank_math_schema' !== $screen->post_type ) {
-			wp_enqueue_script( 'rank-math-schema-classic', rank_math()->plugin_url() . 'includes/modules/schema/assets/js/schema-classic.js', [ 'rank-math-metabox', 'clipboard' ], rank_math()->version, true );
+		if ( 'rank_math_schema' !== $screen->post_type ) {
+			wp_enqueue_script( 'rank-math-schema', rank_math()->plugin_url() . 'includes/modules/schema/assets/js/schema-gutenberg.js', [ 'rank-math-editor' ], rank_math()->version, true );
 		}
-
-		$trends_upgrade_link = 'https://rankmath.com/pricing/?utm_source=Plugin&utm_medium=CE%20General%20Tab%20Trends&utm_campaign=WP';
-		if ( $is_gutenberg ) {
-			$trends_upgrade_link = 'https://rankmath.com/pricing/?utm_source=Plugin&utm_medium=Gutenberg%20General%20Tab%20Trends&utm_campaign=WP';
-		} elseif ( $is_elementor ) {
-			$trends_upgrade_link = 'https://rankmath.com/pricing/?utm_source=Plugin&utm_medium=Elementor%20General%20Tab%20Trends&utm_campaign=WP';
-		}
-		Helper::add_json( 'trendsUpgradeLink', esc_url_raw( $trends_upgrade_link ) );
-		Helper::add_json( 'trendsPreviewImage', esc_url( rank_math()->plugin_url() . 'assets/admin/img/trends-preview.jpg' ) );
-	}
-
-	/**
-	 * Enqueue Styles and Scripts required for the metabox in Elementor editor.
-	 */
-	public function elementor_enqueue() {
-		if ( ! Helper::has_cap( 'onpage_snippet' ) || Admin_Helper::is_posts_page() ) {
-			return;
-		}
-
-		$deps = [
-			'tagify',
-			'wp-core-data',
-			'wp-components',
-			'wp-block-editor',
-			'wp-element',
-			'wp-data',
-			'wp-api-fetch',
-			'wp-media-utils',
-			'site-health',
-			'rank-math-analyzer',
-			'backbone-marionette',
-			'elementor-common-modules',
-		];
-
-		wp_enqueue_style( 'rank-math-elementor-schema', rank_math()->plugin_url() . 'includes/modules/schema/assets/css/schema.css', [], rank_math()->version );
-		wp_enqueue_script( 'rank-math-schema', rank_math()->plugin_url() . 'includes/modules/schema/assets/js/schema-gutenberg.js', $deps, rank_math()->version, true );
-		$this->enqueue_translation();
 	}
 
 	/**
@@ -274,6 +128,17 @@ class Admin extends Base {
 				'isPrimary' => true,
 			],
 		];
+
+		if ( ! in_array( $default_type, [ 'Article', 'NewsArticle', 'BlogPosting' ], true ) ) {
+			return $schemas;
+		}
+
+		$post_type   = get_post_type( $post_id );
+		$name        = Helper::get_settings( "titles.pt_{$post_type}_default_snippet_name" );
+		$description = Helper::get_settings( "titles.pt_{$post_type}_default_snippet_desc" );
+
+		$schemas['new-9999']['headline']    = $name ? $name : '';
+		$schemas['new-9999']['description'] = $description ? $description : '';
 
 		return $schemas;
 	}
@@ -330,7 +195,20 @@ class Admin extends Base {
 
 		$types = [];
 		foreach ( $schemas as $schema ) {
-			$types[] = Helper::sanitize_schema_title( $schema['@type'] );
+			if ( ! is_array( $schema['@type'] ) ) {
+				$types[] = Helper::sanitize_schema_title( $schema['@type'] );
+				continue;
+			}
+
+			$types = array_merge(
+				$types,
+				array_map(
+					function( $type ) {
+						return Helper::sanitize_schema_title( $type );
+					},
+					$schema['@type']
+				)
+			);
 		}
 
 		return implode( ', ', $types );

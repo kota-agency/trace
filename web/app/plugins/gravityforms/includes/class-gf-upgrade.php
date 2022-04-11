@@ -513,10 +513,10 @@ class GF_Upgrade {
 	 * @return array Return an array of tables modified with column lengths on integers.
 	 */
 	private function make_tables_backward_compatible( $tables ) {
-		$columns_without_lengths = array( ' int', 'tinyint', 'mediumint', 'bigint' );
-		$columns_with_lengths    = array( ' int(10)', 'tinyint(1)', 'mediumint(8)', 'bigint(20)' );
+		$columns_without_lengths = array( '/(int)([\s,])/', '/(tinyint)([\s,])/', '/(mediumint)([\s,])/', '/(bigint)([\s,])/' );
+		$columns_with_lengths    = array( '$1(10)$2', '$1(1)$2', '$1(8)$2', '$1(20)$2' );
 
-		return $tables = str_replace( $columns_without_lengths, $columns_with_lengths, $tables );
+		return $tables = preg_replace( $columns_without_lengths, $columns_with_lengths, $tables );
 	}
 
 	public function check_table_schema( $table_name ) {
@@ -1856,13 +1856,9 @@ HAVING count(*) > 1;" );
 		$previous_version = get_option( 'rg_form_version' );
 
 		if ( version_compare( $previous_version, '2.5', '>=' ) ) {
-			$message = sprintf(
-				'%s <a href="https://www.gravityforms.com/two-five/" target="_blank" rel="noopener noreferrer">%s</a> %s',
-				esc_html__( 'Welcome to Gravity Forms 2.5!', 'gravityforms' ),
-				esc_html__( 'Learn more', 'gravityforms' ),
-				esc_html__( 'about all the new features and updates included in this version.', 'gravityforms' )
-			);
-			GFCommon::add_dismissible_message( $message, 'gravityforms_update_2.5', 'success', false, true, null );
+			require_once( GFCommon::get_base_path() . '/includes/messages/class-dismissable-messages.php' );
+			$dismissable = new \Gravity_Forms\Gravity_Forms\Messages\Dismissable_Messages();
+			$dismissable->add_internal('gravityforms_update_2_5', 'success', false, true, null );
 		}
 
 		$previous_db_version = get_option( 'gf_previous_db_version' );

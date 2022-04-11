@@ -150,17 +150,23 @@ class Product_WooCommerce {
 			return;
 		}
 
-		$image             = wp_get_attachment_image_src( $product->get_image_id(), 'single-post-thumbnail' );
-		$entity['image'][] = [
-			'@type'  => 'ImageObject',
-			'url'    => $image[0],
-			'height' => $image[2],
-			'width'  => $image[1],
-		];
+		$image = wp_get_attachment_image_src( $product->get_image_id(), 'single-post-thumbnail' );
+		if ( ! empty( $image ) ) {
+			$entity['image'][] = [
+				'@type'  => 'ImageObject',
+				'url'    => $image[0],
+				'height' => $image[2],
+				'width'  => $image[1],
+			];
+		}
 
 		$gallery = $product->get_gallery_image_ids();
 		foreach ( $gallery as $image_id ) {
-			$image             = wp_get_attachment_image_src( $image_id, 'single-post-thumbnail' );
+			$image = wp_get_attachment_image_src( $image_id, 'single-post-thumbnail' );
+			if ( empty( $image ) ) {
+				continue;
+			}
+
 			$entity['image'][] = [
 				'@type'  => 'ImageObject',
 				'url'    => $image[0],
@@ -247,7 +253,7 @@ class Product_WooCommerce {
 			'@type'           => 'Offer',
 			'price'           => $product->get_price() ? wc_format_decimal( $product->get_price(), wc_get_price_decimals() ) : '0',
 			'priceCurrency'   => get_woocommerce_currency(),
-			'priceValidUntil' => ! empty( $product->get_date_on_sale_to() ) ? date_i18n( 'Y-m-d', strtotime( $product->get_date_on_sale_to() ) ) : '',
+			'priceValidUntil' => $product->is_on_sale() && ! empty( $product->get_date_on_sale_to() ) ? date_i18n( 'Y-m-d', strtotime( $product->get_date_on_sale_to() ) ) : date( 'Y-12-31', time() + YEAR_IN_SECONDS ),
 			'availability'    => $product->is_in_stock() ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
 			'itemCondition'   => 'NewCondition',
 			'url'             => $product->get_permalink(),

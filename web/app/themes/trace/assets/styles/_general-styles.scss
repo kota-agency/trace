@@ -9,6 +9,14 @@ a:focus {
     text-decoration: none;
 }
 
+.site-wrapper a:not(.btn) {
+    color: $color-quaternary;
+
+    &:hover {
+        color: $selection;
+    }
+}
+
 .btn {
     display: inline-block;
     position: relative;

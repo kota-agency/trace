@@ -81,6 +81,10 @@ class Generic_Map extends Base {
 		// Set Settings framework instance.
 		$this->settings = $settings;
 
+		// Prepare required and excluded field types.
+		$this->excluded_field_types = rgar( $props, 'exclude_field_types' );
+		$this->required_field_types = isset( $props['field_types'] ) ? $props['field_types'] : rgar( $props, 'field_type' );
+
 		// Merge Key Field properties.
 		if ( rgar( $props, 'key_field' ) ) {
 
@@ -122,11 +126,45 @@ class Generic_Map extends Base {
 			$this->key_field['choices'] = rgar( $this->key_field, 'choices', array() );
 		}
 
-		// Define value field choices.
-		if ( ! rgar( $this->value_field, 'choices' ) || rgar( $this->value_field, 'choices' ) === 'form_fields' ) {
-			$this->value_field['choices'] = $this->get_value_choices();
-		} else if ( rgar( $props, 'value_choices' ) ) {
-			$this->value_field['choices'] = $props['value_choices'] === 'form_fields' ? $this->get_value_choices() : $props['value_choices'];
+		$passed_choices = rgar( $this->value_field, 'choices' );
+
+		if ( ! $passed_choices ) {
+			$passed_choices = rgar( $props, 'value_choices' );
+		}
+
+		if ( ! $passed_choices ) {
+			$passed_choices = 'form_fields';
+		}
+
+		$this->value_field['choices']            = array();
+		$this->value_field['choices']['default'] = $passed_choices == 'form_fields' ? $this->get_value_choices( $this->required_field_types, $this->excluded_field_types ) : $this->get_prepopulated_choice( 'default', $passed_choices );
+
+		// Assign the correct value field choices per key field choice.
+		foreach ( $this->key_field['choices'] as $choice ) {
+
+			// Choice doesn't have a name index; this likely means the choice is non-standard; bail and use default choices.
+			if ( ! rgar( $choice, 'name' ) ) {
+				continue;
+			}
+
+			$required_types = isset( $choice['field_types'] ) ? rgar( $choice, 'field_types', array() ) : rgar( $choice, 'required_types', array() );
+			$excluded_types  = isset( $choice['exclude_field_types'] ) ? rgar( $choice, 'exclude_field_types', array() ) : rgar( $choice, 'excluded_types', array() );
+
+			// Convert to array if field type was configured as a string to require only one field type.
+			if ( ! is_array( $required_types ) ) {
+				$required_types = array( $required_types );
+			}
+
+			// Convert to array if excluded field type was configured as string to exclude only one field type.
+			if ( ! is_array( $excluded_types ) ) {
+				$excluded_types = array( $excluded_types );
+			}
+
+			$key = 'filtered_choices_' . implode( '-', $required_types ) . '_' . implode( '-', $excluded_types );
+			if ( ! isset( $this->value_field['choices'][ $key ] ) ) {
+				$this->value_field['choices'][ $key ] = $passed_choices == 'form_fields' ? $this->get_value_choices( $required_types, $excluded_types ) : $this->get_prepopulated_choice( 'default', $passed_choices );
+			}
+			$this->value_field['choice_keys'][ $choice['name'] ] = $key;
 		}
 
 		// Translate base strings.
@@ -147,6 +185,21 @@ class Generic_Map extends Base {
 
 		parent::__construct( $props, $settings );
 
+	}
+
+	/**
+	 * Looks into the $passed_choices for the specified $key. If $key is specified and mapped to an array, return the contents of that array. Otherwise return the entired $passed_choices array.
+	 *
+	 * @since 2.5.16
+	 *
+	 * @param string $key They filtered key to be used when looking for the child choices.
+	 * @param array  $passed_choices The choices array that will be used to pre-populate the value field.
+	 *
+	 * @return array List of choices to be prepopulated
+	 */
+	private function get_prepopulated_choice( $key, $passed_choices ) {
+		$is_filtered_choice_defined = isset( $passed_choices[ $key ] ) && is_array( $passed_choices[ $key ] );
+		return $is_filtered_choice_defined ? $passed_choices[ $key ] : $passed_choices;
 	}
 
 	/**
@@ -177,6 +230,9 @@ class Generic_Map extends Base {
 
 	/**
 	 * Render field.
+	 * This contains the hidden input used to manage the state of the field and is also updated via react.
+	 * This also contains the initializeFieldMap method which inits the react for the field and passes along
+	 * the various props to then be used in the react app.
 	 *
 	 * @since 2.5
 	 *
@@ -210,7 +266,7 @@ class Generic_Map extends Base {
 			'valueField'      => $value_field,
 			'limit'           => $this->limit,
 			'invalidChoices'  => $this->invalid_choices,
-			'mergeTagSupport' => $this->merge_tags,
+			'mergeTagSupport' => property_exists( $this, 'merge_tags' ) ? $this->merge_tags : false,
 		);
 
 		// Prepare markup.
@@ -223,7 +279,7 @@ class Generic_Map extends Base {
 				<script type="text/javascript">initializeFieldMap( \'%4$s\', %6$s );</script></span>',
 			esc_attr( $this->get_container_classes() ),
 			$input_name, // Input name
-			wp_json_encode( $this->get_value() ? $this->get_value() : array() ), // Input value
+			esc_attr( wp_json_encode( $this->get_value() ? $this->get_value() : array() ) ), // Input value
 			$container_name, // Container name
 			$this->get_error_icon(),
 			wp_json_encode( $js_params )// JS params
@@ -298,29 +354,32 @@ class Generic_Map extends Base {
 			$default_value_choices = array_map( 'strtolower', $default_value_choices );
 
 			// If choice has specific value choices after evaluating required and excluded types, get them.
-			if( rgar( $choice, 'choices' ) && is_array( $choice['choices'] ) ) {
-				$value_choices =  $choice['choices'];
+			if ( rgar( $choice, 'choices' ) && is_array( $choice['choices'] ) ) {
+				$value_choices = $choice['choices'];
 			} else {
 				$value_choices = $this->value_field['choices'];
 			}
 
-			foreach ( $value_choices as $group ) {
+			// Each key field potentially has it's own array of potential choices based on required and excluded types, so we need to loop through those.
+			foreach ( $value_choices as $key_field_choices ) {
 
-				if( ! rgar( $group, 'choices' ) || ! is_array( $group['choices'] ) )
-					continue;
-
-				foreach ( $group['choices']  as $value_choice ) {
-
-					if( empty( $value_choice['value'] ) ) {
+				// Loop through each group for each key field and see if there are choices available.
+				foreach ( $key_field_choices as $group ) {
+					if ( ! rgar( $group, 'choices' ) || ! is_array( $group['choices'] ) ) {
 						continue;
 					}
 
-					// If lowercase field label matches a default value choice, set it to the default value.
-					if ( in_array( strtolower( $value_choice['label'] ), $default_value_choices ) ) {
-						$choice['default_value'] = $value_choice['value'];
-						break 2 ;
-					}
+					foreach ( $group['choices']  as $value_choice ) {
+						if ( empty( $value_choice['value'] ) ) {
+							continue;
+						}
 
+						// If lowercase field label matches a default value choice, set it to the default value.
+						if ( in_array( strtolower( $value_choice['label'] ), $default_value_choices ) ) {
+							$choice['default_value'] = $value_choice['value'];
+							break 3;
+						}
+					}
 				}
 			}
 		}
@@ -389,11 +448,21 @@ class Generic_Map extends Base {
 				switch ( $input_type ) {
 
 					case 'address':
+
+						$form_field_choices[] = array(
+							'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full Address', 'gravityforms' ) . ')' ),
+							'value' => $field->id,
+							'type' => 'address'
+						);
+
+						break;
+
 					case 'name':
 
 						$form_field_choices[] = array(
-							'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full', 'gravityforms' ) . ')' ),
+							'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full Name', 'gravityforms' ) . ')' ),
 							'value' => $field->id,
+							'type' => 'name'
 						);
 
 						break;
@@ -403,6 +472,7 @@ class Generic_Map extends Base {
 						$form_field_choices[] = array(
 							'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Selected', 'gravityforms' ) . ')' ),
 							'value' => $field->id,
+							'type' => 'checkbox'
 						);
 
 						break;
@@ -414,6 +484,7 @@ class Generic_Map extends Base {
 					$form_field_choices[] = array(
 						'label' => strip_tags( GFCommon::get_label( $field, $input['id'] ) ),
 						'value' => $input['id'],
+						'type'  => $field['type'],
 					);
 				}
 
@@ -424,6 +495,7 @@ class Generic_Map extends Base {
 				$form_field_choices[] = array(
 					'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full', 'gravityforms' ) . ')' ),
 					'value' => $field->id,
+					'type'  => 'list',
 				);
 
 				// Add choice for each column.
@@ -432,6 +504,7 @@ class Generic_Map extends Base {
 					$form_field_choices[] = array(
 						'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html( rgar( $column, 'text' ) ) . ')' ),
 						'value' => $field->id . '.' . $col_index,
+						'type'  => 'list',
 					);
 					$col_index++;
 				}
@@ -441,6 +514,7 @@ class Generic_Map extends Base {
 				$form_field_choices[] = array(
 					'label' => strip_tags( GFCommon::get_label( $field ) ),
 					'value' => $field->id,
+					'type'  => $field['type'],
 				);
 
 			}
@@ -454,6 +528,7 @@ class Generic_Map extends Base {
 				$choices[] = array(
 					'label' => esc_html__( 'Select a Field', 'gravityforms' ),
 					'value' => '',
+					'type'  => $field['type'],
 				);
 
 			} else {
@@ -464,6 +539,7 @@ class Generic_Map extends Base {
 						GF_Fields::get( $required_types[0] ) ? ucfirst( GF_Fields::get( $required_types[0] )->get_form_editor_field_title() ) : ''
 					),
 					'value' => '',
+					'type'  => $field['type'],
 				);
 
 			}
@@ -554,7 +630,6 @@ class Generic_Map extends Base {
 		 * @param null|array|string $exclude_field_types Null or the field type(s) to be excluded from the drop down.
 		 */
 		$choices = apply_filters( 'gform_field_map_choices', $choices, $form_id, $input_type, $excluded_types );
-
 		return array_values( $choices );
 
 	}
@@ -579,6 +654,10 @@ class Generic_Map extends Base {
 
 		// If no choices are required, exit.
 		if ( empty( $required_choices ) ) {
+			return;
+		}
+
+		if ( ! is_array( $value ) ) {
 			return;
 		}
 

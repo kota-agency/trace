@@ -71,10 +71,6 @@ class WordPress {
 	public static function get_filesystem() {
 		global $wp_filesystem;
 
-		if ( ! defined( 'FS_METHOD' ) ) {
-			define( 'FS_METHOD', 'direct' );
-		}
-
 		if ( empty( $wp_filesystem ) ) {
 			require_once ABSPATH . '/wp-admin/includes/file.php';
 			WP_Filesystem();
@@ -140,7 +136,7 @@ class WordPress {
 			return sanitize_key( $post_type );
 		}
 
-		if ( $post_id = Param::request( 'post_ID' ) ) { // phpcs:ignore
+		if ( $post_id = Param::request( 'post_ID', 0, FILTER_VALIDATE_INT ) ) { // phpcs:ignore
 			return get_post_type( $post_id );
 		}
 

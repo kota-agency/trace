@@ -198,6 +198,37 @@ trait Conditional {
 	}
 
 	/**
+	 * Get current editor, or false if we're not editing.
+	 *
+	 * @since 1.0.67
+	 *
+	 * @return mixed
+	 */
+	public static function get_current_editor() {
+		if ( self::is_elementor_editor() ) {
+			return 'elementor';
+		}
+
+		if ( self::is_divi_frontend_editor() ) {
+			return 'divi';
+		}
+
+		if ( self::is_block_editor() && \rank_math_is_gutenberg() ) {
+			return 'gutenberg';
+		}
+
+		if ( self::is_ux_builder() ) {
+			return 'uxbuilder';
+		}
+
+		if ( Admin_Helper::is_post_edit() ) {
+			return 'classic';
+		}
+
+		return false;
+	}
+
+	/**
 	 * Is Advanced Mode.
 	 *
 	 * @since 1.0.43
@@ -228,5 +259,20 @@ trait Conditional {
 	 */
 	public static function is_wizard() {
 		return ( filter_input( INPUT_GET, 'page' ) === 'rank-math-wizard' || filter_input( INPUT_POST, 'action' ) === 'rank_math_save_wizard' );
+	}
+
+	/**
+	 * Is filesystem method direct.
+	 *
+	 * @since 1.0.71.1
+	 *
+	 * @return boolean
+	 */
+	public static function is_filesystem_direct() {
+		if ( ! function_exists( 'get_filesystem_method' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+		}
+
+		return 'direct' === get_filesystem_method();
 	}
 }

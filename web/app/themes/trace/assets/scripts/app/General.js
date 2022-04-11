@@ -415,6 +415,10 @@ function General() {
         Cookies.set('trace_cookie_consent', 'on', {expires: 365});
     });
 
+    if(Cookies.get('trace_cookie_consent') == 'on') {
+        $('.cookie-banner').css('display', 'none');
+    }
+
     $('.gated-file').on('click', function(e) {
         e.preventDefault();
         $('#form_modal').addClass('show')

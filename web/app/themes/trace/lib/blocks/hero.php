@@ -8,6 +8,7 @@ $classes = ['full-width', 'theme-primary', 'bg-primary', padding_classes()];
 
 $title = get_field('title');
 $background_text = get_field('background_text');
+$video = get_field('hero_video', false, false);
 $image = wp_get_attachment_image(get_field('image'), 'full');
 
 ?>
@@ -33,6 +34,11 @@ $image = wp_get_attachment_image(get_field('image'), 'full');
             <div class="hero__image">
                 <div data-aos="fade-left" data-aos-delay="500">
                     <?= $image; ?>
+                    <?php if($video): ?>
+                        <a href="<?= $video ?>" data-fancybox>
+                            <span class="play"></span>
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
 

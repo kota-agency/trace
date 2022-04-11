@@ -171,6 +171,10 @@ class JsonLD {
 	 * @return array
 	 */
 	private function validate_schema( $data ) {
+		if ( ! is_array( $data ) || empty( $data ) ) {
+			return $data;
+		}
+
 		foreach ( $data as $id => $value ) {
 			if ( is_array( $value ) ) {
 				// Remove aline @type.
@@ -230,7 +234,7 @@ class JsonLD {
 		$snippets           = [
 			'\\RankMath\\Schema\\Publisher'     => ! isset( $data['publisher'] ) && $can_add_global,
 			'\\RankMath\\Schema\\Website'       => $can_add_global,
-			'\\RankMath\\Schema\\PrimaryImage'  => ! post_password_required() && $can_add_global,
+			'\\RankMath\\Schema\\PrimaryImage'  => is_singular() && ! post_password_required() && $can_add_global,
 			'\\RankMath\\Schema\\Breadcrumbs'   => $this->can_add_breadcrumb(),
 			'\\RankMath\\Schema\\Author'        => is_author() || ( is_singular() && $can_add_global ),
 			'\\RankMath\\Schema\\Webpage'       => $can_add_global,
@@ -320,7 +324,8 @@ class JsonLD {
 		$new_schemas = [];
 
 		foreach ( $schemas as $key => $schema ) {
-			$type = strtolower( $schema['@type'] );
+			$type = is_array( $schema['@type'] ) ? $schema['@type'][0] : $schema['@type'];
+			$type = strtolower( $type );
 			$type = in_array( $type, [ 'musicgroup', 'musicalbum' ], true )
 				? 'music'
 				: ( in_array( $type, [ 'blogposting', 'newsarticle' ], true ) ? 'article' : $type );
@@ -722,6 +727,11 @@ class JsonLD {
 		// Author.
 		$author          = Helper::get_post_meta( 'snippet_author' );
 		$parts['author'] = $author ? $author : get_the_author_meta( 'display_name', $this->post->post_author );
+
+		// Modified date cannot be before publish date.
+		if ( strtotime( $this->post->post_modified ) < strtotime( $this->post->post_date ) ) {
+			$parts['modified'] = $parts['published'];
+		}
 
 		$this->parts = $parts;
 	}

@@ -14,6 +14,7 @@
 namespace RankMath\OpenGraph;
 
 use RankMath\Helper;
+use RankMath\Post;
 use RankMath\Traits\Hooker;
 use MyThemeShop\Helpers\Str;
 use MyThemeShop\Helpers\Url;
@@ -115,7 +116,7 @@ class Image {
 	 * @param array $image_meta Image metadata.
 	 */
 	private function image_tag( $image_meta ) {
-		$og_image = $this->opengraph->get_overlay_image() ? admin_url( "admin-ajax.php?action=rank_math_overlay_thumb&id={$image_meta['id']}&type={$this->opengraph->get_overlay_image()}" ) : $image_meta['url'];
+		$og_image = $this->opengraph->get_overlay_image() && ! empty( $image_meta['id'] ) ? admin_url( "admin-ajax.php?action=rank_math_overlay_thumb&id={$image_meta['id']}&type={$this->opengraph->get_overlay_image()}" ) : $image_meta['url'];
 		$this->opengraph->tag( 'og:image', esc_url_raw( $og_image ) );
 
 		// Add secure URL if detected. Not all services implement this, so the regular one also needs to be rendered.
@@ -283,7 +284,7 @@ class Image {
 			case is_attachment():
 				$this->set_attachment_page_image();
 				break;
-			case is_singular():
+			case is_singular() || Post::is_shop_page():
 				$this->set_singular_image();
 				break;
 			case is_post_type_archive():
@@ -429,8 +430,12 @@ class Image {
 	 * @param null|int $post_id The post ID to get the images for.
 	 */
 	private function set_singular_image( $post_id = null ) {
-		$post_id = is_null( $post_id ) ? get_queried_object_id() : $post_id;
+		$is_shop_page = Post::is_shop_page();
+		if ( $is_shop_page ) {
+			$post_id = Post::get_shop_page_id();
+		}
 
+		$post_id = is_null( $post_id ) ? get_queried_object_id() : $post_id;
 		$this->set_user_defined_image( $post_id );
 
 		if ( $this->has_images() ) {
@@ -445,9 +450,17 @@ class Image {
 		 * @param int  $post_id Post ID for the current post.
 		 */
 		if ( false !== $this->do_filter( 'opengraph/pre_set_content_image', false, $post_id ) ) {
+			if ( $is_shop_page ) {
+				$this->set_archive_image();
+			}
+
 			return;
 		}
 		$this->set_content_image( get_post( $post_id ) );
+
+		if ( ! $this->has_images() && $is_shop_page ) {
+			$this->set_archive_image();
+		}
 	}
 
 	/**
@@ -536,7 +549,12 @@ class Image {
 			return false;
 		}
 
-		return in_array( $check['ext'], [ 'jpeg', 'jpg', 'gif', 'png' ], true );
+		$extensions = [ 'jpeg', 'jpg', 'gif', 'png' ];
+		if ( 'twitter' === $this->network ) {
+			$extensions[] = 'webp';
+		}
+
+		return in_array( $check['ext'], $extensions, true );
 	}
 
 	/**
