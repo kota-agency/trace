@@ -4,7 +4,7 @@
 Plugin Name: Advanced Custom Fields: Font Awesome
 Plugin URI: https://wordpress.org/plugins/advanced-custom-fields-font-awesome/
 Description: Adds a new 'Font Awesome Icon' field to the popular Advanced Custom Fields plugin.
-Version: 4.0.1
+Version: 4.0.3
 Author: Matt Keys
 Author URI: http://mattkeys.me/
 License: GPLv2 or later
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'ACFFA_VERSION' ) ) {
-	define( 'ACFFA_VERSION', '4.0.1' );
+	define( 'ACFFA_VERSION', '4.0.3' );
 }
 
 if ( ! defined( 'ACFFA_PUBLIC_PATH' ) ) {
@@ -156,6 +156,11 @@ if ( ! class_exists('acf_plugin_font_awesome') ) :
 					}
 					break;
 			}
+
+			if ( version_compare( $acffa_internal_version, '4.0.3', '<' ) ) {
+				define( 'ACFFA_FORCE_REFRESH', true );
+				do_action( 'ACFFA_refresh_latest_icons' );
+			}			
 
 			if ( $acffa_internal_version !== ACFFA_VERSION ) {
 				$acffa_settings['acffa_plugin_version'] = ACFFA_VERSION;

@@ -82,6 +82,14 @@ This notification message is filterable so you can customize it to better repres
 
 == Changelog ==
 
+= 4.0.3 =
+* Automatically refresh 4.x and 5.x icon caches when saving the settings
+* Additional strings for translation
+
+= 4.0.2 =
+* Fixed bug where FontAwesome 5.x icon data was improperly loading FontAwesome 6.x data
+* Removed some dependancies on jsDelivr for FontAwesome 5.x icon data
+
 = 4.0.1 =
 * Fixed bug where FontAwesome settings page would not properly load CSS/JS assets on internationalized WordPress installations.
 * Added support for theme authors to bundle this plugin with a theme ( see install instructions )
@@ -227,6 +235,14 @@ This notification message is filterable so you can customize it to better repres
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 4.0.3 =
+* Automatically refresh 4.x and 5.x icon caches when saving the settings
+* Additional strings for translation
+
+= 4.0.2 =
+* Fixed bug where FontAwesome 5.x icon data was improperly loading FontAwesome 6.x data
+* Removed some dependancies on jsDelivr for FontAwesome 5.x icon data
 
 = 4.0.1 =
 * Fixed bug where FontAwesome settings page would not properly load CSS/JS assets on internationalized WordPress installations.

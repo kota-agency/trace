@@ -197,7 +197,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			$field['choices']	= [];
 			$field['multiple']	= false;
 			$field['class']		= $v5_icon_preselected ? 'v5_icon_preselected' : '';
-			if ( in_array( 'custom', $field['icon_sets'] ) && ! empty( $field['custom_icon_set'] ) ) {
+			if ( ! empty( $field['icon_sets'] ) && in_array( 'custom', $field['icon_sets'] ) && ! empty( $field['custom_icon_set'] ) ) {
 				$field['class'] .= ' fa6 select2-fontawesome fontawesome-edit custom-icon-set';
 			} else {
 				$field['class'] .= ' fa6 select2-fontawesome fontawesome-edit';

@@ -5,7 +5,7 @@ Tags: seo, sitemap, google search console, schema, redirection, WordPress SEO
 Tested up to: 5.9
 Requires at least: 5.6
 Requires PHP: 7.2
-Stable tag: 1.0.83
+Stable tag: 1.0.87
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -580,14 +580,26 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.83 [Feb 23, 2022] =
-* Added: [NEW!] Dedicated [Content Analysis tests](https://rankmath.com/blog/woocommerce-seo/?play-video=ba2u_siPqig&start-time=1311) for WooCommerce & EDD Products in the PRO version
-* Added: New test in the Content Analysis to check if the [Content AI](https://rankmath.com/kb/how-to-use-content-ai/) is used or not
-* Improved: Replaced tooltip toggle of each Content Analysis test with the respective [KB article](https://rankmath.com/kb/score-100-in-tests/) for better contextual help
-* Fixed: Some Content Analysis tests were getting hidden on posts with a Russian focus keyword
-* Fixed: [External and Internal link tests](https://rankmath.com/kb/score-100-in-tests/#linking-to-external-sources) were not working well on some sites with the Russian language
-* Fixed: [Image Overlay](https://rankmath.com/kb/meta-box-social-tab/#add-icon-overlay-to-thumbnails) feature was not working on some setups
-* Fixed: [Export Redirections to .htaccess/nginx](https://rankmath.com/kb/setting-up-redirections/#backing-up-your-redirects) was only exporting 1000 URLs
-* Fixed: Content AI's [media count test](https://rankmath.com/kb/how-to-use-content-ai/#num-6-5-media-count) was not updating instantly after adding a Featured Image in the Classic editor
+= 1.0.87 [Apr 13, 2022] =
+* Added: Close button to permanently hide the [Analytics Stats bar](https://rankmath.com/kb/analytics-stats-bar/) from the frontend
+
+= 1.0.86.2 [Apr 09, 2022] =
+* Added: Filter to show/hide [Analytics Stats Bar on the frontend](https://rankmath.com/kb/filters-hooks-api-developer/#hide-analytics-stats-bar)
+* Improved: Hide [Analytics Stats Bar on the frontend](https://rankmath.com/kb/analytics-stats-bar/) on all the pages after clicking on the close button
+* Fixed: [Author Sitemap](https://rankmath.com/kb/configure-sitemaps/#authors) was not working on some setups after the last update
+
+= 1.0.86.1 [Apr 07, 2022] =
+* Fixed: Hide [frontend Analytics Stats](https://rankmath.com/kb/analytics-stats-bar/) when Google Search Console is not connected to the site
+
+= 1.0.86 [Apr 07, 2022] =
+* Added: [NEW!] Introducing Stats Bar. Now, you can view [Analytics stats on the frontend](https://rankmath.com/kb/analytics-stats-bar/)
+* Improved: Optimized the [Redirection](https://rankmath.com/kb/setting-up-redirections/) queries for better performance
+* Fixed: PHP warnings on some setups when [Admin Menu Bar](https://rankmath.com/kb/quick-actions/) was enabled
+* Fixed: [Remove Product Base](https://rankmath.com/kb/general-settings/#remove-base) option was not working well on auto-translated secondary languages products created using WPML
+* Fixed: Duplicate sitemap was getting generated. Now, this duplicate sitemap page will redirect to the main sitemap
+* Fixed: [Content AI Media count](https://rankmath.com/kb/seo-score-vs-content-ai-score/#media-count) was showing different counts in different editors
+* Fixed: Content AI was not detecting the videos added using the Elementor's Video widget
+* Fixed: Content AI was not detecting the iframe videos
+* Fixed: Average position in [Analytics](https://rankmath.com/kb/analytics/) page was showing the wrong color
 
 Full changelog can be found here - **[Rank Math SEO changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**

@@ -99,6 +99,7 @@ class Installer {
 		$tables[] = $wpdb->prefix . 'rank_math_internal_meta';
 		$tables[] = $wpdb->prefix . 'rank_math_analytics_gsc';
 		$tables[] = $wpdb->prefix . 'rank_math_analytics_objects';
+		$tables[] = $wpdb->prefix . 'rank_math_analytics_inspections';
 
 		return $tables;
 	}
@@ -370,6 +371,7 @@ class Installer {
 					'frontend_seo_score_position'         => 'top',
 					'setup_mode'                          => 'advanced',
 					'content_ai_post_types'               => array_keys( $post_types ),
+					'analytics_stats'                     => 'on',
 				]
 			)
 		);

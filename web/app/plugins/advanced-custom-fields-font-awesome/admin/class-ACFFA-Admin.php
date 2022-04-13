@@ -152,6 +152,8 @@ class ACFFA_Admin
 		wp_enqueue_style( 'acffa-settings', ACFFA_PUBLIC_PATH . 'assets/css/settings.css', [], ACFFA_VERSION );
 		wp_enqueue_script( 'acffa-settings', ACFFA_PUBLIC_PATH . 'assets/js/settings-v6.js', [ 'select2', 'wp-util' ], ACFFA_VERSION, true );
 		wp_localize_script( 'acffa-settings', 'ACFFA', [
+			'save_settings'			=> __( 'Save Settings', 'acf-font-awesome' ),
+			'save_refresh_settings'	=> __( 'Save Settings & Refresh Icon Cache', 'acf-font-awesome' ),
 			'search_string'			=> __( 'Add New Icon', 'acf-font-awesome' ),
 			'confirm_delete'		=> __( 'Are you sure you want to delete this icon set?', 'acf-font-awesome' ),
 			'remove_icon'			=> __( 'Remove this icon from this set?', 'acf-font-awesome' ),
@@ -182,9 +184,11 @@ class ACFFA_Admin
 		wp_register_script( 'multi-select-js', ACFFA_PUBLIC_PATH . 'assets/inc/multi-select/jquery.multi-select.js', [ 'jquery' ], '0.9.12', true );
 		wp_enqueue_script( 'acffa-settings', ACFFA_PUBLIC_PATH . 'assets/js/settings-v5.js', [ 'multi-select-js', 'quicksearch-js' ], '1.0.0', true );
 		wp_localize_script( 'acffa-settings', 'ACFFA', [
-			'search_string'		=> __( 'Search List', 'acf-font-awesome' ),
-			'confirm_delete'	=> __( 'Are you sure you want to delete this icon set?', 'acf-font-awesome' ),
-			'delete_fail'		=> __( 'There was an error while trying to delete the icon set, please refresh the page and try again.', 'acf-font-awesome' )
+			'save_settings'			=> __( 'Save Settings', 'acf-font-awesome' ),
+			'save_refresh_settings'	=> __( 'Save Settings & Refresh Icon Cache', 'acf-font-awesome' ),
+			'search_string'			=> __( 'Search List', 'acf-font-awesome' ),
+			'confirm_delete'		=> __( 'Are you sure you want to delete this icon set?', 'acf-font-awesome' ),
+			'delete_fail'			=> __( 'There was an error while trying to delete the icon set, please refresh the page and try again.', 'acf-font-awesome' )
 		] );
 	}
 
@@ -264,7 +268,11 @@ class ACFFA_Admin
 
 					do_settings_sections( 'acffa' );
 
-					submit_button( 'Save Settings' );
+					if ( version_compare( ACFFA_MAJOR_VERSION, 6, '<' ) ) {
+						submit_button( __( 'Save Settings & Refresh Icon Cache', 'acf-font-awesome' ) );
+					} else {
+						submit_button( __( 'Save Settings', 'acf-font-awesome' ) );
+					}
 				?>
 			</form>
 		</div>
@@ -752,23 +760,7 @@ class ACFFA_Admin
 		unset( $new_value['acffa_new_icon_set_label'] );
 		unset( $new_value['acffa_new_icon_set'] );
 
-		$refresh_icons = false;
-
-		if ( $new_value['acffa_major_version'] !== $old_value['acffa_major_version'] ) {
-			$refresh_icons = true;
-		}
-
-		if ( ! $refresh_icons ) {
-			if ( ( isset( $new_value['acffa_pro_cdn'] ) && ! isset( $old_value['acffa_pro_cdn'] ) )
-				 || ( ! isset( $new_value['acffa_pro_cdn'] ) && isset( $old_value['acffa_pro_cdn'] ) )
-			) {
-				 $refresh_icons = true;
-			}
-		}
-
-		if ( $refresh_icons ) {
-			do_action( 'ACFFA_refresh_latest_icons' );
-		}
+		do_action( 'ACFFA_refresh_latest_icons' );
 
 		return $new_value;
 	}
