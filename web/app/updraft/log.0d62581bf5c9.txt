@@ -1,0 +1,22 @@
+0725.847 (1) Opened log file at time: Thu, 28 Apr 2022 01:34:50 +0000 on https://tracesolutions.local/wp
+0725.849 (1) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 2.16.50.25 WP: 5.8.3 PHP: 7.4.21 (cgi-fcgi, Darwin Victors-Mac-mini.local 21.4.0 Darwin Kernel Version 21.4.0: Fri Mar 18 00:45:05 PDT 2022; root:xnu-8020.101.4~15/RELEASE_X86_64 x86_64) MySQL: 5.7.34 WPLANG: en_GB Server: Apache/2.4.46 (Unix) mod_fastcgi/mod_fastcgi-SNAP-0910052141 OpenSSL/1.0.2u mod_wsgi/3.5 Python/2.7.13 safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 65.2M | 12.5M) multisite: N openssl: OpenSSL 1.0.2u  20 Dec 2019 mcrypt: N LANG:  ZipArchive::addFile: Y
+0725.855 (1) Free space on disk containing Updraft's temporary directory: 691052.1 MB
+0725.874 (1) Requesting backup semaphore lock (0d62581bf5c9)
+0725.878 (1) [Lock option (updraft_lock_0d62581bf5c9, wp_options) was created in the database] debug
+0725.880 (1) [Lock (updraft_lock_0d62581bf5c9, wp_options) acquired after initialising the database] info
+0725.884 (1) Backup run: resumption=1, nonce=0d62581bf5c9, file_nonce=0d62581bf5c9 begun at=1651108964 (726s ago), job type=backup, previous check-in=45.4s
+0725.886 (1) Scheduling a resumption (2) after 300 seconds (1651109990) in case this run gets aborted
+0725.913 (1) Checking if we have a zip executable available
+0725.915 (1) Zip engine: found/will use a binary zip: /usr/bin/zip
+0725.917 (1) Creation of backups of directories: already finished
+0725.918 (1) Saving backup status to database (elements: 0)
+0725.935 (1) Database dump (WordPress DB): Creation was completed already
+0725.937 (1) SQL compatibility mode is: NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+0725.945 (1) backup_2022-04-28-0222_Trace_Solutions_0d62581bf5c9-db.gz: db: This file is not ours to upload and has been/will be handled by another job.
+0725.947 (1) Saving backup history. Total backup size: Unknown
+0725.954 (1) Resume backup (0d62581bf5c9, 1): finish run
+0725.957 (1) There were no more files that needed uploading
+0725.958 (1) [Lock option (updraft_lock_0d62581bf5c9, wp_options) released] info
+0725.962 (1) There were no errors in the uploads, so the 'resume' event (2) is being unscheduled
+0725.970 (1) No email will be sent - this backup set was empty.
+0725.972 (1) The backup apparently succeeded (with warnings) and is now complete

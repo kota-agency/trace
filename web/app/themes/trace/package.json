@@ -5,6 +5,11 @@
   "main": "gulpfile.js",
   "author": "OP",
   "license": "ISC",
+  "scripts": {
+    "build": "node node_modules/gulp/bin/gulp.js build",
+    "build:production": "node node_modules/gulp/bin/gulp.js buildProd",
+    "watch": "node node_modules/gulp/bin/gulp.js watch"
+  },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",

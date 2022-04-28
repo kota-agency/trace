@@ -1,6 +1,7 @@
 <?php
 
-class Header_Walker extends Walker {
+class Header_Walker extends Walker
+{
     /**
      * What the class handles.
      *
@@ -36,15 +37,16 @@ class Header_Walker extends Walker {
      * @param int      $depth  Depth of menu item. Used for padding.
      * @param stdClass $args   An object of wp_nav_menu() arguments.
      */
-    public function start_lvl( &$output, $depth = 0, $args = null ) {
-        if ( isset( $args->item_spacing ) && 'discard' === $args->item_spacing ) {
+    public function start_lvl(&$output, $depth = 0, $args = null)
+    {
+        if (isset($args->item_spacing) && 'discard' === $args->item_spacing) {
             $t = '';
             $n = '';
         } else {
             $t = "\t";
             $n = "\n";
         }
-        $indent = str_repeat( $t, $depth );
+        $indent = str_repeat($t, $depth);
 
         // Default class.
         $classes = array( 'sub-menu', 'sub-menu-' . $depth );
@@ -58,8 +60,8 @@ class Header_Walker extends Walker {
          * @param stdClass $args    An object of `wp_nav_menu()` arguments.
          * @param int      $depth   Depth of menu item. Used for padding.
          */
-        $class_names = join( ' ', apply_filters( 'nav_menu_submenu_css_class', $classes, $args, $depth ) );
-        $class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+        $class_names = join(' ', apply_filters('nav_menu_submenu_css_class', $classes, $args, $depth));
+        $class_names = $class_names ? ' class="' . esc_attr($class_names) . '"' : '';
 
         $output .= "{$n}{$indent}<ul$class_names>{$n}";
     }
@@ -75,15 +77,16 @@ class Header_Walker extends Walker {
      * @param int      $depth  Depth of menu item. Used for padding.
      * @param stdClass $args   An object of wp_nav_menu() arguments.
      */
-    public function end_lvl( &$output, $depth = 0, $args = null ) {
-        if ( isset( $args->item_spacing ) && 'discard' === $args->item_spacing ) {
+    public function end_lvl(&$output, $depth = 0, $args = null)
+    {
+        if (isset($args->item_spacing) && 'discard' === $args->item_spacing) {
             $t = '';
             $n = '';
         } else {
             $t = "\t";
             $n = "\n";
         }
-        $indent  = str_repeat( $t, $depth );
+        $indent  = str_repeat($t, $depth);
         $output .= "$indent</ul>{$n}";
     }
 
@@ -101,28 +104,29 @@ class Header_Walker extends Walker {
      * @param stdClass $args   An object of wp_nav_menu() arguments.
      * @param int      $id     Current item ID.
      */
-    public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
-        if ( isset( $args->item_spacing ) && 'discard' === $args->item_spacing ) {
+    public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+    {
+        if (isset($args->item_spacing) && 'discard' === $args->item_spacing) {
             $t = '';
             $n = '';
         } else {
             $t = "\t";
             $n = "\n";
         }
-        $indent = ( $depth ) ? str_repeat( $t, $depth ) : '';
+        $indent = ($depth) ? str_repeat($t, $depth) : '';
 
-        $classes   = empty( $item->classes ) ? array() : (array) $item->classes;
+        $classes   = empty($item->classes) ? array() : (array) $item->classes;
         $classes[] = 'menu-item-' . $item->ID;
 
         $inset_links = get_field('inset_links', $item);
 
         $btn = get_field('button', $item);
 
-        if($inset_links) {
+        if ($inset_links) {
             $classes[] = 'inset-links';
         }
 
-        if($btn) {
+        if ($btn) {
             $classes[] = 'btn-wrap';
         }
 
@@ -135,7 +139,7 @@ class Header_Walker extends Walker {
          * @param WP_Post  $item  Menu item data object.
          * @param int      $depth Depth of menu item. Used for padding.
          */
-        $args = apply_filters( 'nav_menu_item_args', $args, $item, $depth );
+        $args = apply_filters('nav_menu_item_args', $args, $item, $depth);
 
         /**
          * Filters the CSS classes applied to a menu item's list item element.
@@ -148,8 +152,8 @@ class Header_Walker extends Walker {
          * @param stdClass $args    An object of wp_nav_menu() arguments.
          * @param int      $depth   Depth of menu item. Used for padding.
          */
-        $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth ) );
-        $class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+        $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args, $depth));
+        $class_names = $class_names ? ' class="' . esc_attr($class_names) . '"' : '';
 
         /**
          * Filters the ID applied to a menu item's list item element.
@@ -162,20 +166,20 @@ class Header_Walker extends Walker {
          * @param stdClass $args    An object of wp_nav_menu() arguments.
          * @param int      $depth   Depth of menu item. Used for padding.
          */
-        $id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth );
-        $id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
+        $id = apply_filters('nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth);
+        $id = $id ? ' id="' . esc_attr($id) . '"' : '';
 
         $output .= $indent . '<li' . $id . $class_names . '>';
 
         $atts           = array();
-        $atts['title']  = ! empty( $item->attr_title ) ? $item->attr_title : '';
-        $atts['target'] = ! empty( $item->target ) ? $item->target : '';
-        if ( '_blank' === $item->target && empty( $item->xfn ) ) {
+        $atts['title']  = ! empty($item->attr_title) ? $item->attr_title : '';
+        $atts['target'] = ! empty($item->target) ? $item->target : '';
+        if ('_blank' === $item->target && empty($item->xfn)) {
             $atts['rel'] = 'noopener noreferrer';
         } else {
             $atts['rel'] = $item->xfn;
         }
-        $atts['href']         = ! empty( $item->url ) ? $item->url : '';
+        $atts['href']         = ! empty($item->url) ? $item->url : '';
         $atts['aria-current'] = $item->current ? 'page' : '';
 
         /**
@@ -197,25 +201,25 @@ class Header_Walker extends Walker {
          * @param stdClass $args  An object of wp_nav_menu() arguments.
          * @param int      $depth Depth of menu item. Used for padding.
          */
-        $atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
+        $atts = apply_filters('nav_menu_link_attributes', $atts, $item, $args, $depth);
 
 
 
-        if($btn) {
+        if (isset($atts['class']) && $btn) {
             $atts['class'] .= ' btn';
         }
 
 
         $attributes = '';
-        foreach ( $atts as $attr => $value ) {
-            if ( is_scalar( $value ) && '' !== $value && false !== $value ) {
-                $value       = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
+        foreach ($atts as $attr => $value) {
+            if (is_scalar($value) && '' !== $value && false !== $value) {
+                $value       = ('href' === $attr) ? esc_url($value) : esc_attr($value);
                 $attributes .= ' ' . $attr . '="' . $value . '"';
             }
         }
 
         /** This filter is documented in wp-includes/post-template.php */
-        $title = apply_filters( 'the_title', $item->title, $item->ID );
+        $title = apply_filters('the_title', $item->title, $item->ID);
 
         /**
          * Filters a menu item's title.
@@ -227,19 +231,19 @@ class Header_Walker extends Walker {
          * @param stdClass $args  An object of wp_nav_menu() arguments.
          * @param int      $depth Depth of menu item. Used for padding.
          */
-        $title = apply_filters( 'nav_menu_item_title', $title, $item, $args, $depth );
+        $title = apply_filters('nav_menu_item_title', $title, $item, $args, $depth);
 
         $icon = get_field('icon', $item);
 
 
-        if(!empty($item->target)) {
+        if (!empty($item->target)) {
             $title .= '<i class="fas fa-external-link"></i>';
         }
 
         $item_output  = $args->before;
         $item_output .= '<a' . $attributes . '>';
         $item_output .= $args->link_before;
-        if($icon) {
+        if ($icon) {
             $item_output .= $icon;
         }
         $item_output .= '<span class="nav-item-title">' . $title . '</span>';
@@ -261,7 +265,7 @@ class Header_Walker extends Walker {
          * @param int      $depth       Depth of menu item. Used for padding.
          * @param stdClass $args        An object of wp_nav_menu() arguments.
          */
-        $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+        $output .= apply_filters('walker_nav_menu_start_el', $item_output, $item, $depth, $args);
     }
 
     /**
@@ -276,8 +280,9 @@ class Header_Walker extends Walker {
      * @param int      $depth  Depth of page. Not Used.
      * @param stdClass $args   An object of wp_nav_menu() arguments.
      */
-    public function end_el( &$output, $item, $depth = 0, $args = null ) {
-        if ( isset( $args->item_spacing ) && 'discard' === $args->item_spacing ) {
+    public function end_el(&$output, $item, $depth = 0, $args = null)
+    {
+        if (isset($args->item_spacing) && 'discard' === $args->item_spacing) {
             $t = '';
             $n = '';
         } else {
@@ -286,5 +291,4 @@ class Header_Walker extends Walker {
         }
         $output .= "</li>{$n}";
     }
-
 }

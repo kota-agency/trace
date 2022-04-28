@@ -6,9 +6,14 @@
 
 $_post = get_query_var('data');
 
+$card_thumbnail_id = get_field('p_card_image', $_post->ID);
 $thumbnail = get_the_post_thumbnail_url($_post->ID, 'card');
 $heading = get_the_title($_post->ID);
 $excerpt = apply_filters('the_content', excerpt(30, $_post->ID));
+
+if ($card_thumbnail_id) {
+    $thumbnail = wp_get_attachment_image_url($card_thumbnail_id, 'card');
+}
 
 ?>
 
