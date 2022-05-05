@@ -15,6 +15,13 @@
     gtag('config', 'UA-5740928-1');
     </script>
 
+
+    <!-- Global site tag (gtag.js) - Google Ads --> 
+    <script async src=https://www.googletagmanager.com/gtag/js?id=AW-773370370></script>
+    <script> 
+        window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-773370370');
+    </script>
+
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
