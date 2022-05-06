@@ -6,6 +6,7 @@
 
 $_post = get_query_var('data');
 
+$card_thumbnail_id = get_field('p_card_image', $_post->ID);
 $heading = get_the_title($_post->ID);
 $excerpt = get_the_excerpt($_post->ID);
 $thumbnail = get_the_post_thumbnail_url($_post->ID, 'large');
