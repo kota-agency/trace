@@ -6,9 +6,13 @@
 
 $_post = get_query_var('data');
 
-$thumbnail = get_the_post_thumbnail_url($_post->ID, 'large');
 $heading = get_the_title($_post->ID);
 $excerpt = get_the_excerpt($_post->ID);
+$thumbnail = get_the_post_thumbnail_url($_post->ID, 'large');
+
+if ($card_thumbnail_id) {
+    $thumbnail = wp_get_attachment_image_url($card_thumbnail_id, 'large');
+}
 
 ?>
 
