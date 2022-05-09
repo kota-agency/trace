@@ -1,6 +1,6 @@
 .page-template-temp-services {
 	.section-five-image-postion {
-		.text-layout--image-right {
+		.text-layout--image-right.text-layout__image {
 			@include media-breakpoint-up(sm) {
 				right: 75px;
 			}
