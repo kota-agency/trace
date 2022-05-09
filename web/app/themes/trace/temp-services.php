@@ -93,7 +93,7 @@ if($intro_copy2) {
 ?>
 
 <section class="text-layout section-two-image-position <?= implode(' ', $classes2); ?>">
-	<div class="container" data-aos="fade" >
+	<div class="container" data-aos="fade" data-aos-offset="500">
 		<?php if ($background_text2) : ?>
 			<h2 class="background-text background-text--large"><?= $background_text2; ?></h2>
 		<?php endif; ?>
