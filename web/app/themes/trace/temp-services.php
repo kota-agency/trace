@@ -145,7 +145,7 @@ if($intro_copy2) {
 				<?php endif; ?>
 			<?php else : ?>
 				<?php if ($split_level2) : ?>
-					<div class="row text-layout__split-row" data-aos="fade" data-aos-offset="500">
+					<div class="row text-layout__split-row" data-aos="fade" data-aos-offset="-500">
 						<div class="col-md-9">
 							<?php if ($heading2) : ?>
 								<h2><?= $heading2; ?></h2>

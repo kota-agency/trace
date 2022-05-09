@@ -100,7 +100,7 @@
 
     &--image-right {
         .text-layout__image {
-            right: 75px;
+            right: -25px;
             transform: translateX(50%);
 
             @include media-breakpoint-down(sm) {

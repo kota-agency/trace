@@ -1,0 +1,9 @@
+.page-template-temp-services {
+	.section-five-image-postion {
+		.text-layout--image-right {
+			@include media-breakpoint-up(sm) {
+				right: 75px;
+			}
+		}
+	}
+}
