@@ -1,0 +1,8 @@
+<wpml-config>   
+    <admin-texts>
+        <key name="ht_knowledge_base_settings">
+            <key name="search-placeholder-text" />
+            <key name="kb-archive-page-header-text" />
+        </key>
+    </admin-texts>
+</wpml-config>

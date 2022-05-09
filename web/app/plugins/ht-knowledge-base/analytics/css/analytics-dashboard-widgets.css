@@ -1,0 +1,22 @@
+.hkb-analytics-dash-widget li a::before, .hkb-analytics-dash-widget li > span::before {
+    content: "\f159";
+    padding: 0 5px 0 0;
+    color: #82878c;
+    font: normal 20px/1 dashicons;
+    speak: none;
+    display: inline-block;
+    padding: 0 10px 0 0;
+    position: relative;
+}
+
+li.hkb-analytics-dash-widget-articles a:before {
+  content: "\f105";
+}
+
+li.hkb-analytics-dash-widget-categories a:before {
+  content: "\f318";
+}
+
+li.hkb-analytics-dash-widget-views a:before {
+  content: "\f177";
+}
