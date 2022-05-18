@@ -5,7 +5,7 @@
  *
  * This file is used to markup the public-facing aspects of the plugin.
  *
- * @link       https://iamankitp.com/
+ * @link       https://iamankitpanchal.com/
  * @since      1.7.0
  *
  * @package    Hide_Admin_Bar_Based_On_User_Roles
