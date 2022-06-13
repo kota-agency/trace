@@ -3,7 +3,7 @@
 /**
  * Fired during plugin deactivation
  *
- * @link       https://iamankitp.com/
+ * @link       https://iamankitpanchal.com/
  * @since      1.7.0
  *
  * @package    hab_Hide_Admin_Bar_Based_On_User_Roles

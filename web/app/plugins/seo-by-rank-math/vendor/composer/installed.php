@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'ba7eaf5248a96b44706a6d4e3e9c9aca06634017',
+        'reference' => '94dc55c2118ec8200536c9e317195191c02bdeef',
         'name' => 'rankmath/seo-by-rank-math',
         'dev' => true,
     ),
@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'donatj/phpuseragentparser' => array(
-            'pretty_version' => 'v1.5.0',
-            'version' => '1.5.0.0',
+            'pretty_version' => 'v1.6.0',
+            'version' => '1.6.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../donatj/phpuseragentparser',
             'aliases' => array(),
-            'reference' => 'cc9d872cddfc180c52d084d0dff1e4aad653d37f',
+            'reference' => 'c84fd3c205097843aab93290f2a5744b4159e815',
             'dev_requirement' => false,
         ),
         'mythemeshop/wordpress-helpers' => array(
@@ -52,7 +52,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'ba7eaf5248a96b44706a6d4e3e9c9aca06634017',
+            'reference' => '94dc55c2118ec8200536c9e317195191c02bdeef',
             'dev_requirement' => false,
         ),
         'woocommerce/action-scheduler' => array(

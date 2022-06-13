@@ -93,7 +93,7 @@ if($intro_copy2) {
 ?>
 
 <section class="text-layout section-two-image-position <?= implode(' ', $classes2); ?>">
-	<div class="container" data-aos="fade">
+	<div class="container" data-aos="fade" data-aos-offset="-500">
 		<?php if ($background_text2) : ?>
 			<h2 class="background-text background-text--large"><?= $background_text2; ?></h2>
 		<?php endif; ?>
@@ -570,7 +570,7 @@ if($intro_copy5) {
 							</div>
 						<?php endif; ?>
 					</div>
-					<div class="col-md-6 col-lg-5" data-aos="fade">
+					<div class="col-md-6 col-lg-4" data-aos="fade">
 						<?php if (have_rows('text_layout_c_columns')) : ?>
 							<div class="row">
 								<?php while (have_rows('text_layout_c_columns')) : the_row(); ?>

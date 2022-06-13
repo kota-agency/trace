@@ -1,0 +1,13 @@
+.page-template-temp-services {
+	.section-five-image-postion {
+		.text-layout__image {
+			@include media-breakpoint-up(sm) {
+				right: 75px;
+			}
+		}
+	}
+
+	.section-two-image-position.text-layout.block-space {
+		padding: 120px;
+	}
+}

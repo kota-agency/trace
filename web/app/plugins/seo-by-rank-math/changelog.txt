@@ -1,0 +1,1 @@
+* Fixed: [GA4 Data stream](https://rankmath.com/kb/using-ga4/#datastream-and-country) dropdown was not showing any value even if it was working fine
