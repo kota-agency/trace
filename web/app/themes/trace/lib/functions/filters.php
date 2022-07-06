@@ -11,9 +11,12 @@ add_filter('the_generator', function() {
 
 /*
 Admin Bar
-- hide the admin bar
+- hide the admin bar to regular users
  */
-// add_filter('show_admin_bar', '__return_false');
+
+ if (!is_user_logged_in() && !current_user_can('manage_options')) {
+     add_filter('show_admin_bar', '__return_false');
+ }
 
 /**
  * Allow svgs to be uploaded in WordPress
