@@ -2,10 +2,10 @@
 Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, sitemap, google search console, schema, redirection, WordPress SEO
-Tested up to: 5.9
+Tested up to: 6.0
 Requires at least: 5.6
 Requires PHP: 7.2
-Stable tag: 1.0.88.1
+Stable tag: 1.0.92.1
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -185,7 +185,7 @@ Even with significantly more features than other plugins, Rank Math SEO loads am
 ### Take a sneak peek into Rank Math SEO’s features ###
 
 #### Detailed Setup Tutorial ####
-[youtube https://www.youtube.com/watch?v=dTvZuMRzW4w]
+[youtube https://www.youtube.com/watch?v=cQLvCBVev3I]
 
 ### List of Best Rank Math SEO Features ###
 
@@ -580,23 +580,25 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.88.1 [May 04, 2022] =
-* Fixed: [GA4 Data stream](https://rankmath.com/kb/using-ga4/#datastream-and-country) dropdown was not showing any value even if it was working fine
+= 1.0.92 [Jun 29, 2022] =
+* Added: New filter to [disable the domain checking functionality](https://rankmath.com/kb/filters-hooks-api-developer/#disable-domain-checking)
+* Improved: Made several significant code improvements in the [Analytics module](https://rankmath.com/kb/analytics) to make the plugin even FASTER and LIGHTER
+* Improved: Made changes in the Person entity of Schema to include it only on the pages where it is needed
+* Improved: Dark mode styling of the [Schema Generator](https://rankmath.com/kb/rich-snippets/#add-schema-posts-pages) in the Elementor editor
+* Removed: Old update routine files as most of those contained the deprecated code
+* Fixed: Heading tags used for representational purposes were getting counted in the [Content AI Heading count test](https://rankmath.com/kb/how-to-use-content-ai/#heading-count)
+* Fixed: [Focus keyword in the content test](https://rankmath.com/kb/score-100-in-tests/#focus-keyword-in-the-content-runs-of-all-focus-keywords) was not working well in the Elementor editor when the dash was used in the Focus keyword
+* Fixed: Autogeneration of permalink was not working well when German umlauts were used in the [SERP URL field](https://rankmath.com/kb/general-tab/#num-1-1-seo-title-permalink-and-description)
+* Fixed: RSS feed settings were not imported from the Yoast plugin
+* Fixed: Unable to search the pages in the [About & Contact page](https://rankmath.com/kb/local-seo/#about-page) dropdown due to the `minimumInputLength`
+* Fixed: Settings search bar was not working on the first-page load after updating the plugin
+* Fixed: Missing SEO tags on the frontend when Elementor Maintenance mode was partially configured
+* Fixed: [Redirection debugger](https://rankmath.com/kb/general-settings/#debug-redirections) was sending a 404 error code in the header
+* Fixed: PHP notices and warnings in the Redirection debugger on some setups
+* Fixed: [Nofollow Domains](https://rankmath.com/kb/general-settings/#nofollow-domains) &[ Nofollow Exclude Domains](https://rankmath.com/kb/general-settings/#no-follow-exclude-domains) options not working reliably
+* Fixed: Encoded characters were shown in the Rich Results section of the [Index Status](https://rankmath.com/kb/url-inspection-api-integration/#rich-result-types)
 
-= 1.0.88 [May 04, 2022] =
-* Added: [HUGE!] Rank Math now supports [Google Analytics 4](https://rankmath.com/kb/using-ga4/)
-* Added: Option to create GA4 property with one click
-* Added: New option in [Database Tools](https://rankmath.com/kb/rank-math-status-and-tools/#fix-analytics-table-collations) to match the collations of all Analytics tables
-* Fixed: [Content AI](https://rankmath.com/kb/how-to-use-content-ai/) was not working on secondary language posts created using the WPML plugin
-* Fixed: [Search form on the Settings page](https://rankmath.com/kb/general-settings/) was showing irrelevant items in the dropdown 
-* Fixed: Both `index` & `noindex` options could be selected in the [Date Archive Robots settings](https://rankmath.com/kb/titles-and-meta/#date-robots-meta)
-* Fixed: Dashboard widget was showing 403 error to the Shop Manager user role
-* Fixed: Dashboard widget was showing an error when the site couldn't load the Blog posts from rankmath.com/blog/
-* Fixed: "Exclude this attachment from the Sitemap" option on the attachment details popup was showing to all the users
-* Fixed: [Content Analysis](https://rankmath.com/blog/divi-seo/) was also analyzing the global Header & Footer content added in the Divi's Theme Builder
-* Fixed: On Divi's frontend editor, the SEO modal was getting closed after clicking on the Schema generator button
-* Fixed: In [Easy Mode](https://rankmath.com/kb/switch-from-easy-to-advanced-mode/), [Instant Indexing](https://rankmath.com/kb/how-to-use-indexnow/#submit-urls-manually) settings were linked to the wrong page
-* Fixed: [Update data manually](https://rankmath.com/kb/general-settings/#analytics-database) option was not working well on some setups in the Analytics Module
-* Fixed: Invalid `%searchphrase%` variable was used as a default value on the Search page
+= 1.0.92.1 [Jun 29, 2022] =
+* Fixed: PHP Fatal error on some installations where Elementor page builder and PHP v7.2 was used
 
 Full changelog can be found here - **[Rank Math SEO changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**

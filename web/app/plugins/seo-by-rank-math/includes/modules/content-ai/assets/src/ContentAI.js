@@ -14,6 +14,7 @@ import { __ } from '@wordpress/i18n'
 import { Fragment, Component } from '@wordpress/element'
 import { compose } from '@wordpress/compose'
 import { withDispatch, withSelect } from '@wordpress/data'
+import { doAction } from '@wordpress/hooks'
 import apiFetch from '@wordpress/api-fetch'
 import {
 	PanelBody,
@@ -76,8 +77,9 @@ class ContentAI extends Component {
 			blurred: ! hasCredits,
 		} )
 
-		if ( ( ! hasCredits && isEmpty( this.props.data ) ) || 'show_dummy_data' === this.props.data ) {
-			this.props.data = this.getDummyData()
+		let data = this.props.data
+		if ( ( ! hasCredits && isEmpty( data ) ) || 'show_dummy_data' === data ) {
+			data = this.getDummyData()
 		}
 
 		return (
@@ -99,15 +101,15 @@ class ContentAI extends Component {
 								<span>{ __( 'Cooking a Personalized SEO Plan', 'rank-math' ) }</span>
 								<span>{ __( 'Final Touches to the SEO Recommendations', 'rank-math' ) }</span>
 							</span>
-							{ isString( this.props.data ) && <h3 className="no-data">{ this.props.data }</h3> }
-							{ ! isEmpty( this.props.data ) && ! isString( this.props.data ) && <div>
+							{ isString( data ) && <h3 className="no-data">{ data }</h3> }
+							{ ! isEmpty( data ) && ! isString( data ) && <div>
 								<h3 className="rank-math-ca-section-title">
 									{ __( 'Content AI', 'rank-math' ) }
 									<span>{ __( 'New!', 'rank-math' ) }</span>
 									<a href="https://rankmath.com/kb/how-to-use-content-ai/?utm_source=Plugin&utm_medium=Sidebar%20KB%20Icon&utm_campaign=WP" rel="noreferrer" target="_blank" className="rank-math-help-icon" title={ __( 'Content AI Knowledge Base.', 'rank-math' ) }>﹖</a>
 								</h3>
 								<ContentAIScore />
-								<Recommendations recommendations={ this.props.data.recommendations } hasCredits={ hasCredits } content={ this.props.content } researcher={ this.props.researcher } updateAiScore={ this.props.updateAiScore } hasThumbnail={ this.props.hasThumbnail } />
+								<Recommendations recommendations={ data.recommendations } hasCredits={ hasCredits } content={ this.props.content } researcher={ this.props.researcher } updateAiScore={ this.props.updateAiScore } hasThumbnail={ this.props.hasThumbnail } />
 								<ContentAIPanel caData={ this.props } updateAiScore={ this.props.updateAiScore } hasCredits={ hasCredits } />
 							</div>
 							}
@@ -333,15 +335,16 @@ class ContentAI extends Component {
 export default compose(
 	withSelect( ( select ) => {
 		const researcher = rankMathEditor.assessor.analyzer.researcher
+		const paper = researcher.paper
 		return {
 			data: select( 'rank-math' ).getKeywordsData(),
 			keyword: get( rankMath.ca_keyword, 'keyword', select( 'rank-math' ).getKeywords().split( ',' )[ 0 ] ),
 			country: get( rankMath.ca_keyword, 'country', rankMath.contentAiCountry ),
 			researcher,
-			content: researcher.paper.getTextLower(),
-			title: researcher.paper.getTitle().toLowerCase(),
-			description: researcher.paper.getDescription().toLowerCase(),
-			hasThumbnail: researcher.paper.hasThumbnail(),
+			content: ! isUndefined( paper ) ? paper.getTextLower() : '',
+			title: ! isUndefined( paper ) ? paper.getTitle().toLowerCase() : '',
+			description: ! isUndefined( paper ) ? paper.getDescription().toLowerCase() : '',
+			hasThumbnail: ! isUndefined( paper ) ? paper.hasThumbnail() : '',
 			score: select( 'rank-math' ).getContentAIScore(),
 		}
 	} ),
@@ -367,6 +370,8 @@ export default compose(
 						if ( ! isNull( response.credits ) && ! isUndefined( response.credits ) ) {
 							setState( { credits: response.credits, creditsValue: ! isNumber( response.credits ) ? 0 : response.credits } )
 						}
+
+						doAction( 'rank_math_content_ai_changed', response.keyword )
 					} )
 			},
 			updateAiScore( key, score ) {

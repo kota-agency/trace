@@ -15,7 +15,6 @@ import { withSelect } from '@wordpress/data'
 /**
  * Internal dependencies
  */
-import { Helpers } from '@rankMath/analyzer'
 import getClassByScore from '@helpers/getClassByScore'
 
 class Recommendations extends Component {
@@ -160,9 +159,10 @@ export default compose(
 
 		if ( props.hasCredits ) {
 			const getWordCount = props.researcher.getResearch( 'wordCount' )
+			const contentAssets = rankMathEditor.assessor.analyzer.defaultAnalyses.contentHasAssets
 			wordCount = getWordCount( props.content )
-			images = rankMathEditor.assessor.analyzer.defaultAnalyses.contentHasAssets.getImages( props.researcher.paper, props.content )
-			videos = rankMathEditor.assessor.analyzer.defaultAnalyses.contentHasAssets.getVideos( props.content )
+			images = ! isUndefined( contentAssets ) ? contentAssets.getImages( props.researcher.paper, props.content ) : 0
+			videos = ! isUndefined( contentAssets ) ? contentAssets.getVideos( props.content ) : 0
 			h2 = ( props.content.match( /<h2\b[^>]*>(.*?)<\/h2>/g ) || [] ).length
 			h3 = ( props.content.match( /<h3\b[^>]*>(.*?)<\/h3>/g ) || [] ).length
 			h4 = ( props.content.match( /<h4\b[^>]*>(.*?)<\/h4>/g ) || [] ).length

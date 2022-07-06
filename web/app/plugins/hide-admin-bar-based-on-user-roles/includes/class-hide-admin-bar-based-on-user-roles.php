@@ -157,10 +157,12 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'generate_admin_menu_page' );
-		$this->loader->add_action( 'wp_ajax_save_user_roles', $plugin_admin, 'save_user_roles' );
+		$this->loader->add_action( 'wp_ajax_hab_save_user_roles', $plugin_admin, 'save_user_roles' );
 		$this->loader->add_action( 'upgrader_process_complete', $plugin_admin, 'upgrader_process_complete' );
 
-		 
+		if( is_multisite()) {
+			$this->loader->add_action( 'network_admin_menu', $plugin_admin, 'generate_network_admin_menu_page' ); 
+		}
 		
 		
 	}

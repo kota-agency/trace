@@ -7,7 +7,7 @@ Author URI: https://iamankitpanchal.com
 Requires at least: 3.7.0
 Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 3.2
+Stable tag: 3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,6 +31,9 @@ This plugin is very useful to hide admin bar based on selected user roles and us
 3. User Roles => In this option you can choose user roles to hide admin bar for that specific user roles.
 
 4. Capabilities Blacklist => Now you can hide admin bar based on user capabilities as well. ( Like manage_options etc...)
+
+5. Multisite support => Now it supports WordPress network(multisite) sites as well.
+
 
 == You can check our other plugins: ==
 <ol>
@@ -139,6 +142,9 @@ Security Fixes and Improvements.
 
 = 3.2.0 =
 Security Fixes and Improvements.
+
+= 3.3.0 =
+Security Fixes and Improvements and multisite support added.
 
 == Upgrade Notice ==
 Always keep updated. We frequently provide latest updates to run plugin smoothly with all other WordPress plugins and themes.

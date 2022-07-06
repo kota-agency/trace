@@ -102,18 +102,33 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Public {
 
 	public function hab_hide_admin_bar(){
 		global $wpdb;
+		
+		if( is_multisite() ) {
+			$current_user_object = new WP_User(
+			    get_current_user_id(),
+			    get_current_blog_id()
+			);
+		} else {
+			$current_user_object = wp_get_current_user();
+		}
 
-		$curUserObj = wp_get_current_user();
-		$settings = get_option("hab_settings");		
+		$settings = [];
+
+		if( is_multisite() ) {
+			$settings_sa = get_network_option( 1, "hab_settings" );
+			$settings = get_network_option( get_current_blog_id(), "hab_settings" );
+		} else {
+			$settings = get_option("hab_settings");	
+		}
 
     	$plgUserRoles = ( isset($settings["hab_userRoles"]) ) ? $settings["hab_userRoles"] : "";
-    	$hab_capabilities = ( isset($settings["hab_capabilities"]) )  ? explode(",",$settings["hab_capabilities"]) : "";
+    	$hab_capabilities = ( isset($settings["hab_capabilities"]) && !empty($settings["hab_capabilities"]) )  ? explode(",",$settings["hab_capabilities"]) : "";
     	$hab_disableforall = ( isset($settings["hab_disableforall"]) ) ? $settings["hab_disableforall"] : "";
-
     	$hab_disableforallGuests = ( isset($settings["hab_disableforallGuests"]) ) ? $settings["hab_disableforallGuests"] : "";
+    	$hab_super_admin = ( isset($settings["hab_super_admin"]) ) ? $settings["hab_super_admin"] : "";
 
     	$userCap = 0;
-    	if( is_array($hab_capabilities) ) {
+    	if( is_array($hab_capabilities) && count($hab_capabilities) > 0 ) {
 	    	foreach( $hab_capabilities as $caps ){
 		    	if( current_user_can( $caps ) ) { 
 		    		$userCap = 1;
@@ -122,20 +137,40 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Public {
 	    	}
     	}
 
+    	$flag = 0;
+
     	if( $hab_disableforall == 'yes' ){
+    		$flag = 1;
     		show_admin_bar( false );
-    	} else {
-    		if( is_array($plgUserRoles) && array_intersect($plgUserRoles, $curUserObj->roles ) ) { 
-	    		show_admin_bar( false );
-	    	}
-	    	if( $userCap == 1 ){
-	    		show_admin_bar( false );
-	    	}
-	    	if( $hab_disableforallGuests == 'yes' && !is_user_logged_in() ){
-	    		show_admin_bar( false );
-	    	}
+		}
+
+		if( is_array($plgUserRoles) && array_intersect($plgUserRoles, $current_user_object->roles ) ) { 
+			$flag = 1;
+    		show_admin_bar( false );
     	}
-    	
+
+    	if( $userCap == 1 ){
+    		$flag = 1;
+    		show_admin_bar( false );
+    	}
+
+    	if( strval($hab_disableforallGuests) == 'yes' && ! is_user_logged_in() ){
+    		$flag = 1;
+    		show_admin_bar( false );
+    	}
+
+    	if( $flag == 0 ){
+    		show_admin_bar( true );
+    	}
+
+    	if( is_super_admin() && $hab_super_admin == 'yes' ){
+			show_admin_bar( false );
+		}
+
+		if( isset($settings_sa['hab_disableforall']) && $settings_sa['hab_disableforall'] == 'yes' ){
+			show_admin_bar( false );
+		}
+		
 	}
 
 
