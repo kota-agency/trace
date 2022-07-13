@@ -20,7 +20,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 	 *
 	 * link to udrpc_action main function in class UpdraftCentral_Listener
 	 */
-	public function _pre_action($command, $data, $extra_info) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- This function is called from listner.php and $extra_info is being sent.
+	public function _pre_action($command, $data, $extra_info) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- This function is called from listener.php and $extra_info is being sent.
 		// Here we assign the current blog_id to a variable $blog_id
 		$blog_id = get_current_blog_id();
 		if (!empty($data['site_id'])) $blog_id = $data['site_id'];
@@ -209,7 +209,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 	 * @return array
 	 */
 	protected function get_preload_data($timeout, $type = 'post') {
-		global $updraftplus;
+		global $updraftcentral_host_plugin, $updraftcentral_main;
 
 		if (!function_exists('get_page_templates')) {
 			require_once(ABSPATH.'wp-admin/includes/theme.php');
@@ -219,7 +219,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 		if (!empty($templates)) {
 			$templates = array_flip($templates);
 			if (!isset($templates['default'])) {
-				$templates['default'] = __('Default template', 'updraftplus');
+				$templates['default'] = $updraftcentral_host_plugin->retrieve_show_message('default_template');
 			}
 		}
 
@@ -233,7 +233,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 			'parent_pages' => $parent_pages['data']['pages'],
 			'templates' => $templates,
 			'editor_styles' => $this->get_editor_styles($timeout),
-			'wp_version' => $updraftplus->get_wordpress_version()
+			'wp_version' => $updraftcentral_main->get_wordpress_version()
 		);
 
 		if ('post' == $type) {
@@ -360,8 +360,9 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 
 		do_action('enqueue_block_editor_assets');
 		do_action('enqueue_block_assets');
+		do_action('wp_enqueue_scripts');
 
-		// Checking for editor styles support since styles make vary from theme to theme
+		// Checking for editor styles support since styles may vary from theme to theme
 		if ($editor_styles) {
 			foreach ($editor_styles as $style) {
 				if (false !== array_search($style, $loaded)) continue;
@@ -383,6 +384,24 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 				);
 				$loaded[] = $style;
 			}
+		}
+
+		// Introduced in 5.9.0
+		if (function_exists('wp_get_global_stylesheet')) {
+			$editing_styles[] = array('css' => wp_get_global_stylesheet(), 'inline' => '');
+		}
+
+		// Introduced in 5.8.0
+		if (function_exists('get_block_editor_settings')) {
+			$block_editor_context = new WP_Block_Editor_Context();
+			$settings = get_block_editor_settings(array(), $block_editor_context);
+			
+			// Don't render but instead attached to the editor before load.
+			// We let the editor render these kind of styles as they need to be prefixed
+			// by the editor based on the current context.
+			//
+			// N.B. Leave the 'css' property empty. It is used for downward compatibility.
+			$editing_styles[] = array('editor_css' => $settings['styles'], 'inline' => '', 'css' => '');
 		}
 
 		$editing_styles[] = array('css' => $this->extract_css_content('/style.css', $timeout), 'inline' => '');
@@ -622,6 +641,8 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 				);
 			}
 
+			add_filter('tag_cloud_sort', array($this, 'sort_tag_cloud'), 9, 2);
+
 			if (!function_exists('wp_generate_tag_cloud')) {
 				require_once ABSPATH.WPINC.'/category-template.php';
 			}
@@ -653,6 +674,43 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 				)
 			)
 		));
+	}
+
+	/**
+	 * Sorts the tag items that are to be shown within the tag cloud
+	 *
+	 * @param array $tags The array to be sorted. Contains the tag items
+	 * @param array $args Additional parameters needed for the sorting process
+	 * @return array
+	 */
+	public function sort_tag_cloud($tags, $args) {
+		uasort($tags, array($this, '_wp_object_count_sort_cb'));
+		if ('DESC' === $args['order']) {
+			$tags = array_reverse($tags, true);
+		}
+
+		return $tags;
+	}
+
+	/**
+	 * Serves as a callback for comparing objects based on count. Copied from WordPress 5.7
+	 * core (wp-includes/category-template.php) and tweaked to return integer instead of boolean
+	 * because returning boolean using uasort is now DEPRECATED in PHP 8.
+	 *
+	 * Used with `uasort()`.
+	 *
+	 * @since 3.1.0
+	 * @access private
+	 *
+	 * @param object $a The first object to compare.
+	 * @param object $b The second object to compare.
+	 * @return bool Whether the count value for `$a` is greater than the count value for `$b`.
+	 */
+	public function _wp_object_count_sort_cb($a, $b) {
+		if ($a->count == $b->count) {
+			return 0;
+		}
+		return ( $a->count > $b->count ) ? 1 : -1;
 	}
 
 	/**
@@ -958,7 +1016,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 			return $wrap_response ? $this->_response($data) : $data;
 		} else {
 			$error = array(
-				'message' => __($result->get_error_message(), 'updraftplus')
+				'message' => $result->get_error_message()
 			);
 
 			return $wrap_response ? $this->_generic_error_response('post_add_category_failed', $error) : $error;
@@ -1023,7 +1081,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 			return $wrap_response ? $this->_response($data) : $data;
 		} else {
 			$error = array(
-				'message' => __($result->get_error_message(), 'updraftplus')
+				'message' => $result->get_error_message()
 			);
 
 			return $wrap_response ? $this->_generic_error_response('post_add_tag_failed', $error) : $error;
@@ -1057,6 +1115,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 	 * @return array
 	 */
 	public function save($params) {
+		global $updraftcentral_host_plugin;
 
 		$validation_fields = array(
 			'post' => array('publish_posts', 'edit_posts', 'delete_posts'),
@@ -1294,7 +1353,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 			}
 		} else {
 			// ERROR: no id parameter, invalid request
-			return $this->_generic_error_response('post_invalid_request', array('message' => __('Expected parameter(s) missing.', 'updraftplus')));
+			return $this->_generic_error_response('post_invalid_request', array('message' => $updraftcentral_host_plugin->retrieve_show_message('parameters_missing')));
 		}
 	}
 
@@ -1305,6 +1364,8 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 	 * @return array
 	 */
 	public function get_authors($params = array()) {
+		global $updraftcentral_main;
+
 		// If expected parameters are empty or does not exists then set them to some default values
 		$page = !empty($params['page']) ? (int) $params['page'] : 1;
 		$per_page = !empty($params['per_page']) ? (int) $params['per_page'] : 15;
@@ -1313,14 +1374,23 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 		$order = !empty($params['order']) ? strtoupper($params['order']) : 'ASC';
 		$orderby = !empty($params['orderby']) ? $params['orderby'] : 'display_name';
 
-		$users = get_users(array(
+		$get_user_params = array(
 			'number' => $per_page,
 			'paged' => $page,
 			'offset' => $offset,
-			'who' => $who,
 			'order' => $order,
 			'orderby' => $orderby,
-		));
+		);
+
+		// WP 5.9 deprecated the 'who' parameter and introduces the 'capability'
+		// parameter, thus we'll be replacing the 'who' parameter in 5.9 or higher
+		if (version_compare($updraftcentral_main->get_wordpress_version(), '5.9', '<')) {
+			$get_user_params['who'] = $who;
+		} else {
+			$get_user_params['capability'] = array('edit_posts');
+		}
+
+		$users = get_users($get_user_params);
 
 		$authors = array();
 		$locale = get_locale();

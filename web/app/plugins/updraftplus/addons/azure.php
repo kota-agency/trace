@@ -42,6 +42,13 @@ class UpdraftPlus_Addons_RemoteStorage_azure extends UpdraftPlus_RemoteStorage_A
 		
 		$account_name = $opts['account_name']; // Used here only for logging
 		
+		// If the user is using OneDrive for Germany option
+		if (isset($opts['endpoint']) && 'blob.core.cloudapi.de' === $opts['endpoint']) {
+			$odg_warning = sprintf(__('Due to the shutdown of the %1$s endpoint, support for %1$s will be ending soon. You will need to migrate to the Global endpoint in your UpdraftPlus settings. For more information, please see: %2$s', 'updraftplus'), 'Azure Germany', 'https://www.microsoft.com/en-us/cloud-platform/germany-cloud-regions');
+			// We only want to log this once per backup job
+			$this->log($odg_warning, 'warning', 'azure_de_migrate');
+		}
+		
 		// Create/check container
 		$container_name = $opts['container'];
 		$container = $this->create_container($container_name);

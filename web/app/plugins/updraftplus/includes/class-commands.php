@@ -158,6 +158,25 @@ class UpdraftPlus_Commands {
 			'rawbackup' => html_entity_decode($rawbackup),
 		);
 	}
+
+	/**
+	 * Function to retrieve raw backup history given a timestamp and nonce
+	 *
+	 * @param Array $data - Data parameter; keys: timestamp, nonce
+	 *
+	 * @return Array - An array that contains the raw backup history
+	 */
+	public function rawbackup_history($data) {
+		if (false === ($updraftplus_admin = $this->_load_ud_admin())) return new WP_Error('no_updraftplus');
+
+		$history = UpdraftPlus_Backup_History::get_history();
+
+		$rawbackup = $updraftplus_admin->raw_backup_info($history, $data['timestamp'], $data['nonce'], null);
+
+		return array(
+			'rawbackup' => html_entity_decode($rawbackup),
+		);
+	}
 	
 	private function _load_ud() {
 		global $updraftplus;
@@ -899,6 +918,53 @@ class UpdraftPlus_Commands {
 	}
 
 	/**
+	 * This method will create UI for a list of local backups that can be remote sent and return it
+	 *
+	 * @param array $data - an array of data
+	 *
+	 * @return array      - an array with the results from the backup search
+	 */
+	public function get_backup_list($data) {
+		if (false === ($updraftplus_admin = $this->_load_ud_admin()) || false === ($updraftplus = $this->_load_ud())) return new WP_Error('no_updraftplus');
+
+		$response = array(
+			'result' => 'success'
+		);
+
+		$output = '';
+		$backup_history = UpdraftPlus_Backup_History::get_history();
+		
+		foreach ($backup_history as $key => $backup) {
+			$backup_complete = $updraftplus_admin->check_backup_is_complete($backup, false, false, true);
+			$remote_sent = !empty($backup['service']) && ((is_array($backup['service']) && in_array('remotesend', $backup['service'])) || 'remotesend' === $backup['service']);
+			if (!$backup_complete || $remote_sent) unset($backup_history[$key]);
+		}
+
+		if (!empty($backup_history)) {
+
+			$output .= '<p class="updraftplus-option updraftplus-option-inline updraft-remote_send">';
+			$output .= ' <span class="updraftplus-option-label">'.__('Backup:', 'updraftplus').'</span> ';
+			$output .= '<select id="updraftplus_remote_send_backup_options" name="updraftplus_remote_send_backup_options">';
+
+			foreach ($backup_history as $key => $backup) {
+				$total_size = round($updraftplus->get_total_backup_size($backup) / 1073741824, 1);
+				$pretty_date = get_date_from_gmt(gmdate('Y-m-d H:i:s', (int) $key), 'M d, Y G:i');
+				$label = isset($backup['label']) ? ' ' . $backup['label'] : '';
+				$output .= '<option value="'.$key. '" data-nonce="'.$backup['nonce'].'" data-timestamp="'.$key.'" data-size="'.$total_size.'">' . $pretty_date . $label . '</option>';
+			}
+			$output .= '</select>';
+			$output .= ' <button class="button button-primary" onclick="updraft_migrate_go_existing_backup()">'.__('Send', 'updraftplus').'</button>';
+			$output .= '</p>';
+		} else {
+			$output .= '<p>'.__('You have no local backups to send.', 'updraftplus').'</p>';
+		}
+
+		$response['data'] = $output;
+
+		return $response;
+	}
+	
+	/**
 	 * This function will add some needed filters in order to be able to send a local backup to remote storage it will then boot the backup process.
 	 *
 	 * @param array $data - data sent from the front end, it includes the backup timestamp and nonce
@@ -967,9 +1033,26 @@ class UpdraftPlus_Commands {
 	public function process_updraftplus_clone_login($params) {
 		if (false === ($updraftplus_admin = $this->_load_ud_admin()) || false === ($updraftplus = $this->_load_ud())) return new WP_Error('no_updraftplus');
 		if (!UpdraftPlus_Options::user_can_manage()) return new WP_Error('updraftplus_permission_denied');
+
+		if (!defined('UPDRAFTPLUS_DO_NOT_USE_IPINFO') || !UPDRAFTPLUS_DO_NOT_USE_IPINFO) {
+			// Try to get the users region code we can then use this to find their closest clone region
+			$response = wp_remote_get('https://ipinfo.io/json', array(
+				'timeout' => 3,
+				// The API always returns 429 rate limit unless this header is passed
+				'headers' => array(
+					'Referer' => network_site_url()
+				)
+			));
+			
+			if (200 === wp_remote_retrieve_response_code($response)) {
+				$body = wp_remote_retrieve_body($response);
+				$response = json_decode($body, true);
+				if (isset($response['country'])) $params['form_data']['country_code'] = $response['country'];
+			}
+		}
 		
 		$response = $updraftplus->get_updraftplus_clone()->ajax_process_login($params, false);
-
+		
 		if (isset($response['status']) && 'authenticated' == $response['status']) {
 			$tokens = isset($response['tokens']) ? $response['tokens'] : 0;
 			$content = '<div class="updraftclone-main-row">';
@@ -983,8 +1066,9 @@ class UpdraftPlus_Commands {
 				$supported_wp_versions = isset($response['supported_wp_versions']) ? $response['supported_wp_versions'] : array();
 				$supported_packages = isset($response['supported_packages']) ? $response['supported_packages'] : array();
 				$supported_regions = isset($response['supported_regions']) ? $response['supported_regions'] : array();
+				$nearest_region = isset($response['nearest_region']) ? $response['nearest_region'] : '';
 				$content .= '<div class="updraftclone_action_box">';
-				$content .= $updraftplus_admin->updraftplus_clone_ui_widget($is_vps_tester, $supported_wp_versions, $supported_packages, $supported_regions);
+				$content .= $updraftplus_admin->updraftplus_clone_ui_widget($is_vps_tester, $supported_wp_versions, $supported_packages, $supported_regions, $nearest_region);
 				$content .= '<p class="updraftplus_clone_status"></p>';
 				$content .= '<button id="updraft_migrate_createclone" class="button button-primary button-hero" data-clone_id="'.$response['clone_info']['id'].'" data-secret_token="'.$response['clone_info']['secret_token'].'">'. __('Create clone', 'updraftplus') . '</button>';
 				$content .= '<span class="updraftplus_spinner spinner">' . __('Processing', 'updraftplus') . '...</span><br>';
@@ -1016,6 +1100,7 @@ class UpdraftPlus_Commands {
 		if (!isset($response['status']) && 'success' != $response['status']) return $response;
 
 		$content = '';
+		$url = '';
 		
 		if (isset($response['data'])) {
 			$tokens = isset($response['data']['tokens']) ? $response['data']['tokens'] : 0;
@@ -1041,9 +1126,9 @@ class UpdraftPlus_Commands {
 			$content .= '</div>'; // end .updraftclone-main-row
 		}
 		if (isset($params['form_data']['install_info']['wp_only'])) {
-			$content .= '<p id="updraft_clone_progress">' . __('No backup will be started. The creation of your clone should now begin, and your WordPress username and password will be displayed below when ready.', 'updraftplus') . ' ' . __('N.B. You will be charged one token once the clone is ready. If the clone fails to boot, then no token will be taken.', 'updraftplus') . '<span class="updraftplus_spinner spinner">' . __('Processing', 'updraftplus') . '...</span></p>';
+			$content .= '<p id="updraft_clone_progress">' . __('No backup will be started. The creation of your clone should now begin, and your WordPress username and password will be displayed below when ready.', 'updraftplus') . ' ' . __('N.B. You will be charged one token once the clone is ready. If the clone fails to boot, then the token will be released within an hour.', 'updraftplus') . '<span class="updraftplus_spinner spinner">' . __('Processing', 'updraftplus') . '...</span></p>';
 		} else {
-			$content .= '<p id="updraft_clone_progress">' . __('The creation of your data for creating the clone should now begin.', 'updraftplus') . ' ' . __('N.B. You will be charged one token once the clone is ready. If the clone fails to boot, then no token will be taken.', 'updraftplus') . '<span class="updraftplus_spinner spinner">' . __('Processing', 'updraftplus') . '...</span></p>';
+			$content .= '<p id="updraft_clone_progress">' . __('The creation of your data for creating the clone should now begin.', 'updraftplus') . ' ' . __('N.B. You will be charged one token once the clone is ready. If the clone fails to boot, then the token will be released within an hour.', 'updraftplus') . '<span class="updraftplus_spinner spinner">' . __('Processing', 'updraftplus') . '...</span></p>';
 			$content .= '<div id="updraft_clone_activejobsrow" style="display:none;"></div>';
 		}
 

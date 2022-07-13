@@ -9,12 +9,18 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	private $vault_mothership = 'https://vault.updraftplus.com/plugin-info/';
 	
 	private $vault_config;
+	
+	protected $quota_transient_used = false;
+
+	protected $provider_can_use_aws_sdk = true;
+	
+	protected $provider_has_regions = true;
 
 	/**
 	 * This function makes testing easier, rather than having to change the URLs in multiple places
 	 *
-	 * @param  boolean|string $which_page specifies which page to get the URL for
-	 * @return string
+	 * @param  Boolean|string $which_page specifies which page to get the URL for
+	 * @return String
 	 */
 	private function get_url($which_page = false) {
 		$base = defined('UPDRAFTPLUS_VAULT_SHOP_BASE') ? UPDRAFTPLUS_VAULT_SHOP_BASE : 'https://updraftplus.com/shop/';
@@ -44,7 +50,7 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	 */
 	public function get_supported_features() {
 		// This options format is handled via only accessing options via $this->get_options()
-		return array('multi_options', 'config_templates');
+		return array('multi_options', 'config_templates', 'conditional_logic');
 	}
 	
 	/**
@@ -78,7 +84,7 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	 *
 	 * @param Boolean $force_refresh - if set, and if relevant, don't use cached credentials, but get them afresh
 	 *
-	 * @return array An array containing the Amazon S3 credentials (accesskey, secretkey, etc.)
+	 * @return Array An array containing the Amazon S3 credentials (accesskey, secretkey, etc.)
 	 *				 along with some configuration values.
 	 */
 	public function get_config($force_refresh = false) {
@@ -396,7 +402,7 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 						<em>'.__("UpdraftPlus Vault is built on top of Amazon's world-leading data-centres, with redundant data storage to achieve 99.999999999% reliability.", 'updraftplus').' <a target="_blank" href="'.esc_attr($this->get_url('more_vault_info_landing')).'">'.sprintf(__('Read more about %s here.', 'updraftplus'), 'UpdraftPlus Vault').'</a> <a target="_blank" href="'.esc_attr($this->get_url('more_vault_info_faqs')).'">'.sprintf(__('Read the %s FAQs here.', 'updraftplus'), 'Vault').'</a></em>
 					</p>
 					<p>
-						<a aria-label="'.sprintf(__('Back to other %s options'), 'Vault').'" href="'.UpdraftPlus::get_current_clean_url().'" class="updraftvault_backtostart">'.__('Back...', 'updraftplus').'</a>
+						<a aria-label="'.sprintf(__('Back to other %s options'), 'Vault').'" href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" class="updraftvault_backtostart">'.__('Back...', 'updraftplus').'</a>
 					</p>
 				</div>
 				<div id="updraftvault_settings_connect" data-instance_id="{{instance_id}}" style="display:none;" class="updraft-hidden">
@@ -410,7 +416,7 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 						<em>'.__("Don't know your email address, or forgotten your password?", 'updraftplus').' <a aria-label="'.__("Don't know your email address, or forgotten your password?", 'updraftplus').__('Follow this link for help', 'updraftplus').'" href="'.esc_attr($this->get_url('vault_forgotten_credentials_links')).'">'.__('Go here for help', 'updraftplus').'</a></em>
 					</p>
 					<p class="padding-top-14px">
-						<em><a aria-label="'.sprintf(__('Back to other %s options'), 'Vault').'" href="'.UpdraftPlus::get_current_clean_url().'" class="updraftvault_backtostart">'.__('Back...', 'updraftplus').'</a></em>
+						<em><a aria-label="'.sprintf(__('Back to other %s options'), 'Vault').'" href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" class="updraftvault_backtostart">'.__('Back...', 'updraftplus').'</a></em>
 					</p>
 				</div>
 				<div id="updraftvault_settings_connected"{{#unless is_connected}} style="display:none;" class="updraft-hidden"{{/unless}}>
@@ -445,7 +451,7 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	 * Modifies handerbar template options
 	 *
 	 * @param array $opts
-	 * @return array - Modified handerbar template options
+	 * @return Array - Modified handerbar template options
 	 */
 	public function transform_options_for_template($opts) {
 		if (!empty($opts['token']) || !empty($opts['email'])) {
@@ -475,7 +481,7 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	 * Gives settings keys which values should not passed to handlebarsjs context.
 	 * The settings stored in UD in the database sometimes also include internal information that it would be best not to send to the front-end (so that it can't be stolen by a man-in-the-middle attacker)
 	 *
-	 * @return array - Settings array keys which should be filtered
+	 * @return Array - Settings array keys which should be filtered
 	 */
 	public function filter_frontend_settings_keys() {
 		return array(
@@ -500,6 +506,7 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 		if (!isset($vault_settings['quota']) || !is_numeric($vault_settings['quota']) || $vault_settings['quota'] < 0) {
 			if (!$error_message) {
 				$ret .= __('Unknown', 'updraftplus');
+				$ret .= $this->get_quota_recount_links();
 			} else {
 				$ret .= $error_message;
 				$ret .= $this->get_quota_recount_links();
@@ -514,11 +521,31 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 		return $ret;
 	}
 
+	/**
+	 * This function will output to the backup log when s3 is out of quota, it will then also clear the vault quota transient so a recount will happen at some point.
+	 *
+	 * @param Integer $total  - the total amount of quota
+	 * @param Integer $used   - the toal amount used
+	 * @param Integer $needed - the amount needed for the upload
+	 *
+	 * @return void
+	 */
 	protected function s3_out_of_quota($total, $used, $needed) {
-		$this->log("Error: Quota exhausted (used=$used, total=$total, needed=$needed)");
-		$this->log(sprintf(__('Error: you have insufficient storage quota available (%s) to upload this archive (%s).', 'updraftplus'), round(($total-$used)/1048576, 2).' MB', round($needed/1048576, 2).' MB').' '.__('You can get more quota here', 'updraftplus').': '.$this->get_url('get_more_quota'), 'error');
+		$quota_transient_used = $this->quota_transient_used ? '(via transient)' : '';
+		$this->log("Error: Quota exhausted (used=$used, total=$total, needed=$needed) $quota_transient_used");
+		$this->log(sprintf(__('Error: you have insufficient storage quota available (%s) to upload this archive (%s) (%s).', 'updraftplus'), round(($total-$used)/1048576, 2).' MB', round($needed/1048576, 2).' MB', $quota_transient_used).' '.__('You can get more quota here', 'updraftplus').': '.$this->get_url('get_more_quota'), 'error');
+		// The transient wasn't intended for 100% precision when that matters (e.g. out-of-quota), so we delete it - a fresh calculation will take place on the next operation
+		delete_transient('updraftvault_quota_numeric');
 	}
 
+	/**
+	 * This function will setup and record the UpdraftVault quota text transient
+	 *
+	 * @param Integer $quota_used - the amount of quota used
+	 * @param Integer $quota      - the total quota
+	 *
+	 * @return void
+	 */
 	protected function s3_record_quota_info($quota_used, $quota) {
 
 		$ret = __('Current use:', 'updraftplus').' '.round($quota_used / 1048576, 1).' / '.round($quota / 1048576, 1).' MB';
@@ -536,8 +563,9 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 		$config = $this->get_config();
 		$quota = $config['quota'];
 		$quota_used = $this->s3_get_quota_info('numeric', $config['quota']);
+		$quota_transient_used = $this->quota_transient_used ? ' (via transient)' : '';
 		
-		$ret = __('Current use:', 'updraftplus').' '.round($quota_used / 1048576, 1).' / '.round($quota / 1048576, 1).' MB';
+		$ret = __('Current use:', 'updraftplus').' '.round($quota_used / 1048576, 1).' / '.round($quota / 1048576, 1).' MB'.$quota_transient_used;
 		$ret .= ' ('.sprintf('%.1f', 100*$quota_used / max($quota, 1)).' %)';
 
 		$ret_plain = $ret . ' - '.__('Get more quota', 'updraftplus').': '.$this->get_url('get_more_quota');
@@ -550,18 +578,29 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	/**
 	 * This function will return the S3 quota Information
 	 *
-	 * @param  string|integer $format n numeric, returns an integer or false for an error (never returns an error)
+	 * @param  String|integer $format n numeric, returns an integer or false for an error (never returns an error)
 	 * @param  integer        $quota  S3 quota information
-	 * @return string|integer
+	 * @return String|integer
 	 */
 	protected function s3_get_quota_info($format = 'numeric', $quota = 0) {
 		$ret = '';
+		$counted = 0;
 
 		if ($quota > 0) {
 
 			if (!empty($this->vault_in_config_print) && 'text' == $format) {
 				$quota_via_transient = get_transient('updraftvault_quota_text');
 				if (is_string($quota_via_transient) && $quota_via_transient) return $quota_via_transient;
+			} elseif ('numeric' == $format) {
+				$quota_via_transient = get_transient('updraftvault_quota_numeric');
+				if (is_numeric($quota_via_transient) && $quota_via_transient && round($quota - $quota_via_transient, 1048576) >= 1024) {
+					$this->quota_transient_used = true;
+					if (!defined('UPDRAFTVAULT_COUNT_QUOTA_ANYWAY') || !UPDRAFTVAULT_COUNT_QUOTA_ANYWAY) {
+						return $quota_via_transient;
+					}
+				} else {
+					$this->quota_transient_used = false;
+				}
 			}
 
 			try {
@@ -582,7 +621,6 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 
 			$ret .= __('Current use:', 'updraftplus').' ';
 
-			$counted = false;
 			if (is_wp_error($current_files)) {
 				$ret .= __('Error:', 'updraftplus').' '.$current_files->get_error_message().' ('.$current_files->get_error_code().')';
 			} elseif (!is_array($current_files)) {
@@ -590,6 +628,11 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 			} else {
 				foreach ($current_files as $file) {
 					$counted += $file['size'];
+				}
+				if ($this->quota_transient_used && defined('UPDRAFTVAULT_COUNT_QUOTA_ANYWAY') && UPDRAFTVAULT_COUNT_QUOTA_ANYWAY) {
+					$this->log("UpdraftVault: UPDRAFTVAULT_COUNT_QUOTA_ANYWAY set. Current quota: {$counted}");
+				} else {
+					set_transient('updraftvault_quota_numeric', $counted, 86400);
 				}
 				$ret .= round($counted / 1048576, 1);
 				$ret .= ' / '.round($quota / 1048576, 1).' MB';
@@ -609,16 +652,12 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	/**
 	 * Build the links to recount used vault quota and to purchase more quota
 	 *
-	 * @return string 
+	 * @return String
 	 */
 	private function get_quota_recount_links() {
-		return ' - <a href="'.esc_attr($this->get_url('get_more_quota')).'">'.__('Get more quota', 'updraftplus').'</a> - <a href="'.UpdraftPlus::get_current_clean_url().'" id="updraftvault_recountquota">'.__('Refresh current status', 'updraftplus').'</a>';
+		return ' - <a href="'.esc_attr($this->get_url('get_more_quota')).'">'.__('Get more quota', 'updraftplus').'</a> - <a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraftvault_recountquota">'.__('Refresh current status', 'updraftplus').'</a>';
 	}
 
-	public function credentials_test($posted_settings) {
-		$this->credentials_test_engine($this->get_config(), $posted_settings);
-	}
-	
 	public function ajax_vault_recountquota($echo_results = true) {
 		// Force the opts to be refreshed
 		$config = $this->get_config();
@@ -646,12 +685,16 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	/**
 	 * This method also gets called directly, so don't add code that assumes that it's definitely an AJAX situation
 	 *
-	 * @param  boolean $echo_results check to see if the results need to be echoed
-	 * @return array
+	 * @param  Boolean $echo_results check to see if the results need to be echoed
+	 * @return Array
 	 */
 	public function ajax_vault_disconnect($echo_results = true) {
 		$vault_settings = $this->get_options();
-		$this->set_options(array(), true);
+		$frontend_settings_keys = array_flip($this->filter_frontend_settings_keys());
+		foreach ((array) $frontend_settings_keys as $key => $val) {
+			$frontend_settings_keys[$key] = ('last_config' === $key) ? array() : '';
+		}
+		$this->set_options(array_merge($frontend_settings_keys, $this->get_default_options()), true);
 		global $updraftplus;
 
 		delete_transient('udvault_last_config');
@@ -688,9 +731,9 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	/**
 	 * This is called from the UD admin object
 	 *
-	 * @param  boolean       $echo_results    A Flag to see if results need to be echoed or returned
-	 * @param  boolean|array $use_credentials Check if Vault needs to use credentials
-	 * @return array
+	 * @param  Boolean       $echo_results    A Flag to see if results need to be echoed or returned
+	 * @param  Boolean|array $use_credentials Check if Vault needs to use credentials
+	 * @return Array
 	 */
 	public function ajax_vault_connect($echo_results = true, $use_credentials = false) {
 	
@@ -720,9 +763,9 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 	/**
 	 * Returns either true (in which case the Vault token will be stored), or false|WP_Error
 	 *
-	 * @param  string $email    Vault Email
-	 * @param  string $password Vault Password
-	 * @return boolean|WP_Error
+	 * @param  String $email    Vault Email
+	 * @param  String $password Vault Password
+	 * @return Boolean|WP_Error
 	 */
 	private function vault_connect($email, $password) {
 
@@ -737,7 +780,8 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 				'e' => $email,
 				'p' => base64_encode($password),
 				'sid' => $updraftplus->siteid(),
-				'su' => base64_encode(home_url())
+				'su' => base64_encode(home_url()),
+				'v' => $updraftplus->version
 			)
 		));
 		
@@ -812,5 +856,38 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 
 		return true;
 
+	}
+
+	/**
+	 * Acts as a WordPress options filter
+	 *
+	 * @param  Array $updraftvault - An array of UpdraftVault options
+	 * @return Array - the set of updated UpdraftVault settings
+	 */
+	public function options_filter($updraftvault) {
+		// Get the current options (and possibly update them to the new format)
+		$opts = UpdraftPlus_Storage_Methods_Interface::update_remote_storage_options_format('updraftvault');
+		
+		if (is_wp_error($opts)) {
+			if ('recursion' !== $opts->get_error_code()) {
+				$msg = "(".$opts->get_error_code()."): ".$opts->get_error_message();
+				$this->log($msg);
+				error_log("UpdraftPlus: $msg");
+			}
+			// The saved options had a problem; so, return the new ones
+			return $updraftvault;
+		}
+		
+		// If the input is either empty or not as expected, then return the current options
+		if (!isset($updraftvault['settings']) || !is_array($updraftvault['settings']) || empty($updraftvault['settings'])) return $opts;
+		
+		foreach ($updraftvault['settings'] as $instance_id => $storage_options) {
+			if (!isset($opts['settings'][$instance_id])) continue;
+			foreach ($storage_options as $storage_key => $storage_value) {
+				$opts['settings'][$instance_id][$storage_key] = $storage_value;
+			}
+		}
+
+		return $opts;
 	}
 }

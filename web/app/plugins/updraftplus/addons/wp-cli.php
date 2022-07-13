@@ -687,6 +687,9 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 	 * [--collate]
 	 * : Specify a collation to use to replace any found in the database file that are not locally supported
 	 *
+	 * [--charset]
+	 * : Specify a charset to use to replace any found in the database file that are not locally supported
+	 *
 	 * ## EXAMPLES
 	 *
 	 * wp updraftplus restore b290ee083e9e --component="db,plugins,themes" --db-decryption-phrase=="test"
@@ -766,6 +769,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 		if (!empty($assoc_args['db-dummy-restore'])) $restore_options['dummy_db_restore'] = $assoc_args['db-dummy-restore'];
 		
 		if (!empty($assoc_args['collate'])) $restore_options['updraft_restorer_collate'] = $assoc_args['collate'];
+		if (!empty($assoc_args['charset'])) $restore_options['updraft_restorer_charset'] = $assoc_args['charset'];
 		
 		if (class_exists('UpdraftPlus_Addons_MoreFiles')) {
 			if (isset($assoc_args['over-write-wp-config'])) {
@@ -781,12 +785,16 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 			}
 		} else {
 			if (isset($assoc_args['over-write-wp-config'])) {
-				$this->addon_not_exist_error('over-write-wp-config', 'More files', 'https://updraftplus.com/shop/more-files/');
+				$this->addon_not_exist_error('over-write-wp-config', 'More files', $updraftplus->get_url('premium'));
 			}
 		}
 		
 		list ($mess, $warn, $err, $info) = $updraftplus->analyse_db_file($backup_set['timestamp'], array());// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		
+		if (!empty($info['supported_charset'])) {
+			if (empty($assoc_args['charset'])) $restore_options['updraft_restorer_charset'] = $info['supported_charset'];
+		}
+
 		if (class_exists('UpdraftPlus_Addons_Migrator')) {
 			if (!empty($info['migration'])) {
 				if (isset($assoc_args['migration'])) {
@@ -817,7 +825,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 			}
 		} else {
 			if (isset($assoc_args['site-id-to-restore'])) {
-				$this->addon_not_exist_error('site-id-to-restore', 'Network / Multisite', 'https://updraftplus.com/shop/network-multisite/');
+				$this->addon_not_exist_error('site-id-to-restore', 'Network / Multisite', $updraftplus->get_url('premium'));
 			}
 		}
 		
@@ -839,7 +847,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 				$restore_options['incremental-restore-point'] = -1;
 			}
 		} elseif (isset($assoc_args['incremental-restore-point'])) {
-			$this->addon_not_exist_error('incremental-restore-point', 'Support for incremental backups', 'https://updraftplus.com/shop/incremental/');
+			$this->addon_not_exist_error('incremental-restore-point', 'Support for incremental backups', $updraftplus->get_url('premium'));
 		}
 		
 		if (isset($assoc_args['delete-during-restore'])) {
@@ -982,7 +990,8 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 	 * @alias incremental-backups
 	 */
 	public function incremental_backups() {
-
+		global $updraftplus;
+		
 		$items = array();
 
 		if (class_exists('UpdraftPlus_Addons_Incremental')) {
@@ -1005,10 +1014,216 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 				WP_CLI::error(__('There are no incremental backup restore points available.', 'updraftplus'), true);
 			}
 		} else {
-			$this->addon_not_exist_error('incremental-restore-point', 'Support for incremental backups', 'https://updraftplus.com/shop/incremental/');
+			$this->addon_not_exist_error('incremental-restore-point', 'Support for incremental backups', $updraftplus->get_url('premium'));
 		}
 
 		WP_CLI\Utils\format_items('table', $items, array('incremental_backups'));
+	}
+
+	/**
+	 * Login to UpdraftPlus.com server to connect this plugin with your associated account
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--email=<email-address>]
+	 * : The email address that is registered on UpdraftPlus.com system/server
+	 *
+	 * [--password=<password>]
+	 * : The associated password with the registered email address
+	 *
+	 * [--password-file=<path-to-file>]
+	 * : The path to a file that contains an associated password with the registered email address
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp updraftplus connect --email="myemail@somewhere.com" [--password="dC6UdyF4CGzmTxzt" or --password-file="/path/to/file"]
+	 *
+	 * @subcommand connect
+	 * @when after_wp_load
+	 *
+	 * @param Array $args       A indexed array of command line arguments
+	 * @param Array $assoc_args Key value pair of command line arguments
+	 */
+	public function connect($args, $assoc_args) {
+		global $updraftplus_addons2;
+		if ('' == $assoc_args['email'] || ('' == $assoc_args['password'] && '' == $assoc_args['password-file'])) {
+			WP_CLI::error(__('An email and password are required to connect to UpdraftPlus.com. Please make sure these two parameters are set.', 'updraftplus'), true);
+		}
+		if (!filter_var($assoc_args['email'], FILTER_VALIDATE_EMAIL)) {
+			WP_CLI::error(__('The email address provided appears to be invalid, please double-check your email address again and try again.', 'updraftplus'), true);
+		}
+		if ('' != $assoc_args['password-file'] && !file_exists(realpath($assoc_args['password-file']))) {
+			WP_CLI::error(__("The password file you specified doesn't exist; please check the --password-file parameter.", 'updraftplus'));
+		}
+		if ('' != $assoc_args['password-file'] && false === ($password_from_file = file_get_contents($assoc_args['password-file']))) {
+			WP_CLI::error(__("The attempt to open and read contents from the password file failed; please make sure the file is readable and is not being exclusively locked by another process", 'updraftplus'));
+		}
+		$password = '' != $assoc_args['password'] ? $assoc_args['password'] : $password_from_file;
+		$updraftplus_addons2->update_option(UDADDONS2_SLUG.'_options', array('email' => $assoc_args['email'], 'password' => $password));
+
+		WP_CLI::log(__('Please wait while connecting to UpdraftPlus.com ...', 'updraftplus'));
+		$_GET['udm_refresh'] = 1; // don't use cache, we always refresh when connecting even if already connected
+		$result = $updraftplus_addons2->connection_status();
+		unset($_GET['udm_refresh']);
+		
+		if (true !== $result) {
+			if (is_wp_error($result)) {
+				foreach ($result->get_error_messages() as $msg) {
+					if (empty($msg)) continue;
+					WP_CLI::error($msg);
+				}
+			} else {
+				WP_CLI::error(__('An unknown error occurred when trying to connect to UpdraftPlus.Com', 'updraftplus'));
+			}
+		} else {
+			WP_CLI::success(__('You successfully logged in to UpdraftPlus.Com and connected this plugin with your account', 'updraftplus'));
+		}
+	}
+
+	/**
+	 * Create a clone using a UpdraftClone key
+	 *
+	 * NOTE: this command must be run with the --user=<user> flag otherwise the clone will fail to boot
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--clone-key=<updraftclone-key>]
+	 * : A UpdraftClone key generated on UpdraftPlus.com
+	 *
+	 * [--php=<php-version>]
+	 * : The PHP version to use on the clone (optional default: 7.4)
+	 *
+	 * [--wp=<wp-version>]
+	 * : The WP version to use on the clone (optional default: 5.9)
+	 *
+	 * [--region=<region>]
+	 * : The region to create the clone in (optional default: London)
+	 *
+	 * [--package=<package>]
+	 * : The clone package to boot (optional default: starter)
+	 *
+	 * [--admin-only]
+	 * : A boolean to indicate if the clone should only allow admins to login (optional default: False)
+	 *
+	 * [--wp-only]
+	 * : A boolean to indicate if we should boot a blank clone (optional default: False)
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp updraftplus updraftclone --user="USER NAME/ID" --clone-key="CLONE_KEY" --php="8.0" --wp="5.6" --region="london"
+	 *
+	 * @when after_wp_load
+	 *
+	 * @param Array $args       A indexed array of command line arguments
+	 * @param Array $assoc_args Key value pair of command line arguments
+	 */
+	public function updraftclone($args, $assoc_args) {
+		global $updraftplus;
+		$wp_version = $updraftplus->get_wordpress_version();
+
+		$clone_key = (!isset($assoc_args['clone-key']) || !is_string($assoc_args['clone-key'])) ? false : $assoc_args['clone-key'];
+
+		if (!$clone_key) {
+			WP_CLI::error(sprintf(__('No clone key provided. You can create a clone key at %s', 'updraftplus'), $updraftplus->get_url('my-account')));
+		}
+
+		$params = array(
+			'form_data' => array(
+				'clone_key' => $clone_key,
+				'consent' => 1,
+			)
+		);
+
+		$this->set_commands_object();
+		$response = $this->commands->process_updraftplus_clone_login($params);
+
+		if (!isset($response['clone_info'])) {
+			if (isset($response['status']) && 'error' == $response['status'] && isset($response['message'])) {
+				WP_CLI::error($response['message']);
+			} else {
+				WP_CLI::error(__('Failed to connect to UpdraftPlus.Com:', 'updraftplus').' '.json_encode($response));
+			}
+		}
+		
+		$wp_parts = explode('.', $wp_version);
+		$default_wp_version = $wp_parts[0] . '.' . $wp_parts[1];
+		$php_parts = explode(".", PHP_VERSION);
+		$default_php_version = $php_parts[0] . '.' . $php_parts[1];
+
+		$php_version = (!isset($assoc_args['php-version']) || !is_numeric($assoc_args['php-version'])) ? $default_php_version : (int) $assoc_args['php-version'];
+		$wp_version = (!isset($assoc_args['wp-version']) || !is_numeric($assoc_args['wp-version'])) ? $default_wp_version : (int) $assoc_args['wp-version'];
+		$region = (!isset($assoc_args['region'])) ? 'London' : $assoc_args['region'];
+		$package = (!isset($assoc_args['package'])) ? 'starter' : $assoc_args['package'];
+
+		if (isset($assoc_args['admin-only']) && filter_var($assoc_args['admin-only'], FILTER_VALIDATE_BOOLEAN)) {
+			$admin_only = true;
+		} else {
+			$admin_only = false;
+		}
+
+		if (isset($assoc_args['wp-only']) && filter_var($assoc_args['wp-only'], FILTER_VALIDATE_BOOLEAN)) {
+			$wp_only = true;
+		} else {
+			$wp_only = false;
+		}
+
+		$clone_id = $response['clone_info']['id'];
+		$secret_token = $response['clone_info']['secret_token'];
+
+		$params = array(
+			'form_data' => array(
+				'clone_id' => $clone_id,
+				'secret_token' => $secret_token,
+				'install_info' => array(
+					'php_version' => $php_version,
+					'wp_version' => $wp_version,
+					'region' => $region,
+					'package' => $package,
+					'admin_only' => $admin_only,
+					'use_queue' => 1,
+				)
+			)
+		);
+
+		if ($wp_only) $params['form_data']['install_info']['wp_only'] = 1;
+
+		$response = $this->commands->process_updraftplus_clone_create($params);
+
+		if ('success' != $response['status']) {
+			if (isset($response['status']) && 'error' == $response['status'] && isset($response['message'])) {
+				WP_CLI::error($response['message']);
+			} else {
+				WP_CLI::error(__('Failed to boot clone:', 'updraftplus').json_encode($response));
+			}
+		}
+		if ($wp_only) {
+			WP_CLI::success(__('The UpdraftClone boot process for an empty WordPress install has begun.', 'updraftplus') . ' ' . __('You will recieve an email when it completes.', 'updraftplus'));
+		}
+
+		// reset the secret token, this can change if we have been given one from the queue
+		$secret_token = $response['secret_token'];
+		$clone_url = $response['url'];
+		$key = $response['key'];
+		
+		// Run a UpdraftClone backup
+		$params = array(
+			'updraftplus_clone_backup' => 1,
+			'backupnow_nodb'    => 0,
+			'backupnow_nofiles' => 0,
+			'backupnow_nocloud' => 0,
+			'backupnow_label'   => 'UpdraftPlus Clone',
+			'extradata'         => array(),
+			'onlythisfileentity' => 'plugins,themes,uploads,others',
+			'clone_id' => $clone_id,
+			'secret_token' => $secret_token,
+			'clone_url' => $clone_url,
+			'key' => $key,
+			'backup_nonce' => 'current',
+			'backup_timestamp' => 'current',
+		);
+		$this->commands->backupnow($params);
+		
+		WP_CLI::success(__('The UpdraftClone boot process has started.', 'updraftplus') . ' ' . __('The creation of your data for creating the clone should now begin, and you will recieve an email when it completes.', 'updraftplus'));
 	}
 }
 

@@ -9,7 +9,7 @@ Latest Change: 1.16.15
 */
 // @codingStandardsIgnoreEnd
 
-$updraftplus_addon_google_enhanced = new UpdraftPlus_Addon_Google_Enhanced;
+ new UpdraftPlus_Addon_Google_Enhanced;
 
 class UpdraftPlus_Addon_Google_Enhanced {
 

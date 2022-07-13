@@ -26,6 +26,8 @@ $udaddons2_mothership = (defined('UPDRAFTPLUS_ADDONS_SSL') && !UPDRAFTPLUS_ADDON
 
 $udaddons2_mothership .= defined('UDADDONS2_TEST_MOTHERSHIP') ? UDADDONS2_TEST_MOTHERSHIP : 'updraftplus.com';
 
+global $updraftplus_addons2; // Need to explicitly globalise the variable or WP-CLI won't recognise it https://github.com/wp-cli/wp-cli/issues/4019#issuecomment-297410839
+
 $updraftplus_addons2 = new UpdraftPlusAddons2('updraftplus', $udaddons2_mothership);
 
 class UpdraftPlusAddons2 {
@@ -267,7 +269,7 @@ class UpdraftPlusAddons2 {
 				$dismissed_until = UpdraftPlus_Options::get_updraft_option('updraftplus_dismissedexpiry', 0);
 				if ($dismissed_until <= time()) {
 					$do_expiry_check = true;
-					$dismiss = '<div style="float:right; position: relative; top:-24px;" class="ud-expiry-dismiss"><a href="'.UpdraftPlus::get_current_clean_url().'" onclick="jQuery(\'.ud-expiry-dismiss\').parent().slideUp(); jQuery.post(ajaxurl, {action: \'updraft_ajax\', subaction: \'dismissexpiry\', nonce: \''.wp_create_nonce('updraftplus-credentialtest-nonce').'\' });">'.sprintf(__('Dismiss from main dashboard (for %s weeks)', 'updraftplus'), 2).'</a></div>';
+					$dismiss = '<div style="float:right; position: relative; top:-24px;" class="ud-expiry-dismiss"><a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" onclick="jQuery(\'.ud-expiry-dismiss\').parent().slideUp(); jQuery.post(ajaxurl, {action: \'updraft_ajax\', subaction: \'dismissexpiry\', nonce: \''.wp_create_nonce('updraftplus-credentialtest-nonce').'\' });">'.sprintf(__('Dismiss from main dashboard (for %s weeks)', 'updraftplus'), 2).'</a></div>';
 				}
 			}
 		}
@@ -768,7 +770,7 @@ class UpdraftPlusAddons2 {
 			'noadverts' => array(
 				'name' => 'Remove adverts',
 				'description' => 'Removes all adverts from the control panel and emails',
-				'shopurl' => '/shop/no-adverts/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'all' => array(
 				'name' => 'All addons',
@@ -778,37 +780,37 @@ class UpdraftPlusAddons2 {
 			'multisite' => array(
 				'name' => 'WordPress Network (multisite) support',
 				'description' => 'Adds support for WordPress Network (multisite) installations, allowing secure backup by the super-admin only',
-				'shopurl' => '/shop/network-multisite/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'fixtime' => array(
 				'name' => 'Fix Time',
 				'description' => 'Allows you to specify the exact time at which backups will run',
-				'shopurl' => '/shop/fix-time/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'morefiles' => array(
 				'name' => 'More Files',
 				'description' => 'Allows you to backup WordPress core, and other files in your web space',
-				'shopurl' => '/shop/more-files/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'sftp' => array(
 				'name' => 'SFTP and FTPS and SCP',
 				'description' => 'Allows SFTP and SCP as a cloud backup method, and encrypted FTP',
-				'shopurl' => '/shop/sftp/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'dropbox-folders' => array(
 				'name' => 'Dropbox Folders',
 				'description' => 'Allows you to organise your backups into Dropbox sub-folders',
-				'shopurl' => '/shop/dropbox-folders/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'morestorage' => array(
 				'name' => 'Multiple storage destinations',
 				'description' => 'Allows you to send a single backup to multiple destinations (e.g. Dropbox and Google Drive and Amazon)',
-				'shopurl' => '/shop/morestorage/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'webdav' => array(
 				'name' => 'WebDAV support',
 				'description' => 'Allows you to use the WebDAV and encrypted WebDAV protocols for remote backups',
-				'shopurl' => '/shop/webdav/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			)
 		);
 	}
