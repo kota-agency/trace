@@ -11,13 +11,13 @@
 namespace RankMathPro\Analytics;
 
 use RankMath\Helper;
-use MyThemeShop\Helpers\Str;
-use MyThemeShop\Helpers\DB as DB_Helper;
-use MyThemeShop\Database\Database;
-
+use RankMath\Admin\Admin_Helper;
 use RankMath\Google\Analytics as Analytics_Free;
-use RankMathPro\Google\Adsense;
 use RankMath\Analytics\Stats;
+use RankMathPro\Google\Adsense;
+
+use MyThemeShop\Helpers\Str;
+use MyThemeShop\Database\Database;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -71,6 +71,15 @@ class DB {
 	 */
 	public static function objects() {
 		return Database::table( 'rank_math_analytics_objects' );
+	}
+
+	/**
+	 * Get inspections table.
+	 *
+	 * @return \MyThemeShop\Database\Query_Builder
+	 */
+	public static function inspections() {
+		return Database::table( 'rank_math_analytics_inspections' );
 	}
 
 	/**
@@ -210,34 +219,6 @@ class DB {
 
 		$rank_math_gsc_has_data = $id > 0 ? true : false;
 		return $rank_math_gsc_has_data;
-	}
-
-	/**
-	 * Check if a data exists in the console, analytics, adsense table at specified date.
-	 *
-	 * @param  string $date   Date.
-	 * @param  string $action Action.
-	 * @return boolean
-	 */
-	public static function date_exists( $date, $action = 'console' ) {
-		$table = [
-			'console'   => DB_Helper::check_table_exists( 'rank_math_analytics_gsc' ) ? 'rank_math_analytics_gsc' : '',
-			'analytics' => DB_Helper::check_table_exists( 'rank_math_analytics_ga' ) ? 'rank_math_analytics_ga' : '',
-			'adsense'   => DB_Helper::check_table_exists( 'rank_math_analytics_adsense' ) ? 'rank_math_analytics_adsense' : '',
-		];
-
-		if ( empty( $table[ $action ] ) ) {
-			return true; // Should return true to avoid further data fetch action.
-		}
-
-		$table = self::table( $table[ $action ] );
-
-		$id = $table
-			->select( 'id' )
-			->where( 'DATE(created)', $date )
-			->getVar();
-
-		return $id > 0 ? true : false;
 	}
 
 	/**
@@ -426,14 +407,23 @@ class DB {
 
 		// Build placeholders for each row, and add values to data array.
 		foreach ( $rows as $row ) {
-			if ( empty( $row['dimensions'][1] ) || Str::contains( '?', $row['dimensions'][1] ) ) {
-				continue;
+			if ( ! isset( $row['dimensionValues'] ) ) {
+				if ( empty( $row['dimensions'][1] ) || Str::contains( '?', $row['dimensions'][1] ) ) {
+					continue;
+				}
+				$data[] = $date;
+				$data[] = Stats::get_relative_url( self::remove_hash( $row['dimensions'][1] ) );
+				$data[] = $row['metrics'][0]['values'][0];
+				$data[] = $row['metrics'][0]['values'][1];
+			} else {
+				if ( empty( $row['dimensionValues'][0]['value'] ) || Str::contains( '?', $row['dimensionValues'][0]['value'] ) ) {
+					continue;
+				}
+				$data[] = $date;
+				$data[] = $row['dimensionValues'][0]['value'];
+				$data[] = $row['metricValues'][0]['value'];
+				$data[] = $row['metricValues'][1]['value'];
 			}
-
-			$data[] = $date;
-			$data[] = Stats::get_relative_url( self::remove_hash( $row['dimensions'][1] ) );
-			$data[] = $row['metrics'][0]['values'][0];
-			$data[] = $row['metrics'][0]['values'][1];
 
 			$placeholders[] = '(' . implode( ', ', $placeholder ) . ')';
 		}
@@ -471,10 +461,13 @@ class DB {
 	 * @param array  $rows Data rows to insert.
 	 */
 	public static function add_adsense( $date, $rows ) {
-		global $wpdb;
+		if ( ! \MyThemeShop\Helpers\DB::check_table_exists( 'rank_math_analytics_adsense' ) ) {
+			return;
+		}
 
+		global $wpdb;
 		foreach ( $rows as $row ) {
-			$earnings = floatval( $row[1] );
+			$earnings = floatval( $row['cells'][1]['value'] );
 			if ( empty( $earnings ) ) {
 				continue;
 			}
@@ -502,5 +495,142 @@ class DB {
 		}
 
 		return $number;
+	}
+
+	/**
+	 * Bulk inserts records into a keyword table using WPDB.  All rows must contain the same keys.
+	 *
+	 * @param array $rows Rows to insert.
+	 */
+	public static function bulk_insert_query_focus_keyword_data( $rows ) {
+		$registered = Admin_Helper::get_registration_data();
+		if ( ! $registered || empty( $registered['username'] ) || empty( $registered['api_key'] ) ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		$all_keywords = [];
+		$db_keywords  = $wpdb->get_results( "SELECT keyword FROM `{$wpdb->prefix}rank_math_analytics_keyword_manager`" );
+
+		foreach ( $db_keywords as $item ) {
+			$all_keywords[] = $item->keyword;
+		}
+
+		$new_keys = array_diff( $rows, $all_keywords );
+
+		if ( empty( $new_keys ) ) {
+			return false;
+		}
+
+		$data         = [];
+		$placeholders = [];
+		$columns      = [
+			'keyword',
+			'collection',
+			'is_active',
+		];
+		$columns      = '`' . implode( '`, `', $columns ) . '`';
+		$placeholder  = [
+			'%s',
+			'%s',
+			'%s',
+		];
+
+		// Start building SQL, initialise data and placeholder arrays.
+		$sql = "INSERT INTO `{$wpdb->prefix}rank_math_analytics_keyword_manager` ( $columns ) VALUES\n";
+
+		// Build placeholders for each row, and add values to data array.
+		foreach ( $new_keys as $key ) {
+			$data[]         = $key;
+			$data[]         = 'uncategorized';
+			$data[]         = 1;
+			$placeholders[] = '(' . implode( ', ', $placeholder ) . ')';
+		}
+
+		// Stitch all rows together.
+		$sql .= implode( ",\n", $placeholders );
+
+		// Run the query.  Returns number of affected rows.
+		$count = $wpdb->query( $wpdb->prepare( $sql, $data ) ); // phpcs:ignore
+
+		$total_keywords = Keywords::get()->get_tracked_keywords_count();
+		$response       = \RankMathPro\Admin\Api::get()->keywords_info( $registered['username'], $registered['api_key'], $total_keywords );
+		if ( $response ) {
+			update_option( 'rank_math_keyword_quota', $response );
+		}
+
+		return $count;
+	}
+
+
+	/**
+	 * Get stats from DB for "Presence on Google" widget:
+	 * All unique coverage_state values and their counts.
+	 */
+	public static function get_presence_stats() {
+		$results = self::inspections()
+			->select( [ 'coverage_state', 'COUNT(*)' => 'count' ] )
+			->groupBy( 'coverage_state' )
+			->orderBy( 'count', 'DESC' )
+			->get();
+
+		$results = array_map(
+			'absint',
+			array_combine(
+				array_column( $results, 'coverage_state' ),
+				array_column( $results, 'count' )
+			)
+		);
+
+		return $results;
+	}
+
+	/**
+	 * Get stats from DB for "Top Statuses" widget.
+	 */
+	public static function get_status_stats() {
+		$statuses = [
+			'VERDICT_UNSPECIFIED',
+			'PASS',
+			'PARTIAL',
+			'FAIL',
+			'NEUTRAL',
+		];
+
+		// Get all unique index_verdict values and their counts.
+		$index_statuses = self::inspections()
+			->select(
+				[
+					'index_verdict',
+					'COUNT(*)' => 'count',
+				]
+			)
+			->groupBy( 'index_verdict' )
+			->orderBy( 'count', 'DESC' )
+			->get();
+
+		$results = array_fill_keys( $statuses, 0 );
+		foreach ( $index_statuses as $status ) {
+			if ( empty( $status->index_verdict ) ) {
+				continue;
+			}
+
+			$results[ $status->index_verdict ] += $status->count;
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Get stats from DB for "Top Statuses" widget.
+	 */
+	public static function get_index_verdict( $page ) {
+		$verdict = self::inspections()
+			->select()
+			->where( 'page', '=', $page )
+			->one();
+
+		return (array) $verdict;
 	}
 }
