@@ -212,8 +212,8 @@ class UpdraftPlus_Database_Utility {
 		if (is_scalar($initial_modes_str) && !is_bool($initial_modes_str)) {
 			$modes = array_unique(array_merge($modes, array_change_key_case(explode(',', $initial_modes_str), CASE_UPPER)));
 		} else {
-			$updraftplus->log("Couldn't get the sql_mode value (".serialize($initial_modes_str).")");
-			unset($initial_modes_str);
+			$updraftplus->log("Couldn't get the sql_mode value (".serialize($initial_modes_str)."); will not attempt any adjustment");
+			return;
 		}
 
 		$modes = array_change_key_case($modes, CASE_UPPER);
@@ -663,6 +663,17 @@ class UpdraftPlus_Database_Utility {
 		$wpdb->suppress_errors($old_val);
 
 		return $stored_routines;
+	}
+
+	/**
+	 * First half of escaping for LIKE special characters % and _ before preparing for MySQL.
+	 * Use this only before wpdb::prepare() or esc_sql(). Reversing the order is very bad for security. This is a shim function for WP versions before 4.0.
+	 *
+	 * @param String $text The raw text to be escaped. The input typed by the user should have no extra or deleted slashes.
+	 * @return String Text in the form of a LIKE phrase. The output is not SQL safe. Call wpdb::prepare() or wpdb::_real_escape() next.
+	 */
+	public static function esc_like($text) {
+		return function_exists('esc_like') ? esc_like($text) : addcslashes($text, '_%\\');
 	}
 }
 

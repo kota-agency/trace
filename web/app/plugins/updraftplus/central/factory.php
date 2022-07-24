@@ -1,5 +1,13 @@
 <?php
 
+if (!defined('ABSPATH')) die('No direct access.');
+
+if (defined('UPDRAFTCENTRAL_CLIENT_DIR')) return;
+
+define('UPDRAFTCENTRAL_CLIENT_DIR', dirname(__FILE__));
+
+if (!defined('UPDRAFTCENTRAL_SET_TIME_LIMIT')) define('UPDRAFTCENTRAL_SET_TIME_LIMIT', 900);
+
 /**
  * Returns an instance of the host plugin class where the UpdraftCentral "central" folder is being
  * integrated.
@@ -14,7 +22,7 @@ class UpdraftCentral_Factory {
 	 */
 	public static function create_host($plugin) {
 		// N.B. You can add additional host plugins here. Just make sure that you will create
-		// a host class for that particular plugin (see updraftplus/central/updraftplus.php as an example).
+		// a host class for that particular plugin (see central/updraftplus.php as an example).
 		$mapped_classes = array(
 			'updraftplus' => 'UpdraftPlus_Host',
 			// 'wp-optimize' => 'WPOptimize_Host'
@@ -24,9 +32,8 @@ class UpdraftCentral_Factory {
 
 		$host_class = $mapped_classes[$plugin];
 		if (!class_exists($host_class)) {
-			$central_folder = defined('UPDRAFTCENTRAL_CLIENT_DIR') ? UPDRAFTCENTRAL_CLIENT_DIR : dirname(__FILE__);
-			if (file_exists($central_folder.'/'.$plugin.'.php')) {
-				include_once($central_folder.'/'.$plugin.'.php');
+			if (file_exists(UPDRAFTCENTRAL_CLIENT_DIR.'/'.$plugin.'.php')) {
+				include_once(UPDRAFTCENTRAL_CLIENT_DIR.'/'.$plugin.'.php');
 			} else {
 				return null;
 			}

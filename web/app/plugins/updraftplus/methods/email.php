@@ -37,15 +37,26 @@ class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
 
 				if (apply_filters('updraftplus_email_backup', true, $addr, $ind, $type)) {
 					foreach (explode(',', $addr) as $sendmail_addr) {
-	
-						$send_short = (strlen($sendmail_addr)>5) ? substr($sendmail_addr, 0, 5).'...' : $sendmail_addr;
-						$this->log("$file: email to: $send_short");
-						$any_attempted = true;
-	
-						$subject = __("WordPress Backup", 'updraftplus').': '.get_bloginfo('name').' (UpdraftPlus '.$updraftplus->version.') '.get_date_from_gmt(gmdate('Y-m-d H:i:s', $updraftplus->backup_time), 'Y-m-d H:i');
-	
-						$sent = wp_mail(trim($sendmail_addr), $subject, sprintf(__("Backup is of: %s.", 'updraftplus'), site_url().' ('.$descrip_type.')'), null, array($fullpath));
-						if ($sent) $any_sent = true;
+						if (!preg_match('/^https?:\/\//i', $sendmail_addr)) {
+							$send_short = (strlen($sendmail_addr)>5) ? substr($sendmail_addr, 0, 5).'...' : $sendmail_addr;
+							$this->log("$file: email to: $send_short");
+							$any_attempted = true;
+							$headers = array();
+		
+							$subject = __("WordPress Backup", 'updraftplus').': '.get_bloginfo('name').' (UpdraftPlus '.$updraftplus->version.') '.get_date_from_gmt(gmdate('Y-m-d H:i:s', $updraftplus->backup_time), 'Y-m-d H:i');
+							$from_email = apply_filters('updraftplus_email_from_header', $updraftplus->get_email_from_header());
+							$from_name = apply_filters('updraftplus_email_from_name_header', $updraftplus->get_email_from_name_header());
+							// Notice that we don't use the 'wp_mail_from' filter, but only the 'From:' header to set sender name and sender email address, the reason behind it is that some SMTP plugins override the "wp_mail()" function and they do anything they want inside their own "wp_mail()" function, including not to call the php_mailer filter nor the wp_mail_from and wp_mail_from_name filters, but since the function signature remain the same as the WP one, so they may evaluate and do something with the header parameter
+							if ('' !== $from_email) {
+								$headers[] = sprintf('From: %s <%s>', $from_name, $from_email);
+							} else {
+								add_filter('wp_mail_from_name', array($updraftplus, 'get_email_from_name_header'), 9);
+							}
+							add_action('wp_mail_failed', array($updraftplus, 'log_email_delivery_failure'));
+							$sent = wp_mail(trim($sendmail_addr), $subject, sprintf(__("Backup is of: %s.", 'updraftplus'), site_url().' ('.$descrip_type.')'), $headers, array($fullpath));
+							remove_action('wp_mail_failed', array($updraftplus, 'log_email_delivery_failure'));
+							if ($sent) $any_sent = true;
+						}
 					}
 				} else {
 					$log_message = apply_filters('updraftplus_email_backup_skip_log_message', '', $addr, $ind, $descrip_type);
@@ -87,6 +98,7 @@ class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
 	}
 	
 	public function config_print() {
+		global $updraftplus;
 		?>
 		<tr class="updraftplusmethod email">
 			<th><?php _e('Note:', 'updraftplus');?></th>
@@ -94,7 +106,7 @@ class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
 
 				$used = apply_filters('updraftplus_email_whichaddresses',
 					sprintf(__("Your site's admin email address (%s) will be used.", 'updraftplus'), get_bloginfo('admin_email').' - <a href="'.esc_attr(admin_url('options-general.php')).'">'.__("configure it here", 'updraftplus').'</a>').
-					' <a href="'.apply_filters("updraftplus_com_link", "https://updraftplus.com/shop/reporting/").'" target="_blank">'.sprintf(__('For more options, use the "%s" add-on.', 'updraftplus'), __('Reporting', 'updraftplus')).'</a>'
+					' <a href="'.$updraftplus->get_url('premium').'" target="_blank">'.__('For more options, use Premium', 'updraftplus').'</a>'
 				);
 
 				echo $used.' '.sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20');

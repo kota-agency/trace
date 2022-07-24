@@ -3,9 +3,8 @@
 /*
 UpdraftPlus Addon: multisite:Multisite/Network
 Description: Makes UpdraftPlus compatible with a WordPress Network (a.k.a. multi-site) and adds Network-related features
-Version: 3.7
+Version: 3.8
 Shop: /shop/network-multisite/
-Latest Change: 1.15.4
 */
 // @codingStandardsIgnoreEnd
 
@@ -31,22 +30,41 @@ if (is_multisite()) {
 			return apply_filters('updraft_user_can_manage', $user_can_manage, true);
 		}
 
+		/**
+		 * The suffix for the table to store options in
+		 *
+		 * @return String
+		 */
 		public static function options_table() {
 			return 'sitemeta';
 		}
 
 		/**
-		 * Extracts the last logged message from updraftplus last process
+		 * Extracts the last logged message
 		 *
 		 * @return Mixed - Value set for the option or the default message
 		 */
 		public static function get_updraft_lastmessage() {
-			return UpdraftPlus_Options::get_updraft_option('updraft_lastmessage', __('(Nothing has been logged yet)', 'updraftplus'));
+			// Storing this in the single-row option does not combine well with SQL binary logging and frequent updates during a backup process
+			return get_site_option('updraft_lastmessage', __('(Nothing has been logged yet)', 'updraftplus'));
 		}
 
+		/**
+		 * Get the value for a specified option
+		 *
+		 * @param String $option  - the option name
+		 * @param Mixed	 $default - the default option value
+		 *
+		 * @return Mixed
+		 */
 		public static function get_updraft_option($option, $default = false) {
-			$tmp = get_site_option('updraftplus_options');
-			$ret = isset($tmp[$option]) ? $tmp[$option] : $default;
+			if ('updraft_lastmessage' == $option) {
+				// Storing this in the single-row option does not combine well with SQL binary logging and frequent updates during a backup process
+				$ret = get_site_option($option, $default);
+			} else {
+				$tmp = get_site_option('updraftplus_options');
+				$ret = isset($tmp[$option]) ? $tmp[$option] : $default;
+			}
 			return apply_filters('updraftplus_get_option', $ret, $option, $default);
 		}
 
@@ -59,9 +77,13 @@ if (is_multisite()) {
 		 * @return Boolean - as from update_site_option()
 		 */
 		public static function update_updraft_option($option, $value, $use_cache = true) {
+			$value = apply_filters('updraftplus_update_option', $value, $option, $use_cache);
+			if ('updraft_lastmessage' == $option) {
+				return update_site_option('updraft_lastmessage', $value);
+			}
 			$tmp = get_site_option('updraftplus_options', array(), $use_cache);
 			if (!is_array($tmp)) $tmp = array();
-			$tmp[$option] = apply_filters('updraftplus_update_option', $value, $option, $use_cache);
+			$tmp[$option] = $value;
 			return update_site_option('updraftplus_options', $tmp);
 		}
 
@@ -275,7 +297,7 @@ if (is_multisite()) {
 					$options[$key] = $value;
 				} elseif ('updraft_dir' == $key) {
 					$options[$key] = UpdraftPlus_Manipulation_Functions::prune_updraft_dir_prefix($value);
-				} elseif ('updraft_updraftvault' !== $key && preg_match('/^updraft_(.*)$/', $key, $matches) && in_array($matches[1], $backup_methods)) {
+				} elseif (preg_match('/^updraft_(.*)$/', $key, $matches) && in_array($matches[1], $backup_methods)) {
 					$options[$key] = call_user_func(array($updraftplus, 'storage_options_filter'), $value, $key);
 				} elseif (preg_match("/^updraft_/", $key)) {
 					$options[$key] = $value;
@@ -814,6 +836,6 @@ if (is_multisite()) {
 		}
 	}
 	
-	$updraftplus_addon_multisite = new UpdraftPlusAddOn_MultiSite;
+	new UpdraftPlusAddOn_MultiSite;
 
 }

@@ -10,11 +10,12 @@
 
 namespace RankMathPro\Analytics;
 
-use MyThemeShop\Helpers\DB as DB_Helper;
-
+use RankMath\Helper;
 use RankMath\Traits\Hooker;
 use RankMath\Analytics\Stats;
-
+use RankMath\Admin\Admin_Helper;
+use RankMathPro\Admin\Admin_Helper as ProAdminHelper;
+use MyThemeShop\Helpers\DB as DB_Helper;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -37,7 +38,8 @@ class Summary {
 			$this->filter( 'rank_math/analytics/get_widget', 'get_pageviews_summary' );
 		}
 		$this->filter( 'rank_math/analytics/summary', 'get_clicks_summary' );
-		$this->filter( 'rank_math/analytics/posts_summary', 'get_posts_summary' );
+		$this->filter( 'rank_math/analytics/summary', 'get_g_update_summary' );
+		$this->filter( 'rank_math/analytics/posts_summary', 'get_posts_summary', 10, 3 );
 		$this->filter( 'rank_math/analytics/analytics_summary_graph', 'get_analytics_summary_graph', 10, 2 );
 		$this->filter( 'rank_math/analytics/analytics_tables_info', 'get_analytics_tables_info' );
 	}
@@ -45,10 +47,23 @@ class Summary {
 	/**
 	 * Get posts summary.
 	 *
-	 * @param  object $summary Posts summary.
+	 * @param object $summary   Posts summary.
+	 * @param string $post_type Post type.
+	 * @param string $query     Query to get the summary data.
 	 * @return object
 	 */
-	public function get_posts_summary( $summary ) {
+	public function get_posts_summary( $summary, $post_type, $query ) {
+		if ( empty( $summary ) ) {
+			return $summary;
+		}
+
+		if ( $post_type && is_string( $post_type ) ) {
+			global $wpdb;
+			$query->leftJoin( $wpdb->prefix . 'rank_math_analytics_objects', $wpdb->prefix . 'rank_math_analytics_gsc.page', $wpdb->prefix . 'rank_math_analytics_objects.page' );
+			$query->where( $wpdb->prefix . 'rank_math_analytics_objects.object_subtype', sanitize_key( $post_type ) );
+			$summary = (object) $query->one();
+		}
+
 		$summary->pageviews = DB::traffic()
 			->selectSum( 'pageviews', 'pageviews' )
 			->whereBetween( 'created', [ Stats::get()->start_date, Stats::get()->end_date ] )
@@ -161,8 +176,7 @@ class Summary {
 
 		$sql_daterange = Stats::get()->get_sql_date_intervals( $intervals );
 
-		// phpcs:disable
-		$query = $wpdb->prepare(
+		$query        = $wpdb->prepare(
 			"SELECT DATE_FORMAT( created, '%%Y-%%m-%%d') as date, SUM(pageviews) as pageviews, {$sql_daterange}
 			FROM {$wpdb->prefix}rank_math_analytics_ga
 			WHERE created BETWEEN %s AND %s
@@ -190,8 +204,7 @@ class Summary {
 		if ( DB_Helper::check_table_exists( 'rank_math_analytics_adsense' ) ) {
 			$sql_daterange = Stats::get()->get_sql_date_intervals( $intervals );
 
-			// phpcs:disable
-			$query = $wpdb->prepare(
+			$query        = $wpdb->prepare(
 				"SELECT DATE_FORMAT( created, '%%Y-%%m-%%d') as date, SUM(earnings) as earnings, {$sql_daterange}
 				FROM {$wpdb->prefix}rank_math_analytics_adsense
 				WHERE created BETWEEN %s AND %s
@@ -228,6 +241,26 @@ class Summary {
 			'previous'   => (int) $old_clicks,
 			'difference' => $clicks - $old_clicks,
 		];
+
+		return $stats;
+	}
+
+	/**
+	 * Get google update summary.
+	 *
+	 * @param  object $stats Stats holder.
+	 * @return object
+	 */
+	public function get_g_update_summary( $stats ) {
+		if ( ! Helper::get_settings( 'general.google_updates' ) && ProAdminHelper::is_business_plan() ) {
+			$stats->graph->g_updates = null;
+
+			return $stats;
+		}
+
+		$stored                  = get_site_option( 'rank_math_pro_google_updates' );
+		$g_updates               = json_decode( $stored );
+		$stats->graph->g_updates = $g_updates;
 
 		return $stats;
 	}

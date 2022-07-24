@@ -14,6 +14,7 @@ use RankMath\Helper;
 use RankMath\Traits\Hooker;
 use RankMath\Redirections\DB;
 use RankMath\Redirections\Cache;
+use RankMathPro\Admin\CSV;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,9 +23,16 @@ defined( 'ABSPATH' ) || exit;
  *
  * @codeCoverageIgnore
  */
-class Exporter {
+class Exporter extends CSV {
 
 	use Hooker;
+
+	/**
+	 * Data
+	 *
+	 * @var array
+	 */
+	private $data = [];
 
 	/**
 	 * Term ID => slug cache.
@@ -103,66 +111,29 @@ class Exporter {
 	 *
 	 * @return void
 	 */
-	public function export() {
-		$this->increase_limits();
-		$this->headers();
-		$this->output();
+	public function process_export() {
+		$this->export(
+			[
+				'filename' => 'rank-math',
+				'columns'  => $this->columns,
+				'items'    => $this->get_items(),
+			]
+		);
 
 		exit;
 	}
 
 	/**
-	 * Try to increase time limit on server.
-	 *
-	 * @return void
-	 */
-	public function increase_limits() {
-		set_time_limit( 300 );
-	}
-
-	/**
-	 * Send headers.
-	 *
-	 * @return void
-	 */
-	public function headers() {
-		$sitename = sanitize_key( get_bloginfo( 'name' ) );
-		$filename = $sitename . '_rank-math-' . date( 'Y-m-d_H-i-s' ) . '.csv'; // phpcs:ignore
-
-		header( 'Content-Type: application/csv' );
-		header( 'Content-Description: File Transfer' );
-		header( "Content-Disposition: attachment; filename={$filename}" );
-		header( 'Pragma: no-cache' );
-	}
-
-	/**
-	 * Send output.
-	 *
-	 * @return void
-	 */
-	public function output() {
-		$this->column_headers();
-		$this->column_contents();
-	}
-
-	/**
-	 * Output column headers.
-	 *
-	 * @return void
-	 */
-	public function column_headers() {
-		echo join( ',', $this->columns ) . "\n"; // phpcs:ignore
-	}
-
-	/**
 	 * Output column contents.
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public function column_contents() {
+	public function get_items() {
 		foreach ( $this->object_types as  $object_type ) {
-			$this->export_objects( $object_type );
+			$this->get_objects( $object_type );
 		}
+
+		return $this->data;
 	}
 
 	/**
@@ -188,14 +159,17 @@ class Exporter {
 		$primary_column = "{$object_type}_id";
 		$object_id      = isset( $object->ID ) ? $object->ID : $object->$primary_column;
 
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$meta_rows = $wpdb->get_results(
 			$wpdb->prepare(
+				/* translators: %d: object id, %s: table name */
 				"SELECT * FROM {$wpdb->$table} WHERE {$primary_column} = %d AND meta_key LIKE %s",
 				$object_id,
 				$wpdb->esc_like( 'rank_math_' ) . '%'
 			)
 		);
-		$meta      = $this->process_meta_rows( $meta_rows );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$meta = $this->process_meta_rows( $meta_rows );
 
 		$internal_meta = (object) [];
 		if ( 'post' === $object_type && $this->needs_link_count ) {
@@ -285,17 +259,7 @@ class Exporter {
 					$value = $this->not_applicable_value;
 					break;
 				}
-				$value = $this->get_primary_term( $object, $meta );
-				break;
-
-			case 'schema_type':
-				if ( in_array( $object_type, [ 'term', 'user' ], true ) ) {
-					$value = $this->not_applicable_value;
-					break;
-				}
-				if ( isset( $meta['rank_math_rich_snippet'] ) ) {
-					$value = $meta['rank_math_rich_snippet'];
-				}
+				$value = $this->get_primary_term( $meta );
 				break;
 
 			case 'schema_data':
@@ -356,7 +320,7 @@ class Exporter {
 					$value = $this->not_applicable_value;
 					break;
 				}
-				if ( ! $redirection['id'] ) {
+				if ( empty( $redirection['id'] ) ) {
 					break;
 				}
 				$value = $redirection['url_to'];
@@ -367,7 +331,7 @@ class Exporter {
 					$value = $this->not_applicable_value;
 					break;
 				}
-				if ( ! $redirection['id'] ) {
+				if ( empty( $redirection['id'] ) ) {
 					break;
 				}
 				$value = $redirection['header_code'];
@@ -458,55 +422,53 @@ class Exporter {
 	 * @return string
 	 */
 	public function process_schema_data( $metadata ) {
-		$schema_data = [];
-		if ( empty( $metadata['rank_math_rich_snippet'] ) ) {
+		$output      = [];
+		$schema_data = $this->filter_schema_meta( $metadata );
+
+		if ( empty( $schema_data ) ) {
 			return '';
 		}
 
-		$snippet_type        = $metadata['rank_math_rich_snippet'];
-		$snippet_type_length = strlen( $snippet_type );
-
-		$common_fields = [ 'name', 'url', 'author' ];
-		foreach ( $metadata as $meta_key => $meta_value ) {
-			$name = '';
+		foreach ( $schema_data as $meta_key => $meta_value ) {
+			$name       = substr( $meta_key, 17 );
 			$meta_value = maybe_unserialize( $meta_value );
 
-			if ( substr( $meta_key, 0, 18 + $snippet_type_length ) == 'rank_math_snippet_' . $snippet_type ) {
-				$name = substr( $meta_key, 18 + $snippet_type_length + 1 );
-			} elseif ( in_array( $meta_key, preg_filter( '/^/', 'rank_math_snippet_', $common_fields ), true ) ) {
-				$name = substr( $meta_key, 18 );
-			}
-
 			if ( $name ) {
-				$schema_data[ $name ] = $meta_value;
+				$output[ $name ] = $meta_value;
 			}
 		}
-		return wp_json_encode( $schema_data, JSON_UNESCAPED_SLASHES );
+
+		return wp_json_encode( $output, JSON_UNESCAPED_SLASHES );
+	}
+
+	/**
+	 * Get all the rank_math_schema_* post meta values from all the values.
+	 *
+	 * @param array $metadata Schema data meta value from DB.
+	 * @return array
+	 */
+	private function filter_schema_meta( $metadata ) {
+		$found = [];
+		foreach ( $metadata as $meta_key => $meta_value ) {
+			if ( substr( $meta_key, 0, 17 ) === 'rank_math_schema_' ) {
+				$found[ $meta_key ] = $meta_value;
+			}
+		}
+		return $found;
 	}
 
 	/**
 	 * Get primary term for given object.
 	 *
-	 * @param object $object WP object.
-	 * @param mixed  $meta   Processed meta data.
+	 * @param mixed $meta   Processed meta data.
 	 * @return string
 	 */
-	public function get_primary_term( $object, $meta ) {
+	public function get_primary_term( $meta ) {
 		if ( empty( $meta['rank_math_primary_category'] ) ) {
 			return '';
 		}
 
 		return $this->get_term_slug( $meta['rank_math_primary_category'] );
-	}
-
-	/**
-	 * Escape CSV: quotes and slashes
-	 *
-	 * @param string $string String to escape.
-	 * @return string
-	 */
-	public function escape_csv( $string ) {
-		return '"' . str_replace( [ "'", '"', '\\' ], [ "''", '""', '\\\\' ], $string ) . '"';
 	}
 
 	/**
@@ -572,16 +534,16 @@ class Exporter {
 	 * Export all items of specified object type. Output column values.
 	 *
 	 * @param string $object_type Object type to export.
-	 * @return void
+	 * @return array
 	 */
-	public function export_objects( $object_type ) {
+	public function get_objects( $object_type ) {
 		global $wpdb;
 		$object_type_plural = $object_type . 's';
 		// get_post_ids, get_term_ids, get_user_ids.
 		$method = "get_{$object_type}_ids";
-		$ids = $this->$method();
+		$ids    = $this->$method();
 		if ( ! $ids ) {
-			return;
+			return [];
 		}
 
 		$primary_column = 'ID';
@@ -589,32 +551,29 @@ class Exporter {
 			$primary_column = "{$object_type}_id";
 		}
 
-		$cols       = $this->columns;
-		$cols_count = count( $cols );
+		$cols = $this->columns;
 
 		// Fetch 50 at a time rather than loading the entire table into memory.
-		while ( $next_batch = array_splice( $ids, 0, 50 ) ) {
+		while ( $next_batch = array_splice( $ids, 0, 50 ) ) { // phpcs:ignore
 			$where = 'WHERE ' . $primary_column . ' IN (' . join( ',', $next_batch ) . ')';
 
-			$objects = $wpdb->get_results( "SELECT * FROM {$wpdb->$object_type_plural} $where" );
-			$objects_count = count( $objects );
+			$objects        = $wpdb->get_results( "SELECT * FROM {$wpdb->$object_type_plural} $where" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$current_object = 0;
 
 			// Begin Loop.
 			foreach ( $objects as $object ) {
 				$current_object++;
 				$current_col = 0;
+				$columns     = [];
 				foreach ( $cols as $column ) {
 					$current_col++;
-					$sep = ',';
-					if ( $current_col == $cols_count ) {
-						$sep = '';
-					}
-					echo $this->get_column_value( $column, $object ) . $sep; // phpcs:ignore
+					$columns[] = $this->get_column_value( $column, $object ); // phpcs:ignore
 				}
-				echo "\n";
+				$this->data[] = $columns;
 			}
 		}
+
+		return $this->data;
 	}
 
 	/**
@@ -636,8 +595,8 @@ class Exporter {
 
 		$esses = array_fill( 0, count( $post_types ), '%s' );
 
-		// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-		$where  = $wpdb->prepare( "{$wpdb->posts}.post_type IN (" . implode( ',', $esses ) . ')', $post_types );
+		$where = $wpdb->prepare( "{$wpdb->posts}.post_type IN (" . implode( ',', $esses ) . ')', $post_types ); // phpcs:ignore
+
 		$where .= " AND {$wpdb->posts}.post_status != 'auto-draft'";
 
 		return $where;
@@ -654,7 +613,7 @@ class Exporter {
 			return $this->term_slugs[ $term_id ];
 		}
 		global $wpdb;
-		$where = 'term_id = ' . absint( $term_id ) . '';
+		$where                        = 'term_id = ' . absint( $term_id ) . '';
 		$this->term_slugs[ $term_id ] = $wpdb->get_var( "SELECT slug FROM {$wpdb->terms} WHERE $where" ); // phpcs:ignore
 
 		return $this->term_slugs[ $term_id ];
