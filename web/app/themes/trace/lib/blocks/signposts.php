@@ -65,17 +65,19 @@ if (is_single() && !$_posts) {
             </div>
         <?php endif; ?>
     </div>
-</section><!-- .signposts -->
 
-<?php if (is_singular('post')) : ?>
-    <div class="half-width-content__btn">
-        <div class="container">
-            <?php
+    
+    <?php if (is_singular('post')) : ?>
+        <div class="signposts__btn">
+            <div class="container">
+                <?php
 
-            $button = ['url' => get_permalink(get_option('page_for_posts')), 'title' => __("See all news", 'trace')];
-            get_component('button', $button);
+                $button = ['url' => get_permalink(get_option('page_for_posts')), 'title' => __("See all news", 'trace')];
+                get_component('button', $button);
 
-            ?>
+                ?>
+            </div>
         </div>
-    </div>
-<?php endif; ?>
+    <?php endif; ?>
+
+</section><!-- .signposts -->
