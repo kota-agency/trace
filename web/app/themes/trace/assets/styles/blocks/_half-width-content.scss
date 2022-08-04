@@ -97,6 +97,15 @@
         }
     }
 
+    &--quote-left {
+        .half-width-content__image {
+            @include media-breakpoint-up(lg) {
+                left: -70px;
+                right: 0;  
+            }
+        }
+    }
+
     &__btn {
         padding-bottom: 50px;
         text-align: center;
