@@ -335,13 +335,23 @@ function General() {
     });
 
     $('.split-content__content').find('a').on('click', (e) => {
+
+        // Check if is external link
+        var comp = new RegExp(location.host);
+        if(!comp.test($(e.currentTarget).attr('href'))){
+            return
+        }
+
+        const $this = $(e.currentTarget);
+
+
         e.preventDefault();
 
 
         if (!animating) {
             animating = true;
 
-            const $this = $(e.currentTarget);
+            
             const index = $(e.currentTarget).closest('.split-content__item').index();
 
             $('.modal').fadeOut().promise()
