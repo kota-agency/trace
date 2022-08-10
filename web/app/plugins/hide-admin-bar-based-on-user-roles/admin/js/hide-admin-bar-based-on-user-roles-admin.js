@@ -16,19 +16,16 @@
         else i = "no";
         if (jQuery("#hide_for_all_guests").is(":checked")) var o = "yes";
         else o = "no";
-        if (jQuery("#hide_for_super_admin").is(":checked")) var sa = "yes";
-        else sa = "no";
 
         jQuery.ajax({
             type: "POST",		// use $_POST request to submit data
             url: ajaxVar.url,	// URL to "wp-admin/admin-ajax.php"
             data: {
-                action: "hab_save_user_roles",
+                action: "save_user_roles",
                 UserRoles: c,
                 caps: s,
                 disableForAll: i,
                 forGuests: o,
-                superAdmin: sa,
                 hbaNonce: ajaxVar.hba_nonce,
             },
             success: function (data) {

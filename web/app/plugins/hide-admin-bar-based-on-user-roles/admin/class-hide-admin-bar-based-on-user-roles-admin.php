@@ -126,6 +126,7 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 
 	}
 
+
 	public function generate_admin_menu_page() {
 
 		add_options_page( __( 'Hide Admin Bar Settings', 'hide-admin-bar-based-on-user-roles' ), __( 'Hide Admin Bar Settings', 'hide-admin-bar-based-on-user-roles' ), 'manage_options', 'hide-admin-bar-settings', array(
@@ -135,35 +136,14 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 
 	}
 
-	public function generate_network_admin_menu_page() {
-
-		add_menu_page(
-			__( 'Hide Admin Bar Settings', 'hide-admin-bar-based-on-user-roles' ), 
-			__( 'Hide Admin Bar Settings', 'hide-admin-bar-based-on-user-roles' ),
-			'manage_options',
-			'hide-admin-bar-settings',
-			array( $this, 'hide_admin_bar_settings' ),
-	 		'', // Icon
-			100 // Position of the menu item in the menu.
-		);
-
-	}
-
 	public function hide_admin_bar_settings() {
 
-		if( is_multisite() ) {
-			$settings      = get_network_option( get_current_blog_id(), "hab_settings" );
-		} else {
-			$settings      = get_option( "hab_settings" );
-		}
-		
-		if ( ! empty( $hab_reset_key ) && isset( $_GET["reset_plugin"] ) && $_GET["reset_plugin"] == $hab_reset_key ) {
+		$settings      = get_option( "hab_settings" );
+		$hab_reset_key = get_option( "hab_reset_key" );
 
-			if( is_multisite() ) {
-				update_network_option( get_current_blog_id(), "hab_settings", "" );
-			} else {
-				update_option( "hab_settings", "" );
-			}
+		if ( ! empty( $hab_reset_key ) && isset( $_GET["reset_plugin"] ) && $_GET["reset_plugin"] == $hab_reset_key ) {
+			update_option( "hab_settings", "" );
+			update_option( "hab_reset_key", rand( 0, 999999999 ) );
 			echo '<script>window.location.reload();</script>';
 		}
 
@@ -173,13 +153,13 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
                 <div class="col-12 grid-margin">
                     <div class="card">
                         <div class="card-body">
-                            <h3><?php _e( 'Hide Admin Bar Based on User Roles', 'hide-admin-bar-based-on-user-roles' ); ?></h3>
+                            <h3><?php echo __( 'Hide Admin Bar Based on User Roles', 'hide-admin-bar-based-on-user-roles' ); ?></h3>
                             <br/>
                             <form class="form-sample">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group row">
-                                            <label class="col-sm-6 col-form-label"><?php _e( 'Hide Admin Bar for All Users', 'hide-admin-bar-based-on-user-roles' ); ?></label>
+                                            <label class="col-sm-6 col-form-label"><?php echo __( 'Hide Admin Bar for All Users', 'hide-admin-bar-based-on-user-roles' ); ?></label>
                                             <div class="col-sm-6">
 												<?php
 												$disableForAll = ( isset( $settings["hab_disableforall"] ) ) ? $settings["hab_disableforall"] : "";
@@ -194,31 +174,10 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
                                     </div>
                                 </div>
 								<?php if ( $disableForAll == "no" || empty( $disableForAll ) ) { ?>
-									
-									<?php if( is_multisite() ) { ?>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group row">
-                                                <label class="col-sm-6 col-form-label"><?php _e( 'Hide Admin Bar for Super Admin', 'hide-admin-bar-based-on-user-roles' ); ?></label>
-                                                <div class="col-sm-6">
-													<?php
-													$super_admin = ( isset( $settings["hab_super_admin"] ) ) ? $settings["hab_super_admin"] : "";
-													$checkedGuests       = ( $super_admin == 'yes' ) ? "checked" : "";
-													echo '<div class="icheck-square">
-		                                                <input tabindex="5" ' . $checkedGuests . ' type="checkbox" id="hide_for_super_admin">
-		                                            </div>';
-													?>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                               		<?php } ?>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group row">
-                                                <label class="col-sm-6 col-form-label"><?php _e( 'Hide Admin Bar for All Guests Users', 'hide-admin-bar-based-on-user-roles' ); ?></label>
+                                                <label class="col-sm-6 col-form-label"><?php echo __( 'Hide Admin Bar for All Guests Users', 'hide-admin-bar-based-on-user-roles' ); ?></label>
                                                 <div class="col-sm-6">
 													<?php
 													$disableForAllGuests = ( isset( $settings["hab_disableforallGuests"] ) ) ? $settings["hab_disableforallGuests"] : "";
@@ -235,8 +194,8 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group row">
-                                                <label class="col-sm-6 col-form-label"><?php _e( 'User Roles', 'hide-admin-bar-based-on-user-roles' ); ?>
-                                                    <br/><br/><?php _e( 'Hide admin bar for selected user roles.', 'hide-admin-bar-based-on-user-roles' ); ?>
+                                                <label class="col-sm-6 col-form-label"><?php echo __( 'User Roles', 'hide-admin-bar-based-on-user-roles' ); ?>
+                                                    <br/><br/><?php echo __( 'Hide admin bar for selected user roles.', 'hide-admin-bar-based-on-user-roles' ); ?>
                                                 </label>
                                                 <div class="col-sm-6">
 													<?php
@@ -265,9 +224,9 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group row">
-                                                <label class="col-sm-6 col-form-label"><?php _e( 'Capabilities Blacklist', 'hide-admin-bar-based-on-user-roles' );
+                                                <label class="col-sm-6 col-form-label"><?php echo __( 'Capabilities Blacklist', 'hide-admin-bar-based-on-user-roles' );
 													echo '<br />';
-													_e( 'Hide admin bar for selected user capabilities', 'hide-admin-bar-based-on-user-roles' ); ?></label>
+													echo __( 'Hide admin bar for selected user capabilities', 'hide-admin-bar-based-on-user-roles' ); ?></label>
                                                 <div class="col-sm-6">
 													<?php
 													$caps = ( isset( $settings["hab_capabilities"] ) ) ? $settings["hab_capabilities"] : "";
@@ -284,7 +243,14 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
                                 <div class="row">
                                     <div class="col-md-12">
                                         <button type="button" class="btn btn-primary btn-fw"
-                                                id="submit_roles"><?php _e( "Save Changes", 'hide-admin-bar-based-on-user-roles' ); ?></button>
+                                                id="submit_roles"><?php echo __( "Save Changes", 'hide-admin-bar-based-on-user-roles' ); ?></button>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <br/>
+                                        <p><?php echo __( "You can reset plugin settings by visiting this url without login to admin panel. Keep it safe.", 'hide-admin-bar-based-on-user-roles' ); ?>
+                                            <br/><a href="<?php echo admin_url() . "options-general.php?page=hide-admin-bar-settings&reset_plugin=" . $hab_reset_key; ?>"
+                                                    target="_blank"><?php echo admin_url() . "options-general.php?page=hide-admin-bar-settings&reset_plugin=" . $hab_reset_key; ?></a>
+                                        </p>
                                     </div>
                                 </div>
                             </form>
@@ -320,9 +286,10 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 
 			$UserRoles      = $_REQUEST['UserRoles'];
 			$caps           = sanitize_text_field( str_replace( "&nbsp;", "", $_REQUEST['caps'] ) );
-			$disableForAll  = sanitize_text_field($_REQUEST['disableForAll']);
-			$forGuests      = sanitize_text_field($_REQUEST['forGuests']);
-			$superAdmin      = sanitize_text_field($_REQUEST['superAdmin']);
+			$disableForAll  = $_REQUEST['disableForAll'];
+			$auto_hide_time = $_REQUEST['auto_hide_time'];
+			$autoHideFlag   = $_REQUEST['autoHideFlag'];
+			$forGuests      = $_REQUEST['forGuests'];
 
 			$settings                      = array();
 			$settings['hab_disableforall'] = $disableForAll;
@@ -330,15 +297,11 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 			if ( $disableForAll == 'no' ) {
 				$settings['hab_userRoles']           = $UserRoles;
 				$settings['hab_capabilities']        = $caps;
+				$settings['hab_auto_hide_time']      = $auto_hide_time;
+				$settings['hab_auto_hide_flag']      = $autoHideFlag;
 				$settings['hab_disableforallGuests'] = $forGuests;
-				$settings['hab_super_admin'] = $superAdmin;
 			}
-
-			if( is_multisite() ) {
-				update_network_option( get_current_blog_id(), "hab_settings", $settings );
-			} else {
-				update_option( "hab_settings", $settings );
-			}
+			update_option( "hab_settings", $settings );
 			echo "Success";
 		} else {
 			echo "Failed";

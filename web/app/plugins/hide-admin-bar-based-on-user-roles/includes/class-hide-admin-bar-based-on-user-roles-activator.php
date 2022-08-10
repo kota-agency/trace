@@ -30,13 +30,10 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Activator {
 	 * @since    1.7.0
 	 */
 	public static function activate() {
-		global $wpdb; 
+		global $wpdb;
 
-        if( is_multisite() ) {
-            add_network_option( get_current_blog_id(), "hab_settings", "" );
-        } else {
-            add_option("hab_settings", "" );
-        }
+		add_option("hab_settings", "" );
+		add_option("hab_reset_key", rand(0,999999999) );
 
 	}
 
