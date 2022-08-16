@@ -243,10 +243,10 @@ function General() {
 
         $inner.each((index, el) => {
 
-            const $image = $inner.find('.image-content__image--desktop');
-
+            const $image = $(el).find('.image-content__image--desktop');
+            console.log($image);
             if ($image.length) {
-                $inner.css('min-height', $image.height());
+                $(el).css('min-height', $image.height());
             }
 
         });

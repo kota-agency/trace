@@ -8,6 +8,8 @@ $classes = ['full-width', padding_classes()];
 
 $side_image = wp_get_attachment_image(get_sub_field('side_image'), 'full');
 $offset = get_sub_field('offset');
+$heading = get_sub_field('heading');
+$subheading = get_sub_field('subheading');
 $copy = get_sub_field('copy');
 $quote_image = wp_get_attachment_image(get_sub_field('quote_image'), 'full');
 $quote_image_position = get_sub_field('quote_image_position');
@@ -20,6 +22,19 @@ $layout = get_sub_field('layout');
         <div class="container">
             <div class="row <?php if($layout == 'quote-left') : ?> flex-lg-row-reverse <?php endif; ?>">
                 <div class="col-lg-6 <?php if ($offset) : ?>offset-lg-1<?php endif; ?> order-2 order-lg-1 last-margin">
+
+                    <? if($heading): ?>
+                        <h2 class="half-width-content__heading">
+                            <?= $heading; ?>
+                        </h2>
+                    <? endif; ?>
+
+                    <? if($subheading): ?>
+                        <div class="half-width-content__subheading">
+                            <?= $subheading; ?>
+                        </div>
+                    <? endif; ?>
+
                     <?= $copy; ?>
                 </div>
                 <div class="col-lg-5 order-1 order-lg-2 

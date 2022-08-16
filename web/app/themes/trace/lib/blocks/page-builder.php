@@ -32,6 +32,9 @@ if (have_rows('builder')):
         elseif (get_row_layout() == 'content_video'):
             get_template_part('lib/blocks/content-video');
 
+        elseif (get_row_layout() == 'content_background'):
+            get_template_part('lib/blocks/content-background');
+
         elseif (get_row_layout() == 'testimonials'):
             get_template_part('lib/blocks/testimonials');
 
@@ -40,6 +43,9 @@ if (have_rows('builder')):
 
         elseif (get_row_layout() == 'cta'):
             get_template_part('lib/blocks/cta');
+
+        elseif (get_row_layout() == 'heading_columns'):
+            get_template_part('lib/blocks/heading-columns');
 
         endif;
 
