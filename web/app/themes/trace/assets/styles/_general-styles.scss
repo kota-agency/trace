@@ -145,6 +145,12 @@ a:focus {
             margin-bottom: 20px;
         }
     }
+
+    .yellow {
+        a.link {
+            color: #ffcb39;
+        }
+    }
 }
 
 .loader {
@@ -616,6 +622,18 @@ h1 {
     margin: 0 auto 30px;
 }
 
+.form-left-aligned {
+    .heading-width {
+        max-width: 100%;
+    }
+
+    .form__wrapper {
+        .gform_wrapper {
+            margin: 0;
+        }
+    }
+}
+
 .label {
     font-size: 2rem;
     font-weight: 900;
@@ -961,4 +979,10 @@ hr {
         right: 20px;
         top: 20px;
     }
+}
+
+h2.gform_submission_error {
+    font-size: 12px;
+    font-weight: 300;
+    color: red;
 }

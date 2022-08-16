@@ -1,6 +1,18 @@
 .half-width-content {
     position: relative;
 
+    &__heading {
+        text-transform: uppercase;
+        font-size: 50px;
+        margin-bottom: 1em;
+    }
+
+    &__subheading {
+        text-transform: uppercase;
+        font-size: 30px;
+        margin-bottom: 1em;
+    }
+
     &.block-space {
         padding-top: 60px;
         padding-bottom: 60px;
@@ -28,6 +40,14 @@
         }
     }
 
+    ol {
+        padding-left: 15px;
+
+        li {
+            color: $color-quaternary;
+        }
+    }
+
     .wp-caption {
         padding: 30px 0;
         max-width: 100%;
@@ -41,6 +61,12 @@
             font-size: 1.6rem;
             font-weight: 600;
         }
+    }
+
+    h6 {
+        font-weight: 900;
+        font-size: 2rem;
+        color: $color-tertiary;
     }
 
     p {
@@ -79,6 +105,16 @@
             position: relative;
             top: 0;
             transform: translateY(0) translateX(0);
+            right: 0;
+        }
+    }
+
+    &--quote-left {
+        .half-width-content__image {
+            @include media-breakpoint-up(lg) {
+                left: -70px;
+                right: 0;  
+            }
         }
     }
 
@@ -118,6 +154,10 @@
             width: calc(100% + 220px);
             max-width: calc(100% + 220px);
 
+            &.has-image {
+                padding: 90px 200px 90px 55px;
+            }
+
             p {
                 font-size: 2.2rem;
 
@@ -130,6 +170,91 @@
         blockquote {
             padding: 0;
             margin-bottom: 0;
+        }
+    }
+
+
+    &__quote-image {
+        position: absolute;
+        max-width: 220px;
+        max-height: 220px;
+        height: auto;
+
+        @include media-breakpoint-down(xs) {
+            max-width: 150px;
+            max-height: 150px;
+            height: auto;
+            width: auto;
+        }
+
+        &--top-left {
+            top: 0;
+            left: 6%;
+            transform: translateY(-40%);
+        }
+
+        &--top-right {
+            top: 0;
+            right: 22%;
+            transform: translateY(-40%);
+
+            @include media-breakpoint-down(xs) {
+                right: 40%;
+            }
+        }
+
+        &--bottom-left {
+            bottom: 0;
+            left: 6%;
+            transform: translateY(40%);
+        }
+
+        &--bottom-right {
+            bottom: 0;
+            right: 22%;
+            transform: translateY(40%);
+
+            @include media-breakpoint-down(xs) {
+                right: 40%;
+            }
+        }
+    }
+
+    &--quote-left {
+        .half-width-content {
+            &__side-quote {
+                right: unset;
+                left: -25px;
+                background: url(../images/paper-texture-right.svg) center no-repeat;
+                background-size: 100% 100%;
+
+                @include media-breakpoint-down(md) {
+                    padding: 80px 80px 80px 130px;
+                    left: -90px;
+                }
+
+                @include media-breakpoint-down(xs) {
+                    padding: 60px 220px 60px 55px;
+                    right: 0;
+                    left: -50px;
+                    background-position: left -150px top;
+
+                    &.has-image {
+                        padding: 90px 220px 90px 55px;
+                    }
+                }
+            }
+
+            &__quote-image {
+                &--bottom-right,
+                &--top-right {
+                    right: 2%;
+
+                    @include media-breakpoint-down(xs) {
+                        right: 32%;
+                    }
+                }
+            }
         }
     }
 }

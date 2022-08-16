@@ -47,18 +47,6 @@ if (is_single() && !$_posts) {
 
 ?>
 
-<?php if (is_singular('post')) : ?>
-    <div class="half-width-content__btn">
-        <div class="container">
-            <?php
-
-            $button = ['url' => get_permalink(get_option('page_for_posts')), 'title' => __("See all news", 'trace')];
-            get_component('button', $button);
-
-            ?>
-        </div>
-    </div>
-<?php endif; ?>
 <section <?= block_id(); ?> class="signposts <?= implode(' ', $classes); ?>" data-aos="fade">
     <div class="container">
         <?php if ($border_top) : ?>
@@ -77,4 +65,19 @@ if (is_single() && !$_posts) {
             </div>
         <?php endif; ?>
     </div>
+
+    
+    <?php if (is_singular('post')) : ?>
+        <div class="signposts__btn">
+            <div class="container">
+                <?php
+
+                $button = ['url' => get_permalink(get_option('page_for_posts')), 'title' => __("See all news", 'trace')];
+                get_component('button', $button);
+
+                ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
 </section><!-- .signposts -->

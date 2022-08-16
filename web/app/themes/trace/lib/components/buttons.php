@@ -14,8 +14,8 @@
 
             $button = get_sub_field('link');
             $link_type = get_sub_field('style');
-
-
+            $link_color = get_sub_field('color');
+            
 
             if ($button) {
                 switch($link_type) {
@@ -23,7 +23,9 @@
                         get_component('button', $button);
                         break;
                     case "Link":
+                        echo '<span class="' . $link_color . '">';
                         get_component('link', $button);
+                        echo '</span>';
                         break;
                     case "Video Link":
                         $button['attr'] = 'data-fancybox';

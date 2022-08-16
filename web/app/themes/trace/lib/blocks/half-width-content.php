@@ -8,18 +8,41 @@ $classes = ['full-width', padding_classes()];
 
 $side_image = wp_get_attachment_image(get_sub_field('side_image'), 'full');
 $offset = get_sub_field('offset');
+$heading = get_sub_field('heading');
+$subheading = get_sub_field('subheading');
 $copy = get_sub_field('copy');
+$quote_image = wp_get_attachment_image(get_sub_field('quote_image'), 'full');
+$quote_image_position = get_sub_field('quote_image_position');
+$layout = get_sub_field('layout');
 
 ?>
 
 <?php if ($copy) : ?>
-    <section <?= block_id(); ?> class="half-width-content <?= implode(' ', $classes); ?>" data-aos="fade">
+    <section <?= block_id(); ?> class="half-width-content half-width-content--<?= $layout ?> <?= implode(' ', $classes); ?>" data-aos="fade">
         <div class="container">
-            <div class="row">
+            <div class="row <?php if($layout == 'quote-left') : ?> flex-lg-row-reverse <?php endif; ?>">
                 <div class="col-lg-6 <?php if ($offset) : ?>offset-lg-1<?php endif; ?> order-2 order-lg-1 last-margin">
+
+                    <? if($heading): ?>
+                        <h2 class="half-width-content__heading">
+                            <?= $heading; ?>
+                        </h2>
+                    <? endif; ?>
+
+                    <? if($subheading): ?>
+                        <div class="half-width-content__subheading">
+                            <?= $subheading; ?>
+                        </div>
+                    <? endif; ?>
+
                     <?= $copy; ?>
                 </div>
-                <div class="col-lg-5 order-1 order-lg-2 position-static">
+                <div class="col-lg-5 order-1 order-lg-2 
+                <?php if($side_image): ?>
+                    position-relative 
+                <?php else: ?>
+                    position-static
+                <?php endif; ?>">
                     <?php if ($side_image) : ?>
                         <div class="half-width-content__image">
                             <div data-aos="fade-left">
@@ -37,7 +60,15 @@ $copy = get_sub_field('copy');
 
                             ?>
                             <?php if ($quote && $desc) : ?>
-                                <div class="half-width-content__side-quote">
+                                <div class="half-width-content__side-quote <?php if ($quote_image) : ?> has-image <?php endif; ?>">
+
+                                    <?php if ($quote_image) : ?>
+                                        <div class="half-width-content__quote-image half-width-content__quote-image--<?= $quote_image_position ?>">
+                                            <div data-aos="fade-left">
+                                                <?= $quote_image; ?>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
                                     <?php if ($quote) : ?>
                                         <blockquote>
                                             <?= $quote; ?>
