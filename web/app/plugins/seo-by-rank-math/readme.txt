@@ -2,12 +2,12 @@
 Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, sitemap, google search console, schema, redirection, WordPress SEO
-Tested up to: 5.9
+Tested up to: 6.0
 Requires at least: 5.6
 Requires PHP: 7.2
-Stable tag: 1.0.88.1
-License: GPL-2.0+
-License URI: https://www.gnu.org/licenses/gpl-2.0.txt
+Stable tag: 1.0.96
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
 Rank Math SEO is the Best WordPress SEO plugin combines the features of many SEO tools in a single package & helps you multiply your SEO traffic.
 
@@ -185,7 +185,7 @@ Even with significantly more features than other plugins, Rank Math SEO loads am
 ### Take a sneak peek into Rank Math SEO’s features ###
 
 #### Detailed Setup Tutorial ####
-[youtube https://www.youtube.com/watch?v=dTvZuMRzW4w]
+[youtube https://www.youtube.com/watch?v=cQLvCBVev3I]
 
 ### List of Best Rank Math SEO Features ###
 
@@ -580,23 +580,11 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.88.1 [May 04, 2022] =
-* Fixed: [GA4 Data stream](https://rankmath.com/kb/using-ga4/#datastream-and-country) dropdown was not showing any value even if it was working fine
-
-= 1.0.88 [May 04, 2022] =
-* Added: [HUGE!] Rank Math now supports [Google Analytics 4](https://rankmath.com/kb/using-ga4/)
-* Added: Option to create GA4 property with one click
-* Added: New option in [Database Tools](https://rankmath.com/kb/rank-math-status-and-tools/#fix-analytics-table-collations) to match the collations of all Analytics tables
-* Fixed: [Content AI](https://rankmath.com/kb/how-to-use-content-ai/) was not working on secondary language posts created using the WPML plugin
-* Fixed: [Search form on the Settings page](https://rankmath.com/kb/general-settings/) was showing irrelevant items in the dropdown 
-* Fixed: Both `index` & `noindex` options could be selected in the [Date Archive Robots settings](https://rankmath.com/kb/titles-and-meta/#date-robots-meta)
-* Fixed: Dashboard widget was showing 403 error to the Shop Manager user role
-* Fixed: Dashboard widget was showing an error when the site couldn't load the Blog posts from rankmath.com/blog/
-* Fixed: "Exclude this attachment from the Sitemap" option on the attachment details popup was showing to all the users
-* Fixed: [Content Analysis](https://rankmath.com/blog/divi-seo/) was also analyzing the global Header & Footer content added in the Divi's Theme Builder
-* Fixed: On Divi's frontend editor, the SEO modal was getting closed after clicking on the Schema generator button
-* Fixed: In [Easy Mode](https://rankmath.com/kb/switch-from-easy-to-advanced-mode/), [Instant Indexing](https://rankmath.com/kb/how-to-use-indexnow/#submit-urls-manually) settings were linked to the wrong page
-* Fixed: [Update data manually](https://rankmath.com/kb/general-settings/#analytics-database) option was not working well on some setups in the Analytics Module
-* Fixed: Invalid `%searchphrase%` variable was used as a default value on the Search page
+= 1.0.96 [Aug 24, 2022] =
+* Improved: [Open Graph image](https://rankmath.com/kb/open-graph-meta-tags/#og-image) generation code to execute faster on the front-end
+* Improved: File structure by moving page builder-related assets to their respective folders
+* Fixed: All Redirection rules were not getting exported to the [.htaccess & Nginx .conf file](https://rankmath.com/kb/setting-up-redirections/#backing-up-your-redirects)
+* Fixed: [Local SEO Sitemap](https://rankmath.com/kb/kml-sitemap/) was showing the wrong date format on non-English sites
+* Fixed: Incompatibility with the Oxygen plugin
 
 Full changelog can be found here - **[Rank Math SEO changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**

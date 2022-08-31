@@ -175,8 +175,8 @@ class KML_File {
 		];
 
 		if ( count( array_intersect( $local_seo_fields, $updated ) ) ) {
-			update_option( 'rank_math_local_seo_update', date_i18n( 'c' ) );
-			\RankMath\Sitemap\Sitemap::ping_search_engines( Router::get_base_url( 'local-sitemap.xml' ) );
+			update_option( 'rank_math_local_seo_update', date( 'c' ) );
+			\RankMath\Sitemap\Sitemap::ping_google( Router::get_base_url( 'local-sitemap.xml' ) );
 		}
 	}
 
@@ -218,7 +218,7 @@ class KML_File {
 	 */
 	private function get_modified_date() {
 		if ( ! $date = get_option( 'rank_math_local_seo_update' ) ) { // phpcs:ignore
-			$date = date_i18n( 'c' );
+			$date = date( 'c' );
 		}
 
 		return $date;

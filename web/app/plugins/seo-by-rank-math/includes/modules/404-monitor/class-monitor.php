@@ -58,9 +58,9 @@ class Monitor {
 		?>
 		<h3>
 			<?php esc_html_e( '404 Monitor', 'rank-math' ); ?>
-			<a href="<?php echo esc_url( Helper::get_admin_url( '404-monitor' ) ); ?>" class="rank-math-view-report" title="<?php esc_html_e( 'View Report', 'rank-math' ); ?>"><i class="dashicons dashicons-ellipsis"></i></a>
+			<a href="<?php echo esc_url( Helper::get_admin_url( '404-monitor' ) ); ?>" class="rank-math-view-report" title="<?php esc_html_e( 'View Report', 'rank-math' ); ?>"><i class="dashicons dashicons-chart-bar"></i></a>
 		</h3>
-		<div class="rank-math-dashabord-block">
+		<div class="rank-math-dashboard-block">
 			<div>
 				<h4>
 					<?php esc_html_e( 'Log Count', 'rank-math' ); ?>
@@ -160,12 +160,34 @@ class Monitor {
 		}
 
 		foreach ( $excludes as $rule ) {
+			$rule['exclude'] = empty( $rule['exclude'] ) ? '' : $this->sanitize_exclude_pattern( $rule['exclude'], $rule['comparison'] );
+
 			if ( ! empty( $rule['exclude'] ) && Str::comparison( $rule['exclude'], $uri, $rule['comparison'] ) ) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if regex pattern has delimiters or not, and add them if not.
+	 *
+	 * @param string $pattern The pattern to check.
+	 * @param string $comparison The comparison type.
+	 *
+	 * @return string
+	 */
+	private function sanitize_exclude_pattern( $pattern, $comparison ) {
+		if ( 'regex' !== $comparison ) {
+			return $pattern;
+		}
+
+		if ( preg_match( '[^(?:([^a-zA-Z0-9\\\\]).*\\1|\\(.*\\)|\\{.*\\}|\\[.*\\]|<.*>)[imsxADSUXJu]*$]', $pattern ) ) {
+			return $pattern;
+		}
+
+		return '[' . addslashes( $pattern ) . ']';
 	}
 
 	/**

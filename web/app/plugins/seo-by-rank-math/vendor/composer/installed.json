@@ -106,17 +106,17 @@
         },
         {
             "name": "donatj/phpuseragentparser",
-            "version": "v1.6.0",
-            "version_normalized": "1.6.0.0",
+            "version": "v1.7.0",
+            "version_normalized": "1.7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/donatj/PhpUserAgent.git",
-                "reference": "c84fd3c205097843aab93290f2a5744b4159e815"
+                "reference": "a35900b93530715f8669c10e49756adde5c8e6fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/donatj/PhpUserAgent/zipball/c84fd3c205097843aab93290f2a5744b4159e815",
-                "reference": "c84fd3c205097843aab93290f2a5744b4159e815",
+                "url": "https://api.github.com/repos/donatj/PhpUserAgent/zipball/a35900b93530715f8669c10e49756adde5c8e6fc",
+                "reference": "a35900b93530715f8669c10e49756adde5c8e6fc",
                 "shasum": ""
             },
             "require": {
@@ -128,7 +128,7 @@
                 "ext-json": "*",
                 "phpunit/phpunit": "~4.8|~9"
             },
-            "time": "2022-04-20T03:05:31+00:00",
+            "time": "2022-08-06T15:41:58+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -162,7 +162,7 @@
             ],
             "support": {
                 "issues": "https://github.com/donatj/PhpUserAgent/issues",
-                "source": "https://github.com/donatj/PhpUserAgent/tree/v1.6.0"
+                "source": "https://github.com/donatj/PhpUserAgent/tree/v1.7.0"
             },
             "funding": [
                 {
@@ -224,17 +224,17 @@
         },
         {
             "name": "woocommerce/action-scheduler",
-            "version": "3.4.0",
-            "version_normalized": "3.4.0.0",
+            "version": "3.4.2",
+            "version_normalized": "3.4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/woocommerce/action-scheduler.git",
-                "reference": "3218a33ff14b968f8cb05de9656c2efa1eeb1330"
+                "reference": "7d8e830b6387410ccf11708194d3836f01cb2942"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/3218a33ff14b968f8cb05de9656c2efa1eeb1330",
-                "reference": "3218a33ff14b968f8cb05de9656c2efa1eeb1330",
+                "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/7d8e830b6387410ccf11708194d3836f01cb2942",
+                "reference": "7d8e830b6387410ccf11708194d3836f01cb2942",
                 "shasum": ""
             },
             "require-dev": {
@@ -243,7 +243,7 @@
                 "wp-cli/wp-cli": "~2.5.0",
                 "yoast/phpunit-polyfills": "^1.0"
             },
-            "time": "2021-10-28T17:09:12+00:00",
+            "time": "2022-06-08T15:46:07+00:00",
             "type": "wordpress-plugin",
             "extra": {
                 "scripts-description": {
@@ -261,7 +261,7 @@
             "homepage": "https://actionscheduler.org/",
             "support": {
                 "issues": "https://github.com/woocommerce/action-scheduler/issues",
-                "source": "https://github.com/woocommerce/action-scheduler/tree/3.4.0"
+                "source": "https://github.com/woocommerce/action-scheduler/tree/3.4.2"
             },
             "install-path": "../woocommerce/action-scheduler"
         }

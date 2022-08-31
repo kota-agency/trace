@@ -19,43 +19,45 @@
 	 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 	 */
 
+global $mailgun;
+
 $mailgun_domain_const = ((defined('MAILGUN_DOMAIN') && MAILGUN_DOMAIN) ? MAILGUN_DOMAIN : null);
-$mailgun_domain = $mailgun_domain_const ? $mailgun_domain_const : $this->get_option('domain');
+$mailgun_domain = $mailgun_domain_const ?: $this->get_option('domain');
 
 $mailgun_region_const = ((defined('MAILGUN_REGION') && MAILGUN_REGION) ? MAILGUN_REGION : null);
-$mailgun_region = $mailgun_region_const ? $mailgun_region_const : $this->get_option('region');
+$mailgun_region = $mailgun_region_const ?: $this->get_option('region');
 
 $mailgun_api_key_const = ((defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : null);
-$mailgun_api_key = $mailgun_api_key_const ? $mailgun_api_key_const : $this->get_option('apiKey');
+$mailgun_api_key = $mailgun_api_key_const ?: $this->get_option('apiKey');
 
 $mailgun_username_const = ((defined('MAILGUN_USERNAME') && MAILGUN_USERNAME) ? MAILGUN_USERNAME : null);
-$mailgun_username = $mailgun_username_const ? $mailgun_username_const : $this->get_option('username');
+$mailgun_username = $mailgun_username_const ?: $this->get_option('username');
 
 $mailgun_password_const = ((defined('MAILGUN_PASSWORD') && MAILGUN_PASSWORD) ? MAILGUN_PASSWORD : null);
-$mailgun_password = $mailgun_password_const ? $mailgun_password_const : $this->get_option('password');
+$mailgun_password = $mailgun_password_const ?: $this->get_option('password');
 
 $mailgun_sectype_const = ((defined('MAILGUN_SECTYPE') && MAILGUN_SECTYPE) ? MAILGUN_SECTYPE : null);
-$mailgun_sectype = $mailgun_sectype_const ? $mailgun_sectype_const : $this->get_option('sectype');
+$mailgun_sectype = $mailgun_sectype_const ?: $this->get_option('sectype');
 
 $mailgun_from_name_const = ((defined('MAILGUN_FROM_NAME') && MAILGUN_FROM_NAME) ? MAILGUN_FROM_NAME : null);
-$mailgun_from_name = $mailgun_from_name_const ? $mailgun_from_name_const : $this->get_option('from-name');
+$mailgun_from_name = $mailgun_from_name_const ?: $this->get_option('from-name');
 
 $mailgun_from_address_const = ((defined('MAILGUN_FROM_ADDRESS') && MAILGUN_FROM_ADDRESS) ? MAILGUN_FROM_ADDRESS : null);
-$mailgun_from_address = $mailgun_from_address_const ? $mailgun_from_address_const : $this->get_option('from-address');
+$mailgun_from_address = $mailgun_from_address_const ?: $this->get_option('from-address');
 
 $mailgun_secure_const = (defined('MAILGUN_SECURE') ? MAILGUN_SECURE : null);
 $mailgun_secure = !is_null($mailgun_secure_const) ? ((string)(1 * $mailgun_secure_const)) : $this->get_option('secure');
 
 $mailgun_use_api_const = (defined('MAILGUN_USEAPI') ? MAILGUN_USEAPI : null);
 $mailgun_use_api = !is_null($mailgun_use_api_const) ? ((string)(1 * $mailgun_use_api_const)) : $this->get_option('useAPI');
-
+$icon = $mailgun->getAssetsPath() . 'icon-128x128.png';
 
 ?>
 <div class="wrap">
 	<div id="icon-options-general" class="icon32"><br/></div>
 	<span class="alignright">
 				<a target="_blank" href="http://www.mailgun.com/">
-					<img src="https://assets.mailgun.com/img/mailgun.svg" alt="Mailgun" style="width:10em;"/>
+					<img src="<?php echo $icon?>" alt="Mailgun" style="width:50px;"/>
 				</a>
 			</span>
 	<h2><?php _e('Mailgun', 'mailgun'); ?></h2>

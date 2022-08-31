@@ -138,7 +138,6 @@ class Redirector {
 			return;
 		}
 
-		// Debug if on.
 		$this->do_debugging();
 
 		if ( true === $this->do_filter( 'redirection/add_query_string', true ) && Str::is_non_empty( $this->query_string ) ) {
@@ -301,12 +300,7 @@ class Redirector {
 			return;
 		}
 
-		$this->filter( 'user_has_cap', 'filter_user_has_cap' );
-
-		require_once ABSPATH . 'wp-admin/includes/screen.php';
-
-		include_once \dirname( __FILE__ ) . '/views/debugging.php';
-		exit;
+		new Debugger( get_object_vars( $this ) );
 	}
 
 	/**
