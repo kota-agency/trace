@@ -11,10 +11,9 @@
 namespace RankMathPro\Admin;
 
 use RankMath\Helper;
-use RankMath\Admin\Admin_Helper;
 use RankMath\Traits\Hooker;
 use MyThemeShop\Helpers\Str;
-use MyThemeShop\Helpers\Arr;
+use RankMath\Admin\Admin_Helper;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -111,7 +110,7 @@ class Links {
 			|| $url_parts['host'] === $this->base_host
 		) {
 			// Check if path starts with one of the affiliate_link_prefixes.
-			$prefixes = Arr::from_string( Helper::get_settings( 'general.affiliate_link_prefixes' ), "\n" );
+			$prefixes = array_filter( array_map( 'trim', explode( "\n", Helper::get_settings( 'general.affiliate_link_prefixes' ) ) ) );
 			foreach ( $prefixes as $prefix ) {
 				if ( Str::starts_with( $prefix, $url_parts['path'] ) ) {
 					return true;
@@ -128,7 +127,7 @@ class Links {
 	 * @return void
 	 */
 	public function add_json() {
-		$prefixes = Arr::from_string( Helper::get_settings( 'general.affiliate_link_prefixes' ), "\n" );
+		$prefixes = array_values( array_filter( array_map( 'trim', explode( "\n", Helper::get_settings( 'general.affiliate_link_prefixes' ) ) ) ) );
 		wp_enqueue_script(
 			'rank-math-pro-links',
 			RANK_MATH_PRO_URL . 'assets/admin/js/links.js',

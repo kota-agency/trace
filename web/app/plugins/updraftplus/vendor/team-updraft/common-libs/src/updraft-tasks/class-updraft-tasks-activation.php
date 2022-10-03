@@ -65,11 +65,7 @@ class Updraft_Tasks_Activation {
 	 * Drop database version variable from option from database and run install again.
 	 */
 	public static function reinstall() {
-		if (is_multisite()) {
-			delete_site_option('updraft_task_manager_dbversion');
-		} else {
-			delete_option('updraft_task_manager_dbversion');
-		}
+		delete_option('updraft_task_manager_dbversion');
 		self::install();
 	}
 
@@ -80,7 +76,6 @@ class Updraft_Tasks_Activation {
 	 */
 	public static function check_if_tables_exist() {
 		global $wpdb;
-		self::init_db();
 		$our_prefix = $wpdb->base_prefix.self::$table_prefix;
 		$tables = array($our_prefix.'tasks', $our_prefix.'taskmeta');
 
@@ -104,11 +99,7 @@ class Updraft_Tasks_Activation {
 	public static function check_updates() {
 		self::init_db();
 		$our_version = self::get_version();
-		if (is_multisite()) {
-			$db_version = get_site_option('updraft_task_manager_dbversion');
-		} else {
-			$db_version = get_option('updraft_task_manager_dbversion');
-		}
+		$db_version = get_option('updraft_task_manager_dbversion');
 		if (!$db_version || version_compare($our_version, $db_version, '>')) {
 			foreach (self::$db_updates as $version => $updates) {
 				if (version_compare($version, $db_version, '>')) {
@@ -117,11 +108,7 @@ class Updraft_Tasks_Activation {
 					}
 				}
 			}
-			if (is_multisite()) {
-				update_site_option('updraft_task_manager_dbversion', self::get_version());
-			} else {
-				update_option('updraft_task_manager_dbversion', self::get_version());
-			}
+			update_option('updraft_task_manager_dbversion', self::get_version());
 		}
 	}
 

@@ -13,7 +13,7 @@ if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
 if (defined('UPDRAFTPLUS_NOAUTOBACKUPS') && UPDRAFTPLUS_NOAUTOBACKUPS) return;
 
-new UpdraftPlus_Addon_Autobackup;
+$updraftplus_addon_autobackup = new UpdraftPlus_Addon_Autobackup;
 
 class UpdraftPlus_Addon_Autobackup {
 
@@ -570,9 +570,9 @@ ENDHERE;
 		echo "<script>var h = document.getElementById('updraftplus-autobackup-log'); h.style.display='none';</script>";
 
 		if ($jquery) {
-			echo '<p>'.__('Backup succeeded', 'updraftplus').' <a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'#updraftplus-autobackup-log" onclick="jQuery(\'#updraftplus-autobackup-log\').slideToggle();">'.__('(view log...)', 'updraftplus').'</a> - '.__('now proceeding with the updates...', 'updraftplus').'</p>';
+			echo '<p>'.__('Backup succeeded', 'updraftplus').' <a href="<?php echo UpdraftPlus::get_current_clean_url();?>#updraftplus-autobackup-log" onclick="jQuery(\'#updraftplus-autobackup-log\').slideToggle();">'.__('(view log...)', 'updraftplus').'</a> - '.__('now proceeding with the updates...', 'updraftplus').'</p>';
 		} else {
-			echo '<p>'.__('Backup succeeded', 'updraftplus').' <a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'#updraftplus-autobackup-log" onclick="var s = document.getElementById(\'updraftplus-autobackup-log\'); s.style.display = \'block\';">'.__('(view log...)', 'updraftplus').'</a> - '.__('now proceeding with the updates...', 'updraftplus').'</p>';
+			echo '<p>'.__('Backup succeeded', 'updraftplus').' <a href="<?php echo UpdraftPlus::get_current_clean_url();?>#updraftplus-autobackup-log" onclick="var s = document.getElementById(\'updraftplus-autobackup-log\'); s.style.display = \'block\';">'.__('(view log...)', 'updraftplus').'</a> - '.__('now proceeding with the updates...', 'updraftplus').'</p>';
 		}
 
 	}
@@ -982,60 +982,9 @@ ENDHERE;
 						updates_intercept(e, this, true, shiny_updates, type);
 					});
 					
-					$(window).on('message', function(event) {
-						var originalEvent = event.originalEvent, expectedOrigin = document.location.protocol + '//' + document.location.host, message, selector = '';
-						if ( originalEvent.origin !== expectedOrigin ) return;
-						try {
-							message = JSON.parse(originalEvent.data);
-						} catch (e) {
-							return;
-						}
-						if (!message || 'undefined' === typeof message.action) return;
-						switch (message.action) {
-							case 'update-plugin-via-update-now-link-text':
-								window.tb_remove();
-								if (wp.updates) wp.updates.<?php echo $lock_variable; ?> = true;
-								if (message.data.slug) selector = 'tr.plugin-update-tr[data-slug="'+message.data.slug+'"] a.update-link';
-								if (message.data.plugin) {
-									if (selector) selector += ', ';
-									selector += 'tr.plugin-update-tr a[href*="action=upgrade-plugin&plugin='+message.data.plugin+'"]';
-								}
-								$(selector).trigger('click');
-							break;
-						}
+					$('#plugin-information-footer').on('click', ' a.button', function(e) {
+						updates_intercept(e, this, true, shiny_updates, 'plugin');
 					});
-					if (-1 !== window.location.pathname.indexOf('plugin-install.php')) {
-						$(window).on('load', function(e) {
-							var plugin_update_from_iframe_events = $._data(document.querySelector('div#plugin-information-footer a#plugin_update_from_iframe, div#plugin-information-footer a.button'), 'events'), plugin_update_from_iframe_event_handlers = [];
-							if ("object" === typeof plugin_update_from_iframe_events && Object.prototype.hasOwnProperty.call(plugin_update_from_iframe_events, 'click') && "[object Array]" === Object.prototype.toString.call(plugin_update_from_iframe_events.click)) {
-								for (var idx in plugin_update_from_iframe_events.click) {
-									// store all event handlers that are bound to $('#plugin_update_from_iframe') to an array variable (plugin_update_from_iframe_event_handlers)
-									plugin_update_from_iframe_event_handlers.push(plugin_update_from_iframe_events.click[idx].handler);
-								}
-							}
-							$('div#plugin-information-footer a#plugin_update_from_iframe, div#plugin-information-footer a.button').off('click');
-							$('div#plugin-information-footer a#plugin_update_from_iframe, div#plugin-information-footer a.button').on('click', function(e) {
-								e.preventDefault();
-								var target = window.parent === window ? null : window.parent;
-								$.support.postMessage = !! window.postMessage;
-								if (false === $.support.postMessage || null === target || -1 !== window.parent.location.pathname.indexOf('update-core.php')) return;
-								for	(var idx in plugin_update_from_iframe_event_handlers) {
-									// it's going to execute all event handlers that previously were bound to $('div#plugin-information-footer a#plugin_update_from_iframe, div#plugin-information-footer a.button') and were set to off
-									if ("function" === typeof plugin_update_from_iframe_event_handlers[idx]) plugin_update_from_iframe_event_handlers[idx].call(this, e);
-								}
-								message = {
-									action: 'update-plugin-via-update-now-link-text',
-									data: {
-										// get and extract query string args from the popup window and look for a plugin arg value and send it along with other data in a message
-										// e.g. window.location.search returns ?action=upgrade-plugin&plugin=updraftplus%2Fupdraftplus.php&_wpnonce=108e986d01
-										plugin: $(this).data('plugin') ? $(this).data('plugin') : decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent('plugin').replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1")),
-										slug: $(this).data('slug')
-									}
-								};
-								target.postMessage(JSON.stringify(message), window.location.origin);
-							});
-						});
-					}
 					
 					// See: https://core.trac.wordpress.org/ticket/37512
 					
@@ -1111,11 +1060,7 @@ ENDHERE;
 			</script>
 			
 			<?php
-				if (is_object($updraftplus_admin)) {
-					$updraftplus_admin->add_backup_scaffolding(__('Automatic backup before update', 'updraftplus'), array($this, 'backupnow_modal_contents'));
-				} else {
-					error_log("UpdraftPlus_Addon_Autobackup::admin_footer_inpage_backup() - unexpected failure for accessing UpdraftPlus_Admin object");
-				}
+				$updraftplus_admin->add_backup_scaffolding(__('Automatic backup before update', 'updraftplus'), array($this, 'backupnow_modal_contents'));
 			?>
 			
 		<?php

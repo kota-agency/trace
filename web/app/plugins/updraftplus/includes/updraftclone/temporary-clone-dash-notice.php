@@ -166,5 +166,5 @@ class UpdraftPlus_Temporary_Clone_Dash_Notice {
 }
 
 if (defined('UPDRAFTPLUS_THIS_IS_CLONE')) {
-	new UpdraftPlus_Temporary_Clone_Dash_Notice();
+	$updraftplus_temporary_clone_dash_notice = new UpdraftPlus_Temporary_Clone_Dash_Notice();
 }

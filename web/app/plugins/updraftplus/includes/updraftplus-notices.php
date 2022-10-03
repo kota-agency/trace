@@ -2,9 +2,9 @@
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-if (!class_exists('Updraft_Notices_1_2')) require_once(UPDRAFTPLUS_DIR.'/vendor/team-updraft/common-libs/src/updraft-notices/updraft-notices.php');
+if (!class_exists('Updraft_Notices')) require_once(UPDRAFTPLUS_DIR.'/includes/updraft-notices.php');
 
-class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
+class UpdraftPlus_Notices extends Updraft_Notices {
 
 	protected static $_instance = null;
 
@@ -189,16 +189,6 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 				'dismiss_time' => 'dismissautobackup',
 				'supported_positions' => $this->autobackup_bottom_or_report,
 			),
-			'subscriben' => array(
-				'prefix' => '',
-				'title' => 'Subscriben ' .__('by', 'updraftplus'). ' UpdraftPlus',
-				'text' => __("The WordPress subscription extension for WooCommerce store owners.", "updraftplus"),
-				'image' => 'notices/subscriben.png',
-				'button_link' => 'https://subscribenplugin.com',
-				'button_meta' => 'read_more',
-				'dismiss_time' => 'dismiss_notice',
-				'supported_positions' => $this->anywhere,
-			),
 			'wp-optimize' => array(
 				'prefix' => '',
 				'title' => 'WP-Optimize',
@@ -221,9 +211,9 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 				'campaign' => 'blackfriday',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'blackfridaysale2022',
-				'valid_from' => '2022-11-20 00:00:00',
-				'valid_to' => '2022-11-30 23:59:59',
+				'discount_code' => 'blackfridaysale2020',
+				'valid_from' => '2020-11-20 00:00:00',
+				'valid_to' => '2020-11-30 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'newyear' => array(
@@ -235,23 +225,23 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 				'campaign' => 'newyear',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'newyearsale2023',
-				'valid_from' => '2022-12-26 00:00:00',
-				'valid_to' => '2023-01-14 23:59:59',
+				'discount_code' => 'newyearsale2021',
+				'valid_from' => '2020-12-26 00:00:00',
+				'valid_to' => '2021-01-14 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'spring' => array(
 				'prefix' => '',
-				'title' => __('Spring sale - 20% off UpdraftPlus Premium until May 31st', 'updraftplus'),
+				'title' => __('Spring sale - 20% off UpdraftPlus Premium until April 30th', 'updraftplus'),
 				'text' => __('To benefit, use this discount code:', 'updraftplus').' ',
-				'image' => 'notices/updraft_logo.png', // TODO: Change image and date back to april/spring next year
+				'image' => 'notices/spring.png',
 				'button_link' => 'https://updraftplus.com/landing/updraftplus-premium',
 				'campaign' => 'spring',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'springsale2022',
-				'valid_from' => '2022-05-01 00:00:00',
-				'valid_to' => '2022-05-31 23:59:59',
+				'discount_code' => 'springsale2020',
+				'valid_from' => '2020-04-01 00:00:00',
+				'valid_to' => '2020-04-30 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'summer' => array(
@@ -263,9 +253,9 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 				'campaign' => 'summer',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'summersale2022',
-				'valid_from' => '2022-07-01 00:00:00',
-				'valid_to' => '2022-07-31 23:59:59',
+				'discount_code' => 'summersale2020',
+				'valid_from' => '2020-07-01 00:00:00',
+				'valid_to' => '2020-07-31 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'collection' => array(
@@ -277,9 +267,9 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 				'campaign' => 'collection',
 				'button_meta' => 'collection',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'UDP2022',
-				'valid_from' => '2022-09-01 00:00:00',
-				'valid_to' => '2022-09-30 23:59:59',
+				'discount_code' => 'UDP2020',
+				'valid_from' => '2020-09-01 00:00:00',
+				'valid_to' => '2020-09-30 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			)
 		);

@@ -14,7 +14,6 @@ use Exception;
 use RankMath\Helper;
 use RankMath\Traits\Hooker;
 use RankMathPro\Analytics\DB;
-use RankMath\Analytics\DB as AnalyticsDB;
 use RankMathPro\Google\Adsense;
 use RankMathPro\Google\Analytics;
 
@@ -26,20 +25,6 @@ defined( 'ABSPATH' ) || exit;
 class Jobs {
 
 	use Hooker;
-
-	/**
-	 * Is an Analytics account connected?
-	 *
-	 * @var boolean
-	 */
-	private $analytics_connected = false;
-
-	/**
-	 * Is an AdSense account connected?
-	 *
-	 * @var boolean
-	 */
-	private $adsense_connected = false;
 
 	/**
 	 * Main instance
@@ -64,13 +49,13 @@ class Jobs {
 	 */
 	public function hooks() {
 		$this->analytics_connected = \RankMath\Google\Analytics::is_analytics_connected();
-		$this->adsense_connected   = \RankMathPro\Google\Adsense::is_adsense_connected();
+		$this->exist_adsense_table = \MyThemeShop\Helpers\DB::check_table_exists( 'rank_math_analytics_adsense' );
 
 		// Check missing data for analytics and adsense.
 		$this->action( 'rank_math/analytics/data_fetch', 'data_fetch' );
 
 		// Data Fetcher.
-		if ( $this->adsense_connected ) {
+		if ( $this->exist_adsense_table ) {
 			$this->action( 'rank_math/analytics/get_adsense_data', 'get_adsense_data' );
 		}
 
@@ -93,7 +78,7 @@ class Jobs {
 			$this->check_for_missing_dates( 'analytics' );
 		}
 
-		if ( $this->adsense_connected ) {
+		if ( $this->exist_adsense_table ) {
 			$this->check_for_missing_dates( 'adsense' );
 		}
 	}
@@ -163,7 +148,7 @@ class Jobs {
 			if ( $this->analytics_connected ) {
 				DB::traffic()->truncate();
 			}
-			if ( $this->adsense_connected ) {
+			if ( $this->exist_adsense_table ) {
 				DB::adsense()->truncate();
 			}
 
@@ -177,7 +162,7 @@ class Jobs {
 			DB::traffic()->whereBetween( 'created', [ $end, $start ] )->delete();
 		}
 
-		if ( $this->adsense_connected ) {
+		if ( $this->exist_adsense_table ) {
 			DB::adsense()->whereBetween( 'created', [ $end, $start ] )->delete();
 		}
 	}
@@ -192,7 +177,7 @@ class Jobs {
 			DB::traffic()->where( 'created', '<', $start )->delete();
 		}
 
-		if ( $this->adsense_connected ) {
+		if ( $this->exist_adsense_table ) {
 			DB::adsense()->where( 'created', '<', $start )->delete();
 		}
 	}
@@ -210,7 +195,7 @@ class Jobs {
 
 		for ( $current = 1; $current <= $days; $current++ ) {
 			$date = Helper::get_date( 'Y-m-d', $start - ( DAY_IN_SECONDS * $current ), false, true );
-			if ( AnalyticsDB::date_exists( $date, $action ) ) {
+			if ( DB::date_exists( $date, $action ) ) {
 				continue;
 			}
 

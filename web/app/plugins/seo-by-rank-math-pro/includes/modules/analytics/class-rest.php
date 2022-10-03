@@ -20,8 +20,6 @@ use WP_REST_Controller;
 use RankMath\Admin\Admin_Helper;
 use RankMathPro\Google\PageSpeed;
 use RankMath\SEO_Analysis\SEO_Analyzer;
-use RankMathPro\Analytics\DB;
-use MyThemeShop\Helpers\DB as DB_Helper;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -113,29 +111,10 @@ class Rest extends WP_REST_Controller {
 
 		register_rest_route(
 			$this->namespace,
-			'/autoAddFocusKeywords',
-			[
-				'methods'             => WP_REST_Server::CREATABLE,
-				'callback'            => [ $this, 'auto_add_focus_keywords' ],
-				'permission_callback' => [ $this, 'has_permission' ],
-			]
-		);
-
-		register_rest_route(
-			$this->namespace,
 			'/removeTrackKeyword',
 			[
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => [ $this, 'remove_track_keyword' ],
-				'permission_callback' => [ $this, 'has_permission' ],
-			]
-		);
-		register_rest_route(
-			$this->namespace,
-			'/deleteTrackedKeywords',
-			[
-				'methods'             => WP_REST_Server::CREATABLE,
-				'callback'            => [ $this, 'delete_all_tracked_keywords' ],
 				'permission_callback' => [ $this, 'has_permission' ],
 			]
 		);
@@ -156,16 +135,6 @@ class Rest extends WP_REST_Controller {
 			[
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => [ Posts::get(), 'get_posts_rows' ],
-				'permission_callback' => [ $this, 'has_permission' ],
-			]
-		);
-
-		register_rest_route(
-			$this->namespace,
-			'/inspectionStats',
-			[
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'get_inspection_stats' ],
 				'permission_callback' => [ $this, 'has_permission' ],
 			]
 		);
@@ -248,55 +217,7 @@ class Rest extends WP_REST_Controller {
 			]
 		);
 	}
-	/**
-	 * Add track keyword to DB.
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 *
-	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
-	 */
-	public function auto_add_focus_keywords( WP_REST_Request $request ) {
-		$data              = $request->get_param( 'data' );
-		$secondary_keyword = ! empty( $data['secondary_keyword'] );
-		$post_types        = ! empty( $data['post_types'] ) ? $data['post_types'] : [];
 
-		$all_opts = rank_math()->settings->all_raw();
-		$general  = $all_opts['general'];
-
-		$general['auto_add_focus_keywords'] = $data;
-		Helper::update_all_settings( $general, null, null );
-
-		if ( empty( $post_types ) ) {
-			return false;
-		}
-
-		global $wpdb;
-		$focus_keywords = $wpdb->get_col(
-			"SELECT {$wpdb->postmeta}.meta_value FROM {$wpdb->posts} INNER JOIN {$wpdb->postmeta} 
-			ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id 
-			WHERE 1=1
-			AND {$wpdb->posts}.post_type IN ('" . implode( "', '", esc_sql( $post_types ) ) . "')
-			AND {$wpdb->posts}.post_status = 'publish'
-			AND {$wpdb->postmeta}.meta_key = 'rank_math_focus_keyword'
-			"
-		);
-
-		$keywords_data = [];
-		foreach ( $focus_keywords as $focus_keyword ) {
-			$keywords = explode( ',', mb_strtolower( $focus_keyword ) );
-			if ( $secondary_keyword ) {
-				$keywords_data = array_merge( $keywords, $keywords_data );
-			} else {
-				$keywords_data[] = current( $keywords );
-			}
-		}
-
-		if ( empty( $keywords_data ) ) {
-			return false;
-		}
-
-		return DB::bulk_insert_query_focus_keyword_data( array_unique( $keywords_data ) );
-	}
 	/**
 	 * Add track keyword to DB.
 	 *
@@ -306,7 +227,6 @@ class Rest extends WP_REST_Controller {
 	 */
 	public function add_track_keyword( WP_REST_Request $request ) {
 		$keywords = $request->get_param( 'keyword' );
-		$keywords = mb_strtolower( filter_var( $keywords, FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES ) );
 		if ( empty( $keywords ) ) {
 			return new WP_Error(
 				'param_value_empty',
@@ -378,28 +298,6 @@ class Rest extends WP_REST_Controller {
 	}
 
 	/**
-	 * Delete all the manually tracked keywords.
-	 */
-	public function delete_all_tracked_keywords() {
-
-		// Delete all keywords.
-		Keywords::get()->delete_all_tracked_keywords();
-
-		$registered = Admin_Helper::get_registration_data();
-		if ( empty( $registered['username'] ) || empty( $registered['api_key'] ) ) {
-			return false;
-		}
-
-		// Send total keywords count as 0 to RankMath.
-		$response = \RankMathPro\Admin\Api::get()->keywords_info( $registered['username'], $registered['api_key'], 0 );
-		if ( $response ) {
-			update_option( 'rank_math_keyword_quota', $response );
-		}
-
-		return true;
-	}
-
-	/**
 	 * Check if keyword can be added.
 	 *
 	 * @param  string $keywords Comma separated keywords.
@@ -440,6 +338,8 @@ class Rest extends WP_REST_Controller {
 			);
 		}
 
+		$force = \boolval( $request->get_param( 'force' ) );
+
 		if ( Helper::is_localhost() ) {
 			return [
 				'page_score'          => 0,
@@ -452,14 +352,11 @@ class Rest extends WP_REST_Controller {
 		}
 
 		$url = get_permalink( $post_id );
-		$pre = apply_filters( 'rank_math/analytics/pre_pagespeed', false, $post_id, $request );
+		$pre = apply_filters( 'rank_math/analytics/pre_pagespeed', false, $post_id, $force );
 		if ( false !== $pre ) {
 			return $pre;
 		}
-
-		$force        = \boolval( $request->get_param( 'force' ) );
-		$is_admin_bar = \boolval( $request->get_param( 'isAdminBar' ) );
-		if ( $force || ( ! $is_admin_bar && $this->should_update_pagespeed( $id ) ) ) {
+		if ( $force || $this->should_update_pagespeed( $id ) ) {
 			// Page Score.
 			$analyzer = new SEO_Analyzer();
 			$score    = $analyzer->get_page_score( $url );
@@ -502,27 +399,5 @@ class Rest extends WP_REST_Controller {
 		$record = DB::objects()->where( 'id', $id )->one();
 
 		return \time() > ( \strtotime( $record->pagespeed_refreshed ) + ( DAY_IN_SECONDS * 7 ) );
-	}
-
-	/**
-	 * Get inspection stats.
-	 *
-	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
-	 */
-	public function get_inspection_stats() {
-		// Early Bail!!
-		if ( ! DB_Helper::check_table_exists( 'rank_math_analytics_inspections' ) ) {
-			return [
-				'presence' => [],
-				'status'   => [],
-			];
-		}
-
-		return rest_ensure_response(
-			[
-				'presence' => Url_Inspection::get_presence_stats(),
-				'status'   => Url_Inspection::get_status_stats(),
-			]
-		);
 	}
 }

@@ -1,23 +1,24 @@
-<?php return array(
-    'root' => array(
-        'pretty_version' => 'dev-develop',
-        'version' => 'dev-develop',
-        'type' => 'wordpress-plugin',
-        'install_path' => __DIR__ . '/../../',
-        'aliases' => array(),
-        'reference' => 'ff8af92e09b248bd3b2eb76d01d5a6c3d046b721',
-        'name' => 'rankmath/seo-by-rank-math-pro',
-        'dev' => true,
+<?php return array (
+  'root' => 
+  array (
+    'pretty_version' => 'dev-develop',
+    'version' => 'dev-develop',
+    'aliases' => 
+    array (
     ),
-    'versions' => array(
-        'rankmath/seo-by-rank-math-pro' => array(
-            'pretty_version' => 'dev-develop',
-            'version' => 'dev-develop',
-            'type' => 'wordpress-plugin',
-            'install_path' => __DIR__ . '/../../',
-            'aliases' => array(),
-            'reference' => 'ff8af92e09b248bd3b2eb76d01d5a6c3d046b721',
-            'dev_requirement' => false,
-        ),
+    'reference' => '77df79c89453b9343e5d9b8c417e42cc41c49295',
+    'name' => 'mythemeshop/rank-math-pro',
+  ),
+  'versions' => 
+  array (
+    'mythemeshop/rank-math-pro' => 
+    array (
+      'pretty_version' => 'dev-develop',
+      'version' => 'dev-develop',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '77df79c89453b9343e5d9b8c417e42cc41c49295',
     ),
+  ),
 );

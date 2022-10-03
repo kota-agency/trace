@@ -11,7 +11,7 @@ Latest Change: 1.12.3
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-new UpdraftPlus_AddOn_FixTime;
+$updraftplus_addon_fixtime = new UpdraftPlus_AddOn_FixTime;
 
 class UpdraftPlus_AddOn_FixTime {
 
@@ -302,12 +302,12 @@ class UpdraftPlus_AddOn_FixTime {
 	}
 
 	public function after_dbconfig() {
-		echo '<div id="updraft_retain_db_rules"></div><div><a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraft_retain_db_addnew" class="updraft_icon_link" aria-label="'.__('Add an additional database retention rule', 'updraftplus').'"><span class="dashicons dashicons-plus"></span>'.__('Add an additional retention rule...', 'updraftplus').'</a></div>';
+		echo '<div id="updraft_retain_db_rules"></div><div><a href="'.UpdraftPlus::get_current_clean_url().'" id="updraft_retain_db_addnew" class="updraft_icon_link" aria-label="'.__('Add an additional database retention rule', 'updraftplus').'"><span class="dashicons dashicons-plus"></span>'.__('Add an additional retention rule...', 'updraftplus').'</a></div>';
 	}
 
 	public function after_filesconfig() {
 		add_action('admin_footer', array($this, 'admin_footer_extraretain_js'));
-		echo '<div id="updraft_retain_files_rules"></div><div><a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraft_retain_files_addnew" class="updraft_icon_link" aria-label="'.__('Add an additional file retention rule', 'updraftplus').'"><span class="dashicons dashicons-plus"></span>'.__('Add an additional retention rule...', 'updraftplus').'</a></div>';
+		echo '<div id="updraft_retain_files_rules"></div><div><a href="'.UpdraftPlus::get_current_clean_url().'" id="updraft_retain_files_addnew" class="updraft_icon_link" aria-label="'.__('Add an additional file retention rule', 'updraftplus').'"><span class="dashicons dashicons-plus"></span>'.__('Add an additional retention rule...', 'updraftplus').'</a></div>';
 	}
 
 	public function soonest_first($a, $b) {

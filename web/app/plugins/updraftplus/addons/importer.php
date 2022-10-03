@@ -11,7 +11,7 @@ Latest Change: 1.12.19
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-new UpdraftPlus_Addons_Importer;
+$updraftplus_addons_importer = new UpdraftPlus_Addons_Importer;
 
 class UpdraftPlus_Addons_Importer {
 

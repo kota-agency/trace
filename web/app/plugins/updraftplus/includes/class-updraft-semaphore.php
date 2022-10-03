@@ -148,11 +148,7 @@ class Updraft_Semaphore_3_0 {
 		
 		$this->log('Lock option ('.$this->option_name.', '.$wpdb->options.') released', 'info');
 		
-		$result = (int) $wpdb->query($sql) === 1;
-		
-		$this->acquired = false;
-		
-		return $result;
+		return (int) $wpdb->query($sql) === 1;
 	}
 	
 	/**
@@ -176,7 +172,7 @@ class Updraft_Semaphore_3_0 {
 	public function log($message, $level = 'info') {
 		if (isset($this->loggers)) {
 			foreach ($this->loggers as $logger) {
-				$logger->log($message, $level);
+				$logger->log($level, $message);
 			}
 		}
 	}

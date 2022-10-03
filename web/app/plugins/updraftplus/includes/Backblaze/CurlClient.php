@@ -400,7 +400,7 @@ class UpdraftPlus_Backblaze_CurlClient {
 				break;
 			}
 
-			$json['startFileName'] = $response['nextFileName'];
+			$nextFileName = $response['nextFileName'];
 		}
 
 		return $files;
@@ -573,14 +573,12 @@ class UpdraftPlus_Backblaze_CurlClient {
 	/**
 	 * Delete multiple files
 	 *
-	 * @param Array  $files_to_delete - array of possible files to delete; sub-keys are FileName, FileId, BucketName
-	 * @param String $bucket_name	  - the bucket that files are being deleted from
-	 * @param String|Null			  - path prefix (to prevent unnecessary scanning of other paths)
+	 * @param Array $options - array of possible keys are FileName, FileId, BucketName
 	 *
-	 * @return Array|Boolean
+	 * @return Boolean. Can also throw an exception; including UpdraftPlus_Backblaze_NotFoundException if the file was not found.
 	 */
-	public function deleteMultipleFiles($files_to_delete, $bucket_name, $path_prefix = null) {
-		if (count($files_to_delete) == 0) {
+	public function deleteMultipleFiles($options, $bucket_name) {
+		if (count($options) == 0) {
 			return false;
 		}
 
@@ -589,13 +587,9 @@ class UpdraftPlus_Backblaze_CurlClient {
 		$result       = [];
 		$bulk_session = curl_multi_init();
 
-		$list_options = array(
+		$files = $this->listFiles(array(
 			'BucketName' => $bucket_name
-		);
-		
-		if (is_string($path_prefix) && '' !== $path_prefix) $list_options['Prefix'] = $path_prefix;
-		
-		$files = $this->listFiles($list_options);
+		));
 
 		$files_lookup = array();
 
@@ -605,26 +599,21 @@ class UpdraftPlus_Backblaze_CurlClient {
 			$files_lookup[$file_name] = $file_id;
 		}
 
-		foreach ($files_to_delete as $file_identification) {
+		foreach ($options as $key => $option) {
 			
-			try {
-				if (!isset($file_identification['FileName'])) {
-					// We should not enter here as we always pass a file name but just in case
-					$file = $this->getFile($file_identification);
-					$file_identification['FileName'] = $file->getName();
-					$file_identification['FileId'] = $file->getId();
-				} elseif (!isset($file_identification['FileId'])) {
-					if (isset($files_lookup[$file_identification['FileName']])) {
-						$file_identification['FileId'] = $files_lookup[$file_identification['FileName']];
-					} else {
-						// We should not enter here as all the files should be in the same bucket but just in case
-						$file = $this->getFile($file_identification);
-						$file_identification['FileId'] = $file->getId();
-					}
+			if (!isset($option['FileName'])) {
+				// We should not enter here as we always pass a file name but just in case
+				$file = $this->getFile($option);
+				$option['FileName'] = $file->getName();
+				$option['FileId'] = $file->getId();
+			} elseif (!isset($option['FileId'])) {
+				if (isset($files_lookup[$option['FileName']])) {
+					$option['FileId'] = $files_lookup[$option['FileName']];
+				} else {
+					// We should not enter here as all the files should be in the same bucket but just in case
+					$file = $this->getFile($option);
+					$option['FileId'] = $file->getId();
 				}
-			} catch (UpdraftPlus_Backblaze_NotFoundException $e) {
-				array_push($sessions, true);
-				continue;
 			}
 
 			$session = $this->request('POST', $this->apiUrl . '/b2_delete_file_version', array(
@@ -632,8 +621,8 @@ class UpdraftPlus_Backblaze_CurlClient {
 					'Authorization' => $this->authToken,
 				),
 				'json'	=> array(
-					'fileName' => $file_identification['FileName'],
-					'fileId'   => $file_identification['FileId'],
+					'fileName' => $option['FileName'],
+					'fileId'   => $option['FileId'],
 				),
 				'session' => true
 			));
@@ -649,10 +638,6 @@ class UpdraftPlus_Backblaze_CurlClient {
 		} while ($active && $status == CURLM_OK);
 
 		foreach ($sessions as $session) {
-			if (is_bool($session)) {
-				array_push($result, $session);
-				continue;
-			}
 			$response = curl_multi_getcontent($session);
 			array_push($result, $response);
 			curl_multi_remove_handle($bulk_session, $session);
@@ -665,7 +650,7 @@ class UpdraftPlus_Backblaze_CurlClient {
 	/**
 	 * Create a private bucket with the given name.
 	 *
-	 * @param String $bucket_name - valid bucket name
+	 * @param string $bucket_name - valid bucket name
 	 * @throws Exception
 	 *
 	 * @return boolean - If bucket created successfully, it returns true otherwise false.

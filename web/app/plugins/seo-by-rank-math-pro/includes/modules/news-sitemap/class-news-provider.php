@@ -12,6 +12,7 @@ namespace RankMathPro\Sitemap;
 
 use RankMath\Helper;
 use RankMath\Sitemap\Router;
+use RankMath\Sitemap\Sitemap;
 use RankMath\Sitemap\Providers\Post_Type;
 
 defined( 'ABSPATH' ) || exit;
@@ -20,13 +21,6 @@ defined( 'ABSPATH' ) || exit;
  * News_Provider class.
  */
 class News_Provider extends Post_Type {
-
-	/**
-	 * Indicate that this provider should show an empty sitemap instead of a 404.
-	 *
-	 * @var boolean
-	 */
-	public $should_show_empty = true;
 
 	/**
 	 * Check if provider supports given item type.
@@ -199,6 +193,7 @@ class News_Provider extends Post_Type {
 
 		$url['title']            = $this->get_title( $post );
 		$url['publication_date'] = $post->post_date_gmt;
+		$url['images']           = ! is_null( $this->get_image_parser() ) ? $this->get_image_parser()->get_images( $post ) : [];
 
 		return $url;
 	}

@@ -39,7 +39,6 @@ class Frontend {
 		$this->filter( 'rank_math/snippet/rich_snippet_itemlist_entity', 'filter_item_list_schema' );
 		$this->filter( 'rank_math/schema/valid_types', 'valid_types' );
 		$this->filter( 'rank_math/snippet/rich_snippet_product_entity', 'add_manufacturer_property' );
-		$this->filter( 'rank_math/snippet/rich_snippet_videoobject_entity', 'convert_familyfriendly_property' );
 
 		new Display_Conditions();
 		new Snippet_Pro_Shortcode();
@@ -107,7 +106,7 @@ class Frontend {
 		foreach ( $matches[0] as $link ) {
 			$attrs = HTML::extract_attributes( $link );
 
-			if ( ! isset( $attrs['data-schema-attribute'] ) ) {
+			if ( empty( $attrs['data-schema-attribute'] ) ) {
 				continue;
 			}
 
@@ -214,10 +213,6 @@ class Frontend {
 
 			if ( isset( $schema['isPrimary'] ) ) {
 				unset( $schema['isPrimary'] );
-			}
-
-			if ( isset( $schema['isCustom'] ) ) {
-				unset( $schema['isCustom'] );
 			}
 
 			if ( isset( $wp_query->query_vars['schema-preview'] ) ) {
@@ -412,10 +407,6 @@ class Frontend {
 					continue;
 				}
 
-				if ( 'Dataset' === $type && 'isPartOf' === $property && ! empty( $schema[ $property ]['@type'] ) ) {
-					continue;
-				}
-
 				unset( $schemas[ $id ][ $property ] );
 			}
 
@@ -490,23 +481,6 @@ class Frontend {
 		$type = 'company' === $type ? 'organization' : 'person';
 
 		$schema['manufacturer'] = [ '@id' => home_url( "/#{$type}" ) ];
-		return $schema;
-	}
-
-	/**
-	 * Convert isFamilyFriendly property used in Video schema to boolean.
-	 *
-	 * @param array $schema Video schema data.
-	 * @return array
-	 *
-	 * @since 2.13.0
-	 */
-	public function convert_familyfriendly_property( $schema ) {
-		if ( empty( $schema['isFamilyFriendly'] ) ) {
-			return $schema;
-		}
-
-		$schema['isFamilyFriendly'] = 'True';
 		return $schema;
 	}
 

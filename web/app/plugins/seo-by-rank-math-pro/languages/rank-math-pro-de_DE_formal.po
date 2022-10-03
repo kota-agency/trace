@@ -2,8 +2,8 @@
 # This file is distributed under the same license as the rank-math-pro package.
 msgid ""
 msgstr ""
-"Project-Id-Version: RankMath Pro v3.0.4\n"
-"POT-Creation-Date: 2022-01-05 10:29+0100\n"
+"Project-Id-Version: RankMath Pro v2.10.0\n"
+"POT-Creation-Date: 2021-06-16 16:38+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Thorsten Wollenhöfer <thorsten.wollenhoefer@gmail.com>\n"
 "Language-Team: Thorsten Wollenhöfer <thorsten.wollenhoefer@gmail.com>\n"
@@ -21,26 +21,26 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: includes/3rdparty/divi/class-divi.php:339
+#: includes/3rdparty/divi/class-divi.php:342
 msgid "Rank Math FAQ Schema"
 msgstr "Rank Math FAQ Schema"
 
-#: includes/3rdparty/divi/class-divi.php:368
+#: includes/3rdparty/divi/class-divi.php:371
 #: includes/3rdparty/elementor/class-elementor.php:53
 msgid "Add FAQ Schema Markup"
 msgstr "FAQ-Schema-Auszeichnung hinzufügen"
 
-#: includes/3rdparty/divi/class-divi.php:369
+#: includes/3rdparty/divi/class-divi.php:372
 #: includes/3rdparty/elementor/class-elementor.php:56
 msgid "Added by the Rank Math SEO Plugin."
 msgstr "Hinzugefügt durch das Rank Math SEO Plugin."
 
-#: includes/3rdparty/divi/class-divi.php:375
+#: includes/3rdparty/divi/class-divi.php:378
 #: includes/modules/local-seo/views/titles-options.php:491
 msgid "Yes"
 msgstr "Ja"
 
-#: includes/3rdparty/divi/class-divi.php:376
+#: includes/3rdparty/divi/class-divi.php:379
 #: includes/modules/local-seo/views/titles-options.php:490
 msgid "No"
 msgstr "Nein"
@@ -116,84 +116,84 @@ msgstr "Hover"
 msgid "Color"
 msgstr "Farbe"
 
-#: includes/admin/class-admin.php:80
+#: includes/admin/class-admin.php:79
 msgid "Special Sitemaps:"
 msgstr "Spezielle Sitemaps:"
 
 #: includes/admin/class-bulk-actions.php:59
-#: includes/admin/class-bulk-actions.php:100
+#: includes/admin/class-bulk-actions.php:86
 msgid "&#8595; Rank Math"
 msgstr "&#8595; Rank Math"
 
-#: includes/admin/class-bulk-actions.php:62
-#: includes/admin/class-bulk-actions.php:101
+#: includes/admin/class-bulk-actions.php:60
+#: includes/admin/class-bulk-actions.php:87
 msgid "Set to noindex"
 msgstr "Auf „noindex“ festlegen"
 
-#: includes/admin/class-bulk-actions.php:63
-#: includes/admin/class-bulk-actions.php:102
+#: includes/admin/class-bulk-actions.php:61
+#: includes/admin/class-bulk-actions.php:88
 msgid "Set to index"
 msgstr "Auf „index“ festlegen"
 
-#: includes/admin/class-bulk-actions.php:64
-#: includes/admin/class-bulk-actions.php:103
+#: includes/admin/class-bulk-actions.php:62
+#: includes/admin/class-bulk-actions.php:89
 msgid "Set to nofollow"
 msgstr "Auf „nofollow“ festlegen"
 
-#: includes/admin/class-bulk-actions.php:65
-#: includes/admin/class-bulk-actions.php:104
+#: includes/admin/class-bulk-actions.php:63
+#: includes/admin/class-bulk-actions.php:90
 msgid "Set to follow"
 msgstr "Auf „follow“ festlegen"
 
-#: includes/admin/class-bulk-actions.php:66
+#: includes/admin/class-bulk-actions.php:64
 msgid "Remove custom canonical URL"
 msgstr "Benutzerdefinierte kanonische URL entfernen"
 
-#: includes/admin/class-bulk-actions.php:69
-#: includes/admin/class-bulk-actions.php:107
+#: includes/admin/class-bulk-actions.php:66
+#: includes/admin/class-bulk-actions.php:92
 msgid "Redirect"
 msgstr "Umleiten"
 
-#: includes/admin/class-bulk-actions.php:70
-#: includes/admin/class-bulk-actions.php:108
+#: includes/admin/class-bulk-actions.php:67
+#: includes/admin/class-bulk-actions.php:93
 msgid "Remove redirection"
 msgstr "Umleitung entfernen"
 
-#: includes/admin/class-bulk-actions.php:75
+#: includes/admin/class-bulk-actions.php:70
 msgid "Set Schema: None"
 msgstr "Schema festlegen: Keines"
 
-#: includes/admin/class-bulk-actions.php:79
+#: includes/admin/class-bulk-actions.php:74
 #, php-format
 msgid "Set Schema: Default (%s)"
 msgstr "Schema festlegen: Voreinstellung (%s)"
 
-#: includes/admin/class-bulk-actions.php:179
-#: includes/admin/class-bulk-actions.php:332
+#: includes/admin/class-bulk-actions.php:163
+#: includes/admin/class-bulk-actions.php:316
 #, php-format
 msgid "Robots meta edited for %1$d %2$s."
 msgstr "Roboter-Meta bearbeitet für %1$d %2$s."
 
-#: includes/admin/class-bulk-actions.php:201
-#: includes/admin/class-bulk-actions.php:354
+#: includes/admin/class-bulk-actions.php:185
+#: includes/admin/class-bulk-actions.php:338
 #, php-format
 msgid "%d redirection moved to Trash."
 msgid_plural "%d redirections moved to Trash."
 msgstr[0] "%d Umleitung in den Papierkorb verschoben."
 msgstr[1] "%d Umleitungen in den Papierkorb verschoben."
 
-#: includes/admin/class-bulk-actions.php:215
-#: includes/admin/class-bulk-actions.php:229
+#: includes/admin/class-bulk-actions.php:199
+#: includes/admin/class-bulk-actions.php:213
 #, php-format
 msgid "Schema edited for %1$d %2$s."
 msgstr "Schema bearbeitet für %1$d %2$s."
 
-#: includes/admin/class-bulk-actions.php:244
+#: includes/admin/class-bulk-actions.php:228
 #, php-format
 msgid "Custom Canonical URL removed from %1$d %2$s."
 msgstr "Benutzerdefinierte kanonische URL von %1$d %2$s entfernt."
 
-#: includes/admin/class-bulk-actions.php:405
+#: includes/admin/class-bulk-actions.php:389
 msgid ""
 "Are you sure you want to change the Schema type for the selected posts? "
 "Doing so may irreversibly delete the existing Schema data."
@@ -258,162 +258,164 @@ msgstr "Umgeleitete Beiträge"
 msgid "Orphan Posts"
 msgstr "Verwaiste Beiträge"
 
-#: includes/admin/class-post-filters.php:55
+#: includes/admin/class-post-filters.php:52
 msgid "Filter by Schema Type"
 msgstr "Nach Schematyp filtern"
 
-#: includes/admin/class-post-filters.php:72
+#: includes/admin/class-post-filters.php:69
 msgid "Turned Off"
 msgstr "Ausgeschaltet"
 
-#: includes/admin/class-post-filters.php:73
+#: includes/admin/class-post-filters.php:70
 msgid "Article"
 msgstr "Artikel"
 
-#: includes/admin/class-post-filters.php:74
+#: includes/admin/class-post-filters.php:71
 msgid "Blog Post"
 msgstr "Blog Beitrag"
 
-#: includes/admin/class-post-filters.php:75
+#: includes/admin/class-post-filters.php:72
 msgid "News Article"
 msgstr "Nachrichtenartikel"
 
-#: includes/admin/class-post-filters.php:76
+#: includes/admin/class-post-filters.php:73
 msgid "Book"
 msgstr "Buch"
 
-#: includes/admin/class-post-filters.php:77
+#: includes/admin/class-post-filters.php:74
 msgid "Course"
 msgstr "Kurs"
 
-#: includes/admin/class-post-filters.php:78
+#: includes/admin/class-post-filters.php:75
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: includes/admin/class-post-filters.php:79
+#: includes/admin/class-post-filters.php:76
 msgid "Job Posting"
 msgstr "Stellenausschreibung"
 
-#: includes/admin/class-post-filters.php:80
+#: includes/admin/class-post-filters.php:77
 msgid "Music"
 msgstr "Musik"
 
-#: includes/admin/class-post-filters.php:81
-#: includes/modules/schema/class-admin.php:57
+#: includes/admin/class-post-filters.php:78
+#: includes/modules/schema/class-admin.php:63
 msgid "Movie"
 msgstr "Film"
 
-#: includes/admin/class-post-filters.php:82
+#: includes/admin/class-post-filters.php:79
 #: includes/modules/local-seo/views/titles-options.php:276
 msgid "Person"
 msgstr "Person"
 
-#: includes/admin/class-post-filters.php:83
+#: includes/admin/class-post-filters.php:80
 msgid "Product"
 msgstr "Produkt"
 
-#: includes/admin/class-post-filters.php:84
+#: includes/admin/class-post-filters.php:81
 msgid "Recipe"
 msgstr "Rezept"
 
-#: includes/admin/class-post-filters.php:85
+#: includes/admin/class-post-filters.php:82
 msgid "Restaurant"
 msgstr "Restaurant"
 
-#: includes/admin/class-post-filters.php:86
+#: includes/admin/class-post-filters.php:83
 msgid "Service"
 msgstr "Service"
 
-#: includes/admin/class-post-filters.php:87
+#: includes/admin/class-post-filters.php:84
 msgid "Software"
 msgstr "Software"
 
-#: includes/admin/class-post-filters.php:88
+#: includes/admin/class-post-filters.php:85
 #: includes/modules/video-sitemap/sitemap-xsl.php:152
 msgid "Video"
 msgstr "Video"
 
-#: includes/admin/class-post-filters.php:89
+#: includes/admin/class-post-filters.php:86
 msgid "Dataset"
 msgstr "Datensatz"
 
-#: includes/admin/class-post-filters.php:90
+#: includes/admin/class-post-filters.php:87
 msgid "FAQ"
 msgstr "Häufig gestellte Fragen (FAQ)"
 
-#: includes/admin/class-post-filters.php:91
+#: includes/admin/class-post-filters.php:88
 msgid "FactCheck"
 msgstr "Fakten-Check"
 
-#: includes/admin/class-post-filters.php:314
+#: includes/admin/class-post-filters.php:311
 #: includes/modules/redirections/class-redirections-pro.php:756
 msgid "Clear Filter"
 msgstr "Filter leeren"
 
-#: includes/admin/class-quick-edit.php:59
+#: includes/admin/class-quick-edit.php:57
 msgid "SEO Details"
 msgstr "SEO Details"
 
-#: includes/admin/class-quick-edit.php:181
+#: includes/admin/class-quick-edit.php:170
+#: includes/modules/news-sitemap/metabox.php:20
 msgid "Index"
 msgstr "Index"
 
-#: includes/admin/class-quick-edit.php:182
+#: includes/admin/class-quick-edit.php:171
+#: includes/modules/news-sitemap/metabox.php:21
 msgid "No Index"
 msgstr "Kein Index"
 
-#: includes/admin/class-quick-edit.php:183
+#: includes/admin/class-quick-edit.php:172
 msgid "No Follow"
 msgstr "Nicht folgen"
 
-#: includes/admin/class-quick-edit.php:184
+#: includes/admin/class-quick-edit.php:173
 msgid "No Archive"
 msgstr "Kein Archiv"
 
-#: includes/admin/class-quick-edit.php:185
+#: includes/admin/class-quick-edit.php:174
 msgid "No Image Index"
 msgstr "Kein Bildverzeichnis"
 
-#: includes/admin/class-quick-edit.php:186
+#: includes/admin/class-quick-edit.php:175
 msgid "No Snippet"
 msgstr "Kein Snippet"
 
-#: includes/admin/class-quick-edit.php:196
-#: includes/admin/class-quick-edit.php:301
+#: includes/admin/class-quick-edit.php:185
+#: includes/admin/class-quick-edit.php:288
 msgid "SEO Settings"
 msgstr "SEO-Einstellungen"
 
-#: includes/admin/class-quick-edit.php:205
-#: includes/admin/class-quick-edit.php:305
+#: includes/admin/class-quick-edit.php:194
+#: includes/admin/class-quick-edit.php:292
 msgid "SEO Title"
 msgstr "SEO Titel"
 
-#: includes/admin/class-quick-edit.php:216
-#: includes/admin/class-quick-edit.php:311
+#: includes/admin/class-quick-edit.php:205
+#: includes/admin/class-quick-edit.php:298
 msgid "SEO Description"
 msgstr "SEO-Beschreibung"
 
-#: includes/admin/class-quick-edit.php:223
-#: includes/admin/class-quick-edit.php:315
+#: includes/admin/class-quick-edit.php:212
+#: includes/admin/class-quick-edit.php:302
 msgid "Robots Meta"
 msgstr "Roboter-Meta"
 
-#: includes/admin/class-quick-edit.php:241
-#: includes/admin/class-quick-edit.php:328
+#: includes/admin/class-quick-edit.php:229
+#: includes/admin/class-quick-edit.php:315
 msgid "Primary Focus Keyword"
 msgstr "Primäres Fokus-Stichwort"
 
-#: includes/admin/class-quick-edit.php:247
-#: includes/admin/class-quick-edit.php:334
+#: includes/admin/class-quick-edit.php:235
+#: includes/admin/class-quick-edit.php:321
 msgid "Canonical URL"
 msgstr "Kanonische URL"
 
-#: includes/admin/class-quick-edit.php:262
+#: includes/admin/class-quick-edit.php:250
 #, php-format
 msgid "Primary %s"
 msgstr "Primär %s"
 
-#: includes/admin/class-quick-edit.php:276
+#: includes/admin/class-quick-edit.php:264
 msgid "&mdash; Not Selected &mdash;"
 msgstr "&mdash; Nicht ausgewählt &mdash;"
 
@@ -498,27 +500,27 @@ msgstr ""
 "Wählen Sie dies, wenn Sie eine benutzerdefinierte Rank-Math-"
 "Einstellungsdatei haben, die Sie verwenden möchten."
 
-#: includes/admin/class-setup-wizard.php:129
+#: includes/admin/class-setup-wizard.php:125
 msgid "Import successful."
 msgstr "Import erfolgreich."
 
-#: includes/admin/class-setup-wizard.php:133
+#: includes/admin/class-setup-wizard.php:129
 msgid "No settings found to be imported."
 msgstr "Keine Einstellungen zum Importieren gefunden."
 
-#: includes/admin/class-setup-wizard.php:159
+#: includes/admin/class-setup-wizard.php:155
 msgid "No file selected."
 msgstr "Keine Datei ausgewählt."
 
-#: includes/admin/class-setup-wizard.php:168
+#: includes/admin/class-setup-wizard.php:164
 msgid "Settings file could not be imported:"
 msgstr "Die Einstellungsdatei konnte nicht importiert werden:"
 
-#: includes/admin/class-setup-wizard.php:173
+#: includes/admin/class-setup-wizard.php:169
 msgid "Settings could not be imported:"
 msgstr "Einstellungen konnten nicht importiert werden:"
 
-#: includes/admin/class-setup-wizard.php:178
+#: includes/admin/class-setup-wizard.php:174
 msgid "Settings could not be imported: Upload failed."
 msgstr ""
 "Die Einstellungen konnten nicht importiert werden: Upload fehlgeschlagen."
@@ -585,29 +587,29 @@ msgstr "CSV konnte nicht importiert werden: Upload fehlgeschlagen."
 msgid "CSV could not be imported: File type error."
 msgstr "CSV konnte nicht importiert werden: Dateityp-Fehler."
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:258
+#: includes/admin/csv-import-export/class-csv-import-export.php:259
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:329
 msgid "Posts"
 msgstr "Alle Beiträge angezeigen"
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:259
+#: includes/admin/csv-import-export/class-csv-import-export.php:260
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:330
 msgid "Terms"
 msgstr "Bedingungen"
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:260
+#: includes/admin/csv-import-export/class-csv-import-export.php:261
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:331
 msgid "Users"
 msgstr "Benutzer"
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:279
+#: includes/admin/csv-import-export/class-csv-import-export.php:280
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:350
 msgid "Import could not be canceled: invalid nonce. Please try again."
 msgstr ""
 "Import konnte nicht abgebrochen werden: ungültiges „Nonce“. Bitte versuchen "
 "Sie es erneut."
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:284
+#: includes/admin/csv-import-export/class-csv-import-export.php:285
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:355
 msgid ""
 "Import could not be canceled: you are not allowed to import content to this "
@@ -616,50 +618,50 @@ msgstr ""
 "Der Import konnte nicht abgebrochen werden: Es ist nicht erlaubt, Inhalte "
 "auf diese Website zu importieren."
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:308
+#: includes/admin/csv-import-export/class-csv-import-export.php:309
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:379
 msgid "Import could not be canceled."
 msgstr "Der Import konnte nicht abgebrochen werden."
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:318
+#: includes/admin/csv-import-export/class-csv-import-export.php:319
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:389
 msgid "CSV import canceled."
 msgstr "CSV-Import abgebrochen."
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:356
+#: includes/admin/csv-import-export/class-csv-import-export.php:357
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:427
 msgid "Import in progress..."
 msgstr "Import wird durchgeführt ..."
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:359
+#: includes/admin/csv-import-export/class-csv-import-export.php:360
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:430
 #, php-format
 msgid "Items processed: %1$s/%2$s"
 msgstr "Verarbeitete Elemente: %1$s/%2$s"
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:392
+#: includes/admin/csv-import-export/class-csv-import-export.php:393
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:463
 #, php-format
 msgid "CSV import completed. Successfully imported %d rows."
 msgstr "CSV-Import abgeschlossen. Erfolgreicher Import von %d Zeilen."
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:397
+#: includes/admin/csv-import-export/class-csv-import-export.php:398
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:468
 msgid "CSV import completed."
 msgstr "CSV-Import abgeschlossen."
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:400
+#: includes/admin/csv-import-export/class-csv-import-export.php:401
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:471
 #, php-format
 msgid "Imported %d rows."
 msgstr "%d Zeilen importiert."
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:405
+#: includes/admin/csv-import-export/class-csv-import-export.php:406
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:476
 msgid "One or more errors occured while importing: "
 msgstr "Beim Importieren sind ein oder mehrere Fehler aufgetreten: "
 
-#: includes/admin/csv-import-export/class-csv-import-export.php:409
+#: includes/admin/csv-import-export/class-csv-import-export.php:410
 #: includes/modules/redirections/csv-import-redirections/class-csv-import-export-redirections.php:480
 msgid "The following lines could not be imported: "
 msgstr "Die folgenden Zeilen konnten nicht importiert werden: "
@@ -773,6 +775,7 @@ msgstr ""
 "in die Sitemap aufzunehmen."
 
 #: includes/admin/wizard/class-sitemap.php:118 includes/class-modules.php:50
+#: includes/modules/news-sitemap/class-news-metabox.php:104
 #: includes/modules/news-sitemap/class-news-sitemap.php:129
 msgid "News Sitemap"
 msgstr "News-Sitemap"
@@ -865,17 +868,13 @@ msgstr ""
 "Wählen Sie den Beitragstyp aus, in dem Sie Videos verwenden und möchten, "
 "dass sie in der Videosuche angezeigt werden."
 
-#: includes/class-common.php:46
+#: includes/class-common.php:44
 msgid "Rich Pins Validator"
 msgstr "Rich Pins Validator"
 
-#: includes/class-common.php:49
+#: includes/class-common.php:47
 msgid "Pinterest Debugger"
 msgstr "Pinterest-Debugger"
-
-#: includes/class-common.php:68
-msgid "Activate now"
-msgstr "Jetzt aktivieren"
 
 #: includes/class-modules.php:51
 msgid ""
@@ -905,7 +904,7 @@ msgstr ""
 "Bitte aktivieren Sie das Modul Schema & Sitemap, um dieses Modul nutzen zu "
 "können."
 
-#: includes/class-register-vars.php:39 includes/class-register-vars.php:50
+#: includes/class-register-vars.php:39
 msgid "Random Word"
 msgstr "Zufälliges Wort"
 
@@ -913,56 +912,48 @@ msgstr "Zufälliges Wort"
 msgid "Persistent random word chosen from a list"
 msgstr "Beständiges Zufallswort, das aus einer Liste ausgewählt wird"
 
-#: includes/class-register-vars.php:51
-msgid ""
-"Non-persistent random word chosen from a list. A new random word will be "
-"chosen on each page load."
-msgstr ""
-"Nicht dauerhaftes Zufallswort, das aus einer Liste gewählt wird. Bei jedem "
-"Laden der Seite wird ein neues Zufallswort gewählt."
-
-#: includes/class-thumbnail-overlays.php:287
+#: includes/class-thumbnail-overlays.php:243
 msgid "Off"
 msgstr "Aus"
 
-#: includes/class-thumbnail-overlays.php:297
+#: includes/class-thumbnail-overlays.php:253
 msgid "Custom Image Watermarks"
 msgstr "Benutzerdefinierte Bild-Wasserzeichen"
 
-#: includes/class-thumbnail-overlays.php:298
+#: includes/class-thumbnail-overlays.php:254
 msgid "Add more image watermarks to choose from for the social thumbnails."
 msgstr ""
 "Fügen Sie weitere Bildwasserzeichen zur Auswahl für die Social Thumbnails "
 "hinzu."
 
-#: includes/class-thumbnail-overlays.php:300
+#: includes/class-thumbnail-overlays.php:256
 msgid "Add Watermark"
 msgstr "Wasserzeichen hinzufügen"
 
-#: includes/class-thumbnail-overlays.php:301
+#: includes/class-thumbnail-overlays.php:257
 #: includes/modules/image-seo/options.php:155
 #: includes/modules/local-seo/views/titles-options.php:392
 #: includes/modules/local-seo/views/titles-options.php:448
 msgid "Remove"
 msgstr "Entfernen"
 
-#: includes/class-thumbnail-overlays.php:317
+#: includes/class-thumbnail-overlays.php:273
 msgid "Add Image"
 msgstr "Bild hinzufügen"
 
-#: includes/class-thumbnail-overlays.php:327
+#: includes/class-thumbnail-overlays.php:283
 msgid "Name*"
 msgstr "Name*"
 
-#: includes/class-thumbnail-overlays.php:347
-#: includes/class-thumbnail-overlays.php:371
-#: includes/class-thumbnail-overlays.php:394
+#: includes/class-thumbnail-overlays.php:303
+#: includes/class-thumbnail-overlays.php:327
+#: includes/class-thumbnail-overlays.php:350
 msgid "Default Thumbnail Watermark"
 msgstr "Standard-Wasserzeichen für Miniaturansichten"
 
-#: includes/class-thumbnail-overlays.php:348
-#: includes/class-thumbnail-overlays.php:372
-#: includes/class-thumbnail-overlays.php:395
+#: includes/class-thumbnail-overlays.php:304
+#: includes/class-thumbnail-overlays.php:328
+#: includes/class-thumbnail-overlays.php:351
 msgid ""
 "Select the default watermark that will be applied if no specific watermark "
 "is selected."
@@ -970,61 +961,61 @@ msgstr ""
 "Wählen Sie das Standardwasserzeichen, das angewendet wird, wenn kein "
 "bestimmtes Wasserzeichen ausgewählt ist."
 
-#: includes/class-thumbnail-overlays.php:436
+#: includes/class-thumbnail-overlays.php:392
 msgid ""
 "A Custom Watermark item could not be saved because the name field is empty."
 msgstr ""
 "Ein Element mit benutzerdefiniertem Wasserzeichen konnte nicht gespeichert "
 "werden, weil das Namensfeld leer ist."
 
-#: includes/class-thumbnail-overlays.php:451
+#: includes/class-thumbnail-overlays.php:407
 msgid "Top Left"
 msgstr "Oben Links"
 
-#: includes/class-thumbnail-overlays.php:452
+#: includes/class-thumbnail-overlays.php:408
 msgid "Top Center"
 msgstr "Oben Mitte"
 
-#: includes/class-thumbnail-overlays.php:453
+#: includes/class-thumbnail-overlays.php:409
 msgid "Top Right"
 msgstr "Oben Rechts"
 
-#: includes/class-thumbnail-overlays.php:455
+#: includes/class-thumbnail-overlays.php:411
 msgid "Middle Left"
 msgstr "Mitte links"
 
-#: includes/class-thumbnail-overlays.php:456
+#: includes/class-thumbnail-overlays.php:412
 msgid "Middle Center"
 msgstr "Mitte zentriert"
 
-#: includes/class-thumbnail-overlays.php:457
+#: includes/class-thumbnail-overlays.php:413
 msgid "Middle Right"
 msgstr "Mitte rechts"
 
-#: includes/class-thumbnail-overlays.php:459
+#: includes/class-thumbnail-overlays.php:415
 msgid "Bottom Left"
 msgstr "Unten links"
 
-#: includes/class-thumbnail-overlays.php:460
+#: includes/class-thumbnail-overlays.php:416
 msgid "Bottom Center"
 msgstr "Unten Mitte"
 
-#: includes/class-thumbnail-overlays.php:461
+#: includes/class-thumbnail-overlays.php:417
 msgid "Bottom Right"
 msgstr "Unten rechts"
 
-#: includes/modules/404-monitor/class-monitor-pro.php:54
-#: includes/modules/404-monitor/class-monitor-pro.php:93
+#: includes/modules/404-monitor/class-monitor-pro.php:48
+#: includes/modules/404-monitor/class-monitor-pro.php:84
 #: includes/views/csv-import-export-panel.php:126
 #: includes/views/csv-import-redirections-panel.php:70
 msgid "Export"
 msgstr "Export"
 
-#: includes/modules/404-monitor/class-monitor-pro.php:69
+#: includes/modules/404-monitor/class-monitor-pro.php:63
 msgid "Export 404 Logs"
 msgstr "404-Protokolle exportieren"
 
-#: includes/modules/404-monitor/class-monitor-pro.php:71
+#: includes/modules/404-monitor/class-monitor-pro.php:65
 msgid ""
 "Export and download 404 logs from a selected period of time in the form of a "
 "CSV file. Leave the from/to fields empty to export all logs."
@@ -1033,28 +1024,24 @@ msgstr ""
 "Zeitraum in Form einer CSV-Datei. Lassen Sie die Felder von/bis leer, um "
 "alle Protokolle zu exportieren."
 
-#: includes/modules/404-monitor/class-monitor-pro.php:80
+#: includes/modules/404-monitor/class-monitor-pro.php:73
 msgid "From date"
 msgstr "Von Datum"
 
-#: includes/modules/404-monitor/class-monitor-pro.php:87
+#: includes/modules/404-monitor/class-monitor-pro.php:79
 msgid "To date"
 msgstr "bis Datum"
 
-#: includes/modules/404-monitor/class-monitor-pro.php:113
+#: includes/modules/404-monitor/class-monitor-pro.php:103
 msgid ""
 "Sorry, your user does not seem to have the necessary capabilities to export."
 msgstr ""
 "Leider scheint Ihr Benutzer nicht über die notwendigen Fähigkeiten zum "
 "Exportieren zu verfügen."
 
-#: includes/modules/404-monitor/class-monitor-pro.php:118
+#: includes/modules/404-monitor/class-monitor-pro.php:108
 msgid "Nonce error. Please try again."
 msgstr "Nonce-Fehler. Bitte versuchen Sie es erneut."
-
-#: includes/modules/404-monitor/class-monitor-pro.php:227
-msgid "Hits"
-msgstr "Treffer"
 
 #: includes/modules/acf/class-acf.php:44
 msgid "Include Images from the ACF Fields."
@@ -1076,20 +1063,20 @@ msgstr "In den ACF-Feldern hinzugefügte Bilder einbeziehen."
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: includes/modules/analytics/class-analytics.php:161
+#: includes/modules/analytics/class-analytics.php:145
 msgid "Post Analytics"
 msgstr "Beitragsanalysen"
 
-#: includes/modules/analytics/class-analytics.php:163
+#: includes/modules/analytics/class-analytics.php:147
 msgid "Analytics Report"
 msgstr "Analysenbericht"
 
-#: includes/modules/analytics/class-analytics.php:216
-#: includes/modules/analytics/class-analytics.php:235
+#: includes/modules/analytics/class-analytics.php:200
+#: includes/modules/analytics/class-analytics.php:219
 msgid "Country"
 msgstr "Land"
 
-#: includes/modules/analytics/class-analytics.php:301
+#: includes/modules/analytics/class-analytics.php:285
 msgid ""
 "Enter the number of days to keep Analytics data in your database. The "
 "maximum allowed days are 180. Though, 2x data will be stored in the DB for "
@@ -1100,12 +1087,12 @@ msgstr ""
 "180. Es werden jedoch 2x Daten in der DB gespeichert, um die Differenz "
 "korrekt berechnen zu können."
 
-#: includes/modules/analytics/class-analytics.php:322
+#: includes/modules/analytics/class-analytics.php:310
 msgid "Monitor SEO Performance"
 msgstr "SEO-Leistung überwachen"
 
 #. translators: Link to kb article
-#: includes/modules/analytics/class-analytics.php:325
+#: includes/modules/analytics/class-analytics.php:313
 #, php-format
 msgid ""
 "This option allows you to monitor the SEO performance of all of your sites "
@@ -1117,25 +1104,11 @@ msgstr ""
 "Websites auf Anhieb überprüfen können. <a href=\"%1$s\" target=\"_blank"
 "\">Mehr erfahren</a>."
 
-#: includes/modules/analytics/class-analytics.php:337
-msgid "Google Core Updates in the Graphs"
-msgstr "Google Core-Updates in den Grafiken"
-
-#. translators: Link to kb article
-#: includes/modules/analytics/class-analytics.php:340
-#, php-format
-msgid "This option allows you to show %s in the Analytics graphs."
-msgstr "Mit dieser Option können Sie %s in den Analytics-Diagrammen anzeigen."
-
-#: includes/modules/analytics/class-analytics.php:341
-msgid "Google Core Updates"
-msgstr "Google Core-Updates"
-
-#: includes/modules/analytics/class-analytics.php:495
+#: includes/modules/analytics/class-analytics.php:456
 msgid "AdSense"
 msgstr "AdSense"
 
-#: includes/modules/analytics/class-analytics.php:496
+#: includes/modules/analytics/class-analytics.php:457
 msgid "Analytics"
 msgstr "Analysen"
 
@@ -1251,22 +1224,22 @@ msgid "Positions Summary"
 msgstr "Zusammenfassung der Positionen"
 
 #: includes/modules/analytics/class-email-reports.php:286
-#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:21
+#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:19
 msgid "Top Winning Posts"
 msgstr "Erfolgreiche Beiträge"
 
 #: includes/modules/analytics/class-email-reports.php:287
-#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:21
+#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:19
 msgid "Top Losing Posts"
 msgstr "Verlorene Spitzenpositionen"
 
 #: includes/modules/analytics/class-email-reports.php:288
-#: includes/modules/analytics/views/email-reports/sections/winning-keywords.php:21
+#: includes/modules/analytics/views/email-reports/sections/winning-keywords.php:19
 msgid "Top Winning Keywords"
 msgstr "Top Gewinnende Schlüsselwörter"
 
 #: includes/modules/analytics/class-email-reports.php:289
-#: includes/modules/analytics/views/email-reports/sections/losing-keywords.php:21
+#: includes/modules/analytics/views/email-reports/sections/losing-keywords.php:19
 msgid "Top Losing Keywords"
 msgstr "Top Verlierende Schlüsselwörter"
 
@@ -1325,108 +1298,81 @@ msgstr "Vorschau"
 msgid "Rank Math [SEO Report] - %s"
 msgstr "Rang Math [SEO-Bericht] - %s"
 
-#: includes/modules/analytics/class-rest.php:292
-#: includes/modules/analytics/class-rest.php:337
+#: includes/modules/analytics/class-rest.php:233
+#: includes/modules/analytics/class-rest.php:278
 msgid "Sorry, no keyword found."
 msgstr "Leider kein Schlüsselwort gefunden."
 
-#: includes/modules/analytics/class-rest.php:388
+#: includes/modules/analytics/class-rest.php:329
 msgid "Sorry, no record id found."
 msgstr "Leider keine Datensatz-ID gefunden."
 
-#: includes/modules/analytics/class-rest.php:396
+#: includes/modules/analytics/class-rest.php:337
 msgid "Sorry, no post id found."
 msgstr "Es wurde leider keine Beitrags-ID gefunden."
 
-#: includes/modules/analytics/views/email-reports/header-after.php:17
+#: includes/modules/analytics/views/email-reports/header-after.php:15
 msgid "SEO Report of Your Website"
 msgstr "SEO-Bericht über Ihre Website"
 
-#: includes/modules/analytics/views/email-reports/header-after.php:25
+#: includes/modules/analytics/views/email-reports/header-after.php:23
 msgid "FULL REPORT"
 msgstr "VOLLER BERICHT"
 
-#: includes/modules/analytics/views/email-reports/header-after.php:26
+#: includes/modules/analytics/views/email-reports/header-after.php:24
 msgid "External Link Icon"
 msgstr "Externes Link-Symbol"
-
-#: includes/modules/analytics/views/email-reports/header-after.php:37
-msgid "Uh-oh"
-msgstr "Uh-oh"
-
-#: includes/modules/analytics/views/email-reports/header-after.php:38
-msgid "It seems that there are no stats to show right now."
-msgstr "Es scheint, dass es im Moment keine Statistiken anzuzeigen gibt."
-
-#: includes/modules/analytics/views/email-reports/header-after.php:40
-#, php-format
-msgid ""
-"If you can see the site data in your Search Console and Analytics accounts, "
-"but not here, then %1$s try reconnecting your account %2$s and make sure "
-"that the correct properties are selected in the %1$s Analytics Settings%2$s."
-msgstr ""
-"Wenn Sie die Website-Daten in Ihren Search Console- und Analytics-Konten "
-"sehen können, aber nicht hier, dann %1$s versuchen Sie bitte, Ihr Konto %2$s "
-"erneut zu verbinden und stellen sicher, dass die richtigen Eigenschaften in "
-"den %1$s Analytics-Einstellungen%2$s ausgewählt sind."
 
 #: includes/modules/analytics/views/email-reports/report.php:36
 msgid "VIEW DETAILED ANALYTICS"
 msgstr "DETAILLIERTE ANALYSEN ANZEIGEN"
 
-#: includes/modules/analytics/views/email-reports/sections/losing-keywords.php:32
-#: includes/modules/analytics/views/email-reports/sections/winning-keywords.php:32
+#: includes/modules/analytics/views/email-reports/sections/losing-keywords.php:30
+#: includes/modules/analytics/views/email-reports/sections/winning-keywords.php:30
 #: includes/modules/schema/shortcode/dataset.php:49
-#: includes/modules/schema/shortcode/recipe.php:34
+#: includes/views/compare-keywords.php:24
 msgid "Keywords"
 msgstr "Keywords"
 
-#: includes/modules/analytics/views/email-reports/sections/losing-keywords.php:35
-#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:37
-#: includes/modules/analytics/views/email-reports/sections/winning-keywords.php:35
-#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:37
+#: includes/modules/analytics/views/email-reports/sections/losing-keywords.php:33
+#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:35
+#: includes/modules/analytics/views/email-reports/sections/winning-keywords.php:33
+#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:35
 msgid "Impressions"
 msgstr "Impressionen"
 
-#: includes/modules/analytics/views/email-reports/sections/losing-keywords.php:38
-#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:41
-#: includes/modules/analytics/views/email-reports/sections/winning-keywords.php:38
-#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:41
+#: includes/modules/analytics/views/email-reports/sections/losing-keywords.php:36
+#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:39
+#: includes/modules/analytics/views/email-reports/sections/winning-keywords.php:36
+#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:39
 msgid "Position"
 msgstr "Position"
 
-#: includes/modules/analytics/views/email-reports/sections/losing-keywords.php:58
-#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:69
-#: includes/modules/analytics/views/email-reports/sections/winning-keywords.php:58
-#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:69
-msgid "No data to show."
-msgstr "Es sind keine Daten vorhanden."
-
-#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:29
-#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:29
+#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:27
+#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:27
 msgid "Post"
 msgstr "Beitrag"
 
-#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:33
-#: includes/modules/analytics/views/email-reports/sections/summary.php:24
-#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:33
+#: includes/modules/analytics/views/email-reports/sections/losing-posts.php:31
+#: includes/modules/analytics/views/email-reports/sections/summary.php:20
+#: includes/modules/analytics/views/email-reports/sections/winning-posts.php:31
 msgid "Search Traffic"
 msgstr "Traffic durchsuchen"
 
-#: includes/modules/analytics/views/email-reports/sections/summary.php:39
-#: includes/modules/analytics/views/email-reports/sections/summary.php:70
+#: includes/modules/analytics/views/email-reports/sections/summary.php:35
+#: includes/modules/analytics/views/email-reports/sections/summary.php:66
 msgid "Total Impressions"
 msgstr "Gesamtimpressionen"
 
-#: includes/modules/analytics/views/email-reports/sections/summary.php:55
+#: includes/modules/analytics/views/email-reports/sections/summary.php:51
 msgid "Total Clicks"
 msgstr "Klicks insgesamt"
 
-#: includes/modules/analytics/views/email-reports/sections/summary.php:87
+#: includes/modules/analytics/views/email-reports/sections/summary.php:83
 msgid "Total Keywords"
 msgstr "Schlüsselwörter insgesamt"
 
-#: includes/modules/analytics/views/email-reports/sections/summary.php:101
+#: includes/modules/analytics/views/email-reports/sections/summary.php:97
 msgid "Average Position"
 msgstr "Durchschnittliche Position"
 
@@ -1454,7 +1400,7 @@ msgstr "Bildtitel"
 msgid "Title text set for the current image."
 msgstr "Eingestellter Titeltext für das aktuelle Bild."
 
-#: includes/modules/image-seo/class-image-seo-pro.php:349
+#: includes/modules/image-seo/class-image-seo-pro.php:340
 #, php-format
 msgid "Avatar of %s"
 msgstr "Profilbild von %s"
@@ -1659,158 +1605,105 @@ msgid "Your Locations KML file can be found here: %s"
 msgstr "Ihre Standort-KML-Datei finden Sie hier: %s"
 
 #. translators: Post Type Plural Name
-#: includes/modules/local-seo/class-local-seo.php:136
+#: includes/modules/local-seo/class-local-seo.php:131
 #, php-format
 msgid "All %s"
 msgstr "Alle %s"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:138
+#: includes/modules/local-seo/class-local-seo.php:133
 #, php-format
 msgid "Add New %s"
 msgstr "Neue %s hinzufügen"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:140
+#: includes/modules/local-seo/class-local-seo.php:135
 #, php-format
 msgid "New %s"
 msgstr "Neue %s"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:142
+#: includes/modules/local-seo/class-local-seo.php:137
 #, php-format
 msgid "Edit %s"
 msgstr "Bearbeiten %s"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:144
+#: includes/modules/local-seo/class-local-seo.php:139
 #, php-format
 msgid "Update %s"
 msgstr "Aktualisiere %s"
 
 #. translators: Post Type Singular Name
 #. translators: Post Type Plural Name
-#: includes/modules/local-seo/class-local-seo.php:146
-#: includes/modules/local-seo/class-local-seo.php:148
+#: includes/modules/local-seo/class-local-seo.php:141
+#: includes/modules/local-seo/class-local-seo.php:143
 #, php-format
 msgid "View %s"
 msgstr "Zeige %s"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:150
+#: includes/modules/local-seo/class-local-seo.php:145
 #, php-format
 msgid "Search %s"
 msgstr "Suchen %s"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:152
-#, php-format
-msgid "No %s found."
-msgstr "Keine %s gefunden."
-
-#. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:154
-#, php-format
-msgid "No %s found in Trash."
-msgstr "Keine %s im Papierkorb gefunden."
-
-#. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:156
-#, php-format
-msgid "%s published."
-msgstr "%s veröffentlicht."
-
-#. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:158
-#, php-format
-msgid "%s published privately."
-msgstr "%s privat veröffentlicht."
-
-#. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:160
-#, php-format
-msgid "%s reverted to draft."
-msgstr "%s auf Entwurf zurückgesetzt."
-
-#. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:162
-#, php-format
-msgid "%s scheduled."
-msgstr "%s geplant."
-
-#. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:164
-#, php-format
-msgid "%s updated."
-msgstr "%s aktualisiert."
-
-#. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:207
-#: includes/modules/local-seo/class-local-seo.php:221
+#: includes/modules/local-seo/class-local-seo.php:178
+#: includes/modules/local-seo/class-local-seo.php:192
 #, php-format
 msgid "%s categories"
 msgstr "%s Kategorien"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:209
+#: includes/modules/local-seo/class-local-seo.php:180
 #, php-format
 msgid "%s category"
 msgstr "%s Kategorie"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:211
+#: includes/modules/local-seo/class-local-seo.php:182
 #, php-format
 msgid "All %s categories"
 msgstr "Alle %s Kategorien"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:213
+#: includes/modules/local-seo/class-local-seo.php:184
 #, php-format
 msgid "Edit %s category"
 msgstr "%s-Kategorie bearbeiten"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:215
+#: includes/modules/local-seo/class-local-seo.php:186
 #, php-format
 msgid "Update %s category"
 msgstr "%s-Kategorie aktualisieren"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:217
+#: includes/modules/local-seo/class-local-seo.php:188
 #, php-format
 msgid "Add New %s category"
 msgstr "Neue %s-Kategorie hinzufügen"
 
 #. translators: Post Type Singular Name
-#: includes/modules/local-seo/class-local-seo.php:219
+#: includes/modules/local-seo/class-local-seo.php:190
 #, php-format
 msgid "New %s category"
 msgstr "Neue %s-Kategorie"
 
-#: includes/modules/local-seo/class-local-seo.php:222
+#: includes/modules/local-seo/class-local-seo.php:193
 msgid "Search categories"
 msgstr "Kategorien durchsuchen"
 
-#: includes/modules/local-seo/class-local-seo.php:223
+#: includes/modules/local-seo/class-local-seo.php:194
 #: includes/modules/redirections/class-redirections-pro.php:397
 msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
 
-#: includes/modules/local-seo/class-local-seo.php:224
+#: includes/modules/local-seo/class-local-seo.php:195
 #: includes/modules/redirections/class-redirections-pro.php:398
 msgid "Parent Category:"
 msgstr "Übergeordnete Kategorie:"
-
-#: includes/modules/local-seo/class-local-seo.php:261
-#: includes/modules/local-seo/views/titles-options.php:352
-msgid "Address"
-msgstr "﻿Adresse"
-
-#: includes/modules/local-seo/class-local-seo.php:262
-#: includes/modules/local-seo/shortcodes/class-address.php:38
-#: includes/modules/local-seo/views/titles-options.php:342
-msgid "Phone"
-msgstr "Telefon"
 
 #: includes/modules/local-seo/class-location-shortcode.php:96
 #, php-format
@@ -1821,10 +1714,15 @@ msgstr "Diese Seite kann Google Maps nicht korrekt laden. Bitte %s hinzufügen."
 msgid "API Key"
 msgstr "API-Schlüssel"
 
-#: includes/modules/local-seo/class-location-shortcode.php:273
+#: includes/modules/local-seo/class-location-shortcode.php:266
 #: includes/modules/local-seo/shortcodes/class-store-locator.php:170
 msgid "Sorry, no locations were found."
 msgstr "Tut mir leid, es wurden keine Standorte gefunden."
+
+#: includes/modules/local-seo/shortcodes/class-address.php:38
+#: includes/modules/local-seo/views/titles-options.php:342
+msgid "Phone"
+msgstr "Telefon"
 
 #: includes/modules/local-seo/shortcodes/class-address.php:42
 msgid "Secondary phone"
@@ -2972,6 +2870,10 @@ msgstr ""
 "Suchmaschinen können Ihre Kontakttelefonnummer für mobile Benutzer prominent "
 "anzeigen."
 
+#: includes/modules/local-seo/views/titles-options.php:352
+msgid "Address"
+msgstr "﻿Adresse"
+
 #: includes/modules/local-seo/views/titles-options.php:361
 msgid "Address Format"
 msgstr "Adressformat"
@@ -3289,6 +3191,10 @@ msgstr ""
 msgid "Contact Page"
 msgstr "Kontaktseite"
 
+#: includes/modules/news-sitemap/class-news-metabox.php:105
+msgid "This tab contains news sitemap options."
+msgstr "Diese Registerkarte enthält News-Sitemap-Optionen."
+
 #: includes/modules/news-sitemap/class-news-sitemap.php:131
 msgid ""
 "News Sitemaps allow you to control which content you submit to Google News. "
@@ -3306,6 +3212,16 @@ msgstr ""
 #, php-format
 msgid "Your News Sitemap index can be found here: : %s"
 msgstr "Den Index Ihrer Nachrichten-Sitemap finden Sie hier: : %s"
+
+#: includes/modules/news-sitemap/metabox.php:17
+msgid "Googlebot-News index"
+msgstr "Googlebot-News-Index"
+
+#: includes/modules/news-sitemap/metabox.php:18
+msgid ""
+"Using noindex allows you to prevent articles from appearing in Google News."
+msgstr ""
+"Mit „noindex“ können Sie verhindern, dass Artikel in Google News erscheinen."
 
 #. translators: Post Type
 #: includes/modules/news-sitemap/settings-news.php:77
@@ -3619,55 +3535,55 @@ msgstr "Konnte Umleitung #%d nicht aktualisieren (nicht gefunden)"
 msgid "Could not import redirection."
 msgstr "Die Umleitung konnte nicht importiert werden."
 
-#: includes/modules/schema/class-admin.php:55
+#: includes/modules/schema/class-admin.php:61
 msgid "DataSet"
 msgstr "DataSet"
 
-#: includes/modules/schema/class-admin.php:56
+#: includes/modules/schema/class-admin.php:62
 msgid "Fact Check"
 msgstr "Faktenüberprüfung"
 
-#: includes/modules/schema/class-admin.php:63
+#: includes/modules/schema/class-admin.php:69
 msgid "None (Click here to set one)"
 msgstr "Keine (Klicken Sie hier, um eine einzustellen)"
 
-#: includes/modules/schema/class-admin.php:91
+#: includes/modules/schema/class-admin.php:93
 msgid "Insert/edit link"
 msgstr "Link einfügen/bearbeiten"
 
-#: includes/modules/schema/class-admin.php:92
+#: includes/modules/schema/class-admin.php:94
 msgid "Update"
 msgstr "Update"
 
-#: includes/modules/schema/class-admin.php:93
+#: includes/modules/schema/class-admin.php:95
 msgid "Add Link"
 msgstr "Link hinzufügen"
 
-#: includes/modules/schema/class-admin.php:94
+#: includes/modules/schema/class-admin.php:96
 msgid "(no title)"
 msgstr "(kein Titel)"
 
-#: includes/modules/schema/class-admin.php:95
+#: includes/modules/schema/class-admin.php:97
 msgid "No matches found."
 msgstr "Keine Treffer gefunden."
 
-#: includes/modules/schema/class-admin.php:96
+#: includes/modules/schema/class-admin.php:98
 msgid "Link selected."
 msgstr "Link ausgewählt."
 
-#: includes/modules/schema/class-admin.php:97
+#: includes/modules/schema/class-admin.php:99
 msgid "Link inserted."
 msgstr "Link eingefügt."
 
-#: includes/modules/schema/class-admin.php:102
+#: includes/modules/schema/class-admin.php:104
 msgid "Use in Schema Markup"
 msgstr "Verwendung im Schema-Markup"
 
-#: includes/modules/schema/class-admin.php:103
+#: includes/modules/schema/class-admin.php:105
 msgid "Link Title"
 msgstr "Link-Titel"
 
-#: includes/modules/schema/class-admin.php:382
+#: includes/modules/schema/class-admin.php:407
 msgid "All Taxonomies"
 msgstr "Alle Taxonomien"
 
@@ -3694,7 +3610,7 @@ msgid "Schemas"
 msgstr "Schemas"
 
 #: includes/modules/schema/class-post-type.php:43
-#: includes/modules/schema/class-post-type.php:56
+#: includes/modules/schema/class-post-type.php:55
 msgid "Schema"
 msgstr "Schema"
 
@@ -3730,12 +3646,12 @@ msgstr "Schemata anzeigen"
 msgid "Search schemas"
 msgstr "Schemata durchsuchen"
 
-#: includes/modules/schema/class-post-type.php:57
+#: includes/modules/schema/class-post-type.php:56
 msgid "Rank Math Schema Templates"
 msgstr "Rank Math Schema-Vorlagen"
 
-#: includes/modules/schema/class-post-type.php:99
-#: includes/modules/schema/class-post-type.php:100
+#: includes/modules/schema/class-post-type.php:96
+#: includes/modules/schema/class-post-type.php:97
 msgid "Schema Templates"
 msgstr "Schema-Vorlagen"
 
@@ -3743,17 +3659,9 @@ msgstr "Schema-Vorlagen"
 msgid "Schema to add."
 msgstr "Schema, das hinzugefügt werden soll."
 
-#: includes/modules/schema/class-rest.php:140
+#: includes/modules/schema/class-rest.php:113
 msgid "Sorry, you are not allowed to save template."
 msgstr "Leider ist es Ihnen nicht erlaubt, die Vorlage zu speichern."
-
-#: includes/modules/schema/class-rest.php:155
-msgid "Object unique id"
-msgstr "Eindeutige Objekt-ID"
-
-#: includes/modules/schema/class-rest.php:160
-msgid "Video URL."
-msgstr "Video-URL."
 
 #: includes/modules/schema/class-schema.php:125
 msgid "Estimated Cost:"
@@ -3799,11 +3707,11 @@ msgstr "Automatische Bildgenerierung für das automatisch erkannte Video."
 msgid "Remove Media Data from RSS feed"
 msgstr "Mediendaten aus dem RSS-Feed entfernen"
 
-#: includes/modules/schema/class-video.php:193
+#: includes/modules/schema/class-video.php:188
 msgid "Generate Video Schema for Old Posts/Pages"
 msgstr "Videoschema für alte Beiträge/Seiten generieren"
 
-#: includes/modules/schema/class-video.php:194
+#: includes/modules/schema/class-video.php:189
 msgid ""
 "Add Video schema to posts which have YouTube or Vimeo Video in the content. "
 "Applies to only those Posts/Pages/CPTs in which Autodetect Video Option is "
@@ -3813,7 +3721,7 @@ msgstr ""
 "im Inhalt haben. Gilt nur für Beiträge/Seiten/CPTs, in denen die Option "
 "„Video automatisch erkennen“ aktiviert ist."
 
-#: includes/modules/schema/class-video.php:195
+#: includes/modules/schema/class-video.php:190
 msgid ""
 "Are you sure you want to add Video Schema to the posts/pages with the video "
 "in the content? This action is irreversible."
@@ -3821,15 +3729,15 @@ msgstr ""
 "Sind Sie sicher, dass Sie das Video-Schema zu den Beiträgen/Seiten mit dem "
 "Video im Inhalt hinzufügen möchten? Diese Aktion ist nicht umkehrbar."
 
-#: includes/modules/schema/class-video.php:196
+#: includes/modules/schema/class-video.php:191
 msgid "Generate"
 msgstr "Generieren"
 
-#: includes/modules/schema/class-video.php:215
+#: includes/modules/schema/class-video.php:210
 msgid "No posts found to convert."
 msgstr "Keine Beiträge zum Konvertieren gefunden."
 
-#: includes/modules/schema/class-video.php:220
+#: includes/modules/schema/class-video.php:215
 msgid ""
 "Conversion started. A success message will be shown here once the process "
 "completes. You can close this page."
@@ -3860,10 +3768,6 @@ msgstr "Erscheinung Autor"
 #: includes/modules/schema/shortcode/claimreview.php:61
 msgid "Appearance Published Date"
 msgstr "Erscheinung Veröffentlichungsdatum"
-
-#: includes/modules/schema/shortcode/claimreview.php:68
-msgid "Alternate Name"
-msgstr "Alternative Bezeichnung"
 
 #: includes/modules/schema/shortcode/dataset.php:28
 msgid "Reference Web page "
@@ -3908,7 +3812,6 @@ msgid "Distribution"
 msgstr "Verteilung"
 
 #: includes/modules/schema/shortcode/howto.php:25
-#: includes/modules/schema/shortcode/recipe.php:69
 msgid "Total Time"
 msgstr "Gesamtzeit"
 
@@ -4009,52 +3912,14 @@ msgstr "Preis gültig bis"
 msgid "Product In-Stock"
 msgstr "Produkt auf Lager"
 
-#: includes/modules/schema/shortcode/recipe.php:20
-msgid "Type"
-msgstr "Typ"
-
-#: includes/modules/schema/shortcode/recipe.php:27
-msgid "Cuisine"
-msgstr "Küche"
-
-#: includes/modules/schema/shortcode/recipe.php:41
-msgid "Recipe Yield"
-msgstr "Rezeptausbeute"
-
-#: includes/modules/schema/shortcode/recipe.php:48
-msgid "Calories"
-msgstr "Kalorien"
-
-#: includes/modules/schema/shortcode/recipe.php:55
-msgid "Preparation Time"
-msgstr "Vorbereitungszeit"
-
-#: includes/modules/schema/shortcode/recipe.php:62
-msgid "Cooking Time"
-msgstr "Kochzeit"
-
-#: includes/modules/schema/shortcode/recipe.php:76
-msgid "Recipe Video Name"
-msgstr "Rezept Video Name"
-
-#: includes/modules/schema/shortcode/recipe.php:83
-msgid "Recipe Video Description"
-msgstr "Rezept Videobeschreibung"
-
-#: includes/modules/schema/shortcode/recipe.php:90
-msgid "Recipe Video Thumbnail"
-msgstr "Vorschaubild des Rezeptvideos"
-
-#: includes/modules/schema/shortcode/recipe.php:109
-msgid "Recipe Ingredients"
-msgstr "Rezept-Zutaten"
-
-#: includes/modules/schema/shortcode/recipe.php:118
-#: includes/modules/schema/shortcode/recipe.php:126
-#: includes/modules/schema/shortcode/recipe.php:134
-#: includes/modules/schema/shortcode/recipe.php:147
-msgid "Recipe Instructions"
-msgstr "Rezeptanweisungen"
+#: includes/modules/schema/views/metabox-options.php:13
+msgid ""
+"We handle the Schema on Archive page automatically. Please add schema from "
+"this tab only if you are sure what you are doing."
+msgstr ""
+"Wir behandeln das Schema auf der Archivseite automatisch. Bitte fügen Sie "
+"das Schema auf dieser Registerkarte nur hinzu, wenn Sie sicher sind, was Sie "
+"tun."
 
 #: includes/modules/status/class-system-status.php:39
 msgid "Free version"
@@ -4230,7 +4095,7 @@ msgid "%s value to use in Product schema."
 msgstr "%s-Wert zur Verwendung im Produktschema."
 
 #. translators: 1: opening HTML anchor tag, 2: closing HTML anchor tags.
-#: includes/plugin-update/class-plugin-update.php:156
+#: includes/plugin-update/class-plugin-update.php:155
 #, php-format
 msgid ""
 "Rank Math Pro is installed but not activated yet. %1$sActivate now%2$s. It "
@@ -4239,33 +4104,29 @@ msgstr ""
 "Rank Math Pro ist installiert, aber noch nicht aktiviert. %1$sJetzt "
 "aktivieren%2$s. Es dauert nur 20 Sekunden!"
 
-#: includes/plugin-update/class-plugin-update.php:190
+#: includes/plugin-update/class-plugin-update.php:189
 msgid "Enable updates"
 msgstr "Updates aktivieren"
 
-#: includes/plugin-update/class-plugin-update.php:261
+#: includes/plugin-update/class-plugin-update.php:260
 msgid "Automatic updates are not available."
 msgstr "Automatische Updates sind nicht verfügbar."
 
-#: includes/plugin-update/class-plugin-update.php:380
-#: includes/plugin-update/class-plugin-update.php:398
+#: includes/plugin-update/class-plugin-update.php:379
+#: includes/plugin-update/class-plugin-update.php:397
 msgid "This update will install a beta version of Rank Math SEO PRO."
 msgstr ""
 "Mit diesem Update wird eine Beta-Version von Rank Math SEO PRO installiert."
 
-#: includes/plugin-update/class-plugin-update.php:482
-msgid "Cannot Update"
-msgstr "Aktualisierung nicht möglich"
-
-#: includes/plugin-update/class-plugin-update.php:533
+#: includes/plugin-update/class-plugin-update.php:480
 msgid "Rank Math SEO PRO For WordPress"
 msgstr "Rank Math SEO PRO für WordPress"
 
-#: includes/plugin-update/class-plugin-update.php:535
+#: includes/plugin-update/class-plugin-update.php:482
 msgid "SEO is the most consistent source of traffic for any website"
 msgstr "SEO ist die beständigste Quelle von Traffic für jede Website"
 
-#: includes/plugin-update/class-plugin-update.php:537
+#: includes/plugin-update/class-plugin-update.php:484
 #, php-format
 msgid ""
 "We created %1$sRank Math, a WordPress SEO plugin%2$s, to help every website "
@@ -4277,14 +4138,14 @@ msgstr ""
 "benötigt, um seine SEO zu verbessern und mehr Besucher auf seine Website zu "
 "gewinnen."
 
-#: includes/plugin-update/class-plugin-update.php:734
+#: includes/plugin-update/class-plugin-update.php:680
 msgid "Please update the free version before updating Rank Math SEO PRO."
 msgstr ""
 "Bitte aktualisieren Sie die kostenlose Version, bevor Sie Rank Math SEO PRO "
 "aktualisieren."
 
 #. translators: 1: Plugin name, 2: Pricing Link's opening HTML anchor tag, 3: Pricing Link's closing HTML anchor tag.
-#: includes/plugin-update/class-plugin-update.php:737
+#: includes/plugin-update/class-plugin-update.php:683
 #, php-format
 msgid ""
 "It seems that you don't have an active subscription for %1$s. Please see "
@@ -4294,19 +4155,51 @@ msgstr ""
 "%2$sDetails und Preise%3$s."
 
 #. translators: 1: Link's opening HTML anchor tag, 2: Link's closing HTML anchor tag.
-#: includes/plugin-update/class-plugin-update.php:744
+#: includes/plugin-update/class-plugin-update.php:690
 #, php-format
 msgid "Please %1$s connect Rank Math SEO PRO %2$s for automatic updates."
 msgstr ""
 "Bitte verbinden Sie %1$s Rank Math SEO PRO %2$s für automatische Updates."
 
-#: includes/plugin-update/class-plugin-update.php:889
+#: includes/plugin-update/class-plugin-update.php:835
 msgid "Rank Math PRO"
 msgstr "Rank Math PRO"
 
-#: includes/plugin-update/class-plugin-update.php:892
+#: includes/plugin-update/class-plugin-update.php:838
 msgid "https://rankmath.com/changelog/"
 msgstr "https://rankmath.com/changelog/"
+
+#: includes/views/compare-keywords.php:16
+msgid "Close panel"
+msgstr "Panel schließen"
+
+#: includes/views/compare-keywords.php:26
+msgid "Enter Keyword"
+msgstr "Stichwort eingeben"
+
+#: includes/views/compare-keywords.php:27
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: includes/views/compare-keywords.php:31
+msgid "Compare Keywords"
+msgstr "Stichwörter vergleichen"
+
+#: includes/views/compare-keywords.php:32
+msgid "Close and use selected keywords"
+msgstr "Schließen und ausgewählte Stichwörter verwenden"
+
+#: includes/views/compare-keywords.php:33
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: includes/views/compare-keywords.php:39
+msgid "Data source: Google Trends"
+msgstr "Datenquelle: Google-Trends"
+
+#: includes/views/compare-keywords.php:44
+msgid "Trends"
+msgstr "Trends"
 
 #: includes/views/csv-import-export-panel.php:21
 msgid "Import SEO meta data for posts, terms, and users from a CSV file."
@@ -4453,60 +4346,6 @@ msgstr "Rank Math"
 #. Author URI of the plugin/theme
 msgid "https://s.rankmath.com/pro"
 msgstr "https://s.rankmath.com/pro"
-
-#~ msgid "Sorry, you are not allowed to edit posts."
-#~ msgstr "Bedaure, Sie sind nicht berechtigt, Beiträge zu bearbeiten."
-
-#~ msgid "Sorry, you are not allowed to edit pages."
-#~ msgstr "Sie sind nicht berechtigt, Seiten zu bearbeiten."
-
-#~ msgid "Sorry, you are not allowed to do this."
-#~ msgstr "Tut mir leid, Sie sind nicht dazu berechtigt, dies zu tun."
-
-#~ msgid "This tab contains news sitemap options."
-#~ msgstr "Diese Registerkarte enthält News-Sitemap-Optionen."
-
-#~ msgid "Googlebot-News index"
-#~ msgstr "Googlebot-News-Index"
-
-#~ msgid ""
-#~ "Using noindex allows you to prevent articles from appearing in Google "
-#~ "News."
-#~ msgstr ""
-#~ "Mit „noindex“ können Sie verhindern, dass Artikel in Google News "
-#~ "erscheinen."
-
-#~ msgid ""
-#~ "We handle the Schema on Archive page automatically. Please add schema "
-#~ "from this tab only if you are sure what you are doing."
-#~ msgstr ""
-#~ "Wir behandeln das Schema auf der Archivseite automatisch. Bitte fügen Sie "
-#~ "das Schema auf dieser Registerkarte nur hinzu, wenn Sie sicher sind, was "
-#~ "Sie tun."
-
-#~ msgid "Close panel"
-#~ msgstr "Panel schließen"
-
-#~ msgid "Enter Keyword"
-#~ msgstr "Stichwort eingeben"
-
-#~ msgid "Add"
-#~ msgstr "Hinzufügen"
-
-#~ msgid "Compare Keywords"
-#~ msgstr "Stichwörter vergleichen"
-
-#~ msgid "Close and use selected keywords"
-#~ msgstr "Schließen und ausgewählte Stichwörter verwenden"
-
-#~ msgid "Cancel"
-#~ msgstr "Abbrechen"
-
-#~ msgid "Data source: Google Trends"
-#~ msgstr "Datenquelle: Google-Trends"
-
-#~ msgid "Trends"
-#~ msgstr "Trends"
 
 #~ msgid "Include Data"
 #~ msgstr "Daten einbeziehen"
@@ -4718,6 +4557,9 @@ msgstr "https://s.rankmath.com/pro"
 #~ msgstr ""
 #~ "Standard-Titel-Tag für einzelne %s-Seiten. Dies kann auf dem Bildschirm "
 #~ "des Beitrag-Editors pro Beitrag geändert werden."
+
+#~ msgid "Single %s Description"
+#~ msgstr "Einzelne %s Beschreibung"
 
 #~ msgid ""
 #~ "Default description for single %s pages. This can be changed on a per-"

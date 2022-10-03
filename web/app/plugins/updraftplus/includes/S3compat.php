@@ -4,7 +4,7 @@
 
 /**
  *
- * Copyright (c) 2012-22, David Anderson (https://www.simbahosting.co.uk).  All rights reserved.
+ * Copyright (c) 2012-9, David Anderson (https://www.simbahosting.co.uk).  All rights reserved.
  * Portions copyright (c) 2011, Donovan Schönknecht.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,16 +32,10 @@
  */
 // @codingStandardsIgnoreEnd
 
-// SDK requires PHP 5.5+
-use Aws\Common\RulesEndpointProvider;
-use Aws\Credentials\Credentials;
-use Aws\S3\Exception\NoSuchBucketException;
-use Aws\S3\S3MultiRegionClient;
+require_once(UPDRAFTPLUS_DIR.'/vendor/autoload.php');
 
-global $updraftplus;
-$updraftplus->potentially_remove_composer_autoloaders(array('GuzzleHttp\\', 'Aws\\'));
-include(UPDRAFTPLUS_DIR.'/vendor/autoload.php');
-$updraftplus->mitigate_guzzle_autoloader_conflicts();
+// SDK uses namespacing - requires PHP 5.3 (actually the SDK states its requirements as 5.3.3)
+use Aws\S3;
 
 /**
  * Amazon S3 PHP class
@@ -108,32 +102,17 @@ class UpdraftPlus_S3_Compat {
 	 * @param Null|String    $region        Region. Currently unused, but harmonised with UpdraftPlus_S3 class
 	 * @return void
 	 */
-	public function __construct($access_key = null, $secret_key = null, $use_ssl = true, $ssl_ca_cert = true, $endpoint = null, $session_token = null, $region = null) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- $region is unused
-		
-		global $updraftplus;
-		$updraftplus->mitigate_guzzle_autoloader_conflicts();
-		
+	public function __construct($access_key = null, $secret_key = null, $use_ssl = true, $ssl_ca_cert = true, $endpoint = null, $session_token = null, $region = null) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- $region is unused 
 		if (null !== $access_key && null !== $secret_key)
 			$this->setAuth($access_key, $secret_key, $session_token);
 
 		$this->use_ssl = $use_ssl;
 		$this->ssl_ca_cert = $ssl_ca_cert;
 
-		if ($session_token) {
-			$credentials = new Credentials($access_key, $secret_key, $session_token);
-		} else {
-			$credentials = new Credentials($access_key, $secret_key);
-		}
-
-		global $updraftplus;
-
-		// AWS SDK V3 requires we specify a version. String 'latest' can be used but not recommended, a full list of versions for each API found here: https://docs.aws.amazon.com/aws-sdk-php/v3/api/index.html
-		// latest S3Client version as of 16/09/21 is version 2006-03-01
 		$opts = array(
-			'credentials' => $credentials,
-			'version' => '2006-03-01',
+			'key' => $access_key,
+			'secret' => $secret_key,
 			'scheme' => ($use_ssl) ? 'https' : 'http',
-			'ua_append' => 'UpdraftPlus/'.$updraftplus->version,
 			// Using signature v4 requires a region (but see the note below)
 			// 'signature' => 'v4',
 			// 'region' => $this->region
@@ -151,9 +130,13 @@ class UpdraftPlus_S3_Compat {
 			$opts['region'] = $this->region;
 		}
 
+		if ($session_token) {
+		  $opts['token'] = $session_token;
+		}
+	
 		if ($use_ssl) $opts['ssl.certificate_authority'] = $ssl_ca_cert;
 
-		$this->client = new S3MultiRegionClient($opts);
+		$this->client = Aws\S3\S3Client::factory($opts);
 	}
 
 	/**
@@ -192,6 +175,7 @@ class UpdraftPlus_S3_Compat {
 			// $this->config['signature'] =  new Aws\S3\S3SignatureV4('s3');
 			// $this->client->setConfig($this->config);
 		}
+		$this->client->setRegion($region);
 	}
 
 	/**
@@ -229,7 +213,7 @@ class UpdraftPlus_S3_Compat {
 				"*/s3" => $our_endpoints
 			)
 		);
-		return new RulesEndpointProvider($endpoints);
+		return new Aws\Common\RulesEndpointProvider($endpoints);
 	}
 
 	/**
@@ -267,16 +251,7 @@ class UpdraftPlus_S3_Compat {
 	public function getuseSSL() {
 		return $this->use_ssl;
 	}
-	
-	/**
-	 * Get SSL validation value.
-	 *
-	 * @return bool
-	 */
-	public function getUseSSLValidation() {
-		return $this->use_ssl_validation;
-	}
-	
+
 	/**
 	 * Set SSL client certificates (experimental)
 	 *
@@ -390,17 +365,14 @@ class UpdraftPlus_S3_Compat {
 		try {
 			if (0 == $max_keys) $max_keys = null;
 			
-			$vars = array(
-				'Bucket' => $bucket,
-				'@region' => $this->region
-			);
+			$vars = array('Bucket' => $bucket);
 			if (null !== $prefix && '' !== $prefix) $vars['Prefix'] = $prefix;
 			if (null !== $marker && '' !== $marker) $vars['Marker'] = $marker;
 			if (null !== $max_keys && '' !== $max_keys) $vars['MaxKeys'] = $max_keys;
 			if (null !== $delimiter && '' !== $delimiter) $vars['Delimiter'] = $delimiter;
 			$result = $this->client->listObjects($vars);
 
-			if (!is_a($result, 'Aws\Result')) {
+			if (!is_a($result, 'Guzzle\Service\Resource\Model')) {
 				return false;
 			}
 
@@ -430,7 +402,7 @@ class UpdraftPlus_S3_Compat {
 				$vars['Marker'] = $next_marker;
 				$result = $this->client->listObjects($vars);
 
-				if (!is_a($result, 'Aws\Result') || empty($result['Contents'])) break;
+				if (!is_a($result, 'Guzzle\Service\Resource\Model') || empty($result['Contents'])) break;
 
 				foreach ($result['Contents'] as $c) {
 					$results[(string) $c['Key']] = array(
@@ -450,7 +422,7 @@ class UpdraftPlus_S3_Compat {
 				if (isset($result['NextMarker']))
 					$next_marker = (string) $result['NextMarker'];
 
-			} while (is_a($result, 'Aws\Result') && !empty($result['Contents']) && !empty($result['IsTruncated']));
+			} while (is_a($result, 'Guzzle\Service\Resource\Model') && !empty($result['Contents']) && !empty($result['IsTruncated']));
 
 			return $results;
 
@@ -471,10 +443,7 @@ class UpdraftPlus_S3_Compat {
 	 */
 	public function waitForBucket($bucket) {
 		try {
-			$this->client->waitUntil('BucketExists', array(
-				'Bucket' => $bucket,
-				'@region' => $this->region
-			));
+			$this->client->waitUntil('BucketExists', array('Bucket' => $bucket));
 		} catch (Exception $e) {
 			if ($this->useExceptions) {
 				throw $e;
@@ -501,22 +470,15 @@ class UpdraftPlus_S3_Compat {
 		$bucket_vars = array(
 			'Bucket' => $bucket,
 			'ACL' => $acl,
-			'@region' => $this->region
 		);
 		// http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_createBucket
 		$location_constraint = apply_filters('updraftplus_s3_putbucket_defaultlocation', $location);
 		if ('us-east-1' != $location_constraint) $bucket_vars['LocationConstraint'] = $location_constraint;
 		try {
 			$result = $this->client->createBucket($bucket_vars);
-			if (is_object($result) && method_exists($result, 'get')) {
-				$metadata = $result->get('@metadata');
-				if (!empty($metadata) && in_array($metadata['statusCode'], array(200, 204))) {
-					$this->client->waitUntil('BucketExists', array(
-						'Bucket' => $bucket,
-						'@region' => $this->region
-					));
-					return true;
-				}
+			if (is_object($result) && method_exists($result, 'get') && '' != $result->get('RequestId')) {
+				$this->client->waitUntil('BucketExists', array('Bucket' => $bucket));
+				return true;
 			}
 		} catch (Exception $e) {
 			if ($this->useExceptions) {
@@ -525,7 +487,6 @@ class UpdraftPlus_S3_Compat {
 				return $this->trigger_from_exception($e);
 			}
 		}
-		return false;
 	}
 
 	/**
@@ -545,8 +506,7 @@ class UpdraftPlus_S3_Compat {
 			'Bucket' => $bucket,
 			'Key' => $uri,
 			'Metadata' => $meta_headers,
-			'StorageClass' => $storage_class,
-			'@region' => $this->region
+			'StorageClass' => $storage_class
 		);
 
 		$vars['ContentType'] = ('.gz' == strtolower(substr($uri, -3, 3))) ? 'application/octet-stream' : 'application/zip';
@@ -583,12 +543,11 @@ class UpdraftPlus_S3_Compat {
 			'Bucket' => $bucket,
 			'Key' => $uri,
 			'PartNumber' => $part_number,
-			'UploadId' => $upload_id,
-			'@region' => $this->region
+			'UploadId' => $upload_id
 		);
 
 		// Where to begin
-		$file_offset = ($part_number - 1) * $part_size;
+		$file_offset = ($part_number - 1 ) * $part_size;
 
 		// Download the smallest of the remaining bytes and the part size
 		$file_bytes = min(filesize($file_path) - $file_offset, $part_size);
@@ -599,10 +558,10 @@ class UpdraftPlus_S3_Compat {
 
 		if ($handle = fopen($file_path, "rb")) {
 			if ($file_offset > 0) fseek($handle, $file_offset);
-			// $bytes_read = 0;
+			$bytes_read = 0;// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Its used below on like 564
 			while ($file_bytes > 0 && $read = fread($handle, max($file_bytes, 131072))) {
 				$file_bytes = $file_bytes - strlen($read);
-				// $bytes_read += strlen($read);
+				$bytes_read += strlen($read);
 				$data .= $read;
 			}
 			fclose($handle);
@@ -639,8 +598,7 @@ class UpdraftPlus_S3_Compat {
 		$vars = array(
 			'Bucket' => $bucket,
 			'Key' => $uri,
-			'UploadId' => $upload_id,
-			'@region' => $this->region
+			'UploadId' => $upload_id
 		);
 
 		$partno = 1;
@@ -650,7 +608,7 @@ class UpdraftPlus_S3_Compat {
 			$partno++;
 		}
 
-		$vars['MultipartUpload'] = array('Parts' => $send_parts);
+		$vars['Parts'] = $send_parts;
 
 		try {
 			$result = $this->client->completeMultipartUpload($vars);
@@ -684,17 +642,13 @@ class UpdraftPlus_S3_Compat {
 				'Key' => $uri,
 				'SourceFile' => $file,
 				'StorageClass' => $storage_class,
-				'ACL' => $acl,
-				'@region' => $this->region
+				'ACL' => $acl
 			);
 			if ($content_type) $options['ContentType'] = $content_type;
 			if (!empty($this->_serverSideEncryption)) $options['ServerSideEncryption'] = $this->_serverSideEncryption;
 			if (!empty($meta_headers)) $options['Metadata'] = $meta_headers;
 			$result = $this->client->putObject($options);
-			if (is_object($result) && method_exists($result, 'get')) {
-				$metadata = $result->get('@metadata');
-				if (!empty($metadata) && in_array($metadata['statusCode'], array(200, 204))) return true;
-			}
+			if (is_object($result) && method_exists($result, 'get') && '' != $result->get('RequestId')) return true;
 		} catch (Exception $e) {
 			if ($this->useExceptions) {
 				throw $e;
@@ -702,7 +656,6 @@ class UpdraftPlus_S3_Compat {
 				return $this->trigger_from_exception($e);
 			}
 		}
-		return false;
 	}
 
 
@@ -724,13 +677,9 @@ class UpdraftPlus_S3_Compat {
 				'Bucket' => $bucket,
 				'Key' => $uri,
 				'Body' => $string,
-				'ContentType' => $content_type,
-				'@region' => $this->region
+				'ContentType' => $content_type
 			));
-			if (is_object($result) && method_exists($result, 'get')) {
-				$metadata = $result->get('@metadata');
-				if (!empty($metadata) && in_array($metadata['statusCode'], array(200, 204))) return true;
-			}
+			if (is_object($result) && method_exists($result, 'get') && '' != $result->get('RequestId')) return true;
 		} catch (Exception $e) {
 			if ($this->useExceptions) {
 				throw $e;
@@ -776,16 +725,13 @@ class UpdraftPlus_S3_Compat {
 			$vars = array(
 				'Bucket' => $bucket,
 				'Key' => $uri,
-				'SaveAs' => $fp,
-				'@region' => $this->region
+				'SaveAs' => $fp
 			);
 			if (!empty($range_header)) $vars['Range'] = $range_header;
 
 			$result = $this->client->getObject($vars);
-			if (is_object($result) && method_exists($result, 'get')) {
-				$metadata = $result->get('@metadata');
-				if (!empty($metadata) && in_array($metadata['statusCode'], array(200, 204, 206))) return true;
-			}
+
+			if (is_object($result) && method_exists($result, 'get') && '' != $result->get('RequestId')) return true;
 		} catch (Exception $e) {
 			if ($this->useExceptions) {
 				throw $e;
@@ -805,13 +751,10 @@ class UpdraftPlus_S3_Compat {
 	 */
 	public function getBucketLocation($bucket) {
 		try {
-			$result = $this->client->getBucketLocation(array(
-				'Bucket' => $bucket,
-				'@region' => $this->region
-			));
-			$location = $result->get('LocationConstraint');
+			$result = $this->client->getBucketLocation(array('Bucket' => $bucket));
+			$location = $result->get('Location');
 			if ($location) return $location;
-		} catch (NoSuchBucketException $e) {
+		} catch (Aws\S3\Exception\NoSuchBucketException $e) {
 			return false;
 		} catch (Exception $e) {
 			if ($this->useExceptions) {
@@ -838,13 +781,9 @@ class UpdraftPlus_S3_Compat {
 		try {
 			$result = $this->client->deleteObject(array(
 				'Bucket' => $bucket,
-				'Key' => $uri,
-				'@region' => $this->region
+				'Key' => $uri
 			));
-			if (is_object($result) && method_exists($result, 'get')) {
-				$metadata = $result->get('@metadata');
-				if (!empty($metadata) && in_array($metadata['statusCode'], array(200, 204))) return true;
-			}
+			if (is_object($result) && method_exists($result, 'get') && '' != $result->get('RequestId')) return true;
 		} catch (Exception $e) {
 			if ($this->useExceptions) {
 				throw $e;
@@ -858,10 +797,7 @@ class UpdraftPlus_S3_Compat {
 	public function setCORS($policy) {
 		try {
 			$cors = $this->client->putBucketCors($policy);
-			if (is_object($cors) && method_exists($cors, 'get')) {
-				$metadata = $cors->get('@metadata');
-				if (!empty($metadata) && in_array($metadata['statusCode'], array(200, 204))) return true;
-			}
+			if (is_object($cors) && method_exists($cors, 'get') && '' != $cors->get('RequestId')) return true;
 		} catch (Exception $e) {
 			if ($this->useExceptions) {
 				throw $e;

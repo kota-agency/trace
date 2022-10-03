@@ -116,12 +116,8 @@ class Setup_Wizard {
 
 		// Parse Options.
 		$wp_filesystem = WordPress::get_filesystem();
-		if ( is_null( $wp_filesystem ) ) {
-			return false;
-		}
-
-		$settings = $wp_filesystem->get_contents( $file['file'] );
-		$settings = json_decode( $settings, true );
+		$settings      = $wp_filesystem->get_contents( $file['file'] );
+		$settings      = json_decode( $settings, true );
 
 		\unlink( $file['file'] );
 

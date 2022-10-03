@@ -64,7 +64,7 @@ class Widget_Breadcrumbs extends Widget_Base {
 	/**
 	 * Register model controls. Used to add new controls to the page settings model.
 	 */
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->start_controls_section(
 			'section_breadcrumbs_content',
 			[

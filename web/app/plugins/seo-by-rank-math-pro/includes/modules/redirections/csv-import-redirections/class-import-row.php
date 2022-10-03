@@ -12,7 +12,6 @@ namespace RankMathPro\Redirections\CSV_Import_Export_Redirections;
 
 use RankMath\Redirections\DB;
 use RankMath\Redirections\Redirection;
-use MyThemeShop\Helpers\Arr;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -160,7 +159,7 @@ class Import_Row {
 
 		if ( $this->category ) {
 			// Create category if it doesn't exist.
-			wp_set_object_terms( $redirection->id, Arr::from_string( $this->category ), 'rank_math_redirection_category' );
+			wp_set_object_terms( $redirection->id, array_map( 'trim', explode( ',', $this->category ) ), 'rank_math_redirection_category' );
 		}
 
 		$this->success = true;
@@ -203,7 +202,7 @@ class Import_Row {
 			return;
 		}
 
-		$category = $this->category ? Arr::from_string( $this->category ) : [];
+		$category = $this->category ? array_map( 'trim', explode( ',', $this->category ) ) : [];
 		wp_set_object_terms( $redirection->id, $category, 'rank_math_redirection_category' );
 
 		$this->success = true;

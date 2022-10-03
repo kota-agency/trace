@@ -27,19 +27,18 @@ class Adsense {
 	 */
 	public static function get_adsense_accounts() {
 		$accounts = [];
-		$response = Api::get()->http_get( 'https://adsense.googleapis.com/v2/accounts' );
-		if (
-			! Api::get()->is_success() ||
-			isset( $response->error ) ||
-			! isset( $response['accounts'] ) ||
-			! is_array( $response['accounts'] )
-		) {
+		$response = Api::get()->http_get( 'https://www.googleapis.com/adsense/v1.4/accounts' );
+		if ( ! Api::get()->is_success() || isset( $response->error ) ) {
 			return $accounts;
 		}
 
-		foreach ( $response['accounts'] as $account ) {
-			$accounts[ $account['name'] ] = [
-				'name' => $account['displayName'],
+		foreach ( $response['items'] as $account ) {
+			if ( 'adsense#account' !== $account['kind'] ) {
+				continue;
+			}
+
+			$accounts[ $account['id'] ] = [
+				'name' => $account['name'],
 			];
 		}
 
@@ -58,22 +57,18 @@ class Adsense {
 		if ( ! self::get_adsense_id() ) {
 			return false;
 		}
-		$account_id = self::get_adsense_id();
-		$request    = Security::add_query_arg_raw(
+
+		$request  = Security::add_query_arg_raw(
 			[
-				'startDate.year'  => gmdate( 'Y', strtotime( $start_date ) ),
-				'startDate.month' => gmdate( 'n', strtotime( $start_date ) ),
-				'startDate.day'   => gmdate( 'j', strtotime( $start_date ) ),
-				'endDate.year'    => gmdate( 'Y', strtotime( $end_date ) ),
-				'endDate.month'   => gmdate( 'n', strtotime( $end_date ) ),
-				'endDate.day'     => gmdate( 'j', strtotime( $end_date ) ),
-				'dimensions'      => 'DATE',
-				'currencyCode'    => 'USD',
-				'metrics'         => 'ESTIMATED_EARNINGS',
+				'accountId' => self::get_adsense_id(),
+				'startDate' => $start_date,
+				'endDate'   => $end_date,
+				'dimension' => 'DATE',
+				'metric'    => 'EARNINGS',
 			],
-			'https://adsense.googleapis.com/v2/' . $account_id . '/reports:generate'
+			'https://www.googleapis.com/adsense/v1.4/reports'
 		);
-		$response   = Api::get()->http_get( $request );
+		$response = Api::get()->http_get( $request );
 
 		Api::get()->log_failed_request( $response, 'adsense', $start_date, func_get_args() );
 

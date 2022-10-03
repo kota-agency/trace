@@ -11,8 +11,6 @@ use MyThemeShop\Helpers\Str;
 
 defined( 'ABSPATH' ) || exit;
 
-$posts = (array) $this->get_variable( 'losing_posts' );
-
 ?>
 
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="report-heading">
@@ -42,7 +40,7 @@ $posts = (array) $this->get_variable( 'losing_posts' );
 		</td>
 	</tr>
 
-	<?php foreach ( $posts as $post_url => $data ) : // phpcs:disable ?>
+	<?php foreach ( (array) $this->get_variable( 'losing_posts' ) as $post_url => $data ) : // phpcs:disable ?>
 		<?php if ( ! is_array( $data ) ) { continue; } ?>
 		<tr>
 			<td>
@@ -63,11 +61,4 @@ $posts = (array) $this->get_variable( 'losing_posts' );
 			</td>
 		</tr>
 	<?php endforeach; ?>
-	<?php if ( empty( $posts ) ) : ?>
-		<tr>
-			<td colspan="3">
-				<?php esc_html_e( 'No data to show.', 'rank-math-pro' ); ?>
-			</td>
-		</tr>
-	<?php endif; ?>
 </table>

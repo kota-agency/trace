@@ -63,12 +63,5 @@ $shortcode->get_image();
 	);
 	?>
 
-	<?php
-	$shortcode->get_field(
-		esc_html__( 'Alternate Name', 'rank-math-pro' ),
-		'reviewRating.alternateName'
-	);
-	?>
-
-	<?php $shortcode->show_ratings( 'reviewRating.ratingValue' ); ?>
+	<?php $shortcode->show_ratings(); ?>
 </div>

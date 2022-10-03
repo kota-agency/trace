@@ -18,7 +18,7 @@ if (version_compare(phpversion(), '5.3.3', '<') || (defined('UPDRAFTPLUS_CLOUDFI
 
 use OpenCloud\Rackspace;
 
-$updraftplus_addon_cloudfilesenhanced = new UpdraftPlus_Addon_CloudFilesEnhanced;// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Unused variable $updraftplus_addon_cloudfilesenhanced But it is used Globally in class-commands.php so ignoring
+$updraftplus_addon_cloudfilesenhanced = new UpdraftPlus_Addon_CloudFilesEnhanced;
 
 class UpdraftPlus_Addon_CloudFilesEnhanced {
 	
@@ -64,7 +64,7 @@ class UpdraftPlus_Addon_CloudFilesEnhanced {
 	 * @return string anchor link html for creating new API user
 	 */
 	public function apikeysettings($msg) {
-		$msg = '<a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraft_cloudfiles_newapiuser_{{instance_id}}" class="updraft_cloudfiles_newapiuser" data-instance_id="{{instance_id}}">'.__('Create a new API user with access to only this container (rather than your whole account)', 'updraftplus').'</a>';
+		$msg = '<a href="'.UpdraftPlus::get_current_clean_url().'" id="updraft_cloudfiles_newapiuser_{{instance_id}}" class="updraft_cloudfiles_newapiuser" data-instance_id="{{instance_id}}">'.__('Create a new API user with access to only this container (rather than your whole account)', 'updraftplus').'</a>';
 		return $msg;
 	}
 	

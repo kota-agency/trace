@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTCENTRAL_CLIENT_DIR')) die('No access.');
+if (!defined('UPDRAFTPLUS_DIR')) die('No access.');
 
 /**
  * Handles UpdraftCentral Plugin Commands which basically handles
@@ -92,48 +92,38 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 			case 'network_activate':
 				$info = $this->_get_plugin_info($query);
 				if ($info['installed']) {
-					$activate = activate_plugin($info['plugin_path']);
-					if (is_wp_error($activate)) {
-						$result = $this->_generic_error_response('generic_response_error', array(
-							'plugin' => $query['plugin'],
-							'error_code' => 'generic_response_error',
-							'error_message' => $activate->get_error_message(),
-							'info' => $this->_get_plugin_info($query)
-						));
+					if (is_multisite() && 'network_activate' === $action) {
+						$activate = activate_plugin($info['plugin_path'], '', true);
 					} else {
-						$result = array('activated' => true, 'info' => $this->_get_plugin_info($query), 'last_state' => $info);
+						$activate = activate_plugin($info['plugin_path']);
+					}
+
+					if (is_wp_error($activate)) {
+						$result = $this->_generic_error_response('generic_response_error', array($activate->get_error_message()));
+					} else {
+						$result = array('activated' => true);
 					}
 				} else {
-					$result = $this->_generic_error_response('plugin_not_installed', array(
-						'plugin' => $query['plugin'],
-						'error_code' => 'plugin_not_installed',
-						'error_message' => __('The plugin you wish to activate is either not installed or has been removed recently.', 'updraftplus'),
-						'info' => $info
-					));
+					$result = $this->_generic_error_response('plugin_not_installed', array($query['plugin']));
 				}
 				break;
 			case 'deactivate':
 			case 'network_deactivate':
 				$info = $this->_get_plugin_info($query);
 				if ($info['active']) {
-					deactivate_plugins($info['plugin_path']);
-					if (!is_plugin_active($info['plugin_path'])) {
-						$result = array('deactivated' => true, 'info' => $this->_get_plugin_info($query), 'last_state' => $info);
+					if (is_multisite() && 'network_deactivate' === $action) {
+						deactivate_plugins($info['plugin_path'], false, true);
 					} else {
-						$result = $this->_generic_error_response('deactivate_plugin_failed', array(
-							'plugin' => $query['plugin'],
-							'error_code' => 'deactivate_plugin_failed',
-							'error_message' => __('There appears to be a problem deactivating the intended plugin. Please kindly check your permission and try again.', 'updraftplus'),
-							'info' => $this->_get_plugin_info($query)
-						));
+						deactivate_plugins($info['plugin_path']);
+					}
+
+					if (!is_plugin_active($info['plugin_path'])) {
+						$result = array('deactivated' => true);
+					} else {
+						$result = $this->_generic_error_response('deactivate_plugin_failed', array($query['plugin']));
 					}
 				} else {
-					$result = $this->_generic_error_response('not_active', array(
-						'plugin' => $query['plugin'],
-						'error_code' => 'not_active',
-						'error_message' => __('The plugin you wish to deactivate is currently not active or is already deactivated.', 'updraftplus'),
-						'info' => $info
-					));
+					$result = $this->_generic_error_response('not_active', array($query['plugin']));
 				}
 				break;
 			case 'install':
@@ -155,21 +145,16 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 					)
 				));
 
-				$info = $this->_get_plugin_info($query);
 				if (is_wp_error($api)) {
-					$result = $this->_generic_error_response('generic_response_error', array(
-						'plugin' => $query['plugin'],
-						'error_code' => 'generic_response_error',
-						'error_message' => $api->get_error_message(),
-						'info' => $info
-					));
+					$result = $this->_generic_error_response('generic_response_error', array($api->get_error_message()));
 				} else {
+					$info = $this->_get_plugin_info($query);
 					$installed = $info['installed'];
 
 					$error_code = $error_message = '';
 					if (!$installed) {
 						// WP < 3.7
-						if (!class_exists('Automatic_Upgrader_Skin')) include_once(dirname(dirname(__FILE__)).'/classes/class-automatic-upgrader-skin.php');
+						if (!class_exists('Automatic_Upgrader_Skin')) include_once(UPDRAFTPLUS_DIR.'/central/classes/class-automatic-upgrader-skin.php');
 
 						$skin = new Automatic_Upgrader_Skin();
 						$upgrader = new Plugin_Upgrader($skin);
@@ -216,11 +201,10 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 						$result = $this->_generic_error_response('plugin_install_failed', array(
 							'plugin' => $query['plugin'],
 							'error_code' => $error_code,
-							'error_message' => $error_message,
-							'info' => $this->_get_plugin_info($query)
+							'error_message' => $error_message
 						));
 					} else {
-						$result = array('installed' => true, 'info' => $this->_get_plugin_info($query), 'last_state' => $info);
+						$result = array('installed' => true);
 					}
 				}
 				break;
@@ -287,26 +271,6 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 	}
 
 	/**
-	 * Processing an action for multiple items
-	 *
-	 * @param array $query Parameter array containing a list of plugins to process
-	 * @return array Contains the results of the bulk process
-	 */
-	public function process_action_in_bulk($query) {
-		$action = isset($query['action']) ? $query['action'] : '';
-		$items = isset($query['args']) ? $query['args']['items'] : array();
-
-		$results = array();
-		if (!empty($action) && !empty($items) && is_array($items)) {
-			foreach ($items as $value) {
-				$results[] = array($this, $action)($value);
-			}
-		}
-
-		return $this->_response($results);
-	}
-
-	/**
 	 * Activates the plugin
 	 *
 	 * @param array $query Parameter array containing the name of the plugin to activate
@@ -314,17 +278,15 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 	 */
 	public function activate_plugin($query) {
 
-		$fields = array('plugin');
-		$permissions = array('activate_plugins');
-
-		$error = $this->_validate_fields_and_capabilities($query, $fields, $permissions);
+		$error = $this->_validate_fields_and_capabilities($query, array('plugin'), array('activate_plugins'));
 		if (!empty($error)) {
 			return $error;
 		}
 
-		$this->_preload_credentials($query);
+		$action = 'activate';
+		if (!empty($query['multisite']) && (bool) $query['multisite']) $action = 'network_'.$action;
 
-		$result = $this->_apply_plugin_action((!empty($query['multisite']) && (bool) $query['multisite']) ? 'network_activate' : 'activate', $query);
+		$result = $this->_apply_plugin_action($action, $query);
 		if (empty($result['activated'])) {
 			return $result;
 		}
@@ -340,17 +302,15 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 	 */
 	public function deactivate_plugin($query) {
 
-		$fields = array('plugin');
-		$permissions = array('activate_plugins');
-
-		$error = $this->_validate_fields_and_capabilities($query, $fields, $permissions);
+		$error = $this->_validate_fields_and_capabilities($query, array('plugin'), array('activate_plugins'));
 		if (!empty($error)) {
 			return $error;
 		}
 
-		$this->_preload_credentials($query);
+		$action = 'deactivate';
+		if (!empty($query['multisite']) && (bool) $query['multisite']) $action = 'network_'.$action;
 
-		$result = $this->_apply_plugin_action((!empty($query['multisite']) && (bool) $query['multisite']) ? 'network_deactivate' : 'deactivate', $query);
+		$result = $this->_apply_plugin_action($action, $query);
 		if (empty($result['deactivated'])) {
 			return $result;
 		}
@@ -366,10 +326,7 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 	 */
 	public function install_activate_plugin($query) {
 
-		$fields = array('plugin', 'slug');
-		$permissions = array('install_plugins', 'activate_plugins');
-
-		$error = $this->_validate_fields_and_capabilities($query, $fields, $permissions);
+		$error = $this->_validate_fields_and_capabilities($query, array('plugin', 'slug'), array('install_plugins', 'activate_plugins'));
 		if (!empty($error)) {
 			return $error;
 		}
@@ -378,7 +335,10 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 
 		$result = $this->_apply_plugin_action('install', $query);
 		if (!empty($result['installed']) && $result['installed']) {
-			$result = $this->_apply_plugin_action((!empty($query['multisite']) && (bool) $query['multisite']) ? 'network_activate' : 'activate', $query);
+			$action = 'activate';
+			if (!empty($query['multisite']) && (bool) $query['multisite']) $action = 'network_'.$action;
+
+			$result = $this->_apply_plugin_action($action, $query);
 			if (empty($result['activated'])) {
 				return $result;
 			}
@@ -397,10 +357,7 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 	 */
 	public function install_plugin($query) {
 
-		$fields = array('plugin', 'slug');
-		$permissions = array('install_plugins');
-
-		$error = $this->_validate_fields_and_capabilities($query, $fields, $permissions);
+		$error = $this->_validate_fields_and_capabilities($query, array('plugin', 'slug'), array('install_plugins'));
 		if (!empty($error)) {
 			return $error;
 		}
@@ -423,40 +380,24 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 	 */
 	public function delete_plugin($query) {
 
-		$fields = array('plugin');
-		$permissions = array('delete_plugins');
-
-		$error = $this->_validate_fields_and_capabilities($query, $fields, $permissions);
+		$error = $this->_validate_fields_and_capabilities($query, array('plugin'), array('delete_plugins'));
 		if (!empty($error)) {
 			return $error;
 		}
 
 		$this->_preload_credentials($query);
-
 		$info = $this->_get_plugin_info($query);
-		if ($info['installed']) {
-			// Deactivate first before delete to invalidate the activate
-			// state/status prior to deleting the item. Otherwise, WordPress will keep
-			// that state, and as soon as you install the same plugin it will be automatically
-			// activated since it's previous state was kept.
-			deactivate_plugins($info['plugin_path']);
 
+		if ($info['installed']) {
 			$deleted = delete_plugins(array($info['plugin_path']));
+
 			if ($deleted) {
-				$result = array('deleted' => true, 'info' => $this->_get_plugin_info($query), 'last_state' => $info);
+				$result = array('deleted' => true);
 			} else {
-				return $this->_generic_error_response('delete_plugin_failed', array(
-					'plugin' => $query['plugin'],
-					'error_code' => 'delete_plugin_failed',
-					'info' => $info
-				));
+				$result = $this->_generic_error_response('delete_plugin_failed', array($query['plugin']));
 			}
 		} else {
-			return $this->_generic_error_response('plugin_not_installed', array(
-				'plugin' => $query['plugin'],
-				'error_code' => 'plugin_not_installed',
-				'info' => $info
-			));
+			$result = $this->_generic_error_response('plugin_not_installed', array($query['plugin']));
 		}
 
 		return $this->_response($result);
@@ -470,19 +411,16 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 	 */
 	public function update_plugin($query) {
 
-		$fields = array('plugin', 'slug');
-		$permissions = array('update_plugins');
-
-		$error = $this->_validate_fields_and_capabilities($query, $fields, $permissions);
+		$error = $this->_validate_fields_and_capabilities($query, array('plugin', 'slug'), array('update_plugins'));
 		if (!empty($error)) {
 			return $error;
 		}
 
 		$this->_preload_credentials($query);
-		
+		$info = $this->_get_plugin_info($query);
+
 		// Make sure that we still have the plugin installed before running
 		// the update process
-		$info = $this->_get_plugin_info($query);
 		if ($info['installed']) {
 			// Load the updates command class if not existed
 			if (!class_exists('UpdraftCentral_Updates_Commands')) include_once('updates.php');
@@ -490,14 +428,10 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 
 			$result = $update_command->update_plugin($info['plugin_path'], $query['slug']);
 			if (!empty($result['error'])) {
-				$result['values'] = array('plugin' => $query['plugin'], 'info' => $info);
+				$result['values'] = array($query['plugin']);
 			}
 		} else {
-			return $this->_generic_error_response('plugin_not_installed', array(
-				'plugin' => $query['plugin'],
-				'error_code' => 'plugin_not_installed',
-				'info' => $info
-			));
+			$result = $this->_generic_error_response('plugin_not_installed', array($query['plugin']));
 		}
 
 		return $this->_response($result);
@@ -528,7 +462,7 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 
 		// Loops around each plugin available.
 		foreach ($get_plugins as $key => $value) {
-			$slug = $this->extract_slug_from_info($key, $value);
+			$slug = basename($key, '.php');
 
 			// If the plugin name matches that of the specified name, it will gather details.
 			// In case name check isn't enough, we'll use slug to verify if the plugin being queried is actually installed.
@@ -536,41 +470,16 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 			// Reason for name check failure:
 			// Due to plugin name inconsistencies - where wordpress.org registered plugin name is different
 			// from the actual plugin files's metadata (found inside the plugin's PHP file itself).
-			if ((!empty($query['plugin']) && html_entity_decode($value['Name']) === html_entity_decode($query['plugin'])) || (!empty($query['slug']) && $slug === $query['slug'])) {
+			if ((!empty($query['plugin']) && $value['Name'] === $query['plugin']) || (!empty($query['slug']) && $slug === $query['slug'])) {
 				$info['installed'] = true;
 				$info['active'] = is_plugin_active($key);
 				$info['plugin_path'] = $key;
 				$info['data'] = $value;
-				$info['name'] = $value['Name'];
-				$info['slug'] = $slug;
 				break;
 			}
 		}
 
 		return $info;
-	}
-
-	/**
-	 * Extract the slug from the plugin data
-	 *
-	 * @param string $key  They key of the current info
-	 * @param array  $info Data pulled from the plugin file
-	 *
-	 * @return string
-	 */
-	private function extract_slug_from_info($key, $info) {
-		if (!is_array($info) || empty($info) || empty($key)) return '';
-
-		$temp = explode('/', $key);
-		$slug = !empty($info['TextDomain']) ? $info['TextDomain'] : basename($temp[0], '.php');
-
-		// If in case the user kept the hello-dolly plugin then we'll make sure that it gets
-		// the proper slug for it, otherwise, we'll end up with the wrong slug 'hello' instead of
-		// 'hello-dolly'. Wrong slug will produce error in UpdraftCentral when running it against
-		// wordpress.org for further information retrieval.
-		$slug = ('Hello Dolly' === $info['Name']) ? 'hello-dolly' : $slug;
-
-		return $slug;
 	}
 
 	/**
@@ -581,10 +490,7 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 	 */
 	public function load_plugins($query) {
 
-		$permissions = array('install_plugins', 'activate_plugins');
-		if (is_multisite() && !is_super_admin(get_current_user_id())) $permissions = array('activate_plugins');
-
-		$error = $this->_validate_fields_and_capabilities($query, array(), $permissions);
+		$error = $this->_validate_fields_and_capabilities($query, array(), array('install_plugins', 'activate_plugins'));
 		if (!empty($error)) {
 			return $error;
 		}
@@ -602,33 +508,8 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 		// Get all plugins
 		$plugins = get_plugins();
 
-		if (is_multisite() && !is_super_admin(get_current_user_id())) {
-
-			// If the "Plugins" menu is disabled for the subsites on a multisite
-			// network then we return an empty "plugins" array.
-			$menu_items = get_site_option('menu_items');
-			if (empty($menu_items) || !isset($menu_items['plugins'])) {
-				$plugins = array();
-			} else {
-				$show_network_active = apply_filters('show_network_active_plugins', current_user_can('manage_network_plugins'));
-
-				$filtered_plugins = array();
-				foreach ($plugins as $file => $data) {
-					if (is_network_only_plugin($file) && !is_plugin_active($file)) {
-						if ($show_network_active) $filtered_plugins[$file] = $data;
-					} elseif (is_plugin_active_for_network($file)) {
-						if ($show_network_active) $filtered_plugins[$file] = $data;
-					} else {
-						$filtered_plugins[$file] = $data;
-					}
-				}
-
-				$plugins = $filtered_plugins;
-			}
-		}
-
 		foreach ($plugins as $key => $value) {
-			$slug = $this->extract_slug_from_info($key, $value);
+			$slug = basename($key, '.php');
 
 			$plugin = new stdClass();
 			$plugin->name = $value['Name'];
@@ -668,8 +549,7 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 		}
 
 		$result = array(
-			'plugins' => $results,
-			'is_super_admin' => is_super_admin(),
+			'plugins' => $results
 		);
 
 		$result = array_merge($result, $this->_get_backup_credentials_settings(WP_PLUGIN_DIR));

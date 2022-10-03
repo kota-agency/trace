@@ -11,7 +11,6 @@
 namespace RankMathPro\Google;
 
 use RankMath\Google\Api;
-use MyThemeShop\Helpers\Str;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,121 +28,65 @@ class Analytics {
 	 * @return array
 	 */
 	public static function get_analytics( $start_date, $end_date ) {
-		$view_id = self::get_view_id();
-		if ( ! $view_id ) {
+		if ( ! self::get_view_id() ) {
 			return false;
 		}
 
-		$options = get_option( 'rank_math_google_analytic_options', [] );
-		$is_ga4  = ! empty( $options['property_id'] ) && ! Str::starts_with( 'UA-', $options['property_id'] );
-		if ( ! $is_ga4 ) {
-			$args = [
-				'viewId'                 => self::get_view_id(),
-				'pageSize'               => Api::get()->get_row_limit(),
-				'dateRanges'             => [
-					[
-						'startDate' => $start_date,
-						'endDate'   => $end_date,
-					],
-				],
-				'metrics'                => [
-					[ 'expression' => 'ga:pageviews' ],
-					[ 'expression' => 'ga:users' ],
-				],
-				'dimensions'             => [
-					[ 'name' => 'ga:date' ],
-					[ 'name' => 'ga:pagePath' ],
-				],
-				'dimensionFilterClauses' => [
-					[
-						'filters' => [
-							[
-								'dimensionName' => 'ga:medium',
-								'operator'      => 'EXACT',
-								'expressions'   => 'organic',
-							],
-						],
-					],
-				],
-				'orderBys'               => [
-					[
-						'fieldName' => 'ga:pageviews',
-						'sortOrder' => 'DESCENDING',
-					],
-				],
-			];
-
-			if ( ! empty( $options ) && 'all' !== $options['country'] ) {
-				$args['dimensionFilterClauses'][0]['filters'][] = [
-					'dimensionName' => 'ga:countryIsoCode',
-					'operator'      => 'EXACT',
-					'expressions'   => $options['country'],
-				];
-			}
-			$response = Api::get()->http_post(
-				'https://analyticsreporting.googleapis.com/v4/reports:batchGet',
-				[
-					'reportRequests' => [ $args ],
-				]
-			);
-
-			Api::get()->log_failed_request( $response, 'analytics', $start_date, func_get_args() );
-
-			if ( ! Api::get()->is_success() || ! isset( $response['reports'], $response['reports'][0]['data']['rows'] ) ) {
-				return false;
-			}
-
-			return $response['reports'][0]['data']['rows'];
-		}
-
 		$args = [
-			'dateRanges'      => [
+			'viewId'                 => self::get_view_id(),
+			'pageSize'               => Api::get()->get_row_limit(),
+			'dateRanges'             => [
 				[
 					'startDate' => $start_date,
 					'endDate'   => $end_date,
 				],
 			],
-			'dimensions'      => [
-				[ 'name' => 'pagePathPlusQueryString' ],
-				[ 'name' => 'countryId' ],
+			'metrics'                => [
+				[ 'expression' => 'ga:sessions' ],
+				[ 'expression' => 'ga:visitors' ],
 			],
-			'metrics'         => [
-				[ 'name' => 'screenPageViews' ],
-				[ 'name' => 'totalUsers' ],
+			'dimensions'             => [
+				[ 'name' => 'ga:date' ],
+				[ 'name' => 'ga:pagePath' ],
 			],
-			'dimensionFilter' => [
-				'filter' => [
-					'fieldName'    => 'streamId',
-					'stringFilter' => [
-						'matchType' => 'EXACT',
-						'value'     => $view_id,
+			'dimensionFilterClauses' => [
+				[
+					'filters' => [
+						[
+							'dimensionName' => 'ga:medium',
+							'operator'      => 'EXACT',
+							'expressions'   => 'organic',
+						],
 					],
 				],
 			],
 		];
 
-		if ( 'all' !== $options['country'] ) {
-			$args['dimensionFilter']['filter'] = [
-				'fieldName'    => 'countryId',
-				'stringFilter' => [
-					'matchType' => 'EXACT',
-					'value'     => $options['country'],
-				],
+		$options = get_option( 'rank_math_google_analytic_options', [] );
+		if ( ! empty( $options ) && 'all' !== $options['country'] ) {
+			$args['dimensionFilterClauses'][0]['filters'][] = [
+				'dimensionName' => 'ga:countryIsoCode',
+				'operator'      => 'EXACT',
+				'expressions'   => $options['country'],
 			];
 		}
 
 		$response = Api::get()->http_post(
-			'https://analyticsdata.googleapis.com/v1beta/properties/' . $options['property_id'] . ':runReport',
-			$args
+			'https://analyticsreporting.googleapis.com/v4/reports:batchGet',
+			[
+				'reportRequests' => [ $args ],
+			]
 		);
+
 		Api::get()->log_failed_request( $response, 'analytics', $start_date, func_get_args() );
 
-		if ( ! Api::get()->is_success() || ! isset( $response['rows'] ) ) {
+		if ( ! Api::get()->is_success() || ! isset( $response['reports'], $response['reports'][0]['data']['rows'] ) ) {
 			return false;
 		}
 
-		return $response['rows'];
+		return $response['reports'][0]['data']['rows'];
 	}
+
 
 	/**
 	 * Get view id.

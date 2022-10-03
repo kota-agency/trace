@@ -87,8 +87,7 @@ class WooCommerce {
 	 * @return array Modified robots.
 	 */
 	public function robots( $robots ) {
-		$product   = \wc_get_product();
-		$is_hidden = $product && $product->get_catalog_visibility() === 'hidden';
+		$is_hidden = \wc_get_product()->get_catalog_visibility() === 'hidden';
 
 		if ( Helper::get_settings( 'general.noindex_hidden_products' ) && $is_hidden ) {
 			return [
@@ -243,7 +242,7 @@ class WooCommerce {
 			return $entity;
 		}
 
-		$variations = $product->get_available_variations( 'object' );
+		$variations = $product->get_available_variations();
 		if ( empty( $variations ) ) {
 			return $entity;
 		}
@@ -252,23 +251,19 @@ class WooCommerce {
 
 		$offers = [];
 		foreach ( $variations as $variation ) {
-			$price_valid_until = get_post_meta( $variation->get_id(), '_sale_price_dates_to', true );
-			if ( ! $price_valid_until ) {
-				$price_valid_until = strtotime( ( date( 'Y' ) + 1 ) . '-12-31' );
-			}
-
-			$offer_entity = [
+			$price_valid_until = get_post_meta( $variation['variation_id'], '_sale_price_dates_to', true );
+			$offer_entity      = [
 				'@type'           => 'Offer',
-				'description'     => wp_strip_all_tags( $variation->get_description() ),
-				'price'           => wc_get_price_to_display( $variation ),
+				'description'     => wp_strip_all_tags( $variation['variation_description'] ),
+				'price'           => $variation['display_price'],
 				'priceCurrency'   => get_woocommerce_currency(),
-				'availability'    => 'outofstock' === $variation->get_stock_status() ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+				'availability'    => $variation['is_in_stock'] ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
 				'itemCondition'   => 'NewCondition',
-				'priceValidUntil' => date_i18n( 'Y-m-d', $price_valid_until ),
+				'priceValidUntil' => $price_valid_until ? date_i18n( 'Y-m-d', $price_valid_until ) : '2025-12-31',
 				'url'             => $product->get_permalink(),
 			];
 
-			$this->add_variable_gtin( $variation->get_id(), $offer_entity );
+			$this->add_variable_gtin( $variation['variation_id'], $offer_entity );
 
 			$offers[] = $offer_entity;
 		}

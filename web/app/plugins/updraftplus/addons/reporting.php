@@ -13,7 +13,7 @@ Latest Change: 2.15.8
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-new UpdraftPlus_Addon_Reporting;
+$updraftplus_addon_reporting = new UpdraftPlus_Addon_Reporting;
 
 class UpdraftPlus_Addon_Reporting {
 
@@ -293,10 +293,14 @@ class UpdraftPlus_Addon_Reporting {
 		// Lower priority: get there before other plugins which apply templates
 		add_filter('wp_mail_content_type', array($this, 'wp_mail_content_type'), 8);
 
-		$report_body = $this->html;
+		$replace_a_tags_with_urls = $this->html;
+		$regex = '#\<a href="([^\>]*)"\>(.*)\</a\>#';
 		
+		if (preg_match($regex, $replace_a_tags_with_urls, $matches)) {
+	$replace_a_tags_with_urls = preg_replace($regex, $matches[2].' - '.$matches[1], $replace_a_tags_with_urls);
+		}
 		
-		return str_replace("\n", "\r\n", strip_tags(preg_replace('#\<style([^\>]*)\>.*\</style\>#', '', $report_body)));
+		return str_replace("\n", "\r\n", strip_tags(preg_replace('#\<style([^\>]*)\>.*\</style\>#', '', $replace_a_tags_with_urls)));
 
 	}
 
@@ -448,7 +452,7 @@ class UpdraftPlus_Addon_Reporting {
 		// Columns: Email address | only send if no errors/warnings
 
 		$out = '<tr id="updraft_report_row">
-				<th>'.__('Send reports', 'updraftplus').':</th>
+				<th>'.__('Email reports', 'updraftplus').':</th>
 				<td id="updraft_report_cell">';
 
 		// Could be multiple (separated by commas)
@@ -489,7 +493,7 @@ class UpdraftPlus_Addon_Reporting {
 
 		if (0 === $ind) $out .= $this->report_box_generator('', 0, false, false, false);
 
-		$out .= '<p class="updraft_report_another_p"><a class="updraft_report_another updraft_icon_link" href="'.esc_url(UpdraftPlus::get_current_clean_url()).'#updraft_report_row"><span class="dashicons dashicons-plus"></span>'.__('Add another address...', 'updraftplus').'</a></p>';
+		$out .= '<p class="updraft_report_another_p"><a class="updraft_report_another updraft_icon_link" href="'.UpdraftPlus::get_current_clean_url().'#updraft_report_row"><span class="dashicons dashicons-plus"></span>'.__('Add another address...', 'updraftplus').'</a></p>';
 
 		$out .= '</td>
 			</tr>';
@@ -535,7 +539,7 @@ class UpdraftPlus_Addon_Reporting {
 
 		$out .= '<label for="updraft_report_warningsonly_'.$ind.'" class="updraft_checkbox"><input '.(($warningsonly) ? 'checked="checked" ' : '').' id="updraft_report_warningsonly_'.$ind.'" class="updraft_report_checkbox" type="checkbox"  name="updraft_report_warningsonly['.$ind.']"> '.__('Send a report only when there are warnings/errors', 'updraftplus').'</label>';
 
-		$out .= '<div class="updraft_report_wholebackup"><label for="updraft_report_wholebackup_'.$ind.'" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20')).'" class="updraft_checkbox"><input '.(($wholebackup) ? 'checked="checked" ' : '').'class="updraft_report_checkbox" type="checkbox" id="updraft_report_wholebackup_'.$ind.'" name="updraft_report_wholebackup['.$ind.']" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20')).'"> '.__('When email storage method is enabled, and an email address is entered, also send the backup', 'updraftplus').'</label></div>';
+		$out .= '<div class="updraft_report_wholebackup"><label for="updraft_report_wholebackup_'.$ind.'" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20')).'" class="updraft_checkbox"><input '.(($wholebackup) ? 'checked="checked" ' : '').'class="updraft_report_checkbox" type="checkbox" id="updraft_report_wholebackup_'.$ind.'" name="updraft_report_wholebackup['.$ind.']" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20')).'"> '.__('When the Email storage method is enabled, also send the backup', 'updraftplus').'</label></div>';
 
 		$out .= '<div class="updraft_report_dbbackup'.((!$wholebackup) ? ' updraft_report_disabled' : '').'"><label for="updraft_report_dbbackup_'.$ind.'" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive as a result UpdraftPlus will only send Database backups to email.', 'updraftplus'), '10-20')).'" class="updraft_checkbox"><input '.(($dbbackup) ? 'checked="checked" ' : '').'class="updraft_report_checkbox" type="checkbox" '.((!$wholebackup) ? 'disabled ' : '').'id="updraft_report_dbbackup_'.$ind.'" name="updraft_report_dbbackup['.$ind.']" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus').' '.__('Use this option to only send database backups when sending to email, and skip other components.', 'updraftplus'), '10-20')).'"> '.__('Only email the database backup', 'updraftplus').'</label></div>';
 		
