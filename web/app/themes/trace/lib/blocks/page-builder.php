@@ -14,6 +14,10 @@ if (have_rows('builder')):
         elseif (get_row_layout() == 'video_modal'):
             get_template_part('lib/blocks/video-modal');
 
+        elseif (get_row_layout() == 'video'):
+            // var_dump("test");die;
+            get_template_part('lib/blocks/video');
+
         elseif (get_row_layout() == 'signposts'):
             get_template_part('lib/blocks/signposts');
 

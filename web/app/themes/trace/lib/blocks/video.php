@@ -4,10 +4,10 @@
  * Block: Video
  */
 
-$classes = ['full-width', padding_classes()];
+$classes = [ padding_classes()];
 
-$embed = get_field('vimeo_embed');
-$placeholder = wp_get_attachment_image_url(get_field('placeholder'), 'full');
+$embed = get_sub_field('vimeo_embed');
+$placeholder = wp_get_attachment_image_url(get_sub_field('placeholder'), 'full');
 
 ?>
 
