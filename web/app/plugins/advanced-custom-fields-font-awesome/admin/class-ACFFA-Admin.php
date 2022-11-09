@@ -813,7 +813,8 @@ class ACFFA_Admin
 				'Content-Type'	=> 'application/json',
 				'Authorization'	=> 'Bearer ' . $access_token,
 			],
-			'body'			=> '{
+			'timeout'	=> 30,
+			'body'		=> '{
 				"query" : "query { me { kits { name token status licenseSelected technologySelected version iconUploads { name } } } }" 
 			}'
 		] );

@@ -70,7 +70,8 @@ class ACFFA_Loader_6
 					'Content-Type'	=> 'application/json',
 					'Authorization'	=> 'Bearer ' . $access_token,
 				],
-				'body'			=> '{
+				'timeout'	=> 30,
+				'body'		=> '{
 					"query" : "query { me { kit (token: \"' . $kit_id . '\") { version licenseSelected iconUploads { name width height path unicode } } } }" 
 				}'
 			] );
@@ -119,7 +120,8 @@ class ACFFA_Loader_6
 				'headers'	=> [
 					'Content-Type'	=> 'application/json',
 					'Authorization'	=> 'Bearer ' . $api_key,
-				]
+				],
+				'timeout'	=> 30
 			] );
 
 			if ( ! is_wp_error( $remote_get ) ) {
@@ -240,6 +242,7 @@ class ACFFA_Loader_6
 			'headers'	=> [
 				'Content-Type'	=> 'application/json'
 			],
+			'timeout'	=> 30,
 			'body'			=> '{
 				"query" : "query { search(version: \"' . $kit_version . '\", query: \"' . $s . '\", first: 100) { id label styles unicode membership { free } } }" 
 			}'
@@ -413,6 +416,7 @@ class ACFFA_Loader_6
 				'headers'	=> [
 					'Content-Type'	=> 'application/json'
 				],
+				'timeout'	=> 30,
 				'body'			=> '{
 					"query" : "query { release(version:\"6.x\") { version } }"
 				}'

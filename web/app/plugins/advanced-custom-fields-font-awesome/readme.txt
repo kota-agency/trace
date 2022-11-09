@@ -3,8 +3,8 @@
 Contributors: mattkeys
 Tags: Advanced Custom Fields, ACF, Font Awesome, FontAwesome
 Requires at least: 3.5
-Tested up to: 5.9
-Stable tag: trunk
+Tested up to: 6.0
+Stable tag: 4.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,9 @@ This notification message is filterable so you can customize it to better repres
 2. Searchable list of all icons, including large live preview
 
 == Changelog ==
+
+= 4.0.4 =
+* Fixed bug where queries to the FontAwesome API were timing out for some users, causing issues with searching for icons in the backend
 
 = 4.0.3 =
 * Automatically refresh 4.x and 5.x icon caches when saving the settings
@@ -235,6 +238,9 @@ This notification message is filterable so you can customize it to better repres
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 4.0.4 =
+* Fixed bug where queries to the FontAwesome API were timing out for some users, causing issues with searching for icons in the backend
 
 = 4.0.3 =
 * Automatically refresh 4.x and 5.x icon caches when saving the settings

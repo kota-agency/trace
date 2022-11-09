@@ -68,6 +68,7 @@ class Yoast extends Plugin_Importer {
 	 */
 	public function convert_variables( $string ) {
 		$string = str_replace( '%%term_title%%', '%term%', $string );
+		$string = str_replace( '%%category_description%%', '%term_description%', $string );
 		$string = preg_replace( '/%%cf_([^%]+)%%/i', '%customfield($1)%', $string );
 		$string = preg_replace( '/%%ct_([^%]+)%%/i', '%customterm($1)%', $string );
 		$string = preg_replace( '/%%ct_desc_([^%]+)%%/i', '%customterm($1)%', $string );
@@ -790,10 +791,12 @@ class Yoast extends Plugin_Importer {
 		$logo_id  = 'company' === $knowledgegraph_type ? 'company_logo_id' : 'person_logo_id';
 
 		$hash = [
-			'company_name'      => 'knowledgegraph_name',
-			'company_or_person' => 'knowledgegraph_type',
-			$logo_key           => 'knowledgegraph_logo',
-			$logo_id            => 'knowledgegraph_logo_id',
+			'company_name'           => 'knowledgegraph_name',
+			'website_name'           => 'website_name',
+			'alternate_website_name' => 'website_alternate_name',
+			'company_or_person'      => 'knowledgegraph_type',
+			$logo_key                => 'knowledgegraph_logo',
+			$logo_id                 => 'knowledgegraph_logo_id',
 		];
 		$this->replace( $hash, $yoast_titles, $this->titles );
 
