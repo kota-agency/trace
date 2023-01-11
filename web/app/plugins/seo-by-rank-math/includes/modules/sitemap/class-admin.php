@@ -42,6 +42,7 @@ class Admin extends Base {
 		parent::__construct();
 
 		$this->action( 'init', 'register_setting_page', 999 );
+		$this->action( 'admin_footer', 'admin_scripts' );
 		$this->filter( 'rank_math/settings/sitemap', 'post_type_settings' );
 		$this->filter( 'rank_math/settings/sitemap', 'taxonomy_settings' );
 
@@ -71,6 +72,14 @@ class Admin extends Base {
 				/* translators: sitemap url */
 				'after_row' => $this->get_notice_start() . sprintf( esc_html__( 'Your sitemap index can be found here: %s', 'rank-math' ), '<a href="' . $sitemap_url . '" target="_blank">' . $sitemap_url . '</a>' ) . '</p></div>' . $this->get_nginx_notice(),
 			],
+		];
+
+		$tabs['html_sitemap'] = [
+			'icon'    => 'rm-icon rm-icon-sitemap',
+			'title'   => esc_html__( 'HTML Sitemap', 'rank-math' ),
+			'file'    => $this->directory . '/settings/html-sitemap.php',
+			'desc'    => esc_html__( 'This tab contains settings related to the HTML sitemap.', 'rank-math' ) . ' <a href="' . KB::get( 'sitemap-general', 'Options Panel Sitemap HTML Tab' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math' ) . '</a>',
+			'classes' => 'html-sitemap',
 		];
 
 		if ( Helper::is_author_archive_indexable() ) {
@@ -319,5 +328,31 @@ class Admin extends Base {
  # END Nginx Rewrites for Rank Math Sitemaps
  </pre>
 		 </div>';
+	}
+
+	/**
+	 * Add some inline JS for the sitemap settings admin page.
+	 */
+	public function admin_scripts() {
+		if ( 'rank-math-options-sitemap' !== Param::get( 'page' ) ) {
+			return;
+		}
+
+		?>
+		<script>
+			jQuery( function( $ ) {
+				$( '.cmb2-id-html-sitemap-seo-titles input' ).on( 'change', function() {
+					if ( 'seo_titles' === $( this ).filter(':checked').val() ) {
+						$( '#html_sitemap_sort option[value="alphabetical"]' ).prop( 'disabled', true );
+						if ( $( '#html_sitemap_sort option:selected' ).prop( 'disabled' ) ) {
+							$( '#html_sitemap_sort option:first' ).prop( 'selected', true );
+						}
+					} else {
+						$( '#html_sitemap_sort option[value="alphabetical"]' ).prop( 'disabled', false );
+					}
+				} ).trigger( 'change' );
+			} );
+		</script>
+		<?php
 	}
 }

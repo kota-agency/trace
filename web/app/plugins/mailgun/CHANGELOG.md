@@ -1,5 +1,20 @@
 Changelog
 =========
+1.8.10 (2022-12-26)
+- Fixed bug with not overriding `from name` for Woocommerce
+
+1.8.9 (2022-12-14)
+- Fixed bug with removed wp_mail filter
+
+1.8.8 (2022-12-11)
+- Fixed bug when `$to` override in the `wp_mail` function
+
+1.8.7 (2022-11-12)
+- Fixed bug when field `Override "From" Details` was not updated
+
+1.8.6 (2022-11-09)
+- Version update
+
 1.8.5 (2022-09-21)
 - Make code changes to have more optimized way to use Mailgun object in the code
 

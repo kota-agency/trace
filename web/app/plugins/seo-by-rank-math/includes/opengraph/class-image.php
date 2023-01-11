@@ -216,6 +216,7 @@ class Image {
 			$attachment = [ 'url' => $attachment ];
 		}
 
+		$validate_image = true;
 		/**
 		 * Allow changing the OpenGraph image.
 		 * The dynamic part of the hook name, $this->network, is the network slug (facebook, twitter).
@@ -224,7 +225,8 @@ class Image {
 		 */
 		$filter_image_url = trim( $this->do_filter( "opengraph/{$this->network}/image", isset( $attachment['url'] ) ? $attachment['url'] : '' ) );
 		if ( ! empty( $filter_image_url ) && ( empty( $attachment['url'] ) || $filter_image_url !== $attachment['url'] ) ) {
-			$attachment = [ 'url' => $filter_image_url ];
+			$attachment     = [ 'url' => $filter_image_url ];
+			$validate_image = false;
 		}
 
 		/**
@@ -240,14 +242,17 @@ class Image {
 			return;
 		}
 
-		$attachment_url = explode( '?', $attachment['url'] );
-		if ( ! empty( $attachment_url ) ) {
-			$attachment['url'] = $attachment_url[0];
-		}
+		// Validate image only when it is not added using the opengraph filter.
+		if ( $validate_image ) {
+			$attachment_url = explode( '?', $attachment['url'] );
+			if ( ! empty( $attachment_url ) ) {
+				$attachment['url'] = $attachment_url[0];
+			}
 
-		// If the URL ends in `.svg`, we need to return.
-		if ( ! $this->is_valid_image_url( $attachment['url'] ) ) {
-			return;
+			// If the URL ends in `.svg`, we need to return.
+			if ( ! $this->is_valid_image_url( $attachment['url'] ) ) {
+				return;
+			}
 		}
 
 		$image_url = $attachment['url'];
@@ -509,6 +514,28 @@ class Image {
 			return;
 		}
 
+		$do_og_content_image_cache = $this->do_filter( 'opengraph/content_image_cache', true );
+		if ( $do_og_content_image_cache ) {
+			$cache_key = 'rank_math_og_content_image';
+			$cache = get_post_meta( $post->ID, $cache_key, true );
+			$check = md5( $post->post_content );
+			if ( ! empty( $cache ) && $check === $cache['check'] ) {
+				foreach ( $cache['images'] as $image ) {
+					if ( is_int( $image ) ) {
+						$this->add_image_by_id( $image );
+					} else {
+						$this->add_image( $image );
+					}
+				}
+				return;
+			}
+
+			$cache = [
+				'check'  => $check,
+				'images' => [],
+			];
+		}
+
 		$images = [];
 		if ( preg_match_all( '`<img [^>]+>`', $content, $matches ) ) {
 			foreach ( $matches[0] as $img ) {
@@ -538,12 +565,21 @@ class Image {
 				$attachment_id = Attachment::get_by_url( $image );
 				if ( 0 === $attachment_id ) {
 					$this->add_image( $image );
+					if ( $do_og_content_image_cache ) {
+						$cache['images'][] = $image;
+					}
 				} else {
 					$this->add_image_by_id( $attachment_id );
+					if ( $do_og_content_image_cache ) {
+						$cache['images'][] = $attachment_id;
+					}
 				}
 			}
 		}
 
+		if ( $do_og_content_image_cache ) {
+			update_post_meta( $post->ID, $cache_key, $cache );
+		}
 	}
 
 	/**

@@ -12,12 +12,18 @@ namespace RankMath\Google;
 
 use RankMath\Helpers\Security;
 use MyThemeShop\Helpers\WordPress;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Request
  */
 class Request {
+
+	/**
+	 * Workflow.
+	 */
+	private $workflow = '';
 
 	/**
 	 * Was the last request successful.
@@ -53,6 +59,13 @@ class Request {
 	 * @var bool
 	 */
 	private $is_notice_added = false;
+
+	/**
+	 * Set workflow
+	 */
+	public function set_workflow( $workflow = '' ) {
+		$this->workflow = $workflow;
+	}
 
 	/**
 	 * Was the last request successful?
@@ -146,6 +159,14 @@ class Request {
 	 */
 	private function make_request( $http_verb, $url, $args = [], $timeout = 10 ) {
 		// Early Bail!!
+		if ( ! Authentication::is_authorized() ) {
+			return;
+		}
+
+		if ( $this->have_buffer_time() ) {
+			return;
+		}
+
 		if ( ! $this->refresh_token() || ! is_scalar( $this->token ) ) {
 			if ( ! $this->is_notice_added ) {
 				$this->is_notice_added = true;
@@ -155,7 +176,7 @@ class Request {
 					wp_kses_post( __( 'There is a problem with the Google auth token. Please <a href="%1$s" class="button button-link rank-math-reconnect-google">reconnect your app</a>', 'rank-math' ) ),
 					wp_nonce_url( admin_url( 'admin.php?reconnect=google' ), 'rank_math_reconnect_google' )
 				);
-				$this->log_response( $http_verb, $url, $args, date( 'Y-m-d H:i:s' ) . ': Google auth token has been expired or is invalid' );
+				$this->log_response( $http_verb, $url, $args, '', '', '', date( 'Y-m-d H:i:s' ) . ': Google auth token has been expired or is invalid' );
 			}
 			return;
 		}
@@ -177,10 +198,33 @@ class Request {
 		}
 
 		$this->reset();
-		$response = wp_remote_request( $url, $params );
-		$this->log_response( $http_verb, $url, $args, $response );
+		sleep( 1 );
+		$response           = wp_remote_request( $url, $params );
 		$formatted_response = $this->format_response( $response );
 		$this->determine_success( $response, $formatted_response );
+
+		$this->log_response( $http_verb, $url, $args, $response, $formatted_response, $params );
+
+		// Error handaling.
+		$code = wp_remote_retrieve_response_code( $response );
+		if ( 200 !== $code ) {
+			// Remove workflow actions.
+			if ( $this->workflow ) {
+				as_unschedule_all_actions( 'rank_math/analytics/get_' . $this->workflow . '_data' );
+			}
+		}
+
+		do_action(
+			'rank_math/analytics/handle_' . $this->workflow . '_response',
+			[
+				'formatted_response' => $formatted_response,
+				'response'           => $response,
+				'http_verb'          => $http_verb,
+				'url'                => $url,
+				'args'               => $args,
+				'code'               => $code,
+			]
+		);
 
 		return $formatted_response;
 	}
@@ -193,12 +237,16 @@ class Request {
 	 * @param array  $args       Assoc array of parameters to be passed.
 	 * @param string $response make_request response.
 	 */
-	private function log_response( $http_verb = '', $url = '', $args = [], $response = [] ) {
+	private function log_response( $http_verb = '', $url = '', $args = [], $response = [], $formatted_response = '', $params = [], $text = '' ) {
 		if ( ! apply_filters( 'rank_math/analytics/log_response', false ) ) {
 			return;
 		}
-		$uploads       = wp_upload_dir();
-		$file          = $uploads['basedir'] . '/rank-math/analytics-debug.log';
+
+		do_action( 'rank_math/analytics/log', $http_verb, $url, $args, $response, $formatted_response, $params );
+
+		$uploads = wp_upload_dir();
+		$file    = $uploads['basedir'] . '/rank-math/analytics-debug.log';
+
 		$wp_filesystem = WordPress::get_filesystem();
 
 		// Create log file if it doesn't exist.
@@ -209,18 +257,42 @@ class Request {
 			return;
 		}
 
-		$message = $wp_filesystem->get_contents( $file );
+		$message  = '********************************' . PHP_EOL;
+		$message .= date( 'Y-m-d h:i:s' ) . PHP_EOL;
 
-		$message .= '********************************' . PHP_EOL;
-		$message .= $http_verb . PHP_EOL;
-		$message .= $url . PHP_EOL;
-		$message .= wp_json_encode( $args ) . PHP_EOL;
-		$message .= is_wp_error( $response ) ? 'FAILED: ' : '';
-		$message .= wp_json_encode( $response ) . PHP_EOL;
+		$tokens = Authentication::tokens();
+		if ( ! empty( $tokens ) && is_array( $tokens ) && isset( $tokens['expire'] ) ) {
+			$message .= 'Expiry: ' . date( 'Y-m-d h:i:s', $tokens['expire'] ) . PHP_EOL;
+			$message .= 'Expiry Readable: ' . human_time_diff( $tokens['expire'] ) . PHP_EOL;
+		}
+
+		$message .= $text . PHP_EOL;
+
+		if ( is_wp_error( $response ) ) {
+			$message .= '<span class="fail">FAIL</span>' . PHP_EOL;
+			$message .= 'WP_Error: ' . $response->get_error_message() . PHP_EOL;
+		} elseif ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			$message .= '<span class="fail">FAIL</span>' . PHP_EOL;
+		} elseif ( isset( $formatted_response['error_description'] ) ) {
+			$message .= '<span class="fail">FAIL</span>' . PHP_EOL;
+			$message .= 'Bad Request' === $formatted_response['error_description'] ?
+			esc_html__( 'Bad request. Please check the code.', 'rank-math' ) : $formatted_response['error_description'];
+		} else {
+			$message .= '<span class="pass">PASS</span>' . PHP_EOL;
+		}
+		$message .= 'REQUEST: ' . $http_verb . ' > ' . $url . PHP_EOL;
+		$message .= 'REQUEST_PARAMETERS: ' . wp_json_encode( $params ) . PHP_EOL;
+		$message .= 'REQUEST_API_ARGUMENTS: ' . wp_json_encode( $args ) . PHP_EOL;
+		$message .= 'RESPONSE_CODE: ' . wp_remote_retrieve_response_code( $response ) . PHP_EOL;
+		$message .= 'RESPONSE_CODE_MESSAGE: ' . wp_remote_retrieve_body( $response ) . PHP_EOL;
+		$message .= 'RESPONSE_FORMATTED: ' . wp_json_encode( $formatted_response ) . PHP_EOL;
+		$message .= 'ORIGINAL_RESPONSE: ' . wp_json_encode( $response ) . PHP_EOL;
 		$message .= '================================' . PHP_EOL;
+		$message .= $wp_filesystem->get_contents( $file );
 
 		$wp_filesystem->put_contents( $file, $message );
 	}
+
 	/**
 	 * Decode the response and format any error messages for debugging
 	 *
@@ -304,7 +376,45 @@ class Request {
 		$tokens['access_token'] = $token;
 		Authentication::tokens( $tokens );
 
+		$this->set_buffer_time();
+
 		return true;
+	}
+
+	/**
+	 * Set buffer time.
+	 *
+	 * @param int $buffer_time The buffer time to hold the request until the new token generate.
+	 */
+	protected function set_buffer_time( $buffer_time = 120 ) {
+		update_option( 'rank_math_google_api_buffer_time', time() + $buffer_time );
+	}
+
+	/**
+	 * Check buffer time.
+	 *
+	 * @return boolean
+	 */
+	protected function have_buffer_time() {
+		$tokens      = Authentication::tokens();
+		$buffer_time = get_option( 'rank_math_google_api_buffer_time', '' );
+		// Set buffer time only once before 2 min token expiry.
+		if ( empty( $buffer_time ) && $tokens['expire'] && time() > ( $tokens['expire'] - 120 ) ) {
+			$this->set_buffer_time();
+			return true;
+		}
+
+		if ( empty( $buffer_time ) ) {
+			return false;
+		}
+
+		// Check the current time exceed the buffer time.
+		if ( time() <= $buffer_time ) {
+			return true;
+		}
+
+		delete_option( 'rank_math_google_api_buffer_time' );
+		return false;
 	}
 
 	/**

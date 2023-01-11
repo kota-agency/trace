@@ -3,9 +3,9 @@ Contributors: hwk-fr
 Donate link: https://www.acf-extended.com
 Tags: acf, custom fields, meta, admin, fields, form, repeater, content
 Requires at least: 4.9
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 5.6
-Stable tag: 0.8.8.10
+Stable tag: 0.8.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -483,6 +483,83 @@ The content of the upcoming patch and work in progress features are all listed o
 8. Enhanced WordPress UI
 
 == Changelog ==
+
+= 0.8.9 =
+
+**ACF Extended Pro 0.8.9:**
+
+* Field: Block Editor - Added field
+* Field: Payment - Fixed ACF 6.0.x settings instructions
+* Modules: Added PHP/Json AutoSync feature
+* Modules: Added "Local" & "Sync Available" views
+* Modules: Added DB <> PHP <> Json triangular difference comparison
+* Module: Block Types - PHP sync files are saved/loaded from `/my-theme/acfe-php/block-types`
+* Module: Block Types - Json sync files are saved/loaded from `/my-theme/acf-json/block-types`
+* Module: Options Pages - PHP sync files are saved/loaded from `/my-theme/acfe-php/options-pages`
+* Module: Options Pages - Json sync files are saved/loaded from `/my-theme/acf-json/options-pages`
+* Module: Post Types - PHP sync files are saved/loaded from `/my-theme/acfe-php/post-types`
+* Module: Post Types - Json sync files are saved/loaded from `/my-theme/acf-json/post-types`
+* Module: Taxonomies - PHP sync files are saved/loaded from `/my-theme/acfe-php/taxonomies`
+* Module: Taxonomies - Json sync files are saved/loaded from `/my-theme/acf-json/taxonomies`
+* Module: Templates - PHP sync files are saved/loaded from `/my-theme/acfe-php/templates`
+* Module: Templates - Json sync files are saved/loaded from `/my-theme/acf-json/templates`
+* Module: Templates - Deprecated `acfe_add_local_template()` in favor of `acfe_register_template()`
+* Module: Settings - Fixed `l10n_textdomain` setting as text input
+
+**ACF Extended Basic 0.8.9**
+
+* Field: Advanced Link - Added value type control during `update_value` to enhance compatibility
+* Module: Block Types - Added "Align Text", "Align Content", "Full Height", "Align Matrix" settings
+* Module: Enhanced UI - Fixed WP 6.1 Attachment "Alt" field missing
+* Module: Post Types - Added "Meta Key" and "Meta Type" orderby settings in Archive and Admin query
+* Module: Post Types - Added "Enter Title" setting in Labels
+* Module: Post Types - WP Updated Messages now use Labels with Classic Editor
+* Module: Taxonomies - Added "Meta Key" and "Meta Type" orderby settings in Single and Admin query
+* General: Fixed potential Block Type JS error on layout change
+* General: Added ACF 6.0.x Select2 single select CSS fix
+* General: Introduced Module v3
+* General: Reworked Upgrades logic
+
+= 0.8.8.11 =
+
+**ACF Extended Pro 0.8.8.11:**
+
+* Field: Date/Time Picker - Fixed instructions placement in ACF 6.0.x
+* Field: Google Map - Added `is_array()` control in `format_value()`
+* Field: Payment - Added initialization on `ready` to avoid too early JS init
+* Module: Scripts - Bumped "Clean Orphan Meta" script version to 1.1
+* Module: Scripts - Added "Script Launcher" to easily launch scripts using hooks
+* Module: Settings - Added `modules/scripts/demo` setting
+* General: ACF Updates screen has been uniformized accross 5.10.x to ACF 6.0.x versions
+
+**ACF Extended Basic 0.8.8.11:**
+
+* Field: Advanced Link - Reworked code & unified unformatted value
+* Field: Clone - Fixed Seamless Style CSS in `acf-table`
+* Field: Columns - Fixed Columns render in Repeater when user sort rows
+* Field: Flexible Content - Added check in `acfe/load_fields` to avoid potential PHP warning with third party plugins
+* Field: Flexible Content - Fixed "Added Layout" scroll animation
+* Field: Flexible Content - Fixed Dynamic Preview Ajax when inside ACF Ajax Screen Check
+* Field: Group - Fixed Seamless Style CSS in `acf-table`
+* Field: Post Object - Fixed older ACF version < 5.10 Select2 escape
+* Field: Tab - Fixed last opened tab preference on page refresh
+* Field: Taxonomy Terms - Fixed "Level" ajax setting not working correctly in ACF 6.0.x
+* Field: Taxonomy Terms - Enhanced Load Terms/Save Terms settings logic to avoid call on front-end
+* Field Group: Fixed Flexible Content "Duplicate Layout" sub fields moved to original layout
+* Field Settings: Bidirectional - Fixed potential php warning when deleting related field groups
+* Fields: Added `acf_translate()` in `acf/translate_field/type=field_type` for all field types
+* Module: Dev Mode - "Bulk actions" is correctly hidden when metabox are cleared
+* Module: Enhanced UI - Fixed Tabs "Align Left" placement on User Edit Screen
+* Module: Form - Fixed "User Action" uploaded files so it can be used in a later action
+* Module: Form - Added "User Action" Target control before processing builtin User Validation
+* Module: Form - Added `acfe/form/submit/post_append_terms` filter to change the `wp_set_object_terms` append
+* Module: Settings - Added `rest_api_enabled` `rest_api_format` `rest_api_embed_links` `preload_blocks` `enable_shortcode` settings
+* General: Fixed various ACF 6.0.x CSS
+* General: Added multiple plugin activation warning messages
+* General: Added select2 hooks controls to avoid initialize without `field` instance
+* General: Introduced `acfe.FieldExtender` and deprecated `acfe.fieldExtend`
+* General: Introduced `acfe.Modal` and deprecated `acfe.Popup`
+* General: Replaced `_.escape()` with `acf.strEscape()`
 
 = 0.8.8.10 =
 
