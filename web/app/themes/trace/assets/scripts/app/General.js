@@ -389,10 +389,13 @@ function General() {
     $('a:not(.gated-file)').on('click', (e) => {
         const $this = $(e.currentTarget);
         const hash = $this.attr('href').substring($this.attr('href').indexOf('#'));
-
-        if ($(hash).length) {
-            $(hash).fadeIn();
+        console.log(hash)
+        if(hash.includes('#')) {
+            if ($(hash).length) {
+                $(hash).fadeIn();
+            }
         }
+        
 
     });
 

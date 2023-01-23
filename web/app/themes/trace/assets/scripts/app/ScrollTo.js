@@ -40,15 +40,11 @@ function scrollTo() {
 
         const $this = $(e.currentTarget);
 
-        console.log(e.currentTarget)
-        console.log($this.attr('href'))
-        console.log($this.attr('href').startsWith('#'))
         if($this.attr('href').startsWith('#') && $this.attr('href').length > 1 && $("'" + $this.attr('href') + "'").length) {
 
             if ($($this.attr('href')).hasClass('modal'))
             {
                 e.preventDefault();
-                console.log("here")
                 $($this.attr('href')).fadeIn();
 
             }
