@@ -334,7 +334,7 @@ function General() {
 
     });
 
-    $('.split-content__content').find('a').on('click', (e) => {
+    $('.split-content__content').find('a.btn').on('click', (e) => {
 
         // Check if is external link
         var comp = new RegExp(location.host);
