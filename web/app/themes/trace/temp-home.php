@@ -176,6 +176,107 @@ if ($wide_heading2) {
 <?php
 
 /**
+ * Block: Video
+ */
+
+$classes5 = ['full-width', padding_classes()];
+
+$embed5 = get_field('video_vimeo_embed');
+$placeholder5 = wp_get_attachment_image_url(get_field('video_placeholder'), 'full');
+
+?>
+
+<?php if ($embed5 && $placeholder5) : ?>
+    <section <?= block_id(); ?> class="video <?= implode('', $classes5); ?>" data-aos="trigger" data-aos-delay="1000"
+                                data-aos-offset="500">
+        <div class="container">
+            <div class="video__wrapper">
+                <?= $embed5; ?>
+                <div class="video__image bg-cover" style="background-image: url(<?= $placeholder5; ?>);">
+                    <span class="play"></span>
+                </div>
+            </div>
+        </div>
+
+        <?php if (have_rows('links_v_links')) : ?>
+            <div class="buttons">
+                <?php while (have_rows('links_v_links')) : the_row(); ?>
+                    <?php
+
+                    $button = get_sub_field('link');
+                    $link_type = get_sub_field('style');
+
+                    if ($button) {
+                        switch ($link_type) {
+                            case "Button":
+                                get_component('button', $button);
+                                break;
+                            case "Link":
+                                get_component('link', $button);
+                                break;
+                            case "Video Link":
+                                $button['attr'] = 'data-fancybox';
+                                $button['classes'] = 'link--video';
+                                $button['icon'] = '<i class="far fa-play-circle"></i>';
+                                get_component('link', $button);
+                                break;
+                            default:
+                                get_component('button', $button);
+                        }
+
+                    }
+
+                    ?>
+                <?php endwhile; ?>
+            </div>
+        <?php endif; ?>
+    </section><!-- .video -->
+<?php endif; ?>
+
+
+<?php
+
+/**
+ * Block: Testimonials
+ */
+
+$classes6 = ['full-width', padding_classes()];
+
+?>
+
+<section class="testimonials <?= implode(' ', $classes6); ?>" data-aos="zoom-in">
+    <?php if (have_rows('testimonials_items')) : ?>
+        <div class="testimonials__items">
+            <?php while (have_rows('testimonials_items')) : the_row(); ?>
+                <?php
+
+                $text = get_sub_field('text');
+                $author = get_sub_field('author');
+                $company = get_sub_field('company');
+
+                ?>
+                <div class="testimonials__item">
+                    <?php if ($text) : ?>
+                        <h2><?= $text; ?></h2>
+                    <?php endif; ?>
+                    <div class="container">
+                        <?php if ($author) : ?>
+                            <strong><?= $author; ?><?= ($author && $company) ? ',' : ''; ?></strong>
+                        <?php endif; ?>
+                        <?php if ($company) : ?>
+                            <span><?= $company; ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        </div>
+        <div class="testimonials__arrows"></div>
+    <?php endif; ?>
+</section><!-- .testimonials -->
+
+<?php
+
+/**
  * Block: Family
  */
 
@@ -424,107 +525,6 @@ $copy7 = get_field('content_&_video_copy');
     </div>
 </section><!-- .content-video -->
 
-
-<?php
-
-/**
- * Block: Testimonials
- */
-
-$classes6 = ['full-width', padding_classes()];
-
-?>
-
-<section class="testimonials <?= implode(' ', $classes6); ?>" data-aos="zoom-in">
-    <?php if (have_rows('testimonials_items')) : ?>
-        <div class="testimonials__items">
-            <?php while (have_rows('testimonials_items')) : the_row(); ?>
-                <?php
-
-                $text = get_sub_field('text');
-                $author = get_sub_field('author');
-                $company = get_sub_field('company');
-
-                ?>
-                <div class="testimonials__item">
-                    <?php if ($text) : ?>
-                        <h2><?= $text; ?></h2>
-                    <?php endif; ?>
-                    <div class="container">
-                        <?php if ($author) : ?>
-                            <strong><?= $author; ?><?= ($author && $company) ? ',' : ''; ?></strong>
-                        <?php endif; ?>
-                        <?php if ($company) : ?>
-                            <span><?= $company; ?></span>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            <?php endwhile; ?>
-        </div>
-        <div class="testimonials__arrows"></div>
-    <?php endif; ?>
-</section><!-- .testimonials -->
-
-
-<?php
-
-/**
- * Block: Video
- */
-
-$classes5 = ['full-width', padding_classes()];
-
-$embed5 = get_field('video_vimeo_embed');
-$placeholder5 = wp_get_attachment_image_url(get_field('video_placeholder'), 'full');
-
-?>
-
-<?php if ($embed5 && $placeholder5) : ?>
-    <section <?= block_id(); ?> class="video <?= implode('', $classes5); ?>" data-aos="trigger" data-aos-delay="1000"
-                                data-aos-offset="500">
-        <div class="container">
-            <div class="video__wrapper">
-                <?= $embed5; ?>
-                <div class="video__image bg-cover" style="background-image: url(<?= $placeholder5; ?>);">
-                    <span class="play"></span>
-                </div>
-            </div>
-        </div>
-
-        <?php if (have_rows('links_v_links')) : ?>
-            <div class="buttons">
-                <?php while (have_rows('links_v_links')) : the_row(); ?>
-                    <?php
-
-                    $button = get_sub_field('link');
-                    $link_type = get_sub_field('style');
-
-                    if ($button) {
-                        switch ($link_type) {
-                            case "Button":
-                                get_component('button', $button);
-                                break;
-                            case "Link":
-                                get_component('link', $button);
-                                break;
-                            case "Video Link":
-                                $button['attr'] = 'data-fancybox';
-                                $button['classes'] = 'link--video';
-                                $button['icon'] = '<i class="far fa-play-circle"></i>';
-                                get_component('link', $button);
-                                break;
-                            default:
-                                get_component('button', $button);
-                        }
-
-                    }
-
-                    ?>
-                <?php endwhile; ?>
-            </div>
-        <?php endif; ?>
-    </section><!-- .video -->
-<?php endif; ?>
 
 <?php
 
