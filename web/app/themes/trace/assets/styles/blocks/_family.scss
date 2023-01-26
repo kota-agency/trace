@@ -3,6 +3,14 @@
     z-index: 1;
     text-align: center;
 
+    padding-top: 60px;
+    padding-bottom: 60px;
+
+    @include media-breakpoint-down(sm) {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
     .background-text {
         position: absolute;
         top: 50%;
