@@ -4,7 +4,7 @@ Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, sort, post sort, posts sort, post type order, custom order, admin posts order
 Requires at least: 2.8
 Tested up to: 6.1.1
-Stable tag: 1.9.9.2
+Stable tag: 2.0
 
 Sort Posts and custom Post Type Objects (custom post types) using a Drag and Drop Sortable JavaScript AJAX interface or default WordPress dashboard. 
 
@@ -93,6 +93,13 @@ Consider upgrading to our advanced version of this plugin at a very resonable pr
 
 
 == Change Log ==
+
+= 2.0 =
+ - Update cmoposer.json to use the wpackagist.org
+ - New option to select the drag & drop available for post types. 
+ - The drag & drop within the default WordPress interfaces can be done now through the new icon, under the checkbox, for each item.
+ - Check if ajax call to avoid applying the order when autosort is disabled. 
+ - Update plugin header image
 
 = 1.9.9.2 =
   - WordPress 6.1.1 compatibility tag

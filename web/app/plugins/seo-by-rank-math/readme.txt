@@ -5,7 +5,7 @@ Tags: seo, sitemap, google search console, schema, redirection, WordPress SEO
 Tested up to: 6.1
 Requires at least: 5.6
 Requires PHP: 7.4
-Stable tag: 1.0.107.3
+Stable tag: 1.0.109
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -583,24 +583,12 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.107 [Jan 25, 2023] =
-- Improved: [TOC Block](https://rankmath.com/kb/table-of-contents-block/) can now recognize the headings added to [FAQ](https://rankmath.com/kb/faq-schema-block/) & [HowTo](https://rankmath.com/blog/howto-schema/) Blocks
-- Fixed: PHP error related to [Analytics](https://rankmath.com/kb/analytics) on WordPress 6.0
-- Fixed: [Sorting option](https://rankmath.com/kb/analytics/#data-sorting) was not working in Analytics tables
-- Fixed: [Rank Tracker graph](https://rankmath.com/kb/analytics/#rank-tracker) was not showing correctly on RTL websites
-- Fixed: PHP error on some setups when the [Content AI](https://rankmath.com/content-ai/) module is active
-- Fixed: Missing term names in the [HTML Sitemap](https://rankmath.com/kb/html-sitemap/)
-
-= 1.0.107.1 [Jan 25, 2023] =
-- Fixed: Version number
-
-= 1.0.107.2 [Jan 26, 2023] =
-- Fixed: TOC Block was not detecting the headings added in FAQ & HowTo blocks when core headings were present in the content
-
-= 1.0.107.3 [Jan 30, 2023] =
-- Improved: Strengthened the security of the plugin. Thanks to [PatchStack](https://patchstack.com/) for revealing it responsibly
-- Fixed: After importing the data from Yoast, the `%%searchphrase%%` variable was not getting converted to the Rank Math's `%search_query%`
-- Fixed: [Focus Keyword in Title test](https://rankmath.com/kb/score-100-in-tests/#focus-keyword-in-the-seo-title-primary-focus-keyword-only) was not working well when `&` was used in the SERP Title
-- Fixed: [Book schema](https://rankmath.com/kb/book-schema/#date-published) was showing incorrect published date on the frontend
+= 1.0.109 [Feb 22, 2023] =
+- Improved: On new setups, the [Remove Snippet Data](https://rankmath.com/kb/titles-and-meta/#product-categories-remove-snippet-data) option will be enabled on all WooCommerce Product archive pages by default
+- Fixed: [Elementor editor](https://rankmath.com/blog/elementor-seo/) was showing deprecated warnings when the `SCRIPT_DEBUG` constant is set to `true`
+- Fixed: [Analytics Settings](https://rankmath.com/kb/install-google-analytics/#num-4-choose-your-analytics-account-property) will now be shown only to the users who have access to the Analytics through the [Role Manager](https://rankmath.com/kb/role-manager/)
+- Fixed: Some styling issues when the Gutenberg plugin was active
+- Fixed: Missing `author` name in the default Article Schema added to the old posts
+- Fixed: Missing `video:duration` tag when [Custom field variable](https://rankmath.com/kb/variables-in-seo-title-description/#custom-field-advanced) was used in the Video Schema [Duration field](https://rankmath.com/kb/video-schema/#duration)
 
 Full changelog can be found here - **[Rank Math changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**

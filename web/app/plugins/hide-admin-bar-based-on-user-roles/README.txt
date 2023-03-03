@@ -7,7 +7,7 @@ Author URI: https://iamankitpanchal.com
 Requires at least: 3.7.0
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 3.5.1
+Stable tag: 3.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -154,6 +154,9 @@ Security Fixes and Improvements.
 Security Fixes and Improvements.
 
 = 3.5.1 =
+Security Fixes and Improvements.
+
+= 3.5.2 =
 Security Fixes and Improvements.
 
 == Upgrade Notice ==

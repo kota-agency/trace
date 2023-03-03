@@ -33,7 +33,7 @@
                     
                     include_once(CPTPATH . '/include/class.walkers.php');
                     
-                    add_action( 'admin_init',                               array(&$this, 'registerFiles'), 11 );
+                    //add_action( 'admin_init',                               array(&$this, 'registerFiles'), 11 );
                     add_action( 'admin_init',                               array(&$this, 'admin_init'), 10 );
                     add_action( 'admin_menu',                               array(&$this, 'addMenu') );
                     
@@ -160,10 +160,10 @@
                     if( $query->is_search()  &&  isset( $query->query['s'] )   &&  ! empty ( $query->query['s'] ) )
                         return( $orderBy );
                     
-                    if (is_admin())
+                    if ( ( is_admin() &&  !wp_doing_ajax() )    ||  ( wp_doing_ajax() && isset($_REQUEST['action']) && $_REQUEST['action'] == 'query-attachments') )
                             {
                                 
-                                if ( $options['adminsort'] == "1" || (defined('DOING_AJAX') && isset($_REQUEST['action']) && $_REQUEST['action'] == 'query-attachments') )
+                                if ( $options['adminsort'] == "1" || ( wp_doing_ajax() && isset($_REQUEST['action']) && $_REQUEST['action'] == 'query-attachments') )
                                     {
                                         
                                         global $post;
@@ -232,10 +232,15 @@
                     $options_interface  =    new CptoOptionsInterface();
                     $options_interface->check_options_update();
                     
-                    add_options_page('Post Types Order', '<img class="menu_pto" src="'. CPTURL .'/images/menu-icon.png" alt="" />Post Types Order', 'manage_options', 'cpto-options', array($options_interface, 'plugin_options_interface'));
-                    
+                    $hookID   =     add_options_page('Post Types Order', '<img class="menu_pto" src="'. CPTURL .'/images/menu-icon.png" alt="" />Post Types Order', 'manage_options', 'cpto-options', array($options_interface, 'plugin_options_interface'));
+                    add_action('admin_print_styles-' . $hookID ,    array($this, 'admin_options_print_styles'));
                 }    
             
+            function admin_options_print_styles()
+                {
+                    wp_register_style('pto-options', CPTURL . '/css/cpt-options.css');
+                    wp_enqueue_style( 'pto-options'); 
+                }
                 
             
             /**
@@ -262,6 +267,12 @@
                         return;
                     
                     if( isset( $screen->taxonomy ) && !empty($screen->taxonomy) )
+                        return;
+                    
+                    if ( isset ( $options['allow_reorder_default_interfaces'][$screen->post_type] )  &&  $options['allow_reorder_default_interfaces'][$screen->post_type]   !=      'yes' )
+                        return;
+                        
+                    if ( wp_is_mobile() )
                         return;
                     
                     //check if post type is sortable
@@ -309,17 +320,7 @@
                     
                 }    
             
-            function registerFiles() 
-                {
-                    if ( $this->current_post_type != null ) 
-                        {
-                            wp_enqueue_script('jQuery');
-                            wp_enqueue_script('jquery-ui-sortable');
-                        }
-                        
-                    wp_register_style('CPTStyleSheets', CPTURL . '/css/cpt.css');
-                    wp_enqueue_style( 'CPTStyleSheets');
-                }
+
             
             function admin_init() 
                 {
@@ -529,14 +530,30 @@
                             $required_capability = apply_filters('pto/edit_capability', $capability, $post_type_name);
                             
                             if ( $post_type_name == 'post' )
-                                add_submenu_page('edit.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') );
+                                $hookID   = add_submenu_page('edit.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') );
                             elseif ($post_type_name == 'attachment') 
-                                add_submenu_page('upload.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') ); 
+                                $hookID   = add_submenu_page('upload.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') ); 
                             else
                                 {
-                                    add_submenu_page('edit.php?post_type='.$post_type_name, __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') );    
+                                    $hookID   = add_submenu_page('edit.php?post_type='.$post_type_name, __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') );    
                                 }
+                            
+                            add_action('admin_print_styles-' . $hookID ,    array($this, 'admin_reorder_print_styles'));
                         }
+                }
+                
+            
+            function admin_reorder_print_styles() 
+                {
+                    
+                    if ( $this->current_post_type != null ) 
+                        {
+                            wp_enqueue_script('jQuery');
+                            wp_enqueue_script('jquery-ui-sortable');
+                        }
+                        
+                    wp_register_style('CPTStyleSheets', CPTURL . '/css/cpt.css');
+                    wp_enqueue_style( 'CPTStyleSheets');
                 }
             
 
