@@ -259,6 +259,8 @@ function ea_disable_classic_editor() {
 }
 // add_action( 'admin_head', 'ea_disable_classic_editor' );
 
+add_filter( 'rank_math/sitemap/enable_caching', '__return_false');
+
 
 
 /**
