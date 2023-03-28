@@ -67,4 +67,4 @@ function fix_no_editor_on_posts_page($post)
 }
 
 // This is applied in a namespaced file - so amend this if you're not namespacing
-add_action('edit_form_after_title', __NAMESPACE__ . '\\fix_no_editor_on_posts_page', 0);
+add_action('edit_form_after_title', 'fix_no_editor_on_posts_page', 0);
