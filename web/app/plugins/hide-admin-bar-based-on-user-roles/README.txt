@@ -5,9 +5,9 @@ Plugin URI: https://iamankitpanchal.com
 Author: Ankit Panchal
 Author URI: https://iamankitpanchal.com
 Requires at least: 3.7.0
-Tested up to: 6.1.1
+Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 3.5.2
+Stable tag: 3.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,6 +158,9 @@ Security Fixes and Improvements.
 
 = 3.5.2 =
 Security Fixes and Improvements.
+
+= 3.5.3 =
+Compatibility tested & Tested with the latest WordPress version.
 
 == Upgrade Notice ==
 Always keep updated. We frequently provide latest updates to run plugin smoothly with all other WordPress plugins and themes.
