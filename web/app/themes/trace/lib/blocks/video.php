@@ -12,7 +12,7 @@ $placeholder = wp_get_attachment_image_url(get_sub_field('placeholder'), 'full')
 ?>
 
 <?php if ($embed && $placeholder) : ?>
-    <section <?= block_id(); ?> class="video <?= implode('', $classes); ?>"  data-aos="trigger" data-aos-delay="1000" data-aos-offset="500">
+    <section <?= block_id(); ?> class="video full-width block-space width-calculated"  data-aos="trigger" data-aos-delay="1000" data-aos-offset="500">
         <div class="container">
             <div class="video__wrapper">
                 <?= $embed; ?>
@@ -24,5 +24,4 @@ $placeholder = wp_get_attachment_image_url(get_sub_field('placeholder'), 'full')
         <?php get_component('buttons'); ?>
     </section><!-- .video -->
 <?php endif; ?>
-
 
