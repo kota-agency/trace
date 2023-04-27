@@ -518,7 +518,7 @@ function acf_add_url_utm_tags( $url, $campaign, $content, $anchor = false ) {
 			array(
 				'utm_source'   => ( defined( 'ACF_PRO' ) && ACF_PRO ) ? 'ACF PRO' : 'ACF Free',
 				'utm_medium'   => 'insideplugin',
-				'utm_campagin' => $campaign,
+				'utm_campaign' => $campaign,
 				'utm_content'  => $content,
 			)
 		)
@@ -545,7 +545,7 @@ function acf_sanitize_request_args( $args = array() ) {
 		case 'double':
 			return (float) $args;
 		case 'array':
-			$sanitized = [];
+			$sanitized = array();
 			foreach ( $args as $key => $value ) {
 				$key               = sanitize_text_field( $key );
 				$sanitized[ $key ] = acf_sanitize_request_args( $value );
@@ -561,7 +561,9 @@ function acf_sanitize_request_args( $args = array() ) {
 
 /**
  * Sanitizes file upload arrays.
- * 
+ *
+ * @since 6.0.4
+ *
  * @param array $args The file array.
  *
  * @return array
@@ -583,11 +585,11 @@ function acf_sanitize_files_array( array $args = array() ) {
 
 	if ( is_array( $args['name'] ) ) {
 		$files             = array();
-		$files['name']     = array_map( 'sanitize_file_name', $args['name'] );
-		$files['tmp_name'] = array_map( 'sanitize_text_field', $args['tmp_name'] );
-		$files['type']     = array_map( 'sanitize_text_field', $args['type'] );
-		$files['size']     = array_map( 'absint', $args['size'] );
-		$files['error']    = array_map( 'absint', $args['error'] );
+		$files['name']     = acf_sanitize_files_value_array( $args['name'], 'sanitize_file_name' );
+		$files['tmp_name'] = acf_sanitize_files_value_array( $args['tmp_name'], 'sanitize_text_field' );
+		$files['type']     = acf_sanitize_files_value_array( $args['type'], 'sanitize_text_field' );
+		$files['size']     = acf_sanitize_files_value_array( $args['size'], 'absint' );
+		$files['error']    = acf_sanitize_files_value_array( $args['error'], 'absint' );
 		return $files;
 	}
 
@@ -599,4 +601,55 @@ function acf_sanitize_files_array( array $args = array() ) {
 	$file['error']    = absint( $args['error'] );
 
 	return $file;
+}
+
+/**
+ * Sanitizes file upload values within the array.
+ *
+ * This addresses nested file fields within repeaters and groups.
+ *
+ * @since 6.0.5
+ *
+ * @param array  $array The file upload array.
+ * @param string $sanitize_function Callback used to sanitize array value.
+ * @return array
+ */
+function acf_sanitize_files_value_array( $array, $sanitize_function ) {
+	if ( ! function_exists( $sanitize_function ) ) {
+		return $array;
+	}
+
+	if ( ! is_array( $array ) ) {
+		return $sanitize_function( $array );
+	}
+
+	foreach ( $array as $key => $value ) {
+		if ( is_array( $value ) ) {
+			$array[ $key ] = acf_sanitize_files_value_array( $value, $sanitize_function );
+		} else {
+			$array[ $key ] = $sanitize_function( $value );
+		}
+	}
+
+	return $array;
+}
+
+/**
+ * Maybe unserialize, but don't allow any classes.
+ *
+ * @since 6.1
+ *
+ * @param string $data String to be unserialized, if serialized.
+ * @return mixed The unserialized, or original data.
+ */
+function acf_maybe_unserialize( $data ) {
+	if ( is_serialized( $data ) ) { // Don't attempt to unserialize data that wasn't serialized going in.
+		if ( PHP_VERSION_ID >= 70000 ) {
+			return @unserialize( trim( $data ), array( 'allowed_classes' => false ) ); //phpcs:ignore -- code only runs on PHP7+
+		} else {
+			return @\ACF\Brumann\Polyfill\unserialize::unserialize( trim( $data ), array( 'allowed_classes' => false ) );
+		}
+	}
+
+	return $data;
 }

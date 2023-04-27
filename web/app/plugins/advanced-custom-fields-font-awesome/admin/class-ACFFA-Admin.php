@@ -69,8 +69,10 @@ class ACFFA_Admin
 
 	public function enqueue_acf_select2( $hook )
 	{
-		$acf_menu_slug = sanitize_title( __( 'Custom Fields', 'acf' ) );
-		if ( $acf_menu_slug . '_page_fontawesome-settings' != $hook ) {
+		$acf = sanitize_title( __( 'ACF', 'acf' ) );
+		$custom_fields = sanitize_title( __( 'Custom Fields', 'acf' ) );
+		if ( $custom_fields . '_page_fontawesome-settings' != $hook &&
+			 $acf . '_page_fontawesome-settings' != $hook ) {
 			return;
 		}
 
@@ -135,8 +137,10 @@ class ACFFA_Admin
 
 	public function enqueue_scripts_v6( $hook )
 	{
-		$acf_menu_slug = sanitize_title( __( 'Custom Fields', 'acf' ) );
-		if ( $acf_menu_slug . '_page_fontawesome-settings' != $hook ) {
+		$acf = sanitize_title( __( 'ACF', 'acf' ) );
+		$custom_fields = sanitize_title( __( 'Custom Fields', 'acf' ) );
+		if ( $custom_fields . '_page_fontawesome-settings' != $hook &&
+			 $acf . '_page_fontawesome-settings' != $hook ) {
 			return;
 		}
 
@@ -170,8 +174,10 @@ class ACFFA_Admin
 
 	public function enqueue_scripts_v5( $hook )
 	{
-		$acf_menu_slug = sanitize_title( __( 'Custom Fields', 'acf' ) );
-		if ( $acf_menu_slug . '_page_fontawesome-settings' != $hook ) {
+		$acf = sanitize_title( __( 'ACF', 'acf' ) );
+		$custom_fields = sanitize_title( __( 'Custom Fields', 'acf' ) );
+		if ( $custom_fields . '_page_fontawesome-settings' != $hook &&
+			 $acf . '_page_fontawesome-settings' != $hook ) {
 			return;
 		}
 

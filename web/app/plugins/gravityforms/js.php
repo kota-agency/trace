@@ -243,6 +243,9 @@ if ( ! class_exists( 'GFForms' ) ) {
 		} else {
 			field_str = "<table class='input_autocompletes'><tr><td><strong>" + <?php echo json_encode( esc_html__( 'Field', 'gravityforms' ) ); ?> + "</strong></td><td><strong>" + <?php echo json_encode( esc_html__( 'Autocomplete Attribute', 'gravityforms' ) ); ?> + "</strong></td></tr>";
 			for ( var i = 0; i < field["inputs"].length; i++ ) {
+				if ( field["inputs"][i]["isHidden"] ) {
+					continue;
+				}
 				id = field["inputs"][i]["id"];
 				inputName = 'input_' + id.toString();
 				inputId = inputName.replace('.', '_');
@@ -677,6 +680,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 				if (!field.choices)
 					field.choices = new Array(new Choice(<?php echo json_encode( esc_html__( 'First Choice', 'gravityforms' ) ); ?>), new Choice(<?php echo json_encode( esc_html__( 'Second Choice', 'gravityforms' ) ); ?>), new Choice(<?php echo json_encode( esc_html__( 'Third Choice', 'gravityforms' ) ); ?>));
 
+				field.validateState = true;
 				field.inputs = new Array();
 				for (var i = 1; i <= field.choices.length; i++) {
 					field.inputs.push(new Input(field.id + (i / 10), field.choices[i - 1].text));
@@ -700,6 +704,10 @@ if ( ! class_exists( 'GFForms' ) ) {
 			case "select" :
 				if (!field.label)
 					field.label = <?php echo json_encode( esc_html__( 'Untitled', 'gravityforms' ) ); ?>;
+
+				if (inputType === 'select') {
+					field.validateState = true;
+				}
 
 				field.inputs = null;
 				if (!field.choices) {
@@ -786,7 +794,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 				field.inputs = null;
 				if (!field.label)
 					field.label = <?php echo json_encode( esc_html__( 'Phone', 'gravityforms' ) ); ?>;
-				field.phoneFormat = "standard";
+				field.phoneFormat = "international"; 
 				field.autocompleteAttribute = "tel";
 				break;
 			case "date" :

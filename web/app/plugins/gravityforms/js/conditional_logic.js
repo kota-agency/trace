@@ -134,9 +134,9 @@ function gf_is_match( formId, rule ) {
 		$inputs;
 
 	if( isInputSpecific ) {
-		$inputs = $( '#input_{0}_{1}_{2}'.format( formId, fieldId, inputIndex ) );
+		$inputs = $( '#input_{0}_{1}_{2}'.gformFormat( formId, fieldId, inputIndex ) );
 	} else {
-		$inputs = $( 'input[id="input_{0}_{1}"], input[id^="input_{0}_{1}_"], input[id^="choice_{0}_{1}_"], select#input_{0}_{1}, textarea#input_{0}_{1}'.format( formId, fieldId ) );
+		$inputs = $( 'input[id="input_{0}_{1}"], input[id^="input_{0}_{1}_"], input[id^="choice_{0}_{1}_"], select#input_{0}_{1}, textarea#input_{0}_{1}'.gformFormat( formId, fieldId ) );
 	}
 
 	var isCheckable = $.inArray( $inputs.attr( 'type' ), [ 'checkbox', 'radio' ] ) !== -1;
@@ -172,7 +172,7 @@ function gf_is_match_checkable( $inputs, rule, formId, fieldId ) {
 		}
 		// if the 'other' choice is selected, get the value from the 'other' text input
 		else if ( fieldValue == 'gf_other_choice' ) {
-			fieldValue = jQuery( '#input_{0}_{1}_other'.format( formId, fieldId ) ).val();
+			fieldValue = jQuery( '#input_{0}_{1}_other'.gformFormat( formId, fieldId ) ).val();
 		}
 
 		if( gf_matches_operation( fieldValue, rule.value, rule.operator ) ) {
@@ -413,6 +413,11 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 		$target.data( 'gf-disabled-assessed', true );
 	}
 
+	// honeypot should not be impacted by conditional logic.
+	if( $target.hasClass( 'gfield--type-honeypot') ) {
+		return;
+	}
+
 	if(action == "show"){
 
 		// reset tabindex for selects
@@ -426,6 +431,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 				$target.find(':input:hidden:not(.gf-default-disabled)').removeAttr( 'disabled' );
 				if ( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
 					$target.removeAttr( 'disabled' ).css( 'display', '' );
+					$target.attr( 'data-conditional-logic', 'hidden' );
 					if ( '1' == gf_legacy.is_legacy ) {
 						// for legacy markup, remove screen reader class.
 						$target.removeClass( 'screen-reader-text' );
@@ -444,17 +450,23 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 			if ( display == '' || display == 'none' ){
 				display = '1' === gf_legacy.is_legacy ? 'list-item' : 'block';
 			}
-			$target.find(':input:hidden:not(.gf-default-disabled)').removeAttr( 'disabled' );
+			$target.find(':input:hidden:not(.gf-default-disabled)').removeAttr( 'disabled' ).attr( 'data-conditional-logic', 'visible' );
 
 			// Handle conditional submit and next buttons.
 			if ( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
 				$target.removeAttr( 'disabled' ).css( 'display', '' );
+				$target.attr( 'data-conditional-logic', 'visible' );
 				if ( '1' == gf_legacy.is_legacy ) {
 					// for legacy markup, remove screen reader class.
 					$target.removeClass( 'screen-reader-text' );
 				}
 			} else {
 				$target.css( 'display', display );
+				if( display == 'none' ) {
+					$target.attr( 'data-conditional-logic', 'hidden' );
+				} else {
+					$target.attr( 'data-conditional-logic', 'visible' );
+				}
 			}
 
 			if(callback){
@@ -508,6 +520,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 				}
 			} else {
 				$target.css( 'display', 'none' );
+				$target.attr( 'data-conditional-logic', 'hidden' );
 			}
 			$target.find(':input:hidden:not(.gf-default-disabled)').attr( 'disabled', 'disabled' );
 			if(callback){

@@ -232,7 +232,7 @@
                     $options_interface  =    new CptoOptionsInterface();
                     $options_interface->check_options_update();
                     
-                    $hookID   =     add_options_page('Post Types Order', '<img class="menu_pto" src="'. CPTURL .'/images/menu-icon.png" alt="" />Post Types Order', 'manage_options', 'cpto-options', array($options_interface, 'plugin_options_interface'));
+                    $hookID   =     add_options_page('Post Types Order', '<img class="menu_pto" src="'. CPTURL .'/images/menu-icon.png" alt="" /> Post Types Order', 'manage_options', 'cpto-options', array($options_interface, 'plugin_options_interface'));
                     add_action('admin_print_styles-' . $hookID ,    array($this, 'admin_options_print_styles'));
                 }    
             
@@ -252,10 +252,7 @@
                 {
                     $options          =     $this->functions->get_options();
                     
-                    //if functionality turned off, continue
-                    if( $options['archive_drag_drop']   !=      '1')
-                        return;
-                    
+                                        
                     //if adminsort turned off no need to continue
                     if( $options['adminsort']           !=      '1')
                         return;
@@ -269,7 +266,7 @@
                     if( isset( $screen->taxonomy ) && !empty($screen->taxonomy) )
                         return;
                     
-                    if ( isset ( $options['allow_reorder_default_interfaces'][$screen->post_type] )  &&  $options['allow_reorder_default_interfaces'][$screen->post_type]   !=      'yes' )
+                    if ( empty ( $options['allow_reorder_default_interfaces'][$screen->post_type] )     ||  ( isset ( $options['allow_reorder_default_interfaces'][$screen->post_type] )  &&  $options['allow_reorder_default_interfaces'][$screen->post_type]   !=      'yes' ) )
                         return;
                         
                     if ( wp_is_mobile() )
@@ -449,6 +446,7 @@
                     
                     global $userdata;
                     $objects_per_page   =   get_user_meta($userdata->ID ,'edit_' .  $post_type  .'_per_page', TRUE);
+                    $objects_per_page   =   apply_filters( "edit_{$post_type}_per_page", $objects_per_page );
                     if(empty($objects_per_page))
                         $objects_per_page   =   20;
                     

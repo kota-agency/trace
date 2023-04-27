@@ -208,7 +208,7 @@ class GF_Field_Consent extends GF_Field {
 
 		$target_input_id       = parent::get_first_input_id( $form );
 		$for_attribute         = empty( $target_input_id ) ? '' : "for='{$target_input_id}'";
-		$label_class_attribute = 'class="gfield_consent_label"';
+		$label_class_attribute = 'class="gform-field-label gform-field-label--type-inline gfield_consent_label"';
 		$required_div          = ( $this->labelPlacement === 'hidden_label' && $this->isRequired ) ? $this->get_required_indicator() : '';
 
 		if ( $is_admin && ! GFCommon::is_entry_detail_edit() ) {
@@ -230,7 +230,7 @@ class GF_Field_Consent extends GF_Field {
 		$extra_describedby_ids = empty( $description ) ? array() : array( "gfield_consent_description_{$form['id']}_{$this->id}" );
 		$aria_describedby      = $this->get_aria_describedby( $extra_describedby_ids );
 
-		$input  = "<input name='input_{$id}.1' id='{$target_input_id}' type='{$html_input_type}' value='1' {$tabindex} {$aria_describedby} {$required_attribute} {$invalid_attribute} {$disabled_text} {$checked} /> <label {$label_class_attribute} {$for_attribute} >{$checkbox_label}</label>{$required_div}";
+		$input  = "<input name='input_{$id}.1' id='{$target_input_id}' type='{$html_input_type}' value='1' {$tabindex} {$aria_describedby} {$required_attribute} {$invalid_attribute} {$disabled_text} {$checked} /> <label {$label_class_attribute} {$for_attribute} >{$checkbox_label}{$required_div}</label>";
 		$input .= "<input type='hidden' name='input_{$id}.2' value='" . esc_attr( $checkbox_label ) . "' class='gform_hidden' />";
 		$input .= "<input type='hidden' name='input_{$id}.3' value='" . esc_attr( $revision_id ) . "' class='gform_hidden' />";
 
@@ -276,6 +276,32 @@ class GF_Field_Consent extends GF_Field {
 		}
 
 		return parent::get_description( $description, $css_class );
+	}
+
+	/**
+	 * If a field has a description, the aria-describedby attribute for the input field is returned.
+	 * This method is specific to the consent field since the consent description has a different ID pattern.
+	 *
+	 * @since 2.6.8
+	 *
+	 * @param array|string $extra_ids Any extra ids that should be added to the describedby attribute.
+	 *
+	 * @return string
+	 */
+	public function get_aria_describedby( $extra_ids = array() ) {
+
+		$describedby_ids = is_array( $extra_ids ) ? $extra_ids : explode( ' ', $extra_ids );
+
+		if ( $this->failed_validation ) {
+			$describedby_ids[] = "validation_message_{$this->formId}_{$this->id}";
+		}
+
+		if ( empty( $describedby_ids ) ) {
+			return '';
+		}
+
+		return 'aria-describedby="' . implode( ' ', $describedby_ids ) . '"';
+
 	}
 
 	/**

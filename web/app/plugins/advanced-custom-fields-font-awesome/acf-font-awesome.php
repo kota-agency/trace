@@ -4,7 +4,7 @@
 Plugin Name: Advanced Custom Fields: Font Awesome
 Plugin URI: https://wordpress.org/plugins/advanced-custom-fields-font-awesome/
 Description: Adds a new 'Font Awesome Icon' field to the popular Advanced Custom Fields plugin.
-Version: 4.0.4
+Version: 4.0.5
 Author: Matt Keys
 Author URI: http://mattkeys.me/
 License: GPLv2 or later
@@ -16,30 +16,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'ACFFA_VERSION' ) ) {
-	define( 'ACFFA_VERSION', '4.0.4' );
+	define( 'ACFFA_VERSION', '4.0.5' );
 }
 
 if ( ! defined( 'ACFFA_PUBLIC_PATH' ) ) {
-	$stylesheet_dir = trim( get_stylesheet_directory(), '/' );
-	if ( stristr( __FILE__, $stylesheet_dir ) ) {
-		define( 'ACFFA_THEME_INSTALLATION', true );
-		$basename_dir	= trim( plugin_basename( __DIR__ ), '/' );
-		$theme_path		= str_replace( $stylesheet_dir, '', $basename_dir );
-		$public_path	= get_stylesheet_directory_uri() . trailingslashit( $theme_path );
-	} else {
-		define( 'ACFFA_THEME_INSTALLATION', false );
-		$public_path	= plugin_dir_url( __FILE__ );
-	}
+    $stylesheet_dir = trim( get_stylesheet_directory(), '/' );
+    $stylesheet_dir = wp_normalize_path($stylesheet_dir);
+    
+    $file = wp_normalize_path( __FILE__ );
+    
+    if ( stristr( $file, $stylesheet_dir ) ) {
+        define( 'ACFFA_THEME_INSTALLATION', true );
+        
+        if ( defined( 'MY_ACFFA_URL' ) ) {
+            $public_path	= MY_ACFFA_URL;
+        } else {
+            $basename_dir	= trim( plugin_basename( __DIR__ ), '/' );
+            $theme_path		= str_replace( $stylesheet_dir, '', $basename_dir );
+            $public_path	= get_stylesheet_directory_uri() . trailingslashit( $theme_path );
+        }
+    } else {
+        define( 'ACFFA_THEME_INSTALLATION', false );
+        $public_path = plugin_dir_url( __FILE__ );
+    }
 
-	define( 'ACFFA_PUBLIC_PATH', $public_path );
+    define( 'ACFFA_PUBLIC_PATH', $public_path );
+}
+
+if ( ! defined( 'ACFFA_DIRECTORY' ) ) {
+    if ( defined( 'MY_ACFFA_PATH' ) ) {
+        define( 'ACFFA_DIRECTORY', MY_ACFFA_PATH );
+    } else {
+        define( 'ACFFA_DIRECTORY', dirname( __FILE__ ) );
+    }
 }
 
 if ( ! defined( 'ACFFA_BASENAME' ) ) {
 	define( 'ACFFA_BASENAME', plugin_basename( __FILE__ ) );
-}
-
-if ( ! defined( 'ACFFA_DIRECTORY' ) ) {
-	define( 'ACFFA_DIRECTORY', dirname( __FILE__ ) );
 }
 
 if ( ! class_exists('acf_plugin_font_awesome') ) :
