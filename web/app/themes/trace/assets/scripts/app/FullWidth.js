@@ -12,11 +12,8 @@ function FullWidth() {
 
     const siteMain = document.querySelector('.site-wrapper');
 
-
-    let safariAgent = userAgentString.indexOf("Safari") > -1;
-
     fullWidth.forEach( (el) => {
-        if(!isSafariBrowser) {
+        if(!isSafariBrowser()) {
             el.style.width = (window.innerWidth - scrollbarWidth()) + 'px';
             el.style.marginLeft = -siteMain.getBoundingClientRect().left + 'px';
         }
