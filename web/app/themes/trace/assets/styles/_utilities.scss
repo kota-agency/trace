@@ -1,6 +1,6 @@
 .full-width {
     width: calc(100vw);
-    left: calc((100% - 100vw) / 2);
+    margin-left: calc((100% - 100vw) / 2);
 }
 
 .block-space {
