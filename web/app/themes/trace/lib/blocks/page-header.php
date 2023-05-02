@@ -22,7 +22,7 @@ if(is_home() || is_archive()) {
 ?>
 
 <section <?= block_id(); ?> class="page-header <?= implode(' ', $classes); ?>">
-	<div class="container" data-aos="fade">
+	<div class="container">
 		<div class="row">
 			<div class="col-12">
 				<?php if ($label) : ?>
