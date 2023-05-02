@@ -30,36 +30,39 @@
     })(window,document,'script','dataLayer','GTM-TLL3QZN');</script>
     <!-- End Google Tag Manager -->
 
-    <!-- A1 script -->
-    <script>
-    var cid = 6596;
-    (function() {
-    window.a1wObj = 'a1w';
-    window.a1w = window.a1w || function(){
-    (window.a1w.q = window.ga.q || []).push(arguments)
-    },
-    window.a1w.l = 1 * new Date();
-    var a = document.createElement('script');
-    var m = document.getElementsByTagName('script')[0];
-    a.async = 1;
-    a.src = "https://api1.websuccess-data.com/tracker.js";
-    m.parentNode.insertBefore(a,m)
-    })()
-    </script>
-    <!-- End A1 script -->
+    <?php if(!isset($_GET['test'])): ?>
+        <!-- A1 script -->
+        <script>
+        var cid = 6596;
+        (function() {
+        window.a1wObj = 'a1w';
+        window.a1w = window.a1w || function(){
+        (window.a1w.q = window.ga.q || []).push(arguments)
+        },
+        window.a1w.l = 1 * new Date();
+        var a = document.createElement('script');
+        var m = document.getElementsByTagName('script')[0];
+        a.async = 1;
+        a.src = "https://api1.websuccess-data.com/tracker.js";
+        m.parentNode.insertBefore(a,m)
+        })()
+        </script>
+        <!-- End A1 script -->
 
-    <!-- Script for browser update -->
-    <script> 
-        var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,api:2020.10 }; 
-        function $buo_f(){ 
-        var e = document.createElement("script"); 
-        e.src = "//browser-update.org/update.min.js"; 
-        document.body.appendChild(e);
-        };
-        try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
-        catch(e){window.attachEvent("onload", $buo_f)}
-    </script>
-    <!-- End Script for browser update -->
+    
+        <!-- Script for browser update -->
+        <script> 
+            var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,api:2020.10 }; 
+            function $buo_f(){ 
+            var e = document.createElement("script"); 
+            e.src = "//browser-update.org/update.min.js"; 
+            document.body.appendChild(e);
+            };
+            try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+            catch(e){window.attachEvent("onload", $buo_f)}
+        </script>
+        <!-- End Script for browser update -->
+    <?php endif; ?>
 
     <?php wp_head(); ?>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.14.0/css/all.css"
