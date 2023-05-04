@@ -277,7 +277,7 @@ input[type="checkbox"] {
     position: relative;
     padding-left: 35px;
     box-sizing: border-box;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     line-height: 1.65;
     margin: 0;
 
@@ -285,7 +285,7 @@ input[type="checkbox"] {
       content: "";
       display: inline-block;
       position: absolute;
-      top: 0px;
+      top: 4px;
       left: 0;
       width: 21px;
       height: 21px;
@@ -305,7 +305,7 @@ input[type="checkbox"] {
         bottom: auto;
         margin: auto 0;
         left: 7px;
-        top: 3px;
+        top: 6px;
         width: 7px;
         height: 13px;
         border: solid $color-quaternary;
