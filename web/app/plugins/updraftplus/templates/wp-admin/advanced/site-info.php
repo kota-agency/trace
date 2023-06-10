@@ -8,9 +8,9 @@
 
 	if (function_exists('php_uname')) {
 		// It appears (Mar 2015) that some mod_security distributions block the output of the string el6.x86_64 in PHP output, on the silly assumption that only hackers are interested in knowing what environment PHP is running on.
-		$uname_info = @php_uname('s').' '.@php_uname('n').' ';// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		$uname_info = @php_uname('s').' '.@php_uname('n').' ';// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 
-		$release_name = @php_uname('r');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		$release_name = @php_uname('r');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 		if (preg_match('/^(.*)\.(x86_64|[3456]86)$/', $release_name, $matches)) {
 			$release_name = $matches[1].' ';
 		} else {
@@ -18,14 +18,14 @@
 		}
 
 		// In case someone does something similar with just the processor type string
-		$mtype = @php_uname('m');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		$mtype = @php_uname('m');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 		if ('x86_64' == $mtype) {
 			$mtype = '64-bit';
 		} elseif (preg_match('/^i([3456]86)$/', $mtype, $matches)) {
 			$mtype = $matches[1];
 		}
 
-		$uname_info .= $release_name.$mtype.' '.@php_uname('v');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		$uname_info .= $release_name.$mtype.' '.@php_uname('v');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 	} else {
 		$uname_info = PHP_OS;
 	}
@@ -48,7 +48,7 @@
 	$updraftplus_admin->settings_debugrow('WP_PLUGIN_DIR:', htmlspecialchars(WP_PLUGIN_DIR));
 	$updraftplus_admin->settings_debugrow('Table prefix:', htmlspecialchars($updraftplus->get_table_prefix()));
 
-	$updraftplus_admin->settings_debugrow(__('Web-server disk space in use by UpdraftPlus', 'updraftplus').':', '<span class="updraft_diskspaceused">'.UpdraftPlus_Filesystem_Functions::get_disk_space_used('updraft').'</span> <a class="updraft_diskspaceused_update" href="'.UpdraftPlus::get_current_clean_url().'">'.__('refresh', 'updraftplus').'</a>');
+	$updraftplus_admin->settings_debugrow(__('Web-server disk space in use by UpdraftPlus', 'updraftplus').':', '<span class="updraft_diskspaceused">'.UpdraftPlus_Filesystem_Functions::get_disk_space_used('updraft').'</span> <a class="updraft_diskspaceused_update" href="'.esc_url(UpdraftPlus::get_current_clean_url()).'">'.__('refresh', 'updraftplus').'</a>');
 
 	$peak_memory_usage = memory_get_peak_usage(true)/1048576;
 	$memory_usage = memory_get_usage(true)/1048576;
@@ -62,6 +62,8 @@
 	if ('' == $db_version) $db_version = $wpdb->db_version();
 	
 	$updraftplus_admin->settings_debugrow(sprintf(__('%s version:', 'updraftplus'), 'MySQL'), htmlspecialchars($db_version));
+	$mysql_max_packet_size = round($updraftplus->max_packet_size(false, false)/1048576, 1);
+	$updraftplus_admin->settings_debugrow(__('Database maximum packet size:', 'updraftplus'), $mysql_max_packet_size.' MB');
 	$updraftplus_admin->settings_debugrow(__('Current SQL mode:', 'updraftplus'), htmlspecialchars($wpdb->get_var('SELECT @@GLOBAL.sql_mode')));
 	if (function_exists('curl_version') && function_exists('curl_exec')) {
 		$cv = curl_version();
@@ -106,14 +108,14 @@
 	}
 	
 	if (empty($options['suppress_plugins_for_debugging'])) {
-		$updraftplus_admin->settings_debugrow(__('Plugins for debugging:', 'updraftplus'), '<a href="'.wp_nonce_url(self_admin_url('update.php?action=install-plugin&amp;updraftplus_noautobackup=1&amp;plugin=wp-crontrol'), 'install-plugin_wp-crontrol').'">WP Crontrol</a> | <a href="'.wp_nonce_url(self_admin_url('update.php?action=install-plugin&amp;updraftplus_noautobackup=1&amp;plugin=query-monitor'), 'install-plugin_query-monitor').'">Query Monitor</a> | <a href="'.wp_nonce_url(self_admin_url('update.php?action=install-plugin&amp;updraftplus_noautobackup=1&amp;plugin=sql-executioner'), 'install-plugin_sql-executioner').'">SQL Executioner</a> | <a href="'.wp_nonce_url(self_admin_url('update.php?action=install-plugin&amp;updraftplus_noautobackup=1&amp;plugin=wp-file-manager'), 'install-plugin_wp-file-manager').'">WP Filemanager</a>');
+		$updraftplus_admin->settings_debugrow(__('Install debugging plugins:', 'updraftplus'), '<a href="'.wp_nonce_url(self_admin_url('update.php?action=install-plugin&amp;updraftplus_noautobackup=1&amp;plugin=wp-crontrol'), 'install-plugin_wp-crontrol').'">WP Crontrol</a> | <a href="'.wp_nonce_url(self_admin_url('update.php?action=install-plugin&amp;updraftplus_noautobackup=1&amp;plugin=query-monitor'), 'install-plugin_query-monitor').'">Query Monitor</a> | <a href="'.wp_nonce_url(self_admin_url('update.php?action=install-plugin&amp;updraftplus_noautobackup=1&amp;plugin=sql-executioner'), 'install-plugin_sql-executioner').'">SQL Executioner</a> | <a href="'.wp_nonce_url(self_admin_url('update.php?action=install-plugin&amp;updraftplus_noautobackup=1&amp;plugin=wp-file-manager'), 'install-plugin_wp-file-manager').'">WP Filemanager</a>');
 	}
 
-	$updraftplus_admin->settings_debugrow("HTTP Get: ", '<input id="updraftplus_httpget_uri" type="text" class="call-action"> <a href="'.UpdraftPlus::get_current_clean_url().'" id="updraftplus_httpget_go">'.__('Fetch', 'updraftplus').'</a> <a href="'.UpdraftPlus::get_current_clean_url().'" id="updraftplus_httpget_gocurl">'.__('Fetch', 'updraftplus').' (Curl)</a><p id="updraftplus_httpget_results"></p>');
+	$updraftplus_admin->settings_debugrow("HTTP Get: ", '<input id="updraftplus_httpget_uri" type="text" class="call-action"> <a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraftplus_httpget_go">'.__('Fetch', 'updraftplus').'</a> <a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraftplus_httpget_gocurl">'.__('Fetch', 'updraftplus').' (Curl)</a><p id="updraftplus_httpget_results"></p>');
 
-	$updraftplus_admin->settings_debugrow(__("Call WordPress action:", 'updraftplus'), '<input id="updraftplus_callwpaction" type="text" class="call-action"> <a href="'.UpdraftPlus::get_current_clean_url().'" id="updraftplus_callwpaction_go">'.__('Call', 'updraftplus').'</a><div id="updraftplus_callwpaction_results"></div>');
+	$updraftplus_admin->settings_debugrow(__("Call WordPress action:", 'updraftplus'), '<input id="updraftplus_callwpaction" type="text" class="call-action"> <a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraftplus_callwpaction_go">'.__('Call', 'updraftplus').'</a><div id="updraftplus_callwpaction_results"></div>');
 
-	$updraftplus_admin->settings_debugrow('Site ID:', '(used to identify any Vault connections) <span id="updraft_show_sid">'.htmlspecialchars($updraftplus->siteid()).'</span> - <a href="'.UpdraftPlus::get_current_clean_url().'" id="updraft_reset_sid">'.__('reset', 'updraftplus')."</a>");
+	$updraftplus_admin->settings_debugrow('Site ID:', '(used to identify any Vault connections) <span id="updraft_show_sid">'.htmlspecialchars($updraftplus->siteid()).'</span> - <a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraft_reset_sid">'.__('reset', 'updraftplus')."</a>");
 	
 	$updraftplus_admin->settings_debugrow('', '<a href="admin-ajax.php?page=updraftplus&amp;action=updraft_ajax&amp;subaction=backuphistoryraw&amp;nonce='.wp_create_nonce('updraftplus-credentialtest-nonce').'" id="updraftplus-rawbackuphistory">'.__('Show raw backup and file list', 'updraftplus').'</a><br><span class="hidden-in-updraftcentral"><a id="updraftplus-remote-rescan-debug" href="#">'.__('Rescan remote storage', 'updraftplus').' - '.__('log results to console', 'updraftplus').'</a></span>');
 	

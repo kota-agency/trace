@@ -11,7 +11,7 @@ Latest Change: 1.12.19
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-$updraftplus_addons_importer = new UpdraftPlus_Addons_Importer;
+new UpdraftPlus_Addons_Importer;
 
 class UpdraftPlus_Addons_Importer {
 
@@ -28,7 +28,7 @@ class UpdraftPlus_Addons_Importer {
 		add_filter('updraftplus_if_foreign_then_premium_message', array($this, 'if_foreign_then_premium_message'));
 	}
 
-	public function foreign_allow_missing_entity($allow, $type, $foreign) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function foreign_allow_missing_entity($allow, $type, $foreign) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 		// This plugin splits the backup over various sets
 		return ('dropbox-wpadm' == $foreign) ? true : $allow;
 	}
@@ -125,7 +125,7 @@ class UpdraftPlus_Addons_Importer {
 				}
 				break;
 			case 'wpb2d':
-				if (!class_exists('UpdraftPlus_PclZip') && file_exists(UPDRAFTPLUS_DIR.'/includes/class-zip.php')) include_once(UPDRAFTPLUS_DIR.'/includes/class-zip.php');
+				if (!class_exists('UpdraftPlus_PclZip')) updraft_try_include_file('includes/class-zip.php', 'include_once');
 				global $updraftplus;
 				$updraft_dir = trailingslashit($updraftplus->backups_dir_location());
 				if (file_exists($updraft_dir.$entry) && class_exists('UpdraftPlus_PclZip')) {
@@ -144,12 +144,14 @@ class UpdraftPlus_Addons_Importer {
 						// Don't put this in the for loop, or the magic __get() method gets called every time the loop goes round
 						$numfiles = $zip->numFiles;
 
+						if (false === $numfiles) $updraftplus->log("foreign_gettime(): could not read any files from the zip: (".basename($entry).") Zip error: (".$zip->last_error.")");
+
 						$latest_mtime = -1;
 
 						for ($i=0; $i < $numfiles; $i++) {
 							$si = $zip->statIndex($i);
 							if ('wp-content/backups/wordpress-db-backup.sql' == $si['name']) {
-								@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+								@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 								$btime = $si['mtime'];
 							} elseif (preg_match('#wp-content/backups/(.*)\.sql$#i', $si['name'], $matches)) {
 								if ($si['mtime'] > $latest_mtime) {
@@ -158,7 +160,7 @@ class UpdraftPlus_Addons_Importer {
 								}
 							}
 						}
-						@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+						@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 					}
 					set_transient($transkey, $btime, 86400*365);
 

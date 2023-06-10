@@ -3,9 +3,8 @@
 /*
 UpdraftPlus Addon: multisite:Multisite/Network
 Description: Makes UpdraftPlus compatible with a WordPress Network (a.k.a. multi-site) and adds Network-related features
-Version: 3.7
+Version: 3.8
 Shop: /shop/network-multisite/
-Latest Change: 1.15.4
 */
 // @codingStandardsIgnoreEnd
 
@@ -31,22 +30,41 @@ if (is_multisite()) {
 			return apply_filters('updraft_user_can_manage', $user_can_manage, true);
 		}
 
+		/**
+		 * The suffix for the table to store options in
+		 *
+		 * @return String
+		 */
 		public static function options_table() {
 			return 'sitemeta';
 		}
 
 		/**
-		 * Extracts the last logged message from updraftplus last process
+		 * Extracts the last logged message
 		 *
 		 * @return Mixed - Value set for the option or the default message
 		 */
 		public static function get_updraft_lastmessage() {
-			return UpdraftPlus_Options::get_updraft_option('updraft_lastmessage', __('(Nothing has been logged yet)', 'updraftplus'));
+			// Storing this in the single-row option does not combine well with SQL binary logging and frequent updates during a backup process
+			return get_site_option('updraft_lastmessage', __('(Nothing has been logged yet)', 'updraftplus'));
 		}
 
+		/**
+		 * Get the value for a specified option
+		 *
+		 * @param String $option  - the option name
+		 * @param Mixed	 $default - the default option value
+		 *
+		 * @return Mixed
+		 */
 		public static function get_updraft_option($option, $default = false) {
-			$tmp = get_site_option('updraftplus_options');
-			$ret = isset($tmp[$option]) ? $tmp[$option] : $default;
+			if ('updraft_lastmessage' == $option) {
+				// Storing this in the single-row option does not combine well with SQL binary logging and frequent updates during a backup process
+				$ret = get_site_option($option, $default);
+			} else {
+				$tmp = get_site_option('updraftplus_options');
+				$ret = isset($tmp[$option]) ? $tmp[$option] : $default;
+			}
 			return apply_filters('updraftplus_get_option', $ret, $option, $default);
 		}
 
@@ -59,9 +77,13 @@ if (is_multisite()) {
 		 * @return Boolean - as from update_site_option()
 		 */
 		public static function update_updraft_option($option, $value, $use_cache = true) {
+			$value = apply_filters('updraftplus_update_option', $value, $option, $use_cache);
+			if ('updraft_lastmessage' == $option) {
+				return update_site_option('updraft_lastmessage', $value);
+			}
 			$tmp = get_site_option('updraftplus_options', array(), $use_cache);
 			if (!is_array($tmp)) $tmp = array();
-			$tmp[$option] = apply_filters('updraftplus_update_option', $value, $option, $use_cache);
+			$tmp[$option] = $value;
 			return update_site_option('updraftplus_options', $tmp);
 		}
 
@@ -173,7 +195,7 @@ if (is_multisite()) {
 			update_site_option('updraftplus_options', $arr);
 		}
 
-		public static function options_form_begin($settings_fields = 'updraft-options-group', $allow_autocomplete = true, $get_params = array(), $classes = '') {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+		public static function options_form_begin($settings_fields = 'updraft-options-group', $allow_autocomplete = true, $get_params = array(), $classes = '') {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameters are for future use.
 
 			$page = '';
 			if (!empty($get_params)) {
@@ -275,7 +297,7 @@ if (is_multisite()) {
 					$options[$key] = $value;
 				} elseif ('updraft_dir' == $key) {
 					$options[$key] = UpdraftPlus_Manipulation_Functions::prune_updraft_dir_prefix($value);
-				} elseif ('updraft_updraftvault' !== $key && preg_match('/^updraft_(.*)$/', $key, $matches) && in_array($matches[1], $backup_methods)) {
+				} elseif (preg_match('/^updraft_(.*)$/', $key, $matches) && in_array($matches[1], $backup_methods)) {
 					$options[$key] = call_user_func(array($updraftplus, 'storage_options_filter'), $value, $key);
 				} elseif (preg_match("/^updraft_/", $key)) {
 					$options[$key] = $value;
@@ -360,7 +382,7 @@ if (is_multisite()) {
 			return $preserve_existing;
 		}
 		
-		public function restore_delete_recursive($recurse, $ud_foreign, $restore_options) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+		public function restore_delete_recursive($recurse, $ud_foreign, $restore_options) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 			if ($recurse) return $recurse;
 			$selective_restore_site_id = (is_array($restore_options) && !empty($restore_options['updraft_restore_ms_whichsites']) && $restore_options['updraft_restore_ms_whichsites'] > 0) ? $restore_options['updraft_restore_ms_whichsites'] : false;
 			if ($selective_restore_site_id) return true;
@@ -419,9 +441,9 @@ if (is_multisite()) {
 				$updraftplus->log_e("Restoring only the site with id=%s: removing other data (if any) from the unpacked backup", 'main');
 				
 				if ('uploads' == $type) {
-					@$wp_filesystem->delete($move_from.'/sites', true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+					@$wp_filesystem->delete($move_from.'/sites', true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 				} elseif ('others' == $type) {
-					@$wp_filesystem->delete($move_from.'/blogs.dir', true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+					@$wp_filesystem->delete($move_from.'/blogs.dir', true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 				}
 				
 			} else {
@@ -431,7 +453,7 @@ if (is_multisite()) {
 				if ('uploads' == $type) {
 					// Sanity check
 					if (!$wp_filesystem->exists($move_from.'/sites')) {
-						$updraftplus->log("Could not find sites directory: aborting (${move_from}/sites)");
+						$updraftplus->log("Could not find sites directory: aborting ({$move_from}/sites)");
 						return false;
 					}
 					// Remove stuff not in uploads/sites
@@ -439,14 +461,14 @@ if (is_multisite()) {
 					if (empty($potential_del_files)) $potential_del_files = array();
 					foreach ($potential_del_files as $file => $filestruc) {
 						if (empty($file)) continue;
-						if ('sites' != strtolower($file)) @$wp_filesystem->delete($move_from.'/'.$file, true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+						if ('sites' != strtolower($file)) @$wp_filesystem->delete($move_from.'/'.$file, true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 					}
 					// Remove stuff in uploads/sites that does not match our ID
 					$potential_del_files = $wp_filesystem->dirlist($move_from.'/sites', true, false);
 					if (empty($potential_del_files)) $potential_del_files = array();
 					foreach ($potential_del_files as $file => $filestruc) {
 						if (empty($file)) continue;
-						if ($file != $selective_restore_site_id) @$wp_filesystem->delete($move_from.'/sites/'.$file, true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+						if ($file != $selective_restore_site_id) @$wp_filesystem->delete($move_from.'/sites/'.$file, true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 					}
 					
 					return $move_from.'/sites/'.$selective_restore_site_id;
@@ -454,7 +476,7 @@ if (is_multisite()) {
 				} elseif ('others' == $type) {
 					// Sanity check
 					if (!$wp_filesystem->exists($move_from.'/blogs.dir')) {
-						$updraftplus->log("Could not find blogs.dir directory: aborting (${move_from}/blogs.dir)");
+						$updraftplus->log("Could not find blogs.dir directory: aborting ({$move_from}/blogs.dir)");
 						return false;
 					}
 					// Remove stuff not in wp-content/blogs.dir
@@ -462,14 +484,14 @@ if (is_multisite()) {
 					if (empty($potential_del_files)) $potential_del_files = array();
 					foreach ($potential_del_files as $file => $filestruc) {
 						if (empty($file)) continue;
-						if ('blogs.dir' != strtolower($file)) @$wp_filesystem->delete($move_from.'/'.$file.'/files', true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+						if ('blogs.dir' != strtolower($file)) @$wp_filesystem->delete($move_from.'/'.$file.'/files', true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 					}
 					// Remove stuff in uploads/sites that does not match our ID
 					$potential_del_files = $wp_filesystem->dirlist($move_from.'/blogs.dir', true, false);
 					if (empty($potential_del_files)) $potential_del_files = array();
 					foreach ($potential_del_files as $file => $filestruc) {
 						if (empty($file)) continue;
-						if ($file != $selective_restore_site_id) @$wp_filesystem->delete($move_from.'/blogs.dir/'.$file.'/files', true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+						if ($file != $selective_restore_site_id) @$wp_filesystem->delete($move_from.'/blogs.dir/'.$file.'/files', true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 					}
 					
 					return $move_from.'/blogs.dir/'.$selective_restore_site_id.'/files';
@@ -519,7 +541,7 @@ if (is_multisite()) {
 		 *
 		 * @return Boolean                        - filtered value
 		 */
-		public function restore_this_site($restore_or_not, $site_id, $unprefixed_table_name, $restore_options) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+		public function restore_this_site($restore_or_not, $site_id, $unprefixed_table_name, $restore_options) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 		
 			if (!empty($restore_options['updraft_restore_ms_whichsites']) && -1 != $restore_options['updraft_restore_ms_whichsites']) {
 		
@@ -814,6 +836,6 @@ if (is_multisite()) {
 		}
 	}
 	
-	$updraftplus_addon_multisite = new UpdraftPlusAddOn_MultiSite;
+	new UpdraftPlusAddOn_MultiSite;
 
 }

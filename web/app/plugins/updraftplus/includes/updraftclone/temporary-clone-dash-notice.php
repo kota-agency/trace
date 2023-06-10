@@ -56,7 +56,7 @@ class UpdraftPlus_Temporary_Clone_Dash_Notice {
 	}
 
 	/**
-	 * This function will perform security checks before allowing the ajax calls for the UpdraftPlus clone VPS mu-plugin be processed.
+	 * This function will perform security checks before allowing the ajax calls for the UpdraftClone VPS mu-plugin be processed.
 	 *
 	 * @return void
 	 */
@@ -70,7 +70,7 @@ class UpdraftPlus_Temporary_Clone_Dash_Notice {
 	}
 
 	/**
-	 * This function will handle the ajax calls for the UpdraftPlus clone notice mu-plugin.
+	 * This function will handle the ajax calls for the UpdraftClone notice mu-plugin.
 	 *
 	 * @return void
 	 */
@@ -166,5 +166,5 @@ class UpdraftPlus_Temporary_Clone_Dash_Notice {
 }
 
 if (defined('UPDRAFTPLUS_THIS_IS_CLONE')) {
-	$updraftplus_temporary_clone_dash_notice = new UpdraftPlus_Temporary_Clone_Dash_Notice();
+	new UpdraftPlus_Temporary_Clone_Dash_Notice();
 }

@@ -17,13 +17,15 @@ class UpdraftPlus_Storage_Methods_Interface {
 	 */
 	public static function get_storage_object($method) {
 	
+		if (!preg_match('/^[\-a-z0-9]+$/i', $method)) return new WP_Error('no_such_storage_class', "The specified storage method ($method) was not found");
+	
 		static $objects = array();
 	
 		if (!empty($objects[$method])) return $objects[$method];
 	
 		$method_class = 'UpdraftPlus_BackupModule_'.$method;
 		
-		if (!class_exists($method_class)) include_once UPDRAFTPLUS_DIR.'/methods/'.$method.'.php';
+		if (!class_exists($method_class)) updraft_try_include_file('methods/'.$method.'.php', 'include_once');
 		
 		if (!class_exists($method_class)) return new WP_Error('no_such_storage_class', "The specified storage method ($method) was not found");
 		
@@ -43,7 +45,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 	
 		$storage_objects_and_ids = self::get_storage_objects_and_ids(array_keys($updraftplus->backup_methods));
 		$options = array();
-		$templates = array();
+		$templates = $partial_templates = array();
 
 		foreach ($storage_objects_and_ids as $method => $method_info) {
 
@@ -58,6 +60,8 @@ class UpdraftPlus_Storage_Methods_Interface {
 			} else {
 				$templates[$method] = $object->get_template();
 			}
+
+			if (is_callable(array($object, 'get_partial_templates'))) $partial_templates[$method] = $object->get_partial_templates();
 
 			if (isset($method_info['instance_settings'])) {
 				// Add the methods default settings so that we can add new instances
@@ -80,11 +84,15 @@ class UpdraftPlus_Storage_Methods_Interface {
 					$options[$method][$instance_id] = $opts;
 				}
 			}
+
+			// Get the list of template properties from the predefined storage method
+			$options[$method]['template_properties'] = $object->get_template_properties();
 		}
 
 		return array(
 			'options' => $options,
 			'templates' => $templates,
+			'partial_templates' => $partial_templates,
 		);
 	}
 	
@@ -330,7 +338,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 						$updraftplus->log(__('Error', 'updraftplus'), 'notice-restore');
 					} else {
 						clearstatcache();
-						if (0 === @filesize($fullpath)) @unlink($fullpath);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+						if (0 === @filesize($fullpath)) @unlink($fullpath);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 						$updraftplus->log('Remote fetch failed');
 					}
 				}
@@ -351,7 +359,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 
 		global $updraftplus;
 	
-		if (function_exists('set_time_limit')) @set_time_limit(UPDRAFTPLUS_SET_TIME_LIMIT);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		if (function_exists('set_time_limit')) @set_time_limit(UPDRAFTPLUS_SET_TIME_LIMIT);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 
 		$service = $service_object->get_id();
 		
@@ -365,7 +373,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 				$log_message = 'Exception ('.get_class($e).') occurred during download: '.$e->getMessage().' (Code: '.$e->getCode().', line '.$e->getLine().' in '.$e->getFile().')';
 				error_log($log_message);
 				// @codingStandardsIgnoreLine
-				if (function_exists('wp_debug_backtrace_summary')) $log_message .= ' Backtrace: '.wp_debug_backtrace_summary();
+				$log_message .= ' Backtrace: '.str_replace(array(ABSPATH, "\n"), array('', ', '), $e->getTraceAsString());
 				$updraftplus->log($log_message);
 				$updraftplus->log(sprintf(__('A PHP exception (%s) has occurred: %s', 'updraftplus'), get_class($e), $e->getMessage()), 'error');
 				return false;
@@ -374,7 +382,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 				$log_message = 'PHP Fatal error ('.get_class($e).') has occurred during download. Error Message: '.$e->getMessage().' (Code: '.$e->getCode().', line '.$e->getLine().' in '.$e->getFile().')';
 				error_log($log_message);
 				// @codingStandardsIgnoreLine
-				if (function_exists('wp_debug_backtrace_summary')) $log_message .= ' Backtrace: '.wp_debug_backtrace_summary();
+				$log_message .= ' Backtrace: '.str_replace(array(ABSPATH, "\n"), array('', ', '), $e->getTraceAsString());
 				$updraftplus->log($log_message);
 				$updraftplus->log(sprintf(__('A PHP fatal error (%s) has occurred: %s', 'updraftplus'), get_class($e), $e->getMessage()), 'error');
 				return false;

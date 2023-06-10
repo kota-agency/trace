@@ -11,7 +11,7 @@ Latest Change: 1.16.24
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-$updraftplus_addon_moredatabase = new UpdraftPlus_Addon_MoreDatabase;
+new UpdraftPlus_Addon_MoreDatabase;
 
 class UpdraftPlus_Addon_MoreDatabase {
 
@@ -108,7 +108,7 @@ class UpdraftPlus_Addon_MoreDatabase {
 	 * @param String $posted_data
 	 * @return Array
 	 */
-	public function extradb_testconnection_go($results_initial_value_ignored, $posted_data) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function extradb_testconnection_go($results_initial_value_ignored, $posted_data) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 	
 		if (empty($posted_data['user'])) return(array('r' => $posted_data['row'], 'm' => '<p>'.sprintf(__("Failure: No %s was given.", 'updraftplus').'</p>', __('user', 'updraftplus'))));
 
@@ -198,7 +198,7 @@ class UpdraftPlus_Addon_MoreDatabase {
 	
 			$ret .= '<div id="updraft_backupextradbs"></div>';
 			
-			$ret .= '<div id="updraft_backupextradbs_another_container"><a href="'.UpdraftPlus::get_current_clean_url().'" id="updraft_backupextradb_another" class="updraft_icon_link"><span class="dashicons dashicons-plus"></span>'.__('Add an external database to backup...', 'updraftplus').'</a></div>';
+			$ret .= '<div id="updraft_backupextradbs_another_container"><a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraft_backupextradb_another" class="updraft_icon_link"><span class="dashicons dashicons-plus"></span>'.__('Add an external database to backup...', 'updraftplus').'</a></div>';
 
 		add_action('admin_footer', array($this, 'admin_footer'));
 		return $ret;
@@ -265,7 +265,7 @@ class UpdraftPlus_Addon_MoreDatabase {
 						'<div class="updraft_backupextradbs_row_label" title="<?php echo esc_attr(__('Enter password.', 'updraftplus'));?>"><?php echo esc_js(__('Password', 'updraftplus'));?>:</div><input class="updraft_backupextradbs_row_textinput extradb_pass" title="<?php echo esc_attr(__('Enter password', 'updraftplus'));?>"type="<?php echo apply_filters('updraftplus_admin_secret_field_type', 'text'); ?>" name="updraft_extradbs['+updraft_extra_dbs+'][pass]" value="'+pass+'">'+
 						'<div class="updraft_backupextradbs_row_label" title="<?php echo esc_attr(__('Enter database.', 'updraftplus'));?>"><?php echo esc_js(__('Database', 'updraftplus'));?>:</div><input class="updraft_backupextradbs_row_textinput extradb_name" title="<?php echo esc_attr(__('Enter database', 'updraftplus'));?>" type="text" name="updraft_extradbs['+updraft_extra_dbs+'][name]" value="'+name+'">'+
 						'<div class="updraft_backupextradbs_row_label" title="<?php echo esc_attr(__('Enter table prefix', 'updraftplus')).'. '.esc_attr(__('If you enter a table prefix, then only tables that begin with this prefix will be backed up.', 'updraftplus'));?>"><?php echo esc_js(__('Table prefix', 'updraftplus'));?>:</div><input class="updraft_backupextradbs_row_textinput extradb_prefix" title="<?php echo esc_attr(__('Enter table prefix', 'updraftplus')).'. '.esc_attr('If you enter a table prefix, then only tables that begin with this prefix will be backed up.', 'updraftplus');?>" type="text" name="updraft_extradbs['+updraft_extra_dbs+'][prefix]" value="'+prefix+'">'+
-						'<div class="updraft_backupextradbs_row_label updraft_backupextradbs_row_test"><a href="<?php echo UpdraftPlus::get_current_clean_url();?>" class="updraft_backupextradbs_row_testconnection"><?php echo esc_js(__('Test connection...', 'updraftplus'));?></a></div>'+
+						'<div class="updraft_backupextradbs_row_label updraft_backupextradbs_row_test"><a href="<?php echo esc_url(UpdraftPlus::get_current_clean_url());?>" class="updraft_backupextradbs_row_testconnection"><?php echo esc_js(__('Test connection...', 'updraftplus'));?></a></div>'+
 						'</div>').appendTo($('#updraft_backupextradbs')).fadeIn();
 				}
 				$('#updraft_backupextradb_another').on('click', function(e) {
@@ -372,18 +372,18 @@ class UpdraftPlus_Addon_MoreDatabase {
 	 * @param  string $whichdb_suffix This spcifies the DB suffix
 	 * @return string                 returns the encrypted file name
 	 */
-	public function encrypt_file($result, $file, $encryption, $whichdb, $whichdb_suffix) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function encrypt_file($result, $file, $encryption, $whichdb, $whichdb_suffix) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 
 		global $updraftplus;
 		$updraft_dir = $updraftplus->backups_dir_location();
 		$updraftplus->jobdata_set('jobstatus', 'dbencrypting'.$whichdb_suffix);
 		$time_started = microtime(true);
-		$file_size = @filesize($updraft_dir.'/'.$file)/1024;// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		$file_size = @filesize($updraft_dir.'/'.$file)/1024;// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 
 		$memory_limit = ini_get('memory_limit');
-		$memory_usage = round(@memory_get_usage(false)/1048576, 1);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
-		$memory_usage2 = round(@memory_get_usage(true)/1048576, 1);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
-		$updraftplus->log("Encryption being requested: file_size: ".round($file_size, 1)." KB memory_limit: $memory_limit (used: ${memory_usage}M | ${memory_usage2}M)");
+		$memory_usage = round(@memory_get_usage(false)/1048576, 1);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
+		$memory_usage2 = round(@memory_get_usage(true)/1048576, 1);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
+		$updraftplus->log("Encryption being requested: file_size: ".round($file_size, 1)." KB memory_limit: $memory_limit (used: {$memory_usage}M | {$memory_usage2}M)");
 		
 		$encrypted_file = UpdraftPlus_Encryption::encrypt($updraft_dir.'/'.$file, $encryption);
 
@@ -401,7 +401,7 @@ class UpdraftPlus_Addon_MoreDatabase {
 			}
 
 			// Delete unencrypted file
-			@unlink($updraft_dir.'/'.$file);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			@unlink($updraft_dir.'/'.$file);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 
 			$updraftplus->jobdata_set('jobstatus', 'dbencrypted'.$whichdb_suffix);
 
@@ -524,7 +524,7 @@ class UpdraftPlus_Addon_MoreDatabase {
 	 * @param  [array]      $dbinfo       an array of information about the current database
 	 * @return [boolean] a boolean value indicating if a table should be included in the backup or not
 	 */
-	public function updraftplus_backup_table($bool, $table, $table_prefix, $whichdb, $dbinfo) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function updraftplus_backup_table($bool, $table, $table_prefix, $whichdb, $dbinfo) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 
 		// Check this empty not to cause errors
 		if (!empty($this->database_tables)) {

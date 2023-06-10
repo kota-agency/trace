@@ -39,7 +39,7 @@ class UpdraftPlus_Temporary_Clone_Status {
 	 * @return void
 	 */
 	public function init() {
-		if (is_admin() || (defined('WP_CLI') && WP_CLI) || 'GET' != $_SERVER['REQUEST_METHOD']) return;
+		if (is_admin() || (defined('WP_CLI') && WP_CLI) || !isset($_SERVER['REQUEST_METHOD']) || 'GET' != $_SERVER['REQUEST_METHOD']) return;
 
 		$this->output_status_page();
 	}
@@ -465,5 +465,5 @@ class UpdraftPlus_Temporary_Clone_Status {
 }
 
 if (defined('UPDRAFTPLUS_THIS_IS_CLONE') && 1 == UPDRAFTPLUS_THIS_IS_CLONE) {
-	$updraftplus_temporary_clone_status = new UpdraftPlus_Temporary_Clone_Status();
+	new UpdraftPlus_Temporary_Clone_Status();
 }

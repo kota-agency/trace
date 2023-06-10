@@ -11,7 +11,7 @@ Latest Change: 1.12.3
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-$updraftplus_addon_fixtime = new UpdraftPlus_AddOn_FixTime;
+new UpdraftPlus_AddOn_FixTime;
 
 class UpdraftPlus_AddOn_FixTime {
 
@@ -172,7 +172,7 @@ class UpdraftPlus_AddOn_FixTime {
 	 * @param  string $group_id
 	 * @return boolean
 	 */
-	public function prune_or_not($prune_it, $type, $backup_datestamp, $entity, $entity_how_many, $rule, $group_id) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function prune_or_not($prune_it, $type, $backup_datestamp, $entity, $entity_how_many, $rule, $group_id) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameters are for future use.
 
 		$debug = UpdraftPlus_Options::get_updraft_option('updraft_debug_mode');
 
@@ -302,12 +302,12 @@ class UpdraftPlus_AddOn_FixTime {
 	}
 
 	public function after_dbconfig() {
-		echo '<div id="updraft_retain_db_rules"></div><div><a href="'.UpdraftPlus::get_current_clean_url().'" id="updraft_retain_db_addnew" class="updraft_icon_link" aria-label="'.__('Add an additional database retention rule', 'updraftplus').'"><span class="dashicons dashicons-plus"></span>'.__('Add an additional retention rule...', 'updraftplus').'</a></div>';
+		echo '<div id="updraft_retain_db_rules"></div><div><a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraft_retain_db_addnew" class="updraft_icon_link" aria-label="'.__('Add an additional database retention rule', 'updraftplus').'"><span class="dashicons dashicons-plus"></span>'.__('Add an additional retention rule...', 'updraftplus').'</a></div>';
 	}
 
 	public function after_filesconfig() {
 		add_action('admin_footer', array($this, 'admin_footer_extraretain_js'));
-		echo '<div id="updraft_retain_files_rules"></div><div><a href="'.UpdraftPlus::get_current_clean_url().'" id="updraft_retain_files_addnew" class="updraft_icon_link" aria-label="'.__('Add an additional file retention rule', 'updraftplus').'"><span class="dashicons dashicons-plus"></span>'.__('Add an additional retention rule...', 'updraftplus').'</a></div>';
+		echo '<div id="updraft_retain_files_rules"></div><div><a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraft_retain_files_addnew" class="updraft_icon_link" aria-label="'.__('Add an additional file retention rule', 'updraftplus').'"><span class="dashicons dashicons-plus"></span>'.__('Add an additional retention rule...', 'updraftplus').'</a></div>';
 	}
 
 	public function soonest_first($a, $b) {
@@ -570,13 +570,13 @@ class UpdraftPlus_AddOn_FixTime {
 		return __('starting from next time it is', 'updraftplus').' '.$this->day_selector($day_selector_id, $selected_interval).'<input title="'.__('Start time', 'updraftplus').__('Enter in format HH:MM (e.g. 14:22).', 'updraftplus').' '.htmlspecialchars(__('The time zone used is that from your WordPress settings, in Settings -> General.', 'updraftplus')).'" type="text" class="fix-time" maxlength="5" name="'.$time_selector_id.'" value="'.sprintf('%02d', $start_hour).':'.sprintf('%02d', $start_minute).'">';
 	}
 
-	public function schedule_showdbopts($disp, $selected_interval) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function schedule_showdbopts($disp, $selected_interval) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameters are for future use.
 		$start_time = UpdraftPlus_Options::get_updraft_option('updraft_starttime_db');
 		list ($start_hour, $start_minute) = $this->parse($start_time);
 		return $this->starting_widget($start_hour, $start_minute, 'updraft_startday_db', 'updraft_starttime_db', $selected_interval);
 	}
 
-	public function schedule_showfileopts($disp, $selected_interval) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function schedule_showfileopts($disp, $selected_interval) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameters are for future use.
 		$start_time = UpdraftPlus_Options::get_updraft_option('updraft_starttime_files');
 		list ($start_hour, $start_minute) = $this->parse($start_time);
 		return $this->starting_widget($start_hour, $start_minute, 'updraft_startday_files', 'updraft_starttime_files', $selected_interval);

@@ -18,7 +18,7 @@ if (version_compare(phpversion(), '5.3.3', '<') || (defined('UPDRAFTPLUS_CLOUDFI
 
 use OpenCloud\Rackspace;
 
-$updraftplus_addon_cloudfilesenhanced = new UpdraftPlus_Addon_CloudFilesEnhanced;
+$updraftplus_addon_cloudfilesenhanced = new UpdraftPlus_Addon_CloudFilesEnhanced;// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Unused variable $updraftplus_addon_cloudfilesenhanced But it is used Globally in class-commands.php so ignoring
 
 class UpdraftPlus_Addon_CloudFilesEnhanced {
 	
@@ -26,18 +26,18 @@ class UpdraftPlus_Addon_CloudFilesEnhanced {
 
 	private $regions;
 	
+	/**
+	 * Class constructor
+	 */
 	public function __construct() {
 		add_action('updraftplus_settings_page_init', array($this, 'updraftplus_settings_page_init'));
-		add_action('plugins_loaded', array($this, 'plugins_loaded'));
 		add_action('updraft_cloudfiles_newuser', array($this, 'newuser'));
 		add_filter('updraft_cloudfiles_apikeysetting', array($this, 'apikeysettings'));
 	}
-
-	public function plugins_loaded() {
-		$this->title = __('Rackspace Cloud Files, enhanced', 'updraftplus');
-		$this->description = __('Adds enhanced capabilities for Rackspace Cloud Files users', 'updraftplus');
-	}
 	
+	/**
+	 * Called by the WP action updraftplus_settings_page_init
+	 */
 	public function updraftplus_settings_page_init() {
 		
 		$this->accounts = array(
@@ -64,7 +64,7 @@ class UpdraftPlus_Addon_CloudFilesEnhanced {
 	 * @return string anchor link html for creating new API user
 	 */
 	public function apikeysettings($msg) {
-		$msg = '<a href="'.UpdraftPlus::get_current_clean_url().'" id="updraft_cloudfiles_newapiuser_{{instance_id}}" class="updraft_cloudfiles_newapiuser" data-instance_id="{{instance_id}}">'.__('Create a new API user with access to only this container (rather than your whole account)', 'updraftplus').'</a>';
+		$msg = '<a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraft_cloudfiles_newapiuser_{{instance_id}}" class="updraft_cloudfiles_newapiuser" data-instance_id="{{instance_id}}">'.__('Create a new API user with access to only this container (rather than your whole account)', 'updraftplus').'</a>';
 		return $msg;
 	}
 	
@@ -96,8 +96,8 @@ class UpdraftPlus_Addon_CloudFilesEnhanced {
 		if (empty($use_settings['location'])) $use_settings['location'] = 'us';
 		if (empty($use_settings['region'])) $use_settings['region'] = 'DFW';
 		
-		include_once(UPDRAFTPLUS_DIR.'/methods/cloudfiles.php');
-		include_once(UPDRAFTPLUS_DIR.'/vendor/autoload.php');
+		updraft_try_include_file('methods/cloudfiles.php', 'include_once');
+		updraft_try_include_file('vendor/autoload.php', 'include_once');
 		$method = new UpdraftPlus_BackupModule_cloudfiles;
 		$useservercerts = !empty($use_settings['useservercerts']);
 		$disableverify = !empty($use_settings['disableverify']);

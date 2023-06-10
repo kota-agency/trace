@@ -29,7 +29,7 @@ class UpdraftPlus_Temporary_Clone_User_Notice {
 		<div id="updraftplus_temporary_clone-usernotice" class="updated">
 			<h1><?php _e('UpdraftPlus temporary clone user login settings:', 'updraftplus'); ?></h1>
 			<p><?php _e('You can forbid non-admins logins to this cloned site by checking the checkbox below', 'updraftplus'); ?></p>
-			<input type="checkbox" name="updraftplus_clone_admin_only" value="1" <?php if ($admin_login) echo 'checked="checked"'; ?> onclick="jQuery.post('<?php echo admin_url('admin-ajax.php'); ?>', {action: 'updraftplus_user_notice_ajax', subaction: 'admin_only_login', nonce: '<?php echo wp_create_nonce('updraftplus_admin_only_login');?>', admin_only_login: jQuery(this).is(':checked') });"> <?php _e('Allow only administrators to log in', 'updraftplus'); ?><br>
+			<input type="checkbox" id="updraftplus_clone_admin_only" name="updraftplus_clone_admin_only" value="1" <?php if ($admin_login) echo 'checked="checked"'; ?> onclick="jQuery.post('<?php echo admin_url('admin-ajax.php'); ?>', {action: 'updraftplus_user_notice_ajax', subaction: 'admin_only_login', nonce: '<?php echo wp_create_nonce('updraftplus_admin_only_login');?>', admin_only_login: jQuery(this).is(':checked') });"> <label for="updraftplus_clone_admin_only"><?php _e('Allow only administrators to log in', 'updraftplus'); ?></label><br>
 		</div>
 		<?php
 	}
@@ -57,7 +57,7 @@ class UpdraftPlus_Temporary_Clone_User_Notice {
 	}
 
 	/**
-	 * This function will perform security checks before allowing the ajax calls for the UpdraftPlus clone VPS mu-plugin be processed.
+	 * This function will perform security checks before allowing the ajax calls for the UpdraftClone VPS mu-plugin be processed.
 	 *
 	 * @return void
 	 */
@@ -69,7 +69,7 @@ class UpdraftPlus_Temporary_Clone_User_Notice {
 	}
 
 	/**
-	 * This function will handle the ajax calls for the UpdraftPlus clone user notice mu-plugin.
+	 * This function will handle the ajax calls for the UpdraftClone user notice mu-plugin.
 	 *
 	 * @return void
 	 */
@@ -111,5 +111,5 @@ class UpdraftPlus_Temporary_Clone_User_Notice {
 }
 
 if (defined('UPDRAFTPLUS_THIS_IS_CLONE')) {
-	$updraftplus_temporary_clone_user_notice = new UpdraftPlus_Temporary_Clone_User_Notice();
+	new UpdraftPlus_Temporary_Clone_User_Notice();
 }

@@ -11,7 +11,7 @@ Latest Change: 1.14.5
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-$updraftplus_addon_incremental = new UpdraftPlus_Addons_Incremental;
+new UpdraftPlus_Addons_Incremental;
 
 class UpdraftPlus_Addons_Incremental {
 
@@ -52,7 +52,7 @@ class UpdraftPlus_Addons_Incremental {
 	 *
 	 * @return string      - the premium backup link
 	 */
-	public function incremental_backup_link($link) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	public function incremental_backup_link($link) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Unused parameter is present because the method is used as a WP filter.
 		return '<p><a href="#" id="updraftplus_incremental_backup_link" onclick="updraft_backup_dialog_open(\'incremental\'); return false;" data-incremental="1">' . __('Add changed files (incremental backup) ...', ' updraftplus ') . '</a></p>';
 	}
 
@@ -67,14 +67,13 @@ class UpdraftPlus_Addons_Incremental {
 	 *
 	 * @return string                - returns a string that is either the original backup date or the string that contains the incremental set data
 	 */
-	public function showbackup_date($date, $backup, $jobdata, $backup_date, $simple_format) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function showbackup_date($date, $backup, $jobdata, $backup_date, $simple_format) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 
 		$incremental_sets = !empty($backup['incremental_sets']) ? $backup['incremental_sets'] : array();
 		
 		// Check here that the backup set has the incremental set and that there is more than one set as we don't want the incremental backup UI showing for every user backup
 		if (!empty($incremental_sets) && 1 < count($incremental_sets)) {
 
-			// The timestamps here are already in the users local time (they come from the backup filenames) and don't need to be converted again as we will end up displaying the wrong time
 			$latest_increment = key(array_slice($incremental_sets, -1, 1, true));
 
 			if ($latest_increment > $backup_date) {
@@ -83,13 +82,15 @@ class UpdraftPlus_Addons_Incremental {
 
 				foreach ($incremental_sets as $inc_time => $entities) {
 					if ($increment_times) $increment_times .= '; ';
-					$increment_times .= gmdate('M d, Y G:i', $inc_time);
+					// Format the incremental backup time to users local time
+					$formatted_date = get_date_from_gmt(date('M d, Y G:i', $inc_time), 'M d, Y G:i');
+					$increment_times .= $formatted_date;
 				}
 
 				if ($simple_format) {
-					return $date.' '.sprintf(__('(latest increment: %s)', 'updraftplus'), gmdate('M d, Y G:i', $inc_time));
+					return $date.' '.sprintf(__('(latest increment: %s)', 'updraftplus'), $formatted_date);
 				} else {
-					return '<span title="'.sprintf(__('Increments exist at: %s', 'updraftplus'), $increment_times).'">'.$date.'<br>'.sprintf(__('(latest increment: %s)', 'updraftplus'), gmdate('M d, Y G:i', $latest_increment)).'</span>';
+					return '<span title="'.sprintf(__('Increments exist at: %s', 'updraftplus'), $increment_times).'">'.$date.'<br>'.sprintf(__('(latest increment: %s)', 'updraftplus'), $formatted_date).'</span>';
 				}
 			}
 		}
@@ -172,7 +173,9 @@ class UpdraftPlus_Addons_Incremental {
 			if (isset($job_file_entities[$youwhat]) && isset($backup_history[$youwhat])) {
 				$job_file_entities[$youwhat]['index'] = count($backup_history[$youwhat]);
 				$job_backup_files_array[$youwhat] = $backup_history[$youwhat];
-				$job_backup_files_array[$youwhat.'-size'] = $backup_history[$youwhat.'-size'];
+				if (isset($backup_history[$youwhat.'-size'])) {
+					$job_backup_files_array[$youwhat.'-size'] = $backup_history[$youwhat.'-size'];
+				}
 			}
 		}
 
@@ -378,10 +381,18 @@ class UpdraftPlus_Addons_Incremental {
 	}
 
 	/**
-	 * This function will setup and check that an incremental backup can be started.
+	 * This function will setup and check that an incremental backup can be started. It is called by the WP action updraft_backup_increments (which gets scheduled)
 	 */
 	public function backup_increments() {
 		global $updraftplus;
+		
+		$selected_interval = UpdraftPlus_Options::get_updraft_option('updraft_interval_increments', 'none');
+		
+		if ('none' === $selected_interval) {
+			// Handle WP-Cron being inconsistent with the saved options
+			$updraftplus->log("No incremental backup is configured in the saved settings; will not run");
+			return;
+		}
 		
 		$running = $updraftplus->is_backup_running();
 		if ($running) {
@@ -419,7 +430,7 @@ class UpdraftPlus_Addons_Incremental {
 	 *
 	 * @return boolean - to indicate whether or not (e.g. no full backup was found) an incremental run can proceed
 	 */
-	public function prepare_incremental_run($incremental = false, $entities = array()) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function prepare_incremental_run($incremental = false, $entities = array()) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 		global $updraftplus;
 
 		$nonce = UpdraftPlus_Backup_History::get_latest_backup($entities);

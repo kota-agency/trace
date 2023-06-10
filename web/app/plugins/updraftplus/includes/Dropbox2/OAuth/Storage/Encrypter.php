@@ -68,7 +68,7 @@ class Dropbox_Encrypter
         
         $updraftplus->ensure_phpseclib('Crypt_Rijndael');
 
-        if (!function_exists('crypt_random_string')) require_once(UPDRAFTPLUS_DIR.'/vendor/phpseclib/phpseclib/phpseclib/Crypt/Random.php');
+        if (!function_exists('crypt_random_string')) updraft_try_include_file('vendor/phpseclib/phpseclib/phpseclib/Crypt/Random.php', 'require_once');
         
         $iv = crypt_random_string(self::IV_SIZE);
         
@@ -97,11 +97,17 @@ class Dropbox_Encrypter
         $cipherText = base64_decode($cipherText);
         $iv = substr($cipherText, 0, self::IV_SIZE);
         $cipherText = substr($cipherText, self::IV_SIZE);
+
+        $decrypted = false;
     
         if (function_exists('mcrypt_decrypt')) {
             // @codingStandardsIgnoreLine
             $token = @mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $this->key, $cipherText, MCRYPT_MODE_CBC, $iv);
-        } else {
+            // Some plugins provide their own version of mcrypt_* functions and they don't provide the functionality that the original method has, so try and detect if the decryption has failed and if so try rijndael
+            if (false != $token) $decrypted = true;
+        }
+        
+        if (!$decrypted) {
             global $updraftplus;
             $updraftplus->ensure_phpseclib('Crypt_Rijndael');
 

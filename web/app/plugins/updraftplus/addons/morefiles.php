@@ -11,7 +11,7 @@ Latest Change: 1.14.3
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-$updraftplus_addons_morefiles = new UpdraftPlus_Addons_MoreFiles;
+new UpdraftPlus_Addons_MoreFiles;
 
 class UpdraftPlus_Addons_MoreFiles {
 
@@ -54,7 +54,8 @@ class UpdraftPlus_Addons_MoreFiles {
 		add_filter('updraftplus_include_manifest', array($this, 'more_include_manifest'), 10, 2);
 		add_filter('updraftplus_more_rebuild', array($this, 'more_rebuild'), 10, 1);
 
-		add_filter('updraftplus_restore_all_downloaded_postscan', array($this, 'restore_all_downloaded_postscan'), 10, 7);
+		add_filter('updraftplus_restore_all_downloaded_postscan', array($this, 'restore_all_downloaded_postscan_more'), 10, 7);
+		add_filter('updraftplus_restore_all_downloaded_postscan', array($this, 'restore_all_downloaded_postscan_selective_restore'), 10, 7);
 		add_filter('updraft_backupable_file_entities_on_restore', array($this, 'backupable_file_entities_on_restore'), 10, 3);
 		add_filter('updraftplus_restore_path', array($this, 'restore_path_more'), 10, 4);
 
@@ -82,10 +83,10 @@ class UpdraftPlus_Addons_MoreFiles {
 	}
 	
 	public function updraftplus_browse_download_link() {
-		return '<a href="'.UpdraftPlus::get_current_clean_url().'" id="updraft_zip_download_item">'._x('Download', '(verb)', 'updraftplus').'</a>';
+		return '<a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" id="updraft_zip_download_item">'._x('Download', '(verb)', 'updraftplus').'</a>';
 	}
 	
-	public function updraftplus_command_get_zipfile_download($result, $params) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function updraftplus_command_get_zipfile_download($result, $params) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 		global $updraftplus;
 
 		$zip_object = $updraftplus->get_zip_object_name();
@@ -119,7 +120,7 @@ class UpdraftPlus_Addons_MoreFiles {
 					$extracted = $zip->extractTo($updraftplus->backups_dir_location() . DIRECTORY_SEPARATOR . 'ziptemp' . DIRECTORY_SEPARATOR, $replaced_dir_sep_path);
 				}
 				
-				@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+				@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 
 				if ($extracted) {
 					return array('path' => 'ziptemp'.DIRECTORY_SEPARATOR.$path);
@@ -205,7 +206,7 @@ class UpdraftPlus_Addons_MoreFiles {
 
 		if ('.zip' == strtolower(substr($zipfile, -4, 4))) {
 
-			if (!class_exists('UpdraftPlus_PclZip')) include(UPDRAFTPLUS_DIR.'/includes/class-zip.php');
+			if (!class_exists('UpdraftPlus_PclZip')) updraft_try_include_file('includes/class-zip.php', 'include');
 			$zip = new UpdraftPlus_PclZip;
 
 			if (!$zip->open($zipfile)) {
@@ -215,6 +216,11 @@ class UpdraftPlus_Addons_MoreFiles {
 
 			// Don't put this in the for loop, or the magic __get() method gets called every time the loop goes round
 			$numfiles = $zip->numFiles;
+
+			if (false === $numfiles) {
+				$warn[] = sprintf(__('Unable to read any files from the zip (%s) - could not pre-scan it to check its integrity. Zip error: (%s)', 'updraftplus'), basename($zipfile), $zip->last_error);
+				return;
+			}
 
 			for ($i=0; $i < $numfiles; $i++) {
 				$si = $zip->statIndex($i);
@@ -228,12 +234,12 @@ class UpdraftPlus_Addons_MoreFiles {
 				}
 			}
 
-			@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 		} elseif (preg_match('/\.tar(\.(gz|bz2))$/i', $zipfile)) {
 
 			if (!class_exists('UpdraftPlus_Archive_Tar')) {
 				if (false === strpos(get_include_path(), UPDRAFTPLUS_DIR.'/includes/PEAR')) set_include_path(UPDRAFTPLUS_DIR.'/includes/PEAR'.PATH_SEPARATOR.get_include_path());
-				include_once(UPDRAFTPLUS_DIR.'/includes/PEAR/Archive/Tar.php');
+				updraft_try_include_file('includes/PEAR/Archive/Tar.php', 'include_once');
 			}
 
 			$p_compress = null;
@@ -260,7 +266,7 @@ class UpdraftPlus_Addons_MoreFiles {
 		}
 	}
 
-	public function checkzip_end_wpcore(&$mess, &$warn, &$err) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	public function checkzip_end_wpcore(&$mess, &$warn, &$err) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Unused parameter is present because the method is used as a WP filter.
 		if (!empty($this->wpcore_foundyet) && 3 == $this->wpcore_foundyet) return;
 		if (0 == ($this->wpcore_foundyet & 1)) $warn[] = sprintf(__('This does not look like a valid WordPress core backup - the file %s was missing.', 'updraftplus'), 'wp-admin/index.php').' '.__('If you are not sure then you should stop; otherwise you may destroy this WordPress installation.', 'updraftplus');
 		if (0 == ($this->wpcore_foundyet & 2)) $warn[] = sprintf(__('This does not look like a valid WordPress core backup - the file %s was missing.', 'updraftplus'), 'xmlrpc.php').' '.__('If you are not sure then you should stop; otherwise you may destroy this WordPress installation.', 'updraftplus');
@@ -294,9 +300,10 @@ class UpdraftPlus_Addons_MoreFiles {
 		$display = UpdraftPlus_Options::get_updraft_option('updraft_include_more') ? '' : 'style="display:none;"';
 		$class = $display ? 'updraft-hidden' : '';
 		
-		$paths = UpdraftPlus_Options::get_updraft_option('updraft_include_more_path');
-		
-		if (!is_array($paths)) $paths = array($paths);
+		$paths = UpdraftPlus_Options::get_updraft_option('updraft_include_more_path', array());
+
+		// Remove empty elements
+		$paths = is_array($paths) ? array_filter($paths) : array($paths);
 
 		$ret .= "<div id=\"updraft_include_more_options\" $display class=\"updraft_include_container $class\"><p class=\"updraft-field-description\">";
 
@@ -443,7 +450,8 @@ class UpdraftPlus_Addons_MoreFiles {
 
 		$this->more_paths = array();
 
-		$final_created = array();
+		$final_created = $updraftplus->jobdata_get('morefiles_temporary_final_created');
+		if (!is_array($final_created)) $final_created = array();
 
 		$first_linked_index = 0;
 		
@@ -457,6 +465,7 @@ class UpdraftPlus_Addons_MoreFiles {
 		if (!is_array($more_locations)) $more_locations = array();
 
 		foreach ($whichdirs as $whichdir) {
+			if (in_array($whichdir, $more_locations)) continue;
 
 			// Actually create the thing
 			$dirlist = $this->backup_more_dirlist($whichdir);
@@ -470,7 +479,7 @@ class UpdraftPlus_Addons_MoreFiles {
 				}
 				
 				if (!empty($more_map) && isset($more_map[$first_linked_index])) {
-					$first_linked_index = count($more_map) - 1;
+					$first_linked_index = $index = count($more_map);
 				}
 
 				$created = $updraftplus_backup->create_zip($dirlist, 'more', $backup_file_basename, $index, $first_linked_index);
@@ -500,6 +509,9 @@ class UpdraftPlus_Addons_MoreFiles {
 				$updraftplus->log("$whichdir: No backup of 'more' directory: there was nothing found to back up", 'warning', 'morefiles-empty-'.md5($whichdir));
 				// return false;
 			}
+
+			$final_created = array_unique($final_created);
+			$updraftplus->jobdata_set('morefiles_temporary_final_created', $final_created);
 		}
 
 		return (empty($final_created)) ? false : $final_created;
@@ -623,7 +635,7 @@ class UpdraftPlus_Addons_MoreFiles {
 	 *
 	 * @return boolean|WP_Error - boolean for success or a wordpress error
 	 */
-	public function restore_movein_more($working_dir, $wp_dir, $wp_filesystem_dir) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function restore_movein_more($working_dir, $wp_dir, $wp_filesystem_dir) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 
 		global $updraftplus_restorer;
 
@@ -752,7 +764,7 @@ class UpdraftPlus_Addons_MoreFiles {
 
 				$path = $manifest['directory'];
 
-				@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+				@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
 			}
 		}
 
@@ -772,7 +784,7 @@ class UpdraftPlus_Addons_MoreFiles {
 	 * @param Array   $warn      - array of warning-level messages
 	 * N.B. An extra parameter $err is also available after $warn
 	 */
-	public function restore_all_downloaded_postscan($backups, $timestamp, $entities, &$info, &$mess, &$warn) {
+	public function restore_all_downloaded_postscan_more($backups, $timestamp, $entities, &$info, &$mess, &$warn) {
 		if (!isset($entities['more']) || !isset($backups[$timestamp]['more'])) return;
 
 		$not_found = false;
@@ -819,6 +831,135 @@ class UpdraftPlus_Addons_MoreFiles {
 	}
 
 	/**
+	 * WordPress action updraftplus_restore_all_downloaded_postscan called during the restore process.
+	 *
+	 * The last three parameters can be edited in-place.
+	 *
+	 * @param Array   $backups   - list of backups
+	 * @param Integer $timestamp - the timestamp (epoch time) of the backup being restored
+	 * @param Array   $entities  - elements being restored (as the keys of the array)
+	 * @param Array   $info      - information about the backup being restored
+	 * @param Array   $mess      - array of informational-level messages
+	 * @param Array   $warn      - array of warning-level messages
+	 * N.B. An extra parameter $err is also available after $warn
+	 */
+	public function restore_all_downloaded_postscan_selective_restore($backups, $timestamp, $entities, &$info, &$mess, &$warn) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Unused parameter is present because the method is used as a WP filter.
+
+		$selective_restore_types = array(
+			'plugins',
+			'themes',
+		);
+
+		foreach ($selective_restore_types as $type) {
+			if (!isset($entities[$type]) || !isset($backups[$timestamp][$type])) continue;
+
+			$backup_entities = $this->get_backup_contents_list($backups[$timestamp][$type]);
+	
+			if (empty($backup_entities)) continue;
+			$selective_restore_ui = $this->get_entity_selective_restore_ui($backup_entities, $type);
+	
+			$info['addui'] = empty($info['addui']) ? $selective_restore_ui : $info['addui'] . '<br>' . $selective_restore_ui;
+		}
+	}
+
+	/**
+	 * This function will build the selective entity restore UI and return it
+	 *
+	 * @param Array  $entities - an array of entities to restore (plugins, themes)
+	 * @param String $type     - the type of entity (plugins, themes)
+	 *
+	 * @return String - returns the selective restore UI for this entity
+	 */
+	private function get_entity_selective_restore_ui($entities, $type) {
+
+		global $updraftplus;
+
+		$backupable_entities = $updraftplus->get_backupable_file_entities(false, true);
+		$description = isset($backupable_entities[$type]['singular_description']) ? $backupable_entities[$type]['singular_description'] : $type;
+		
+		$php_max_input_vars = ini_get("max_input_vars"); // phpcs:ignore PHPCompatibility.IniDirectives.NewIniDirectives.max_input_varsFound -- does not exist in PHP 5.2
+
+		$php_max_input_vars_exceeded = false;
+		if (!empty($php_max_input_vars) && count($entities) >= 0.90 * $php_max_input_vars) {
+			$php_max_input_vars_exceeded = true;
+			// If the amount of tables exceed 90% of the php max input vars then truncate the list to 50% of the php max input vars value
+			$entities = array_splice($entities, 0, $php_max_input_vars / 2);
+		}
+
+		$selective_restore_ui = '<div class="notice below-h2 updraft-restore-option">';
+		$selective_restore_ui .= '<p>'.sprintf(__('If you do not want to restore all your %s files, then de-select the unwanted ones here. Files not chosen will not be replaced.', 'updraftplus'), strtolower($description)).'(<a href="#" id="updraftplus_restore_'.$type.'_showmoreoptions">...</a>)</p>';
+
+		$selective_restore_ui .= '<div class="updraftplus_restore_'.$type.'_options_container" style="display:none;">';
+
+		$selective_restore_ui .= '<a class="updraft_restore_select_all_'.$type.'" href="#">'.__('Select all', 'updraftplus').'</a>';
+		$selective_restore_ui .= ' | <a class="updraft_restore_deselect_all_'.$type.'" href="#">'.__('Deselect all', 'updraftplus').'</a><br><br>';
+
+		if ($php_max_input_vars_exceeded) {
+			$all_other_entity_title = sprintf(__('The amount of %s files scanned is near or over the php_max_input_vars value so some %s files maybe truncated. This option will ensure all %s files not found will be restored.', 'updraftplus'), strtolower($description));
+			$selective_restore_ui .= '<input class="updraft_restore_'.$type.'_options" id="updraft_restore_'.$type.'_udp_all_other_'.$type.'" checked="checked" type="checkbox" name="updraft_restore_'.$type.'_options[]" value="udp_all_other_'.$type.'"> ';
+			$selective_restore_ui .= '<label for="updraft_restore_'.$type.'_udp_all_other_'.$type.'"  title="'.$all_other_entity_title.'">'.sprintf(__('Restore all %s not listed below', 'updraftplus'), strtolower($description)).'</label><br>';
+		}
+
+		foreach ($entities as $entity) {
+			$selective_restore_ui .= '<input class="updraft_restore_'.$type.'_options" id="updraft_restore_'.$type.'_'.$entity.'" checked="checked" type="checkbox" name="updraft_restore_'.$type.'_options[]" value="'.$entity.'"> ';
+			$selective_restore_ui .= '<label for="updraft_restore_'.$type.'_'.$entity.'">'.$entity.'</label><br>';
+		}
+		$selective_restore_ui .= '</div></div>';
+
+		return $selective_restore_ui;
+	}
+
+	/**
+	 * This function will get the top level folders (plugins, themes) from the passed in backup archives
+	 *
+	 * @param Array $backups - an array of backup archives
+	 *
+	 * @return Array - an array of top level entities inside the backups (plugin, themes)
+	 */
+	private function get_backup_contents_list($backups) {
+
+		global $updraftplus;
+		
+		if (!class_exists('UpdraftPlus_PclZip')) updraft_try_include_file('includes/class-zip.php', 'include');
+
+		$updraft_dir = $updraftplus->backups_dir_location();
+
+		$entities = array();
+
+		foreach ($backups as $file) {
+			$zip = new UpdraftPlus_PclZip;
+
+			$zipfile = $updraft_dir . '/' . $file;
+
+			if (!$zip->open($zipfile)) return $entities;
+	
+			// Don't put this in the for loop, or the magic __get() method gets called every time the loop goes round
+			$numfiles = $zip->numFiles;
+
+			if (false === $numfiles) $updraftplus->log("get_backup_contents_list(): could not read any files from the zip: (".basename($zipfile).") Zip error: (".$zip->last_error.")");
+	
+			for ($i=0; $i < $numfiles; $i++) {
+				$si = $zip->statIndex($i);
+				$folders = explode('/', $si['name']);
+				$entity = isset($folders[1]) ? $folders[1] : false;
+
+				// We don't want hidden file system files showing up in the list of entities to restore
+				if (!$entity || "." === substr($entity, 0, 1) || "index.php" == $entity) continue;
+
+				if (!in_array($entity, $entities)) {
+					$entities[] = $entity;
+				}
+			}
+	
+			@$zip->close();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the method.
+		}
+
+		sort($entities);
+
+		return $entities;
+	}
+
+	/**
 	 * This function is called via the filter updraft_backupable_file_entities_on_restore and is used to filter the restore paths found in $backupable_entities and replace them with the paths saved in the backup set.
 	 *
 	 * @param  array $backupable_entities - an array of backupable entities and their restore paths
@@ -827,7 +968,7 @@ class UpdraftPlus_Addons_MoreFiles {
 	 *
 	 * @return array - the filtered backupable_entities array
 	 */
-	public function backupable_file_entities_on_restore($backupable_entities, $restore_options, $backup_set) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function backupable_file_entities_on_restore($backupable_entities, $restore_options, $backup_set) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 
 		if (isset($backupable_entities['more']) && isset($backup_set['morefiles_more_locations'])) $backupable_entities['more']['path'] = $backup_set['morefiles_more_locations'];
 
@@ -954,7 +1095,17 @@ class UpdraftPlus_Addons_MoreFiles {
 								}
 							});
 						}
-					}
+					},
+					'plugins' : ['sort','types'],
+					'sort' : function(a, b) {
+						a1 = this.get_node(a);
+						b1 = this.get_node(b);
+						if (a1.icon == b1.icon){
+							return (a1.text > b1.text) ? 1 : -1;
+						} else {
+							return (a1.icon < b1.icon) ? 1 : -1;
+						}
+					},
 				});
 
 				// Detect change on the tree and update the input that has been marked as editing

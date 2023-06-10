@@ -3,9 +3,8 @@
 /*
 UpdraftPlus Addon: reporting:Sophisticated reporting options
 Description: Provides various new reporting capabilities
-Version: 2.6
+Version: 2.7
 Shop: /shop/reporting/
-Latest Change: 2.15.8
 */
 // @codingStandardsIgnoreEnd
 
@@ -13,7 +12,7 @@ Latest Change: 2.15.8
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-$updraftplus_addon_reporting = new UpdraftPlus_Addon_Reporting;
+new UpdraftPlus_Addon_Reporting;
 
 class UpdraftPlus_Addon_Reporting {
 
@@ -24,7 +23,18 @@ class UpdraftPlus_Addon_Reporting {
 	private $history;
 
 	private $syslog;
+	
+	private $log_facility;
+	
+	private $log_ident;
 
+	/**
+	 * Email reporting HTML content
+	 *
+	 * @var String
+	 */
+	private $html;
+	
 	/**
 	 * Class constructor
 	 */
@@ -59,7 +69,7 @@ class UpdraftPlus_Addon_Reporting {
 		if (false !== ($this->syslog = openlog($this->log_ident, LOG_ODELAY|LOG_PID, $this->log_facility))) add_filter('updraftplus_logline', array($this, 'logline'), 10, 3);
 	}
 
-	public function showbackup_date($date, $backup, $jobdata, $key, $simple_format) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function showbackup_date($date, $backup, $jobdata, $key, $simple_format) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 		if (!is_array($backup) || empty($backup['label'])) return $date;
 		if ($simple_format) {
 			return $date.' - '.htmlspecialchars($backup['label']);
@@ -121,7 +131,7 @@ class UpdraftPlus_Addon_Reporting {
 		} else {
 			$pri = LOG_INFO;
 		}
-		@syslog($pri, "($nonce) $line");// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		@syslog($pri, "($nonce) $line");// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 		return $line;
 	}
 
@@ -147,7 +157,7 @@ class UpdraftPlus_Addon_Reporting {
 	 * @param  array  $jobdata
 	 * @return string
 	 */
-	public function updraft_report_body($report, $final_message, $contains, $errors, $warnings, $jobdata) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function updraft_report_body($report, $final_message, $contains, $errors, $warnings, $jobdata) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 	
 		global $updraftplus;
 
@@ -186,7 +196,7 @@ class UpdraftPlus_Addon_Reporting {
 <h1><?php echo get_bloginfo('name').': '.__('Backup Report', 'updraftplus');?></h1>
 <p style="float: left; clear: left; margin: 0 0 8px;"><em><?php printf(__('Backup made by %s', 'updraftplus'), '<a href="https://updraftplus.com" target="_blank">UpdraftPlus '.$updraftplus->version); ?></a></em></p>
 <?php
-	if (!class_exists('UpdraftPlus_Notices')) include_once(UPDRAFTPLUS_DIR.'/includes/updraftplus-notices.php');
+	if (!class_exists('UpdraftPlus_Notices')) updraft_try_include_file('includes/updraftplus-notices.php', 'include_once');
 	global $updraftplus_notices;
 	$ws_advert = $updraftplus_notices->do_notice(false, 'report', true);
 	if ($ws_advert) {
@@ -293,22 +303,19 @@ class UpdraftPlus_Addon_Reporting {
 		// Lower priority: get there before other plugins which apply templates
 		add_filter('wp_mail_content_type', array($this, 'wp_mail_content_type'), 8);
 
-		$replace_a_tags_with_urls = $this->html;
-		$regex = '#\<a href="([^\>]*)"\>(.*)\</a\>#';
+		$report_body = $this->html;
 		
-		if (preg_match($regex, $replace_a_tags_with_urls, $matches)) {
-	$replace_a_tags_with_urls = preg_replace($regex, $matches[2].' - '.$matches[1], $replace_a_tags_with_urls);
-		}
 		
-		return str_replace("\n", "\r\n", strip_tags(preg_replace('#\<style([^\>]*)\>.*\</style\>#', '', $replace_a_tags_with_urls)));
+		return str_replace("\n", "\r\n", strip_tags(preg_replace('#\<style([^\>]*)\>.*\</style\>#', '', $report_body)));
 
 	}
 
 	public function wp_mail_content_type($content_type) {
 		// Only convert if the message is text/plain and the template is ok
 		if ('text/plain' == $content_type && !empty($this->html)) {
-			if (empty($this->added_phpmailer_init_action)) {
-				$this->added_phpmailer_init_action = true;
+			static $added_phpmailer_init_action;
+			if (empty($added_phpmailer_init_action)) {
+				$added_phpmailer_init_action = true;
 				add_action('phpmailer_init', array($this, 'phpmailer_init'));
 			}
 			return 'text/html';
@@ -323,11 +330,11 @@ class UpdraftPlus_Addon_Reporting {
 	}
 
 	public function report_finished() {
+		global $phpmailer;
 		remove_filter('wp_mail_content_type', array($this, 'wp_mail_content_type'), 8);
 		remove_action('phpmail_init', array($this, 'phpmailer_init'));
 		if (empty($this->html)) return;
-		global $phpmailer;
-		if (is_object($phpmailer) && is_a($phpmailer, 'PHPMailer')) {
+		if (is_object($phpmailer) && (is_a($phpmailer, 'PHPMailer') || is_a($phpmailer, 'PHPMailer\PHPMailer\PHPMailer'))) {
 // $phpmailer->AltBody = '';
 // $phpmailer->Body = '';
 // $phpmailer->ContentType = 'text/plain';
@@ -373,7 +380,7 @@ class UpdraftPlus_Addon_Reporting {
 	 * @param string  $type backup entity types
 	 * @return boolean filtered value
 	 */
-	public function email_backup($doit, $addr, $ind, $type) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function email_backup($doit, $addr, $ind, $type) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 		$wholebackup = UpdraftPlus_Options::get_updraft_option('updraft_report_wholebackup', null);
 		$dbbackup = UpdraftPlus_Options::get_updraft_option('updraft_report_dbbackup', null);
 		if (is_array($wholebackup) && !empty($wholebackup[$ind]) && empty($dbbackup[$ind])) {
@@ -394,7 +401,7 @@ class UpdraftPlus_Addon_Reporting {
 	 * @param string  $descrip_type backup entity types
 	 * @return string log message
 	 */
-	public function backup_skip_log_message($log_message, $addr, $ind, $descrip_type) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function backup_skip_log_message($log_message, $addr, $ind, $descrip_type) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
 		$wholebackup = UpdraftPlus_Options::get_updraft_option('updraft_report_wholebackup', null);
 		if (!is_array($wholebackup) || empty($wholebackup[$ind])) {
 			return 'You have chosen to not send the backup via the email remote storage option for '.$addr.'. '.$descrip_type.' will not be sent.';
@@ -452,7 +459,7 @@ class UpdraftPlus_Addon_Reporting {
 		// Columns: Email address | only send if no errors/warnings
 
 		$out = '<tr id="updraft_report_row">
-				<th>'.__('Email reports', 'updraftplus').':</th>
+				<th>'.__('Send reports', 'updraftplus').':</th>
 				<td id="updraft_report_cell">';
 
 		// Could be multiple (separated by commas)
@@ -493,7 +500,7 @@ class UpdraftPlus_Addon_Reporting {
 
 		if (0 === $ind) $out .= $this->report_box_generator('', 0, false, false, false);
 
-		$out .= '<p class="updraft_report_another_p"><a class="updraft_report_another updraft_icon_link" href="'.UpdraftPlus::get_current_clean_url().'#updraft_report_row"><span class="dashicons dashicons-plus"></span>'.__('Add another address...', 'updraftplus').'</a></p>';
+		$out .= '<p class="updraft_report_another_p"><a class="updraft_report_another updraft_icon_link" href="'.esc_url(UpdraftPlus::get_current_clean_url()).'#updraft_report_row"><span class="dashicons dashicons-plus"></span>'.__('Add another address...', 'updraftplus').'</a></p>';
 
 		$out .= '</td>
 			</tr>';
@@ -539,7 +546,7 @@ class UpdraftPlus_Addon_Reporting {
 
 		$out .= '<label for="updraft_report_warningsonly_'.$ind.'" class="updraft_checkbox"><input '.(($warningsonly) ? 'checked="checked" ' : '').' id="updraft_report_warningsonly_'.$ind.'" class="updraft_report_checkbox" type="checkbox"  name="updraft_report_warningsonly['.$ind.']"> '.__('Send a report only when there are warnings/errors', 'updraftplus').'</label>';
 
-		$out .= '<div class="updraft_report_wholebackup"><label for="updraft_report_wholebackup_'.$ind.'" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20')).'" class="updraft_checkbox"><input '.(($wholebackup) ? 'checked="checked" ' : '').'class="updraft_report_checkbox" type="checkbox" id="updraft_report_wholebackup_'.$ind.'" name="updraft_report_wholebackup['.$ind.']" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20')).'"> '.__('When the Email storage method is enabled, also send the backup', 'updraftplus').'</label></div>';
+		$out .= '<div class="updraft_report_wholebackup"><label for="updraft_report_wholebackup_'.$ind.'" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20')).'" class="updraft_checkbox"><input '.(($wholebackup) ? 'checked="checked" ' : '').'class="updraft_report_checkbox" type="checkbox" id="updraft_report_wholebackup_'.$ind.'" name="updraft_report_wholebackup['.$ind.']" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20')).'"> '.__('When email storage method is enabled, and an email address is entered, also send the backup', 'updraftplus').'</label></div>';
 
 		$out .= '<div class="updraft_report_dbbackup'.((!$wholebackup) ? ' updraft_report_disabled' : '').'"><label for="updraft_report_dbbackup_'.$ind.'" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive as a result UpdraftPlus will only send Database backups to email.', 'updraftplus'), '10-20')).'" class="updraft_checkbox"><input '.(($dbbackup) ? 'checked="checked" ' : '').'class="updraft_report_checkbox" type="checkbox" '.((!$wholebackup) ? 'disabled ' : '').'id="updraft_report_dbbackup_'.$ind.'" name="updraft_report_dbbackup['.$ind.']" title="'.esc_attr(sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus').' '.__('Use this option to only send database backups when sending to email, and skip other components.', 'updraftplus'), '10-20')).'"> '.__('Only email the database backup', 'updraftplus').'</label></div>';
 		

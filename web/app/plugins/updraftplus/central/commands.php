@@ -88,6 +88,7 @@ abstract class UpdraftCentral_Commands {
 	 * @return array
 	 */
 	final protected function _get_backup_credentials_settings($dir) {
+
 		// Do we need to ask the user for filesystem credentials? when installing and/or deleting items in the given directory
 		$filesystem_method = get_filesystem_method(array(), $dir);
 
@@ -156,6 +157,7 @@ abstract class UpdraftCentral_Commands {
 	 * @return array
 	 */
 	final protected function process_chunk_upload($params, $type) {
+		global $updraftcentral_host_plugin, $updraftcentral_main;
 
 		if (!in_array($type, array('plugin', 'theme'))) {
 			return $this->_generic_error_response('upload_type_not_supported');
@@ -210,6 +212,11 @@ abstract class UpdraftCentral_Commands {
 			$is_chunked = true;
 		}
 
+		if (!$is_chunked || ($is_chunked && isset($params['chunk']) && 0 === (int) $params['chunk'])) {
+			// if it's not a chunk upload or if it's a chunk upload operation and the current chunk variable is zero, then it means a new upload operation has just begun therefore we should remove previous left-over file (if any and due to error during the previous upload of the same file), because it can lead to a corrupt/invalid zip file (we use file_put_contents a few lines below with FILE_APPEND attribute)
+			if (file_exists($upload_dir.'/'.$filename) && !unlink($upload_dir.'/'.$filename)) return $this->_generic_error_response('unable_to_delete_existing_file');
+		}
+
 		if (empty($params['data'])) {
 			return $this->_generic_error_response('data_empty_or_invalid');
 		}
@@ -257,7 +264,7 @@ abstract class UpdraftCentral_Commands {
 				add_filter('upgrader_post_install', array($this, 'get_install_data'), 10, 3);
 
 				// WP < 3.7
-				if (!class_exists('Automatic_Upgrader_Skin')) include_once(UPDRAFTPLUS_DIR.'/central/classes/class-automatic-upgrader-skin.php');
+				if (!class_exists('Automatic_Upgrader_Skin')) include_once(UPDRAFTCENTRAL_CLIENT_DIR.'/classes/class-automatic-upgrader-skin.php');
 
 				$skin = new Automatic_Upgrader_Skin();
 				$upgrader = ('plugin' === $type) ? new Plugin_Upgrader($skin) : new Theme_Upgrader($skin);
@@ -267,11 +274,11 @@ abstract class UpdraftCentral_Commands {
 
 				// Remove zip file on success and on error (cleanup)
 				if ($install_result || is_null($install_result) || is_wp_error($install_result)) {
-					@unlink($zip_filepath);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+					@unlink($zip_filepath);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 				}
 
 				if (false === $install_result || is_wp_error($install_result)) {
-					$message = __('Unable to connect to the filesystem', 'updraftplus');
+					$message = $updraftcentral_host_plugin->retrieve_show_message('unable_to_connect');
 					if (is_wp_error($install_result)) $message = $install_result->get_error_message();
 
 					return $this->_generic_error_response($type.'_install_failed', array('message' => $message));
@@ -310,10 +317,9 @@ abstract class UpdraftCentral_Commands {
 							}
 
 							if (false === $activate || is_wp_error($activate)) {
-								global $updraftplus;
-								$wp_version = $updraftplus->get_wordpress_version();
+								$wp_version = $updraftcentral_main->get_wordpress_version();
 
-								$message = is_wp_error($activate) ? array('message' => $activate->get_error_message()) : array('message' => sprintf(__('Unable to activate %s successfully. Make sure that this %s is compatible with your remote WordPress version. WordPress version currently installed in your remote website is %s.', 'updraftplus'), $type, $type, $wp_version));
+								$message = is_wp_error($activate) ? array('message' => $activate->get_error_message()) : array('message' => sprintf($updraftcentral_host_plugin->retrieve_show_message('unable_to_activate'), $type, $type, $wp_version));
 								return $this->_generic_error_response('unable_to_activate_'.$type, $message);
 							}
 						}
@@ -342,7 +348,7 @@ abstract class UpdraftCentral_Commands {
 						return $this->_response(
 							array(
 								'installed' => false,
-								'message' => sprintf(__('Unable to install %s. Make sure that the zip file is a valid %s file and a previous version of this %s does not exist. If you wish to overwrite an existing %s then you will have to manually delete it from the %s folder on the remote website and try uploading the file again.', 'updraftplus'), $type, $type, $type, $type, 'wp-content/'.$type.'s'),
+								'message' => sprintf($updraftcentral_host_plugin->retrieve_show_message('unable_to_install'), $type, $type, $type, $type, 'wp-content/'.$type.'s'),
 							)
 						);
 					}

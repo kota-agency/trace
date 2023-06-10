@@ -26,6 +26,8 @@ $udaddons2_mothership = (defined('UPDRAFTPLUS_ADDONS_SSL') && !UPDRAFTPLUS_ADDON
 
 $udaddons2_mothership .= defined('UDADDONS2_TEST_MOTHERSHIP') ? UDADDONS2_TEST_MOTHERSHIP : 'updraftplus.com';
 
+global $updraftplus_addons2; // Need to explicitly globalise the variable or WP-CLI won't recognise it https://github.com/wp-cli/wp-cli/issues/4019#issuecomment-297410839
+
 $updraftplus_addons2 = new UpdraftPlusAddons2('updraftplus', $udaddons2_mothership);
 
 class UpdraftPlusAddons2 {
@@ -49,6 +51,15 @@ class UpdraftPlusAddons2 {
 	private $admin_notices = array();
 
 	private $saved_site_id;
+	
+	private $plugin_file;
+
+	/**
+	 * Not used anywhere, but it is set.
+	 *
+	 * @var UpdraftPlusAddOns_Options2
+	 */
+	private $options;
 
 	/**
 	 * Constructor
@@ -84,7 +95,7 @@ class UpdraftPlusAddons2 {
 		// Over-ride update mechanism for the plugin
 		if (is_readable(UPDRAFTPLUS_DIR.'/vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php')) {
 
-			include_once(UPDRAFTPLUS_DIR.'/vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php');
+			updraft_try_include_file('vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php', 'include_once');
 
 			add_filter('puc_check_now-'.$this->slug, array($this, 'puc_check_now'), 10, 3);
 			add_filter('puc_retain_fields-'.$this->slug, array($this, 'puc_retain_fields'));
@@ -267,7 +278,7 @@ class UpdraftPlusAddons2 {
 				$dismissed_until = UpdraftPlus_Options::get_updraft_option('updraftplus_dismissedexpiry', 0);
 				if ($dismissed_until <= time()) {
 					$do_expiry_check = true;
-					$dismiss = '<div style="float:right; position: relative; top:-24px;" class="ud-expiry-dismiss"><a href="'.UpdraftPlus::get_current_clean_url().'" onclick="jQuery(\'.ud-expiry-dismiss\').parent().slideUp(); jQuery.post(ajaxurl, {action: \'updraft_ajax\', subaction: \'dismissexpiry\', nonce: \''.wp_create_nonce('updraftplus-credentialtest-nonce').'\' });">'.sprintf(__('Dismiss from main dashboard (for %s weeks)', 'updraftplus'), 2).'</a></div>';
+					$dismiss = '<div style="float:right; position: relative; top:-24px;" class="ud-expiry-dismiss"><a href="#" onclick="jQuery(\'.ud-expiry-dismiss\').parent().slideUp(); jQuery.post(ajaxurl, {action: \'updraft_ajax\', subaction: \'dismissexpiry\', nonce: \''.wp_create_nonce('updraftplus-credentialtest-nonce').'\' })">'.sprintf(__('Dismiss from main dashboard (for %s weeks)', 'updraftplus'), 2).'</a></div>';
 				}
 			}
 		}
@@ -740,7 +751,7 @@ class UpdraftPlusAddons2 {
 			$shopurl = "";
 			$latestchange = null;
 			$lines_read = 0;
-			while ($lines_read<10 && $line = @fgets($f)) {// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			while ($lines_read<10 && $line = @fgets($f)) {// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 				if ("" == $key && preg_match('/Addon: ([^:]+):(.*)$/i', $line, $lmatch)) {
 					$key = $lmatch[1];
 					$name = $lmatch[2];
@@ -768,7 +779,7 @@ class UpdraftPlusAddons2 {
 			'noadverts' => array(
 				'name' => 'Remove adverts',
 				'description' => 'Removes all adverts from the control panel and emails',
-				'shopurl' => '/shop/no-adverts/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'all' => array(
 				'name' => 'All addons',
@@ -778,37 +789,37 @@ class UpdraftPlusAddons2 {
 			'multisite' => array(
 				'name' => 'WordPress Network (multisite) support',
 				'description' => 'Adds support for WordPress Network (multisite) installations, allowing secure backup by the super-admin only',
-				'shopurl' => '/shop/network-multisite/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'fixtime' => array(
 				'name' => 'Fix Time',
 				'description' => 'Allows you to specify the exact time at which backups will run',
-				'shopurl' => '/shop/fix-time/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'morefiles' => array(
 				'name' => 'More Files',
 				'description' => 'Allows you to backup WordPress core, and other files in your web space',
-				'shopurl' => '/shop/more-files/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'sftp' => array(
 				'name' => 'SFTP and FTPS and SCP',
 				'description' => 'Allows SFTP and SCP as a cloud backup method, and encrypted FTP',
-				'shopurl' => '/shop/sftp/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'dropbox-folders' => array(
 				'name' => 'Dropbox Folders',
 				'description' => 'Allows you to organise your backups into Dropbox sub-folders',
-				'shopurl' => '/shop/dropbox-folders/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'morestorage' => array(
 				'name' => 'Multiple storage destinations',
 				'description' => 'Allows you to send a single backup to multiple destinations (e.g. Dropbox and Google Drive and Amazon)',
-				'shopurl' => '/shop/morestorage/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			),
 			'webdav' => array(
 				'name' => 'WebDAV support',
 				'description' => 'Allows you to use the WebDAV and encrypted WebDAV protocols for remote backups',
-				'shopurl' => '/shop/webdav/'
+				'shopurl' => '/shop/updraftplus-premium/'
 			)
 		);
 	}
@@ -819,7 +830,7 @@ class UpdraftPlusAddons2 {
 
 		if (!is_dir($plugin_dir.'/addons')) return array();
 		$local_addons = array();
-		if ($dir_handle = @opendir($plugin_dir.'/addons')) {// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		if ($dir_handle = @opendir($plugin_dir.'/addons')) {// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 			while (false !== ($e = readdir($dir_handle))) {
 				if (is_file($plugin_dir.'/addons/'.$e) && preg_match('/^(.*)\.php$/i', $e, $matches)) {
 					$addon = $this->get_addon_info($plugin_dir.'/addons/'.$e);
