@@ -2,12 +2,12 @@
 ----------------------------------------------------------------
 
 admin-css-utilities.css
-Gravity Forms Administration Utility Styles
-http: //www.gravityforms.com
+Gravity Forms Admin Utility Styles
+https://www.gravityforms.com
 
 Gravity Forms is a Rocketgenius project
-copyright 2008-2021 Rocketgenius Inc.
-http: //www.rocketgenius.com
+copyright 2008-2023 Rocketgenius Inc.
+https://www.rocketgenius.com
 this may not be re-distributed without the
 express written permission of the author.
 
@@ -56,6 +56,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-admin .gform-util-gform-admin-background-color-blue-haze {
 		background-color: #c3c5db;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-metal-gray {
+		background-color: #d3d3e0;
 	}
 
 .gform-admin .gform-util-gform-admin-background-color-white-lilac {
@@ -116,6 +120,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-admin .gform-util-gform-admin-background-color-red {
 		background-color: #dd301d;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-spanish-pink {
+		background-color: #ffc7bb;
 	}
 
 .gform-admin .gform-util-gform-admin-background-color-background-red {
@@ -180,6 +188,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-admin .gform-util-gform-admin-background-color-border {
 		background-color: #9092b2;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-secondary-border {
+		background-color: #e4e4ee;
 	}
 
 .gform-admin .gform-util-gform-admin-background-color-button-disabled {
@@ -338,6 +350,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		color: #c3c5db;
 	}
 
+.gform-admin .gform-util-gform-admin-color-metal-gray {
+		color: #d3d3e0;
+	}
+
 .gform-admin .gform-util-gform-admin-color-white-lilac {
 		color: #ecedf8;
 	}
@@ -396,6 +412,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-admin .gform-util-gform-admin-color-red {
 		color: #dd301d;
+	}
+
+.gform-admin .gform-util-gform-admin-color-spanish-pink {
+		color: #ffc7bb;
 	}
 
 .gform-admin .gform-util-gform-admin-color-background-red {
@@ -460,6 +480,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-admin .gform-util-gform-admin-color-border {
 		color: #9092b2;
+	}
+
+.gform-admin .gform-util-gform-admin-color-secondary-border {
+		color: #e4e4ee;
 	}
 
 .gform-admin .gform-util-gform-admin-color-button-disabled {

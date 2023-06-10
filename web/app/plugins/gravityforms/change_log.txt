@@ -1,3 +1,28 @@
+### 2.7.7 | 2023-05-25
+- Added the ability to display error messages for Drop Downs and Textareas on form editor's field settings panel.
+- Fixed a bug that prevented HTML tags from using theme styles in the Orbital theme.
+- Updated how the form block is rendered so it no longer uses the shortcode.
+- Updated the entry list to support array values for custom entry meta.  Credit: The GravityWiz team.
+
+### 2.7.6 | 2023-05-10
+- Fixed an issue where the HTML field filters out JavaScript.
+- Updated the handling of submit button conditional logic to add a data attribute indicating whether a button is hidden or not.
+- API: Added `gform/conditionalLogic/applyRules/start` and `gform/conditionalLogic/applyRules/end` JS event triggers for conditional logic to accommodate conversational forms.
+
+### 2.7.5 | 2023-05-03
+- Added security enhancements.
+- Fixed an issue where `GF_Field_Consent::is_value_submission_empty()` returns the wrong result when editable fields are validated during progress save on the Gravity Flow User Input step.
+- Fixed an issue where Conversational Forms with similar slug names to a post or page are not rendered.
+- Fixed an issue where turning off Legacy Markup with the `gform_enable_legacy_markup` filter results in a fatal error.
+- Updated the minimum WordPress version on the System Status page to 6.1.
+- Updated the location of our NPM packages.
+- Updated the theme framework reset to inherit site theme typographic styles for form confirmation html.
+- API: Added a new function `GFFormsModel::get_forms_columns()`` to get a list of specified form data. Credit: The GravityKit team.
+- API: Added "date_updated" to the list of form database columns. Credit: The GravityKit team.
+- API: Added the `gform_conditional_logic_is_valid_flyout_click` filter to allow third parties to designate valid conditional logic flyout clicks. Credit: GravityWiz.
+- API: Fixed a bug that prevents developers from overriding the button setting default values. Credit: The GravityKit team.
+
+
 ### 2.7.4 | 2023-04-11
 - Added security enhancements.
 - Fixed an issue that causes block style settings to disappear on a form with validation errors.

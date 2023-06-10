@@ -7,7 +7,7 @@ Author URI: https://iamankitpanchal.com
 Requires at least: 3.7.0
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 3.5.3
+Stable tag: 3.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -160,6 +160,12 @@ Security Fixes and Improvements.
 Security Fixes and Improvements.
 
 = 3.5.3 =
+Compatibility tested & Tested with the latest WordPress version.
+
+= 3.5.4 =
+Compatibility tested & Tested with the latest WordPress version.
+
+= 3.5.5 =
 Compatibility tested & Tested with the latest WordPress version.
 
 == Upgrade Notice ==

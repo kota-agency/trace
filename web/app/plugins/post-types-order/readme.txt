@@ -3,8 +3,8 @@ Contributors: nsp-code, tdgu
 Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, sort, post sort, posts sort, post type order, custom order, admin posts order
 Requires at least: 2.8
-Tested up to: 6.2
-Stable tag: 2.0.5
+Tested up to: 6.2.2
+Stable tag: 2.0.9
 
 Sort Posts and custom Post Type Objects (custom post types) using a Drag and Drop Sortable JavaScript AJAX interface or default WordPress dashboard. 
 
@@ -93,6 +93,13 @@ Consider upgrading to our advanced version of this plugin at a very resonable pr
 
 
 == Change Log ==  
+
+= 2.0.9 =
+ - Fix: is_plugin_active
+
+= 2.0.7 =
+ - Compatibility class re-build
+ - Fix: Enfold templates when using Admin Sort
 
 = 2.0.5 =
  - Merge the "default archive&drop" option and keep the individual menu Yes/No for the default WordPress interfaces, to avoid confusion.
