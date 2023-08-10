@@ -13,6 +13,8 @@
 
 namespace RankMath\Sitemap\Providers;
 
+use DateTime;
+use DateTimeZone;
 use RankMath\Helper;
 use RankMath\Sitemap\Router;
 use RankMath\Sitemap\Sitemap;
@@ -73,7 +75,6 @@ class Author implements Provider {
 
 		foreach ( $user_pages as $user_page ) {
 			$user = array_shift( $user_page ); // Time descending, first user on page is most recently updated.
-
 			$item = $this->do_filter(
 				'sitemap/index/entry',
 				[
@@ -147,9 +148,14 @@ class Author implements Provider {
 		}
 
 		$mod = isset( $user->last_update ) ? $user->last_update : strtotime( $user->user_registered );
+
+		$date = new DateTime();
+		$date->setTimestamp( $mod );
+		$date->setTimezone( new DateTimeZone( 'UTC' ) );
+
 		$url = [
 			'loc' => $author_link,
-			'mod' => date_i18n( DATE_W3C, $mod ),
+			'mod' => $date->format( DATE_W3C ),
 		];
 
 		/** This filter is documented at includes/modules/sitemap/providers/class-post-type.php */

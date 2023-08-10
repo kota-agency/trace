@@ -26,6 +26,20 @@ class Stats extends Keywords {
 	use Hooker;
 
 	/**
+	 * Start timestamp.
+	 *
+	 * @var int
+	 */
+	public $start = 0;
+
+	/**
+	 * End timestamp.
+	 *
+	 * @var int
+	 */
+	public $end = 0;
+
+	/**
 	 * Start date.
 	 *
 	 * @var string
@@ -763,7 +777,7 @@ class Stats extends Keywords {
 	 */
 	public function get_metrics_data_by_dimension( $args = [] ) {
 		global $wpdb;
-
+		Helper::enable_big_selects_for_queries();
 		$args = wp_parse_args(
 			$args,
 			[

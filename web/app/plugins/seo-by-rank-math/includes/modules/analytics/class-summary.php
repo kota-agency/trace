@@ -22,6 +22,41 @@ class Summary {
 	use Cache;
 
 	/**
+	 * Start date.
+	 *
+	 * @var string
+	 */
+	public $start_date;
+
+	/**
+	 * End date.
+	 *
+	 * @var string
+	 */
+	public $end_date;
+
+	/**
+	 * Compare start date.
+	 *
+	 * @var string
+	 */
+	public $compare_start_date;
+
+	/**
+	 * Compare end date.
+	 *
+	 * @var string
+	 */
+	public $compare_end_date;
+
+	/**
+	 * Days.
+	 *
+	 * @var int
+	 */
+	public $days;
+
+	/**
 	 * Get Widget.
 	 *
 	 * @return object
@@ -54,7 +89,7 @@ class Summary {
 			$stats = (object) [
 				'clicks'      => 0,
 				'impressions' => 0,
-				'postions'    => 0,
+				'position'    => 0,
 			];
 		}
 
@@ -173,8 +208,8 @@ class Summary {
 		];
 
 		$cache_group = 'rank_math_analytics_summary';
-		$cache_key = $this->generate_hash( $args );
-		$cache     = $this->get_cache( $cache_key, $cache_group );
+		$cache_key   = $this->generate_hash( $args );
+		$cache       = $this->get_cache( $cache_key, $cache_group );
 		if ( false !== $cache ) {
 			return $cache;
 		}

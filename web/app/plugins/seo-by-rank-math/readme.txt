@@ -2,10 +2,10 @@
 Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, sitemap, google search console, schema, redirection, WordPress SEO
-Tested up to: 6.2.2
+Tested up to: 6.3
 Requires at least: 5.6
 Requires PHP: 7.4
-Stable tag: 1.0.116
+Stable tag: 1.0.121
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -583,12 +583,13 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.116 [May 31, 2023] =
-- Added: New Filter to modify data on [Sitemap Index](https://rankmath.com/kb/filters-hooks-api-developer/#remove-lastmod-in-sitemap)
-- Added: New Filter to change the host used in  [Instant Indexing](https://rankmath.com/kb/filters-hooks-api-developer/#indexnow-api-key-location) requests
-- Improved: [SEO Details in the Post column](https://rankmath.com/kb/bulk-editing-in-rank-math/#quick-edit-seo-details) now shows Article with its sub-type to avoid confusion
-- Fixed: [Incoming link count](https://rankmath.com/kb/link-counter/) was not detecting Products when the [Remove Base](https://rankmath.com/kb/general-settings/#remove-base) option was enabled
-- Fixed: Post URLs were incorrectly submitted to the IndexNow API when moving a post from Draft to Trash
-- Fixed: Taxonomies were displayed in the HTML Sitemap even when the [Include in HTML Sitemap](https://rankmath.com/kb/configure-sitemaps/#categories-include-in-html-sitemap) option was disabled
+= 1.0.121 [Aug 09, 2023] =
+- Added: [New filter](https://rankmath.com/kb/filters-hooks-api-developer/#modify-sitemap-index-slug) to change the sitemap_index.xml slug
+- Improved: Query to retrieve score on [Site Analytics page](https://rankmath.com/kb/analytics/#site-analytics)
+- Fixed: PHP error in the [Version Control](https://rankmath.com/kb/rank-math-status-and-tools/#version-control) on sites using Themify Updater plugin
+- Fixed: [Keywords](https://rankmath.com/kb/analytics/#keywords) tab in Analytics was not showing data on some setups due to the nested SELECT queries
+- Fixed: PHP error in the [Error log section](https://rankmath.com/kb/rank-math-status-and-tools/#error-log) on some setups
+- Fixed: HowTo block was not showing the [Step image](https://rankmath.com/blog/howto-schema/#adding-steps) when the [Step description](https://rankmath.com/blog/howto-schema/#step-description) was not added
+- Fixed: PHP error on some setups in Dashboard Widget
 
 Full changelog can be found here - **[Rank Math changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**

@@ -82,6 +82,9 @@ This notification message is filterable so you can customize it to better repres
 
 == Changelog ==
 
+= 4.0.6 =
+* Fixed php 8.2 related warning
+
 = 4.0.5 =
 * Fixed compatibility issue with ACF 6.1+ causing this plugins settings page to break
 * Fixed bug with logic for theme 'bundling' of this plugin that caused issues loading assets in some environments
@@ -242,6 +245,9 @@ This notification message is filterable so you can customize it to better repres
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 4.0.6 =
+* Fixed php 8.2 related warning
 
 = 4.0.5 =
 * Fixed compatibility issue with ACF 6.1+ causing this plugins settings page to break
