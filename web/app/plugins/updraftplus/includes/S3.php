@@ -1273,68 +1273,6 @@ class UpdraftPlus_S3 {
 	}
 
 	/**
-	 * Get upload POST parameters for form uploads
-	 *
-	 * @param string  $bucket Bucket name
-	 * @param string  $uriPrefix Object URI prefix
-	 * @param string  $acl ACL constant
-	 * @param integer $lifetime Lifetime in seconds
-	 * @param integer $maxFileSize Maximum file size in bytes (default 5MB)
-	 * @param string  $successRedirect Redirect URL or 200 / 201 status code
-	 * @param array   $amzHeaders Array of x-amz-meta-* headers
-	 * @param array   $headers Array of request headers or content type as a string
-	 * @param boolean $flashVars Includes additional "Filename" variable posted by Flash
-	 *
-	 * @return object
-	 */
-	public function getHttpUploadPostParams($bucket, $uriPrefix = '', $acl = self::ACL_PRIVATE, $lifetime = 3600,
-	$maxFileSize = 5242880, $successRedirect = "201", $amzHeaders = array(), $headers = array(), $flashVars = false) {
-		// Create policy object
-		$policy = new stdClass;
-		$policy->expiration = gmdate('Y-m-d\TH:i:s\Z', (time() + $lifetime));
-		$policy->conditions = array();
-		$obj = new stdClass; $obj->bucket = $bucket; array_push($policy->conditions, $obj);
-		$obj = new stdClass; $obj->acl = $acl; array_push($policy->conditions, $obj);
-
-		$obj = new stdClass; // 200 for non-redirect uploads
-		if (is_numeric($successRedirect) && in_array((int)$successRedirect, array(200, 201)))
-			$obj->success_action_status = (string)$successRedirect;
-		else // URL
-			$obj->success_action_redirect = $successRedirect;
-		array_push($policy->conditions, $obj);
-
-		if (self::ACL_PUBLIC_READ !== $acl)
-			array_push($policy->conditions, array('eq', '$acl', $acl));
-
-		array_push($policy->conditions, array('starts-with', '$key', $uriPrefix));
-		if ($flashVars) array_push($policy->conditions, array('starts-with', '$Filename', ''));
-		foreach (array_keys($headers) as $headerKey)
-			array_push($policy->conditions, array('starts-with', '$'.$headerKey, ''));
-		foreach ($amzHeaders as $headerKey => $headerVal) {
-			$obj = new stdClass;
-			$obj->{$headerKey} = (string)$headerVal;
-			array_push($policy->conditions, $obj);
-		}
-		array_push($policy->conditions, array('content-length-range', 0, $maxFileSize));
-		$policy = base64_encode(str_replace('\/', '/', json_encode($policy)));
-
-		// Create parameters
-		$params = new stdClass;
-		$params->AWSAccessKeyId = $this->__accessKey;
-		$params->key = $uriPrefix.'${filename}';
-		$params->acl = $acl;
-		$params->policy = $policy; unset($policy);
-		$params->signature = $this->__getHash($params->policy);
-		if (is_numeric($successRedirect) && in_array((int)$successRedirect, array(200, 201)))
-			$params->success_action_status = (string)$successRedirect;
-		else
-			$params->success_action_redirect = $successRedirect;
-		foreach ($headers as $headerKey => $headerVal) $params->{$headerKey} = (string)$headerVal;
-		foreach ($amzHeaders as $headerKey => $headerVal) $params->{$headerKey} = (string)$headerVal;
-		return $params;
-	}
-
-	/**
 	 * Get MIME type for file
 	 *
 	 * @internal Used to get mime types
@@ -1471,7 +1409,13 @@ class UpdraftPlus_S3 {
 		$amzRequests[] = $method;
 		$uriQmPos = strpos($uri, '?');
 		$amzRequests[] = (false === $uriQmPos ? $uri : substr($uri, 0, $uriQmPos));
-		$amzRequests[] = http_build_query($parameters);
+		$built_queries = '';
+		foreach ($parameters as $query => $val) {
+			if (!empty($built_queries)) $built_queries .= '&';
+			$built_queries .= "$query=".rawurlencode($val);
+		}
+		$amzRequests[] = $built_queries;
+
 
 		// add headers as string to requests
 		foreach ($amzHeaders as $k => $v) {
@@ -1618,7 +1562,7 @@ abstract class UpdraftPlus_AWSRequest {
 	);
 	public $fp = false, $size = 0, $data = false, $response;
 	
-	private $s3;
+	protected $s3;
 
 	/**
 	 * Set request parameter
@@ -1753,13 +1697,6 @@ abstract class UpdraftPlus_AWSRequest {
 }
 
 final class UpdraftPlus_S3Request extends UpdraftPlus_AWSRequest {
-
-	/**
-	 * Amazon S3 object
-	 *
-	 * @var UpdraftPlus_S3|null
-	 */
-	private $s3;
 
 	/**
 	 * Constructor
@@ -1908,6 +1845,8 @@ final class UpdraftPlus_S3Request extends UpdraftPlus_AWSRequest {
 						);
 				} else {
 					// Use V4
+					if (isset($this->headers['Content-MD5']) && '' == $this->headers['Content-MD5']) unset($this->headers['Content-MD5']); // content-md5 is part of v2 signature, but it may be presented in the HTTP headers whilst doing PUT requests, we've seen this happening on Amazon S3 storage when testing credentials, but it shouldn't be added to v4's SignedHeaders if it's empty so we unset it
+					if (isset($this->headers['Content-Type']) && '' == $this->headers['Content-Type']) unset($this->headers['Content-Type']); // content-type may get included in the HTTP headers, but if it's not presented then it shouldn't be added to SignedHeaders
 					$amzHeaders = $this->s3->__getSignatureV4(
 						$this->amzHeaders,
 						$this->headers,
@@ -1970,6 +1909,24 @@ final class UpdraftPlus_S3Request extends UpdraftPlus_AWSRequest {
 		}
 
 		@curl_close($curl);
+
+		if (false !== $this->response->error && preg_match('/\.amazonaws\.com$/i', $this->endpoint) && 'PUT' === $this->verb) {
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, 'https://tls12.browserleaks.com/');
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_FAILONERROR, true);
+			curl_setopt($curl, CURLOPT_HEADER, false);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+			curl_setopt($curl, CURLOPT_VERBOSE, true);
+			$response = curl_exec($curl);
+			$info = curl_getinfo($curl);
+			curl_close($curl);
+			
+			if (200 === $info['http_code'] && 'TLS 1.2' !== $response) {
+				$updraftplus->log('Connecting to Amazon S3 failed. Your PHP installation failed a TLS v1.2 connection test, which is the minimum version required by Amazon. Please ask your webserver support how to upgrade your PHP and cURL library versions to use non-obsolete TLS versions.');
+				$updraftplus->log(__('Connecting to Amazon S3 failed.', 'updraftplus').' '.__('Your PHP installation failed a TLS v1.2 connection test, which is the minimum version required by Amazon.', 'updraftplus').' '.__('Please ask your webserver support how to upgrade your PHP and cURL library versions to use non-obsolete TLS versions.', 'updraftplus'), 'warning');
+			}
+		}
 
 		// Parse body into XML
 		// The case in which there is not application/xml content-type header is to support a DreamObjects case seen, April 2018

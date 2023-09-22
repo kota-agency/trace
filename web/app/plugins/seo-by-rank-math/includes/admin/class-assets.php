@@ -190,7 +190,7 @@ class Assets implements Runner {
 	public function overwrite_wplink() {
 
 		wp_deregister_script( 'wplink' );
-		wp_register_script( 'wplink', rank_math()->plugin_url() . 'assets/admin/js/wplink.js', [ 'jquery', 'wpdialogs' ], rank_math()->version, true );
+		wp_register_script( 'wplink', rank_math()->plugin_url() . 'assets/admin/js/wplink.js', [ 'jquery', 'wp-a11y' ], rank_math()->version, true );
 
 		wp_localize_script(
 			'wplink',
@@ -270,7 +270,7 @@ class Assets implements Runner {
 					return true;
 				}
 				jQuery( '.rank-math-notice-permalinks-warning' ).removeClass( 'hidden' ).insertBefore( 'p.submit' );
-				noticeShown = true;	
+				noticeShown = true;
 				return true;
 			}
 

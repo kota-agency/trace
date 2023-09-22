@@ -1,0 +1,84 @@
+# Copyright (C) 2021 Gravity Forms
+# This file is distributed under the GPL-3.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Gravity Forms Akismet Add-On 1.0\n"
+"Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
+"Last-Translator: Gravity Forms <support@gravityforms.com>\n"
+"Language-Team: Gravity Forms <support@gravityforms.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-07-07T14:46:01+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: gravityformsakismet\n"
+
+#. Plugin Name of the plugin
+msgid "Gravity Forms Akismet Add-On"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://gravityforms.com"
+msgstr ""
+
+#. Description of the plugin
+msgid "Enhance Gravity Forms with advanced spam protection, powered by Akismet."
+msgstr ""
+
+#. Author of the plugin
+msgid "Gravity Forms"
+msgstr ""
+
+#: class-gf-akismet.php:210
+msgid "The Akismet plugin is either inactive or not installed."
+msgstr ""
+
+#: class-gf-akismet.php:215
+msgid "To use this add-on, please visit the Forms -> Settings page to enable Akismet integration"
+msgstr ""
+
+#: class-gf-akismet.php:506
+msgid "This entry has been marked as spam."
+msgstr ""
+
+#: includes/settings/class-form-settings.php:52
+msgid "Akismet Settings"
+msgstr ""
+
+#: includes/settings/class-form-settings.php:57
+msgid "First Name"
+msgstr ""
+
+#: includes/settings/class-form-settings.php:65
+msgid "Last Name"
+msgstr ""
+
+#: includes/settings/class-form-settings.php:73
+msgid "Email"
+msgstr ""
+
+#: includes/settings/class-form-settings.php:81
+msgid "Website"
+msgstr ""
+
+#: includes/settings/class-form-settings.php:89
+msgid "Subject"
+msgstr ""
+
+#: includes/settings/class-form-settings.php:96
+msgid "Content"
+msgstr ""
+
+#: includes/settings/class-form-settings.php:117
+msgid "Enable to protect this form's entries from spam using Akismet"
+msgstr ""
+
+#: includes/settings/class-form-settings.php:121
+msgid "Akismet enabled"
+msgstr ""
+
+#: includes/settings/class-form-settings.php:127
+msgid "Enabled"
+msgstr ""

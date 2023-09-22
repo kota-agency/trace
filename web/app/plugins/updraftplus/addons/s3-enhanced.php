@@ -104,7 +104,7 @@ class UpdraftPlus_Addon_S3_Enhanced {
 	/**
 	 * This method gives template string to the page for the extra storage options.
 	 *
-	 * @param  Object $existing_partial_template_str - partial templete string to which this outputted template appended
+	 * @param  Object $existing_partial_template_str - partial template string to which this outputted template appended
 	 *
 	 * @return String - the partial template, ready for substitutions to be carried out
 	 */
@@ -282,7 +282,7 @@ class UpdraftPlus_Addon_S3_Enhanced {
 			if ($try_to_create_bucket) {
 				$gb = $try_to_create_bucket;
 			} else {
-				$msg = __("Failure: We could not successfully access or create such a bucket. Please check your access credentials, and if those are correct then try another bucket name (as another AWS user may already have taken your name).", 'updraftplus');
+				$msg = __('Failure: We could not successfully access or create such a bucket.', 'updraftplus').' '.__('Please check your access credentials, and if those are correct then try another bucket name (as another AWS user may already have taken your name).', 'updraftplus');
 				if (isset($s3_error)) $msg .= "\n\n".sprintf(__('The error reported by %s was:', 'updraftplus'), 'S3').' '.$s3_error;
 				return array('e' => 1, 'm' => $msg);
 			}

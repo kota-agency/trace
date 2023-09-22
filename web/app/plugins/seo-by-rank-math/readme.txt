@@ -3,9 +3,9 @@ Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, sitemap, google search console, schema, redirection, WordPress SEO
 Tested up to: 6.3
-Requires at least: 5.6
+Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.0.121
+Stable tag: 1.0.202
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -583,13 +583,19 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.121 [Aug 09, 2023] =
-- Added: [New filter](https://rankmath.com/kb/filters-hooks-api-developer/#modify-sitemap-index-slug) to change the sitemap_index.xml slug
-- Improved: Query to retrieve score on [Site Analytics page](https://rankmath.com/kb/analytics/#site-analytics)
-- Fixed: PHP error in the [Version Control](https://rankmath.com/kb/rank-math-status-and-tools/#version-control) on sites using Themify Updater plugin
-- Fixed: [Keywords](https://rankmath.com/kb/analytics/#keywords) tab in Analytics was not showing data on some setups due to the nested SELECT queries
-- Fixed: PHP error in the [Error log section](https://rankmath.com/kb/rank-math-status-and-tools/#error-log) on some setups
-- Fixed: HowTo block was not showing the [Step image](https://rankmath.com/blog/howto-schema/#adding-steps) when the [Step description](https://rankmath.com/blog/howto-schema/#step-description) was not added
-- Fixed: PHP error on some setups in Dashboard Widget
+= 1.0.202 [Sept 21, 2023] =
+- Added: Support for `UK English` [language](https://rankmath.com/kb/configure-content-ai-global-settings/#languages) in Content AI
+- Added: Several improvements to the new [Content AI](https://rankmath.com/content-ai/)
+- Added: [New filter](https://rankmath.com/kb/filters-hooks-api-developer/#prevent-link-counter-processing-post) to prevent [Link Counter](https://rankmath.com/kb/link-counter/) from processing the post
+- Improved: [Grammarly integration](https://rankmath.com/kb/configure-content-ai-global-settings/#enable-grammarly) is now enabled by default on all sites. This option will be enabled on existing sites after this update
+- Improved: [Write More](https://rankmath.com/kb/content-ai-editor/#write-tab) feature now generates more advanced preformatted output
+- Improved: Rank Math no longer supports PHP 7.2. Please upgrade to a more recent PHP version to continue using Rank Math
+- Improved: [Analytics](https://rankmath.com/kb/analytics) code to use the same post slug everywhere
+- Fixed: Incorrect formatting of the Hierarchical items in the [HTML sitemap](https://rankmath.com/kb/html-sitemap/)
+- Fixed: UI issue in the [Analytics settings](https://rankmath.com/kb/general-settings/#analytics)
+- Fixed: Insert option in [FAQ AI tool](https://rankmath.com/kb/content-ai-frequently-asked-questions-tool/) was not working in Content Editor
+- Fixed: PHP error on [Content Editor page](https://rankmath.com/kb/content-ai-editor/) on WordPress v6.2 and lower
+- Fixed: Missing option to insert [SEO Meta](https://rankmath.com/kb/content-ai-seo-meta-tool/) & [Opengraph](https://rankmath.com/kb/content-ai-open-graph-tool/) data in Divi Editor
+
 
 Full changelog can be found here - **[Rank Math changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**

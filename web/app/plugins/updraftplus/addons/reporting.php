@@ -240,7 +240,7 @@ class UpdraftPlus_Addon_Reporting {
 		echo "<li>".rtrim($err)."</li>\n";
 	}
 	echo "</ul>\n";
-	echo '<p><em>'.__('Note that warning messages are advisory - the backup process does not stop for them. Instead, they provide information that you might find useful, or that may indicate the source of a problem if the backup did not succeed.', 'updraftplus').'</em></p>';
+	echo '<p><em>'.__('Note that warning messages are advisory - the backup process does not stop for them.', 'updraftplus').' '.__('Instead, they provide information that you might find useful, or that may indicate the source of a problem if the backup did not succeed.', 'updraftplus').'</em></p>';
 		}
 		?>
 <p>
@@ -571,7 +571,7 @@ class UpdraftPlus_Addon_Reporting {
 
 		$jobdata['service'] = empty($jobdata['service']) ? array() : $updraftplus->get_canonical_service_list($jobdata['service']);
 
-		// I was thinking not to check the the nonce fisrt, but at this point I believe we should only generate a valid link
+		// I was thinking not to check the the nonce first, but at this point I believe we should only generate a valid link
 		$download_link = is_array($jobdata) && !empty($jobdata['backup_time']) && !empty($this->file_nonce) && empty($jobdata['service']);
 
 		if ($download_link) {

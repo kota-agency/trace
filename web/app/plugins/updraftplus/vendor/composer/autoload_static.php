@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit03f58c64bbf0b573d3ab64449e33e658
+class ComposerStaticInit84ef3d1f762500609f49905918ada5d5
 {
     public static $files = array (
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
@@ -19,7 +19,7 @@ class ComposerStaticInit03f58c64bbf0b573d3ab64449e33e658
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         '3919eeb97e98d4648304477f8ef734ba' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '49a1299791c25c6fd83542c6fedacddd' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v4p11.php',
+        '7166494aeff09009178f278afd86c83f' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v4p13.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -200,10 +200,10 @@ class ComposerStaticInit03f58c64bbf0b573d3ab64449e33e658
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit03f58c64bbf0b573d3ab64449e33e658::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit03f58c64bbf0b573d3ab64449e33e658::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit03f58c64bbf0b573d3ab64449e33e658::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit03f58c64bbf0b573d3ab64449e33e658::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit84ef3d1f762500609f49905918ada5d5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit84ef3d1f762500609f49905918ada5d5::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit84ef3d1f762500609f49905918ada5d5::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit84ef3d1f762500609f49905918ada5d5::$classMap;
 
         }, null, ClassLoader::class);
     }

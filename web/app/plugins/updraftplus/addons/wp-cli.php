@@ -39,7 +39,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 	 * : File entities which will be backed up. Multiple file entities names should separate by comma (,).
 	 *
 	 * [--include-tables=<include-tables>]
-	 * : Tables which will be backed up.  You should backup all tables unless you are an expert in the internals of the WordPress database. Multiple table names seperated by comma (,). If include-tables is not added in command, All tables will be backed up
+	 * : Tables which will be backed up.  You should backup all tables unless you are an expert in the internals of the WordPress database. Multiple table names separated by comma (,). If include-tables is not added in command, All tables will be backed up
 	 * ---
 	 * default: all
 	 * ---
@@ -203,7 +203,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 	 * @param string $job_id  backup job identifier
 	 */
 	public function backupnow_start_message($message, $job_id) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameter is present because the method is used as a WP filter.
-		return sprintf(__('Backup has been started successfully. You can see the last log message by running the following command: "%s"', 'updraftplus'), 'wp updraftplus backup_progress '.$job_id);
+		return __('Backup has been started successfully.', 'updraftplus').' '.sprintf(__('You can see the last log message by running the following command: "%s"', 'updraftplus'), 'wp updraftplus backup_progress '.$job_id);
 	}
 	
 	/**
@@ -665,7 +665,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 	 * ---
 	 *
 	 * [--db-decryption-phrase=<db-decryption-phrase>]
-	 * : If databse is encypted in the backup, Please give database decryption phrase
+	 * : If database is encrypted in the backup, Please give database decryption phrase
 	 *
 	 * [--over-write-wp-config=<over-write-wp-config>]
 	 * : Whether wp-config.php file will be overwritten or not. This option will work if you have installed the "More files" addon.
@@ -883,13 +883,13 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 	/**
 	 * Displays error message for relevant addon is not exist for a given option to command
 	 *
-	 * @param string $option        Option passed to coomand which is not supported without addon
+	 * @param string $option        Option passed to command which is not supported without addon
 	 * @param string $addon_title   Addon title
 	 * @param string $addon_buy_url Addon buy link which is not filtered for affiliate
 	 */
 	private function addon_not_exist_error($option, $addon_title, $addon_buy_url) {
 		$filtered_addon_buy_url = apply_filters('updraftplus_com_link', $addon_buy_url);
-		WP_CLI::error(sprintf(__('You have given the %1$s option. The %1$s is working with "%2$s" addon. Get the "%2$s" addon: %3$s', 'updraftplus'), $option, $addon_title, $filtered_addon_buy_url), true);
+		WP_CLI::error(sprintf(__('You have given the %s option.', 'updraftplus'), $option).' '.sprintf(__('The %s is working with "%s" addon.', 'updraftplus'), $option, $addon_title).' '.sprintf(__('Get the "%s" addon: %s', 'updraftplus'), $addon_title, $filtered_addon_buy_url), true);
 	}
 	
 	/**
@@ -913,7 +913,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 	}
 	
 	/**
-	 * Get valid restore componenets
+	 * Get valid restore components
 	 *
 	 * @return Array An array which have valid restore components as values
 	 */
@@ -1048,7 +1048,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 	public function connect($args, $assoc_args) {
 		global $updraftplus_addons2;
 		if ('' == $assoc_args['email'] || ('' == $assoc_args['password'] && '' == $assoc_args['password-file'])) {
-			WP_CLI::error(__('An email and password are required to connect to UpdraftPlus.com. Please make sure these two parameters are set.', 'updraftplus'), true);
+			WP_CLI::error(__('An email and password are required to connect to UpdraftPlus.com.', 'updraftplus').' '.__('Please make sure these two parameters are set.', 'updraftplus'), true);
 		}
 		if (!filter_var($assoc_args['email'], FILTER_VALIDATE_EMAIL)) {
 			WP_CLI::error(__('The email address provided appears to be invalid, please double-check your email address again and try again.', 'updraftplus'), true);
@@ -1125,7 +1125,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 		$clone_key = (!isset($assoc_args['clone-key']) || !is_string($assoc_args['clone-key'])) ? false : $assoc_args['clone-key'];
 
 		if (!$clone_key) {
-			WP_CLI::error(sprintf(__('No clone key provided. You can create a clone key at %s', 'updraftplus'), $updraftplus->get_url('my-account')));
+			WP_CLI::error(__('No clone key provided.', 'updraftplus').' '.sprintf(__('You can create a clone key at %s', 'updraftplus'), $updraftplus->get_url('my-account')));
 		}
 
 		$params = array(
@@ -1198,7 +1198,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 			}
 		}
 		if ($wp_only) {
-			WP_CLI::success(__('The UpdraftClone boot process for an empty WordPress install has begun.', 'updraftplus') . ' ' . __('You will recieve an email when it completes.', 'updraftplus'));
+			WP_CLI::success(__('The UpdraftClone boot process for an empty WordPress install has begun.', 'updraftplus') . ' ' . __('You will receive an email when it completes.', 'updraftplus'));
 		}
 
 		// reset the secret token, this can change if we have been given one from the queue
@@ -1224,7 +1224,7 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 		);
 		$this->commands->backupnow($params);
 		
-		WP_CLI::success(__('The UpdraftClone boot process has started.', 'updraftplus') . ' ' . __('The creation of your data for creating the clone should now begin, and you will recieve an email when it completes.', 'updraftplus'));
+		WP_CLI::success(__('The UpdraftClone boot process has started.', 'updraftplus') . ' ' . __('The creation of your data for creating the clone should now begin, and you will receive an email when it completes.', 'updraftplus'));
 	}
 }
 

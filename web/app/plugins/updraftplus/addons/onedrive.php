@@ -81,7 +81,7 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 		
 		// If the user is using OneDrive for Germany option
 		if (isset($opts['endpoint_tld']) && 'de' === $opts['endpoint_tld']) {
-			$odg_warning = sprintf(__('Due to the shutdown of the %1$s endpoint, support for %1$s will be ending soon. You will need to migrate to the Global endpoint in your UpdraftPlus settings. For more information, please see: %2$s', 'updraftplus'), 'OneDrive Germany', 'https://www.microsoft.com/en-us/cloud-platform/germany-cloud-regions');
+			$odg_warning = sprintf(__('Due to the shutdown of the %1$s endpoint, support for %1$s will be ending soon.', 'updraftplus'), 'OneDrive Germany').' '.__('You will need to migrate to the Global endpoint in your UpdraftPlus settings.', 'updraftplus').' '.sprintf(__('For more information, please see: %s', 'updraftplus'), 'https://www.microsoft.com/en-us/cloud-platform/germany-cloud-regions');
 			// We only want to log this once per backup job
 			$this->log($odg_warning, 'warning', 'onedrive_de_migrate');
 		}
@@ -258,7 +258,7 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 			return false;
 		}
 		
-		// At this point, the upload has suceeded despite expectation of failure
+		// At this point, the upload has succeeded despite expectation of failure
 		$updraftplus->log_remove_warning('onedrive_expect_to_fail');
 		return true;
 	}
@@ -410,12 +410,13 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 	/**
 	 * Get the OneDrive internal pointer for an indicated folder path
 	 *
-	 * @param String $folder  - folder path
-	 * @param Object $storage - storage object that API calls can be made upon
+	 * @param String  $folder               - folder path
+	 * @param Object  $storage              - storage object that API calls can be made upon
+	 * @param Boolean $create_if_not_exists - whether to create the folder if not exists
 	 *
-	 * @return String - the pointer
+	 * @return String|Null - the pointer of the given folder, otherwise null if an exception occurs or the folder doesn't exist
 	 */
-	private function get_pointer($folder, $storage) {
+	private function get_pointer($folder, $storage, $create_if_not_exists = true) {
 		
 		$pointer = null;
 		try {
@@ -431,16 +432,30 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 				$dirs = $storage->fetchObjects($pointer);
 				foreach ($dirs as $dir) {
 					$dirname = $dir->getName();
-					if (strtolower($dirname) == strtolower($val) && $dir->isFolder()) {
+					if (function_exists('mb_strtolower')) {
+						$encoding = null;
+						if (seems_utf8($dirname) && seems_utf8($val)) $encoding = 'UTF-8';
+						$lowercased_dirname = mb_strtolower($dirname, $encoding);
+						$lowercased_val = mb_strtolower($val, $encoding);
+					} else {
+						$lowercased_dirname = strtolower($dirname);
+						$lowercased_val = strtolower($val);
+					}
+					if ($lowercased_dirname == $lowercased_val && $dir->isFolder()) {
 						$new_pointer = $dir->getId();
 						break; // This folder exists, we want to select this
 					}
 				}
 				
-				// If new_pointer is same, path doesn't exist, so create it
 				if ($pointer == $new_pointer) {
-					$newdir = $storage->createFolder($val, $pointer);
-					$new_pointer = $newdir->getId();
+					if ($create_if_not_exists) {
+						// If new_pointer is same, path doesn't exist, so create it
+						$newdir = $storage->createFolder($val, $pointer);
+						$new_pointer = $newdir->getId();
+					} else {
+						$this->log("folder $folder does not exist");
+						return null;
+					}
 				}
 				$pointer = $new_pointer;
 				
@@ -518,33 +533,8 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 		if (is_object($storage) && !is_wp_error($storage)) {
 			// Get the folder from options
 			$folder = $opts['folder'];
-			$folder_array = explode('/', $folder);
-			
-			$pointer = null;
-			// Check if folder exists
-			foreach ($folder_array as $val) {
-				if ('' == $val) break; // If value is root break;
-				
-				$new_pointer = $pointer;
-				
-				// Fetch objects in dir
-				$dirs = $storage->fetchObjects($pointer);
-				foreach ($dirs as $dir) {
-					$dirname = $dir->getName();
-					if ($dirname == $val && $dir->isFolder()) {
-						$new_pointer = $dir->getId();
-						break; // This folder exists, we want to select this
-					}
-				}
-				
-				// If new_pointer is same, path doesn't exist, so can't delete
-				if ($pointer == $new_pointer) {
-					$this->log("folder does not exist");
-					return 'container_access_error';
-				}
-				$pointer = $new_pointer;
-				
-			} // End foreach().
+			$pointer = $this->get_pointer($folder, $storage, false);
+			if (null === $pointer) return 'container_access_error';
 			
 			$objs = $storage->fetchObjects($pointer);
 			$objectids = array();
@@ -648,7 +638,7 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 		/*
 			To save calls to the AUth server, Checking from the saved details (in $opts) from the last OneDrive call
 			and to see if there needs to be a new call or to re-use the values.  This also double Checks to see
-			if the access_token_timeout is set. if this is a new setup, this would never be set and therfore
+			if the access_token_timeout is set. if this is a new setup, this would never be set and therefore
 			initial a first request in order to be saved back to $opts for future calls.
 		*/
 		if (!isset($opts['access_token_timeout']) || time() > $opts['access_token_timeout']) {
@@ -705,7 +695,7 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 			}
 			/**
 			 * Before proceeding, check to make sure no errors returned from OneDrive or CloudFlare.
-			 * If no refresh_token returned, disply Errrors
+			 * If no refresh_token returned, display Errors
 			 */
 			$http_code = wp_remote_retrieve_response_code($result);
 			if ($http_code >= 400) {
@@ -1092,7 +1082,7 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 		$url = $onedrive->getLogInUrl($scope, $redirect_uri, array(), $instance_id, $callback_uri);
 
 		if (headers_sent()) {
-			$this->log(sprintf(__('The %s authentication could not go ahead, because something else on your site is breaking it. Try disabling your other plugins and switching to a default theme. (Specifically, you are looking for the component that sends output (most likely PHP warnings/errors) before the page begins. Turning off any debugging settings may also help).', 'updraftplus'), 'OneDrive'), 'error');
+			$this->log(sprintf(__('The %s authentication could not go ahead, because something else on your site is breaking it.', 'updraftplus'), 'OneDrive').' '.__('Try disabling your other plugins and switching to a default theme.', 'updraftplus').' ('.__('Specifically, you are looking for the component that sends output (most likely PHP warnings/errors) before the page begins.', 'updraftplus').' '.__('Turning off any debugging settings may also help).', 'updraftplus').')', 'error');
 		} else {
 			header('Location: '.esc_url_raw($url));
 		}
@@ -1286,7 +1276,7 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 			'privacy_policy' => wp_kses(sprintf(__('Please read %s for use of our %s authorization app (none of your backup data is sent to us).', 'updraftplus'), '<a target="_blank" href="https://updraftplus.com/faqs/what-is-your-privacy-policy-for-the-use-of-your-microsoft-onedrive-app/">'.__('this privacy policy', 'updraftplus').'</a>', 'OneDrive'), $this->allowed_html_for_content_sanitisation()),
 			'developer_console_link_text' => __('Create OneDrive credentials in your OneDrive developer console.', 'updraftplus'),
 			'setup_guide_link_text' => __('For more detailed instructions, follow this link.', 'updraftplus'),
-			'ip_host_label' => sprintf(__('This site uses a URL which is either non-HTTPS, or is localhost or 127.0.0.1 URL. As such, you must use the main %s %s App to authenticate with your account.', 'updraftplus'), 'UpdraftPlus', 'OneDrive'),
+			'ip_host_label' => __('This site uses a URL which is either non-HTTPS, or is localhost or 127.0.0.1 URL.', 'updraftplus').' '.sprintf(__('As such, you must use the main %s %s App to authenticate with your account.', 'updraftplus'), 'UpdraftPlus', 'OneDrive'),
 			'non_ip_host_label' => wp_kses(__('You must add the following as the authorized redirect URI in your OneDrive console (under "API Settings") when asked', 'updraftplus').': <kbd>'.UpdraftPlus_Options::admin_page_url().'</kbd>', $this->allowed_html_for_content_sanitisation()),
 			'input_client_id_label' => __('OneDrive', 'updraftplus').' '.__('Client ID', 'updraftplus'),
 			'input_client_id_title' => __('If OneDrive later shows you the message "unauthorized_client", then you did not enter a valid client ID here.', 'updraftplus'),
