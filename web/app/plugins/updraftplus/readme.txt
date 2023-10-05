@@ -1,7 +1,7 @@
-=== UpdraftPlus WordPress Backup & Migration Plugin ===		       	       
+=== UpdraftPlus WordPress Backup & Migration Plugin ===
 Contributors: Backup with UpdraftPlus, DavidAnderson, pmbaldha, DNutbourne, aporter, bcrodua
-Tags: backup, database backup, wordpress backup, cloud backup, migration  
-Requires at least: 3.2 	       	       	  	       	  	      	  
+Tags: backup, database backup, wordpress backup, cloud backup, migration
+Requires at least: 3.2
 Tested up to: 6.3
 Stable tag: 1.23.10
 Author URI: https://updraftplus.com
@@ -119,7 +119,7 @@ UpdraftClone makes it quick and easy to create a temporary sandbox for changes y
 
 * <a href="https://easyupdatesmanager.com">Easy Updates Manager</a>.
  <b>Take control of updates.</b> Lots of features for free, and a Premium version with even more - over 300,000 users.
-
+ 
 * <a href="https://www.internallinkjuicer.com">Internal Link Juicer</a>.<b>Boost your SEO.</b> Automate internal links within your WordPress website. Save time and rank higher in the search engines.
 
 For other useful, free plugins see <a href="https://profiles.wordpress.org/davidanderson/#content-plugins">our lead developer's profile, here</a>.
