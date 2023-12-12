@@ -30,6 +30,7 @@ if ( ! class_exists( 'acf_pro' ) ) :
 			acf_include( 'pro/blocks.php' );
 			acf_include( 'pro/options-page.php' );
 			acf_include( 'pro/acf-ui-options-page-functions.php' );
+			acf_include( 'pro/class-acf-updates.php' );
 			acf_include( 'pro/updates.php' );
 
 			if ( is_admin() ) {
@@ -45,6 +46,7 @@ if ( ! class_exists( 'acf_pro' ) ) :
 			add_action( 'acf/include_location_rules', array( $this, 'include_location_rules' ), 5 );
 			add_action( 'acf/input/admin_enqueue_scripts', array( $this, 'input_admin_enqueue_scripts' ) );
 			add_action( 'acf/field_group/admin_enqueue_scripts', array( $this, 'field_group_admin_enqueue_scripts' ) );
+			add_action( 'acf/in_admin_header', array( $this, 'maybe_show_license_status_error' ) );
 
 			// Add filters.
 			add_filter( 'posts_where', array( $this, 'posts_where' ), 10, 2 );
@@ -112,7 +114,6 @@ if ( ! class_exists( 'acf_pro' ) ) :
 
 			acf_include( 'pro/locations/class-acf-location-block.php' );
 			acf_include( 'pro/locations/class-acf-location-options-page.php' );
-
 		}
 
 		/**
@@ -154,7 +155,6 @@ if ( ! class_exists( 'acf_pro' ) ) :
 			wp_enqueue_script( 'acf-pro-input' );
 			wp_enqueue_script( 'acf-pro-ui-options-page' );
 			wp_enqueue_style( 'acf-pro-input' );
-
 		}
 
 
@@ -175,7 +175,46 @@ if ( ! class_exists( 'acf_pro' ) ) :
 
 			wp_enqueue_script( 'acf-pro-field-group' );
 			wp_enqueue_style( 'acf-pro-field-group' );
+		}
 
+		/**
+		 * Checks for a license status error and renders it if necessary.
+		 *
+		 * @since 6.2.1
+		 *
+		 * @return void
+		 */
+		public function maybe_show_license_status_error() {
+			$license_status         = acf_pro_get_license_status();
+			$defined_license_errors = acf_pro_get_activation_failure_transient();
+			$manage_url             = false;
+
+			if ( ! acf_pro_get_license_key( true ) && ! defined( 'ACF_PRO_LICENSE' ) ) {
+				$error_msg  = __( 'Activate your license to enable access to updates, support &amp; PRO features.', 'acf' );
+				$manage_url = admin_url( 'edit.php?post_type=acf-field-group&page=acf-settings-updates#acf_pro_license' );
+			} elseif ( acf_pro_is_license_expired( $license_status ) ) {
+				$error_msg  = __( 'Your license has expired. Please renew to continue to have access to updates, support &amp; PRO features.', 'acf' );
+				$manage_url = admin_url( 'edit.php?post_type=acf-field-group&page=acf-settings-updates' );
+			} elseif ( ! empty( $defined_license_errors ) ) {
+				$error_msg = $defined_license_errors['error'];
+			} elseif ( ! empty( $license_status['error_msg'] ) ) {
+				$error_msg = $license_status['error_msg'];
+			} else {
+				// No errors to show.
+				return;
+			}
+
+			if ( acf_is_updates_page_visible() && ! empty( $manage_url ) && 'acf-settings-updates' !== acf_request_arg( 'page' ) ) {
+				$manage_link = sprintf(
+					'<a href="%1$s">%2$s</a>',
+					esc_url( $manage_url ),
+					__( 'Manage License', 'acf' )
+				);
+
+				$error_msg .= ' ' . $manage_link;
+			}
+
+			acf_add_admin_notice( $error_msg, 'warning', false );
 		}
 
 		/**
@@ -199,7 +238,6 @@ if ( ! class_exists( 'acf_pro' ) ) :
 
 			return $where;
 		}
-
 	}
 
 
@@ -209,5 +247,3 @@ if ( ! class_exists( 'acf_pro' ) ) :
 
 	// end class
 endif;
-
-

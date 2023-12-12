@@ -27,14 +27,11 @@ if (!include __DIR__ . '/mg-filter.php') {
 /**
  * mg_api_last_error is a compound getter/setter for the last error that was
  * encountered during a Mailgun API call.
- *
- * @param string $error OPTIONAL
- *
- * @return    string    Last error that occurred.
- *
+ * @param string|null $error OPTIONAL
+ * @return string|null    Last error that occurred.
  * @since    1.5.0
  */
-function mg_api_last_error($error = null)
+function mg_api_last_error(string $error = null): ?string
 {
     static $last_error;
 
@@ -61,7 +58,11 @@ function mg_api_last_error($error = null)
  * @since 1.5.7
  */
 add_filter('mg_mutate_to_rcpt_vars', 'mg_mutate_to_rcpt_vars_cb');
-function mg_mutate_to_rcpt_vars_cb($to_addrs)
+/**
+ * @param $to_addrs
+ * @return array
+ */
+function mg_mutate_to_rcpt_vars_cb($to_addrs): array
 {
     if (is_string($to_addrs)) {
         $to_addrs = explode(',', $to_addrs);
@@ -79,7 +80,7 @@ function mg_mutate_to_rcpt_vars_cb($to_addrs)
 
             return [
                 'to' => '%recipient%',
-                'rcpt_vars' => json_encode($rcpt_vars),
+                'rcpt_vars' => json_encode($rcpt_vars, JSON_THROW_ON_ERROR),
             ];
         }
     }
@@ -260,8 +261,18 @@ if (!function_exists('wp_mail')) {
         }
 
         $body['o:tag'] = [];
-        $body['o:tracking-clicks'] = !empty($mailgun['track-clicks']) ? $mailgun['track-clicks'] : 'no';
-        $body['o:tracking-opens'] = empty($mailgun['track-opens']) ? 'no' : 'yes';
+        if (defined('MAILGUN_TRACK_CLICKS')) {
+            $trackClicks = MAILGUN_TRACK_CLICKS;
+        } else {
+            $trackClicks = !empty($mailgun['track-clicks']) ? $mailgun['track-clicks'] : 'no';
+        }
+        if (defined('MAILGUN_TRACK_OPENS')) {
+            $trackOpens = MAILGUN_TRACK_OPENS;
+        } else {
+            $trackOpens = empty($mailgun['track-opens']) ? 'no' : 'yes';
+        }
+        $body['o:tracking-clicks'] = $trackClicks;
+        $body['o:tracking-opens'] = $trackOpens;
 
         // this is the wordpress site tag
         if (isset($mailgun['tag'])) {
@@ -463,7 +474,12 @@ if (!function_exists('wp_mail')) {
     }
 }
 
-function mg_build_payload_from_body($body, $boundary)
+/**
+ * @param $body
+ * @param $boundary
+ * @return string
+ */
+function mg_build_payload_from_body($body, $boundary): string
 {
     $payload = '';
 
@@ -490,25 +506,29 @@ function mg_build_payload_from_body($body, $boundary)
     return $payload;
 }
 
-function mg_build_attachments_payload($attachments, $boundary)
+/**
+ * @param $attachments
+ * @param $boundary
+ * @return string|null
+ */
+function mg_build_attachments_payload($attachments, $boundary): ?string
 {
     $payload = '';
 
-    // If we have attachments, add them to the payload.
-    if (!empty($attachments)) {
-        $i = 0;
-        foreach ($attachments as $attachment) {
-            if (!empty($attachment)) {
-                $payload .= '--' . $boundary;
-                $payload .= "\r\n";
-                $payload .= 'Content-Disposition: form-data; name="attachment[' . $i . ']"; filename="' . basename($attachment) . '"' . "\r\n\r\n";
-                $payload .= file_get_contents($attachment);
-                $payload .= "\r\n";
-                $i++;
-            }
-        }
-    } else {
+    if (empty($attachments)) {
         return null;
+    }
+    // If we have attachments, add them to the payload.
+    $i = 0;
+    foreach ($attachments as $attachment) {
+        if (!empty($attachment)) {
+            $payload .= '--' . $boundary;
+            $payload .= "\r\n";
+            $payload .= 'Content-Disposition: form-data; name="attachment[' . $i . ']"; filename="' . basename($attachment) . '"' . "\r\n\r\n";
+            $payload .= file_get_contents($attachment);
+            $payload .= "\r\n";
+            $i++;
+        }
     }
 
     return $payload;

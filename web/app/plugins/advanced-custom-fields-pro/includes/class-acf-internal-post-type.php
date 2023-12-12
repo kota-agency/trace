@@ -445,7 +445,7 @@ if ( ! class_exists( 'ACF_Internal_Post_Type' ) ) {
 			if ( ! empty( $args['active'] ) ) {
 				$posts = array_filter(
 					$posts,
-					function( $post ) {
+					function ( $post ) {
 						return $post['active'];
 					}
 				);
@@ -852,13 +852,14 @@ if ( ! class_exists( 'ACF_Internal_Post_Type' ) ) {
 				return '';
 			}
 
-			$str_replace  = array(
+			$str_replace = array(
 				'  '         => "\t",
-				"'!!__(!!\'" => "__('",
+				"'!!__(!!\'" => "__( '",
 				"!!\', !!\'" => "', '",
-				"!!\')!!'"   => "')",
+				"!!\')!!'"   => "' )",
 				'array ('    => 'array(',
 			);
+
 			$preg_replace = array(
 				'/([\t\r\n]+?)array/' => 'array',
 				'/[0-9]+ => array/'   => 'array',
@@ -926,7 +927,6 @@ if ( ! class_exists( 'ACF_Internal_Post_Type' ) ) {
 
 			return $post;
 		}
-
 	}
 
 }
