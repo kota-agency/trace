@@ -1,15 +1,15 @@
-=== Rank Math SEO ===
+=== Rank Math SEO with AI SEO Tools ===
 Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, sitemap, google search console, schema, redirection, WordPress SEO
 Tested up to: 6.4.1
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.0.208.1
+Stable tag: 1.0.211
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
-Rank Math SEO is the Best WordPress SEO plugin combines the features of many SEO tools in a single package & helps you multiply your SEO traffic.
+Rank Math SEO is the Best WordPress SEO plugin with the features of many SEO and AI SEO tools in a single package to help multiply your SEO traffic.
 
 == Description ==
 
@@ -583,15 +583,17 @@ Please drop us an email at support@rankmath.com and we would be more than happy 
 
 == Changelog ==
 
-= 1.0.208 [Dec 07, 2023] =
-- Improved: Content AI is now optimized to deliver results quickly
-- Improved: [Bulk Generate SEO Meta tags](https://rankmath.com/kb/bulk-generate-seo-meta-tags/) feature is now restricted to Paid Content AI users
-- Fixed: [Sitemap Index](https://rankmath.com/kb/sitemaps-seo-benefits/#xml-sitemap) was incorrectly using noindexed post data for `Last Modified` date
-- Fixed: [Update SEO Score tool](https://rankmath.com/kb/seo-score-not-available/#update-seo-scores) now handles encoded characters in Post URL correctly
-- Removed: Google Mobile-Friendly tool from the [Quick Actions admin menu](https://rankmath.com/kb/quick-actions/) as Google deprecated it
-
-= 1.0.208.1 [Dec 07, 2023] =
-- Fixed: Cache issue was causing Content AI to not work properly.
+= 1.0.211 [Jan 17, 2024] =
+- Added: [HUGE!] [Content AI](https://rankmath.com/content-ai/) is now available to all Rank Math users to experience AI SEO features on their WordPress site
+- Improved: Added more [Power words](https://rankmath.com/blog/power-words/) for the German language
+- Improved: Queries used in [Database tools](https://rankmath.com/kb/rank-math-status-and-tools/#database-tools)
+- Fixed: Blog page was added in multiple [sitemaps](https://rankmath.com/kb/sitemaps-seo-benefits/#xml-sitemap)
+- Fixed: [Attachment Sitemap](https://rankmath.com/kb/configure-sitemaps/#media) was not working
+- Fixed: [Content AI Credits](https://rankmath.com/kb/how-to-use-content-ai/#credits-left) data was not updating when all credits were exhausted
+- Fixed: [Content AI Bulk Editing process](https://rankmath.com/kb/bulk-editing-in-rank-math/#write-seo-title-with-ai) was not updating more than 10 posts at a time
+- Fixed: Content AI Bulk Editing option was available to users without [Content AI capability in Role Manager](https://rankmath.com/kb/role-manager/)
+- Fixed: Issue with Diacritic characters when used in the [Schema](https://rankmath.com/kb/schema-generator/) fields
+- Removed: [Ping Search Engines](https://rankmath.com/kb/configure-sitemaps/) option as Google no longer supports it
 
 
 Full changelog can be found here - **[Rank Math changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**

@@ -99,7 +99,10 @@ class Admin_Menu implements Runner {
 
 		if ( 'Rank Math' === $submenu['rank-math'][0][0] ) {
 			if ( current_user_can( 'manage_options' ) ) {
-				$submenu['rank-math'][0][0] = esc_html__( 'Dashboard', 'rank-math' );
+				$plan         = Helper::get_content_ai_plan();
+				$notification = empty( $plan ) || 'free' === $plan && get_option( 'rank_math_view_modules' ) ? ' <span class="awaiting-mod count-1"><span class="pending-count" aria-hidden="true">1</span></span>' : '';
+
+				$submenu['rank-math'][0][0] = esc_html__( 'Dashboard', 'rank-math' ) . $notification;
 			} else {
 				unset( $submenu['rank-math'][0] );
 			}
@@ -160,6 +163,12 @@ class Admin_Menu implements Runner {
 			.multisite.network-admin #toplevel_page_rank-math {
 				display: block;
 			}
+			#toplevel_page_rank-math a[href$='<?php KB::the( 'offer', 'Offer Menu Item' ); ?>'],
+			#toplevel_page_rank-math a[href$='<?php KB::the( 'offer', 'Offer Menu Item' ); ?>']:hover,
+			#toplevel_page_rank-math a[href$='<?php KB::the( 'offer', 'Offer Menu Item' ); ?>']:focus {
+				background-color: #10AC84;
+				color: #fff;
+			}
 		</style>
 		<?php
 	}
@@ -191,7 +200,7 @@ class Admin_Menu implements Runner {
 			return;
 		}
 
-		$submenu['rank-math'][] = [ current( $offer ) . '&nbsp;<span class="awaiting-mod"><span class="pending-count">1</span></span>', 'level_1', KB::get( 'offer', 'Offer Menu Item' ) ];
+		$submenu['rank-math'][] = [ current( $offer ) . '&nbsp;', 'level_1', KB::get( 'offer', 'Offer Menu Item' ) ];
 	}
 
 	/**

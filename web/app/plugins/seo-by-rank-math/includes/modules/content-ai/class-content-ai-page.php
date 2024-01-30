@@ -43,6 +43,8 @@ class Content_AI_Page {
 		$this->action( 'rank_math/admin/editor_scripts', 'enqueue' );
 		$this->action( 'init', 'init' );
 		$this->filter( 'wp_insert_post_data', 'remove_unused_generated_content' );
+		$this->filter( 'rank_math/database/tools', 'add_tools' );
+		$this->filter( 'rank_math/tools/content_ai_cancel_bulk_edit_process', 'cancel_bulk_edit_process' );
 
 		if ( Param::get( 'page' ) !== 'rank-math-content-ai-page' ) {
 			return;
@@ -112,9 +114,9 @@ class Content_AI_Page {
 	 * Register admin page.
 	 */
 	public function register_admin_page() {
-		$uri = untrailingslashit( plugin_dir_url( __FILE__ ) );
-
-		$new_label = '<span class="rank-math-new-label" style="color:#ed5e5e;font-size:10px;font-weight:normal;">' . esc_html__( 'New!', 'rank-math' ) . '</span>';
+		$uri       = untrailingslashit( plugin_dir_url( __FILE__ ) );
+		$label     = Helper::get_content_ai_plan() === 'free' ? esc_html__( 'Free', 'rank-math' ) : esc_html__( 'New!', 'rank-math' );
+		$new_label = '<span class="rank-math-new-label" style="color:#ed5e5e;font-size:10px;font-weight:normal;">' . $label . '</span>';
 
 		if ( 'rank-math-content-ai-page' === Param::get( 'page' ) ) {
 			Helper::add_json( 'isContentAIPage', true );
@@ -166,6 +168,10 @@ class Content_AI_Page {
 	 * @return array          New actions.
 	 */
 	public function post_bulk_actions( $actions ) {
+		if ( ! Helper::has_cap( 'content_ai' ) ) {
+			return $actions;
+		}
+
 		$actions['rank_math_ai_options']                             = __( '&#8595; Rank Math Content AI', 'rank-math' );
 		$actions['rank_math_content_ai_fetch_seo_title']             = esc_html__( 'Write SEO Title with AI', 'rank-math' );
 		$actions['rank_math_content_ai_fetch_seo_description']       = esc_html__( 'Write SEO Description with AI', 'rank-math' );
@@ -339,6 +345,46 @@ class Content_AI_Page {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Add database tools.
+	 *
+	 * @param array $tools Array of tools.
+	 *
+	 * @return array
+	 */
+	public function add_tools( $tools ) {
+		$posts = get_option( 'rank_math_content_ai_posts' );
+
+		// Early Bail if process is not running.
+		if ( empty( $posts ) ) {
+			return $tools;
+		}
+
+		$processed = get_option( 'rank_math_content_ai_posts_processed' );
+
+		$tools['content_ai_cancel_bulk_edit_process'] = [
+			'title'       => esc_html__( 'Cancel Content AI Bulk Editing Process', 'rank-math' ),
+			'description' => sprintf(
+				// Translators: placeholders are the number of posts that were processed.
+				esc_html__( 'Terminate the ongoing Content AI Bulk Editing Process to halt any pending modifications and revert to the previous state. The bulk metadata has been generated for %1$d out of %1$d posts so far.', 'rank-math' ),
+				$processed,
+				count( $posts )
+			),
+			'button_text' => esc_html__( 'Terminate', 'rank-math' ),
+		];
+
+		return $tools;
+	}
+
+	/**
+	 * Function to cancel the Bulk Edit process.
+	 */
+	public function cancel_bulk_edit_process() {
+		Bulk_Edit_SEO_Meta::get()->cancel();
+		Helper::remove_notification( 'rank_math_content_ai_posts_started' );
+		return __( 'Bulk Editing Process Successfully Cancelled', 'rank-math' );
 	}
 
 	/**
