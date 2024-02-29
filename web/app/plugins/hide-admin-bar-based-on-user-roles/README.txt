@@ -4,10 +4,10 @@ Tags: admin bar, hide admin bar, hide admin bar, admin bar hide, admin bar hide 
 Plugin URI: https://iamankitpanchal.com
 Author: Ankit Panchal
 Author URI: https://iamankitpanchal.com
-Requires at least: 3.7.0
-Tested up to: 6.4.1
+Requires at least: 3.7.1
+Tested up to: 6.4.3
 Requires PHP: 5.6
-Stable tag: 3.7.0
+Stable tag: 3.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -181,6 +181,9 @@ Compatibility tested & Tested with the latest WordPress version.
 Compatibility tested & Tested with the latest WordPress version.
 
 = 3.7.0 - 01-01-2024 =
+Compatibility tested & Tested with the latest WordPress version.
+
+= 3.7.1 - 06-02-2024 =
 Compatibility tested & Tested with the latest WordPress version.
 
 == Upgrade Notice ==

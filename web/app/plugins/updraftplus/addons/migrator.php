@@ -14,54 +14,6 @@ if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 updraft_try_include_file('includes/migrator-lite.php', 'require_once');
 class UpdraftPlus_Addons_Migrator extends UpdraftPlus_Migrator_Lite {
 
-	protected $restore_options = array();
-
-	// This is also used to detect the situation of importing a single site into a multisite
-	// Public, as it is used externally
-	public $new_blogid;
-	
-	/**
-	 * The url for the current site where WordPress application files
-	 *
-	 * @var string
-	 */
-	protected $siteurl;
-
-	/**
-	 * The url for the current site where the front end is accessible
-	 *
-	 * @var string
-	 */
-	protected $home;
-	
-	/**
-	 * The url for the content directory
-	 *
-	 * @var string|boolean
-	 */
-	protected $content;
-
-	/**
-	 * The url for the uploads directory
-	 *
-	 * @var string
-	 */
-	private $uploads;
-
-	/**
-	 * The old url for the content directory
-	 *
-	 * @var string|boolean
-	 */
-	private $old_content;
-
-	/**
-	 * The old url for the uploads directory
-	 *
-	 * @var string
-	 */
-	private $old_uploads;
-
 	/**
 	 * Constructor, called during UD initialisation
 	 */

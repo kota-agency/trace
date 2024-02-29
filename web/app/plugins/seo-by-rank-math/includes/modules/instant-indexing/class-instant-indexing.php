@@ -82,7 +82,7 @@ class Instant_Indexing extends Base {
 		$this->filter( 'page_row_actions', 'post_row_actions', 10, 2 );
 		$this->filter( 'admin_init', 'handle_post_row_actions' );
 
-		$this->action( 'template_redirect', 'serve_api_key' );
+		$this->action( 'wp', 'serve_api_key' );
 		$this->action( 'rest_api_init', 'init_rest_api' );
 	}
 
@@ -301,6 +301,14 @@ class Instant_Indexing extends Base {
 
 		if ( ! Helper::is_post_indexable( $post_id ) ) {
 			return;
+		}
+
+		// Check if it's a hidden product.
+		if ( 'product' === $post->post_type && Helper::is_woocommerce_active() ) {
+			$product = wc_get_product( $post_id );
+			if ( $product && ! $product->is_visible() ) {
+				return;
+			}
 		}
 
 		$url = get_permalink( $post );

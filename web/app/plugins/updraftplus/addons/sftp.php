@@ -230,7 +230,7 @@ class UpdraftPlus_Addons_RemoteStorage_sftp extends UpdraftPlus_RemoteStorage_Ad
 					$current_remote_size = 0;
 				}
 
-				if ($current_remote_size >= $this->sftp_size || $sftp->put($file, $updraft_dir.'/'.$file, NET_SFTP_LOCAL_FILE, $current_remote_size, $current_remote_size, array($this, 'sftp_progress_callback'))) {
+				if ($current_remote_size >= $this->sftp_size || $sftp->put($file, $updraft_dir.'/'.$file, phpseclib_Net_SFTP::SOURCE_LOCAL_FILE, $current_remote_size, $current_remote_size, array($this, 'sftp_progress_callback'))) {
 					$updraftplus->uploaded_file($file);
 				} else {
 					$any_failures = true;
@@ -400,12 +400,7 @@ class UpdraftPlus_Addons_RemoteStorage_sftp extends UpdraftPlus_RemoteStorage_Ad
 
 		$timeout = (defined('UPDRAFTPLUS_SFTP_TIMEOUT') && is_numeric(UPDRAFTPLUS_SFTP_TIMEOUT)) ? UPDRAFTPLUS_SFTP_TIMEOUT : 15;
 
-		if ($scp) {
-			$ensure_phpseclib = $updraftplus->ensure_phpseclib('Net_SSH2');
-			$updraftplus->ensure_phpseclib('Net_SCP');
-		} else {
-			$ensure_phpseclib = $updraftplus->ensure_phpseclib('Net_SFTP');
-		}
+		$ensure_phpseclib = $updraftplus->ensure_phpseclib();
 		
 		if (is_wp_error($ensure_phpseclib)) return $ensure_phpseclib;
 		
@@ -413,20 +408,18 @@ class UpdraftPlus_Addons_RemoteStorage_sftp extends UpdraftPlus_RemoteStorage_Ad
 		if ($debug) {
 			if (!defined('NET_SSH2_LOGGING')) {
 				// Alternative: NET_SFTP_LOG_SIMPLE. phpseclib source says that NET_SSH2_LOG_COMPLEX is most useful for SSH2
-				define('NET_SSH2_LOGGING', NET_SSH2_LOG_COMPLEX);
-			} elseif (NET_SSH2_LOGGING != NET_SSH2_LOG_COMPLEX) {
-				$this->log("NET_SSH2_LOGGING: constant was already set; value not as desired (value=".NET_SSH2_LOGGING.", desired=".NET_SSH2_LOG_COMPLEX.")");
+				define('NET_SSH2_LOGGING', phpseclib_Net_SSH2::LOG_COMPLEX);
+			} elseif (NET_SSH2_LOGGING != phpseclib_Net_SSH2::LOG_COMPLEX) {
+				$this->log("NET_SSH2_LOGGING: constant was already set; value not as desired (value=".NET_SSH2_LOGGING.", desired=".phpseclib_Net_SSH2::LOG_COMPLEX.")");
 			}
 		}
 		
-		$connection_class = $scp ? 'Net_SSH2' : 'Net_SFTP';
+		$connection_class = $scp ? 'phpseclib_Net_SSH2' : 'phpseclib_Net_SFTP';
 		
 		$this->ssh = new $connection_class($host, $port, $timeout);
 
 		if (!empty($key)) {
-			$updraftplus->ensure_phpseclib('Crypt_RSA');
-			$updraftplus->ensure_phpseclib('Math_BigInteger');
-			$rsa = new Crypt_RSA();
+			$rsa = new phpseclib_Crypt_RSA();
 			if (false === $rsa->loadKey($key)) {
 				if (preg_match('/Encryption: (.+)/i', $key, $matches)) {
 					$encryption = trim($matches[1]);
@@ -440,9 +433,6 @@ class UpdraftPlus_Addons_RemoteStorage_sftp extends UpdraftPlus_RemoteStorage_Ad
 
 		// See: https://github.com/phpseclib/phpseclib/issues/1271#issuecomment-390417276 . Default is 10s.
 		$this->ssh->setTimeout(35);
-
-		// Ensure phpseclib Crypt_Blowfish is loaded, over PEAR's
-		$updraftplus->ensure_phpseclib('Crypt_Blowfish');
 
 		if (!$this->ssh->login($user, $pass)) {
 			$error_data = null;
@@ -476,7 +466,7 @@ class UpdraftPlus_Addons_RemoteStorage_sftp extends UpdraftPlus_RemoteStorage_Ad
 		// return new WP_Error('debug', "Remove fingerprint: $remote_finger");
 		// }
 
-		return $scp ? new Net_SCP($this->ssh) : $this->ssh;
+		return $scp ? new phpseclib_Net_SCP($this->ssh) : $this->ssh;
 
 	}
 
@@ -720,7 +710,7 @@ class UpdraftPlus_Addons_RemoteStorage_sftp extends UpdraftPlus_RemoteStorage_Ad
 				if ($match_fingerprint) {
 					_e('Success', 'updraftplus');
 				} else {
-					echo __("Failed: We are unable to match the fingerprint.', 'updraftplus').' '.__('However, we were able to log in and move to the indicated directory and successfully create a file in that location.", 'updraftplus');
+					echo __('Failed: We are unable to match the fingerprint.', 'updraftplus').' '.__('However, we were able to log in and move to the indicated directory and successfully create a file in that location.', 'updraftplus');
 				}
 			}
 
@@ -755,9 +745,9 @@ class UpdraftPlus_Addons_RemoteStorage_sftp extends UpdraftPlus_RemoteStorage_Ad
 		if (empty($ssh)) $ssh = $this->ssh;
 
 		$host_key = $ssh->getServerPublicHostKey();
-		$updraftplus->ensure_phpseclib('Crypt_RSA');
+		$updraftplus->ensure_phpseclib();
 		
-		$host_rsa = new Crypt_RSA();
+		$host_rsa = new phpseclib_Crypt_RSA();
 		$host_rsa->loadKey($host_key);
 		return array(
 			'md5' => $host_rsa->getPublicKeyFingerprint('md5'),

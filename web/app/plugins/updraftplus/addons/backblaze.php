@@ -8,7 +8,6 @@ Shop: /shop/backblaze/
 Include: includes/backblaze
 IncludePHP: methods/addon-base-v2.php
 RequiresPHP: 5.3.3
-Latest Change: 1.15.3
 */
 // @codingStandardsIgnoreEnd
 
@@ -20,6 +19,11 @@ if (!class_exists('UpdraftPlus_RemoteStorage_Addons_Base_v2')) updraft_try_inclu
  * - Investigate porting to WP HTTP API so that curl is not required
  */
 class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStorage_Addons_Base_v2 {
+
+	/**
+	 * Maximum duration (in days) for an object can be locked (which is the maximum permitted by the Backblaze API)
+	 */
+	const MAX_OBJECT_LOCK_DURATION = 3000;
 
 	private $_large_file_id;
 	
@@ -37,15 +41,22 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 	private $is_upload_bucket_exist;
 
 	/**
+	 * Variable to store bucket information.
+	 *
+	 * @var array
+	 */
+	private $buckets = array();
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		// 3rd parameter: chunking? 4th: Test button?
 		parent::__construct('backblaze', 'Backblaze B2', true, true);
-		// Set it any lower, any you will get an error when calling /b2_finish_large_file upon finishing: 400, Message: Part number 1 is smaller than 5000000 bytes"
+		// Set it any lower, and you will get an error when calling /b2_finish_large_file upon finishing: 400, Message: Part number 1 is smaller than 5000000 bytes"
 		if (defined('UPDRAFTPLUS_UPLOAD_CHUNKSIZE') && UPDRAFTPLUS_UPLOAD_CHUNKSIZE > 0) $this->chunk_size = max(UPDRAFTPLUS_UPLOAD_CHUNKSIZE, 5000000);
 	}
-	
+
 	/**
 	 * Upload a single file
 	 *
@@ -60,6 +71,7 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 
 		$opts = $this->options;
 		$storage = $this->get_storage();
+		$instance_id = $this->get_instance_id();
 
 		if (is_wp_error($storage)) throw new Exception($storage->get_error_message());
 		if (!is_object($storage)) throw new Exception("Backblaze service error (got a ".gettype($storage).")");
@@ -72,7 +84,8 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 		
 		if (!file_exists($local_path) || !is_readable($local_path)) throw new Exception("Could not read file: $local_path");
 		
-		$bucket_name = $opts['bucket_name'];
+		// Backblaze bucket names are case insensitive
+		$bucket_name = strtolower($opts['bucket_name']);
 		// Create bucket if bucket doesn't exists
 		if (!isset($this->is_upload_bucket_exist) && $this->is_valid_bucket_name($bucket_name)) {
 			$buckets = $this->get_bucket_names_array();
@@ -91,14 +104,36 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 		
 		if (1 === ($ret = $updraftplus->chunked_upload($this, $file, "backblaze://".trailingslashit($bucket_name).$backup_path.$file, 'Backblaze', $this->chunk_size, $this->_uploaded_size))) {
 		
+			if (!empty($opts['object_lock_duration'])) {
+				$buckets = $this->get_bucket_names_array();
+
+				if (!in_array($bucket_name, $buckets)) $this->buckets[$instance_id] = $storage->listBuckets();
+
+				// Check if Object Lock is enabled for the bucket
+				foreach ($this->buckets[$instance_id] as $bucket) {
+					if ($bucket->getName() !== $bucket_name || $bucket->isObjectLockEnabled()) continue;
+					// Update bucket to enable Object Lock
+					$response = $storage->setObjectLockToBucket($bucket->getId());
+					if (!isset($response['fileLockConfiguration']['value']['isFileLockEnabled']) || !$response['fileLockConfiguration']['value']['isFileLockEnabled']) {
+						$this->log(sprintf(__('Error: unable to set object lock for bucket: %s', 'updraftplus'), $bucket->getName()), 'error');
+						$this->log("Unable to set object lock for bucket: ".$bucket->getName());
+					} else {
+						$this->log("Object lock is enabled for bucket: ".$bucket->getName());
+					}
+					break;
+				}
+			}
+			
 			$result = $storage->upload(array(
-				'BucketName' => $opts['bucket_name'],
-				'FileName'   => $remote_path,
-				'Body'	   => file_get_contents($local_path),
+				'BucketName'         => $opts['bucket_name'],
+				'FileName'           => $remote_path,
+				'Body'               => file_get_contents($local_path),
 			));
 			
 			if (is_object($result) && is_callable(array($result, 'getSize')) && $result->getSize() > 1) {
 				$ret = true;
+
+				$this->maybe_set_object_lock($opts, $result);
 			} else {
 				$ret = false;
 				$this->log("all-in-one upload fail: ".serialize($result));
@@ -255,7 +290,7 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 	public function chunked_upload_finish($file) {
 
 		$file_hash = md5($file);
-		
+		$opts = $this->options;
 		$storage = $this->get_storage();
 		
 		// This happens if chunked_upload_finish is called without chunked_upload having been called
@@ -277,6 +312,8 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 				'FileId' => $this->_large_file_id,
 				'FilePartSha1Array' => $this->_sha1_of_parts,
 			));
+
+			$this->maybe_set_object_lock($opts, $response);
 		} catch (Exception $e) {
 			global $updraftplus;
 			
@@ -397,6 +434,9 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 				if (!empty($instance_settings['backup_path'])) {
 					$settings['settings'][$instance_id]['backup_path'] = trim($instance_settings['backup_path'], "/ \t\n\r\0\x0B");
 				}
+				if (!empty($instance_settings['object_lock_duration']) && $instance_settings['object_lock_duration'] > self::MAX_OBJECT_LOCK_DURATION) {
+					$settings['settings'][$instance_id]['object_lock_duration'] = self::MAX_OBJECT_LOCK_DURATION;
+				}
 			}
 		}
 		return $settings;
@@ -507,7 +547,7 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 	 */
 	protected function do_credentials_test($testfile, $posted_settings = array()) {
 
-		$bucket_name = $posted_settings['bucket_name'];
+		$bucket_name = strtolower($posted_settings['bucket_name']);
 		
 		$result = false;
 		$data = null;
@@ -564,7 +604,7 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 		
 			$storage->deleteFile(array(
 				'FileName'   => $backup_path.$testfile,
-				'BucketName' => $posted_settings['bucket_name'],
+				'BucketName' => strtolower($posted_settings['bucket_name']),
 			));
 
 		} catch (Exception $e) {
@@ -599,6 +639,7 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 			'bucket_name' => '',
 			'backup_path' => '',
 			'single_bucket_key_id' => '',
+			'object_lock_duration' => 0
 		);
 	}
 	
@@ -693,7 +734,7 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 		<tr class="{{get_template_css_classes true}}">
 			<th>{{input_bucket_key_id_label}}:</th>
 			<td><input title="{{input_bucket_key_id_title}}" type="text" size="40" data-updraft_settings_test="single_bucket_key_id" id="{{get_template_input_attribute_value "id" "single_bucket_key_id"}}" name="{{get_template_input_attribute_value "name" "single_bucket_key_id"}}" value="{{single_bucket_key_id}}"><br>
-			<em>{{input_bucket_key_id_title}}</em></a><br>
+			<em>{{input_bucket_key_id_title}}</em><br>
 			</td>
 		</tr>
 
@@ -701,6 +742,19 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 			<th>{{input_backup_path_label}}:</th>
 			<td>/<input type="text" size="19" maxlength="50" placeholder="{{input_backup_path_name_placeholder}}" data-updraft_settings_test="bucket_name" id="{{get_template_input_attribute_value "id" "bucket_name"}}" name="{{get_template_input_attribute_value "name" "bucket_name"}}" value="{{bucket_name}}" />/<input type="text" size="19" maxlength="200" placeholder="{{input_backup_path_some_path_placeholder}}" data-updraft_settings_test="backup_path" id="{{get_template_input_attribute_value "id" "backup_path"}}" name="{{get_template_input_attribute_value "name" "backup_path"}}" value="{{backup_path}}" /><br>
 			<em>{{{input_backup_path_title}}}</em><br>
+			</td>
+		</tr>
+
+		<tr class="{{get_template_css_classes true}}">
+			<th>{{input_object_lock_label}}:</th>
+			<td><input type="number" min="0" step="1" max="{{input_object_lock_max_value}}" style="width:70px;" data-updraft_settings_test="object_lock_duration" id="{{get_template_input_attribute_value "id" "object_lock_duration"}}" name="{{get_template_input_attribute_value "name" "object_lock_duration"}}" 
+			{{#if object_lock_duration}}
+				value="{{object_lock_duration}}" />
+			{{else}}
+				value="0" />
+			{{/if}}
+			<br>
+			<em>{{input_object_lock_title}} <span style="color:red">{{input_object_lock_warning}}</span>{{{read_more_object_lock}}}</em>
 			</td>
 		</tr>
 		
@@ -728,6 +782,11 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 			'input_bucket_key_id_label' => __('Bucket application key ID', 'updraftplus'),
 			'input_bucket_key_id_title' => __('This is needed if, and only if, your application key was a bucket-specific application key (not a master key)', 'updraftplus'),
 			'input_backup_path_label' => __('Backup path', 'updraftplus'),
+			'input_object_lock_max_value' => self::MAX_OBJECT_LOCK_DURATION,
+			'input_object_lock_label' => __('Object lock duration (days)', 'updraftplus'),
+			'input_object_lock_title' => __('Object lock is a Backblaze B2 feature that prevents data from being changed or deleted for a given number of days.', 'updraftplus').' '.__('Use this to protect your data from hackers or for regulatory compliance reasons.', 'updraftplus').' '.__('0 days means no lock is applied.', 'updraftplus'),
+			'read_more_object_lock' => ' <a target="_blank" href="https://www.backblaze.com/docs/cloud-storage-object-lock">'.__('Read more about the Backblaze Object Lock', 'updraftplus').'</a>.',
+			'input_object_lock_warning' => __('A file which is locked cannot be deleted by any means until the lock time duration has expired.', 'updraftplus'),
 			'input_backup_path_name_placeholder' => __('Bucket name', 'updraftplus'),
 			'input_backup_path_title' => '<a target="_blank" href="https://help.backblaze.com/hc/en-us/articles/217666908-What-you-need-to-know-about-B2-Bucket-names">'.__('There are limits upon which path-names are valid.', 'updraftplus').' '.__('Spaces are not allowed.', 'updraftplus').'</a>',
 			'input_backup_path_some_path_placeholder' => __('some/path', 'updraftplus'),
@@ -744,9 +803,11 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 	protected function get_bucket_names_array() {
 		$bucket_names = array();
 		$storage = $this->get_storage();
-		$buckets = $storage->listBuckets();
-		if (is_array($buckets)) {
-			foreach ($buckets as $bucket) {
+		$instance_id = $this->get_instance_id();
+		if (empty($this->buckets[$instance_id])) $this->buckets[$instance_id] = $storage->listBuckets();
+
+		if (!empty($this->buckets[$instance_id]) && is_array($this->buckets[$instance_id])) {
+			foreach ($this->buckets[$instance_id] as $bucket) {
 				$bucket_names[] = $bucket->getName();
 			}
 		}
@@ -761,5 +822,31 @@ class UpdraftPlus_Addons_RemoteStorage_backblaze extends UpdraftPlus_RemoteStora
 	 */
 	protected function is_valid_bucket_name($bucket_name) {
 		return preg_match('/^(?!b2-)[-0-9a-z]{6,50}$/i', $bucket_name);
+	}
+
+	/**
+	 * Attempts to set an object lock for a file based on the provided options.
+	 *
+	 * @param array  $opts An array of options.
+	 * @param object $file The file object on which the object lock will be set.
+	 *
+	 * @return void
+	 */
+	private function maybe_set_object_lock($opts, $file) {
+		if (!empty($opts['object_lock_duration'])) {
+			// Attempt to set the object lock for the file.
+			$storage = $this->get_storage();
+			$object_lock_response = $storage->setObjectLock($file->getId(), $file->getName(), $opts['object_lock_duration']);
+
+			if (is_array($object_lock_response) && !empty($object_lock_response['fileRetention']['retainUntilTimestamp'])) {
+				// Object lock set successfully. Log the information.
+				$retain_date = get_date_from_gmt(date('M d, Y G:i', $object_lock_response['fileRetention']['retainUntilTimestamp'] / 1000), 'M d, Y G:i');
+				$this->log(sprintf('The file named %s has been successfully locked for %d day(s) and the lock will expire on %s.', $file->getName(), $opts['object_lock_duration'], $retain_date));
+			} else {
+				// Failed to set object lock. Log an error.
+				$this->log(sprintf(__('Error: unable to set object lock for file: %s', 'updraftplus'), $file->getName()), 'error');
+				$this->log("Unable to set object lock for file: ".$file->getName());
+			}
+		}
 	}
 }

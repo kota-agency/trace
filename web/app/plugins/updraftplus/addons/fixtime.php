@@ -572,12 +572,14 @@ class UpdraftPlus_AddOn_FixTime {
 
 	public function schedule_showdbopts($disp, $selected_interval) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameters are for future use.
 		$start_time = UpdraftPlus_Options::get_updraft_option('updraft_starttime_db');
+		if (empty($start_time)) $start_time = '00:00';
 		list ($start_hour, $start_minute) = $this->parse($start_time);
 		return $this->starting_widget($start_hour, $start_minute, 'updraft_startday_db', 'updraft_starttime_db', $selected_interval);
 	}
 
 	public function schedule_showfileopts($disp, $selected_interval) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Unused parameters are for future use.
 		$start_time = UpdraftPlus_Options::get_updraft_option('updraft_starttime_files');
+		if (empty($start_time)) $start_time = '00:00';
 		list ($start_hour, $start_minute) = $this->parse($start_time);
 		return $this->starting_widget($start_hour, $start_minute, 'updraft_startday_files', 'updraft_starttime_files', $selected_interval);
 	}

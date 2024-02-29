@@ -270,7 +270,7 @@ class UpdraftPlus_Backblaze_CurlClient {
 		if (empty($response['contentLength'])) {
 			throw new Exception('B2: uploadLargeFinish error: contentLength returned was empty ('.serialize($response).')');
 		}
-		
+
 		return new UpdraftPlus_Backblaze_File(
 			$response['fileId'],
 			$response['fileName'],
@@ -306,7 +306,8 @@ class UpdraftPlus_Backblaze_CurlClient {
 		if (!isset($response['buckets'])) throw new Exception('Failed to list buckets: '.serialize($response));
 		
 		foreach ($response['buckets'] as $bucket) {
-			$buckets[] = new UpdraftPlus_Backblaze_Bucket($bucket['bucketId'], $bucket['bucketName'], $bucket['bucketType']);
+			$is_file_lock_enabled = isset($bucket['fileLockConfiguration']['value']['isFileLockEnabled']) ? $bucket['fileLockConfiguration']['value']['isFileLockEnabled'] : false;
+			$buckets[] = new UpdraftPlus_Backblaze_Bucket($bucket['bucketId'], $bucket['bucketName'], $bucket['bucketType'], $is_file_lock_enabled);
 		}
 
 		
@@ -315,7 +316,8 @@ class UpdraftPlus_Backblaze_CurlClient {
 
 	protected function getBucketIdFromName($name) {
 		$buckets = $this->listBuckets();
-
+		$name = strtolower($name);
+		
 		foreach ($buckets as $bucket) {
 			if ($bucket->getName() === $name) {
 				return $bucket->getId();
@@ -457,11 +459,11 @@ class UpdraftPlus_Backblaze_CurlClient {
 
 		$response = $this->request('POST', $uploadEndpoint, array(
 			'headers' => array(
-				'Authorization'					  => $uploadAuthToken,
-				'Content-Type'					   => $options['FileContentType'],
-				'Content-Length'					 => $size,
-				'X-Bz-File-Name'					 => $options['FileName'],
-				'X-Bz-Content-Sha1'				  => $hash,
+				'Authorization'                      => $uploadAuthToken,
+				'Content-Type'                       => $options['FileContentType'],
+				'Content-Length'                     => $size,
+				'X-Bz-File-Name'                     => $options['FileName'],
+				'X-Bz-Content-Sha1'                  => $hash,
 				'X-Bz-Info-src_last_modified_millis' => $options['FileLastModified'],
 			),
 			'body'	=> $options['Body'],
@@ -696,7 +698,61 @@ class UpdraftPlus_Backblaze_CurlClient {
 			return true;
 		}
 		return false;
-    }	
+    }
+
+	/**
+	 * Set object lock for a file in a B2 storage bucket.
+	 *
+	 * @param string $id                   The ID of the file to set object lock for.
+	 * @param string $filename             The name of the file.
+	 * @param int    $object_lock_duration The duration (in days) for which to set object lock.
+	 *
+	 * @return array $response             The array of response.
+	 */
+	public function setObjectLock($id, $filename, $object_lock_duration) {
+		// Calculate the retain until timestamp (milliseconds) based on the $object_lock_duration.
+		$retain_until_timestamp = (time() + ($object_lock_duration * 86400)) * 1000;
+
+		// Make a request to the B2 API to update file retention settings.
+		$response = $this->request('POST', $this->apiUrl.'/b2_update_file_retention', array(
+			'headers' => array(
+				'Authorization' => $this->authToken,
+			),
+			'json' => array(
+				'fileId' => $id,
+				'fileName' => $filename,
+				'fileRetention' => array(
+					'mode' => 'compliance',
+					'retainUntilTimestamp' => $retain_until_timestamp
+				)
+			)
+		));
+
+		return $response;
+	}
+
+	/**
+	 * Set object lock for a B2 storage bucket.
+	 *
+	 * @param string $id       The ID of the bucket to set object lock for.
+	 *
+	 * @return array $response The array of response.
+	 */
+	public function setObjectLockToBucket($id) {
+		// Make a request to the B2 API to update file retention settings.
+		$response = $this->request('POST', $this->apiUrl.'/b2_update_bucket', array(
+			'headers' => array(
+				'Authorization' => $this->authToken,
+			),
+			'json' => array(
+				'accountId' => $this->accountId,
+				'bucketId' => $id,
+				'fileLockEnabled' => true
+			)
+		));
+
+		return $response;
+	}
 
 }
 
@@ -707,6 +763,7 @@ final class UpdraftPlus_Backblaze_Bucket {
 	protected $id;
 	protected $name;
 	protected $type;
+	protected $objectLockEnabled;
 
 	/**
 	 * Bucket constructor.
@@ -715,10 +772,11 @@ final class UpdraftPlus_Backblaze_Bucket {
 	 * @param $name
 	 * @param $type
 	 */
-	public function __construct($id, $name, $type) {
+	public function __construct($id, $name, $type, $objectLockEnabled) {
 		$this->id   = $id;
-		$this->name = $name;
+		$this->name = strtolower($name);
 		$this->type = $type;
+		$this->objectLockEnabled = $objectLockEnabled;
 	}
 
 	public function getId() {
@@ -731,6 +789,10 @@ final class UpdraftPlus_Backblaze_Bucket {
 
 	public function getType() {
 		return $this->type;
+	}
+
+	public function isObjectLockEnabled() {
+		return $this->objectLockEnabled;
 	}
 }
 

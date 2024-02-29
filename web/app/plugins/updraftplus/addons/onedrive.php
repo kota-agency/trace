@@ -31,7 +31,7 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 	/**
 	 * German Azure Active Directory client id
 	 *
-	 * @var string
+	 * @var String
 	 */
 	private $the_germany_client_id;
 
@@ -43,11 +43,25 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 	private $onedrive_file_size;
 
 	/**
-	 * Onedrive uploaded size
+	 * Uploaded size
 	 *
 	 * @var Integer
 	 */
 	private $onedrive_uploaded_size;
+
+	/**
+	 * OneDrive session
+	 *
+	 * @var Object
+	 */
+	private $onedrive_session;
+
+	/**
+	 * The folder to store uploaded file
+	 *
+	 * @var String
+	 */
+	private $onedrive_folder;
 
 	/**
 	 * Constructor
