@@ -1,0 +1,43 @@
+#cn-admin-notice.cn-notice {
+    border-left-color: #20c19e;
+}
+.cn-notice .cn-notice-container {
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cn-notice .cn-notice-actions {
+    margin-bottom: 0;
+}
+.cn-notice .cn-notice-actions .button {
+    display: inline-block;
+    margin: 0.5em 0 0;
+}
+.cn-notice .cn-notice-text h2 {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+}
+.cn-notice .cn-notice-dismiss {
+    margin-left: 1em;
+}
+.cn-notice .cn-notice-text strong {
+    color: #000;
+}
+.cn-notice .cn-notice-text p:last-child {
+    margin-bottom: 0;
+}
+.cn-notice .cn-notice-icon svg path {
+    fill: #666 !important;
+}
+@media only screen and (max-width: 960px) {
+    .cn-notice .cn-notice-container {
+        flex-direction: column;
+        align-items: initial;
+    }
+
+    .cn-notice .cn-notice-container .cn-notice-text {
+        order: 1;
+        padding-top: 1em;
+    }
+}

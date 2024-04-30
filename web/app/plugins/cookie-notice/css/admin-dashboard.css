@@ -1,0 +1,348 @@
+.cn-dashboard-container {
+    min-height: 130px;
+    margin: 0 -4px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.cn-dashboard-container .spinner {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    margin-left: -10px;
+    z-index: 10;
+}
+
+.cn-dashboard-container.loading {
+    pointer-events: none;
+}
+
+.cn-dashboard-container.loading:after {
+    position: absolute;
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(255,255,255,0.8);
+    z-index: 1;
+    transition: all 0.2s;
+}
+
+.cn-dashboard_stats p.sub {
+    color: #8f8f8f;
+    font-size: 14px;
+    text-align: left;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #ececec;
+}
+
+.cn-table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.cn-table {
+    caption-side: bottom;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+    color: inherit;
+    vertical-align: top;
+    border-color: #dee2e6;
+    text-align: left;
+}
+
+.cn-table > thead {
+    vertical-align: bottom;
+    color: #212529;
+}
+
+.cn-table > tbody {
+    vertical-align: inherit;
+}
+
+.cn-table tbody,
+.cn-table td,
+.cn-table tfoot,
+.cn-table th,
+.cn-table thead,
+.cn-table tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+}
+
+.cn-table th,
+.cn-table td {
+    text-align: inherit;
+    text-align: -webkit-match-parent;
+}
+
+.cn-table th:first-child,
+.cn-table td:first-child {
+    width: 1px;
+    white-space: nowrap;
+}
+
+.cn-table th:last-child,
+.cn-table td:last-child {
+    text-align: right;
+}
+
+.cn-table .no-posts :last-child {
+    text-align: left;
+}
+
+.cn-table > :not(caption) > * > * {
+    padding: .5rem .5rem;
+    background-color: transparent;
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px transparent;
+}
+
+#cn_dashboard_stats .inside {
+    margin: 0;
+    padding: 0;
+}
+
+.cn-accordion-toggle {
+    cursor: pointer;
+    line-height: 1;
+    position: relative;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    margin: 0;
+    padding: 15px 15px 0;
+    color: #23282c;
+}
+
+.cn-accordion-title {
+    display: inline-block;
+    padding-right: 10px;
+}
+
+.cn-accordion-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    padding: 11px 30px 11px 0;
+    height: 14px;
+    line-height: 1;
+}
+
+.cn-accordion-actions .cn-accordion-action,
+.cn-accordion-actions .cn-accordion-action::before {
+    font-size: 14px;
+    height: 14px;
+    width: 14px;
+    color: #72777c;
+}
+
+.cn-tooltip {
+    position: relative;
+}
+
+.cn-tooltip-icon {
+    display: inline-block;
+    width: 16px;
+    cursor: help;
+}
+
+.cn-tooltip-icon::before {
+    color: #b4b9be;
+    content: "\f14c";
+    display: inline-block;
+    font: normal 16px/1 dashicons;
+    position: absolute;
+    text-decoration: none !important;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    left: 0;
+    top: 2px;
+}
+
+.cn-according-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cn-accordion-content {
+    padding: 20px 20px 15px;
+    height: 100%;
+}
+
+.cn-collapsed .cn-accordion-toggle::before {
+    transform: rotate(180deg);
+}
+
+.cn-collapsed .cn-accordion-content {
+    display: none;
+}
+
+.cn-infobox-container {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #eee;
+}
+
+.cn-infobox-container:not(:first-child) {
+    border-top-color: transparent;
+}
+
+.cn-infobox {
+    width: 50%;
+    padding: 12px 10px 10px 15px;
+    position: relative;
+    text-align: left;
+    box-sizing: border-box;
+    border-left: 1px solid transparent;
+    min-height: 135px;
+}
+
+#cn-visits-infobox-consents {
+    border-left-color: #eee;
+}
+
+#cn-visits-infobox-limits,
+#cn-visits-chart-limits {
+    border-top-color: #eee;
+}
+
+.cn-infobox-notice {
+    width: 100%;
+    margin: 5px 10px 15px 15px;
+    padding: 15px 12px;
+    position: relative;
+    text-align: left;
+    box-sizing: border-box;
+    background: rgba(255, 193, 7, 0.05);
+    border: 1px solid rgb(255, 193, 7);
+}
+
+.cn-infobox-notice p {
+    margin-top: 0;
+}
+
+.cn-infobox-notice p:last-child {
+    margin-bottom: 0;
+}
+
+.cn-infobox-notice p b {
+    font-size: 15px;
+    color: #222;
+}
+
+.cn-infobox-title {
+    font-size: 16px;
+    color: #393f4c;
+    font-weight: 700;
+    margin-top: 0;
+    padding-right: 18px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre;
+    line-height: 1.2;
+}
+
+.cn-infobox-number {
+    font-size: 36px;
+    float: none;
+    font-weight: 400;
+    display: inline-block;
+    line-height: 1;
+    margin-top: 11px;
+    color: rgb(32, 193, 158);
+}
+
+.cn-infobox-subtitle {
+    margin-top: 22px;
+    color: #a4a9ae;
+}
+
+.cn-infobox-subtitle p {
+    margin: 0 0 5px;
+}
+
+
+.cn-infobox-tooltip {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+}
+
+.cn-widget-block {
+    position: relative;
+    overflow: hidden;
+}
+
+#cn-dashboard-upgrade {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    background: rgba(255,255,255,0.8);
+    min-height: 400px;
+}
+
+#cn-dashboard-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1.5em 3em;
+    box-shadow: 0 0 25px 10px rgba(0,0,0,0.1);
+    border-radius: 3px;
+    background-color: #fff;
+    text-align: center;
+    width: 22em;
+}
+
+#cn-dashboard-modal p {
+    margin: 0;
+}
+
+#cn-dashboard-modal h2 {
+    margin-bottom: 10px;
+    font-size: 21px;
+}
+
+.button.cn-button {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    background-color: #20c19e;
+    border-color: #20c19e;
+}
+
+.button.cn-button:hover,
+.button.cn-button:active,
+.button.cn-button:focus {
+    background-color: #1ca98a;
+    border-color: #1ca98a;
+}
+
+.button.cn-button:focus {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 3px #20c19e;
+}
+
+.cn-text-succcess {
+    color: #20c19e;
+}
+
+.cn-text-warning {
+    color: rgb(255, 193, 7);
+}
+
+.cn-text-danger {
+    color: rgb(200, 35, 51);
+}

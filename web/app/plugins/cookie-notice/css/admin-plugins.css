@@ -1,0 +1,47 @@
+.cn-deactivation-modal {
+	max-height: 500px;
+	overflow: hidden;
+	top: 50% !important;
+	transform: translateY(-50%);
+}
+.cn-deactivation-modal #TB_title {
+	padding: 13px 16px;
+	background: #f3f3f3;
+}
+.cn-deactivation-modal #TB_title > div {
+	padding: 0;
+	color: #000;
+}
+.cn-deactivation-modal #TB_ajaxContent {
+	width: auto !important;
+	height: calc(100% - 112px) !important;
+	padding: 0;
+}
+.cn-deactivation-modal #TB_closeAjaxWindow button {
+	right: 8px;
+}
+.cn-deactivation-options p:first-child {
+	margin-top: 0;
+}
+#cn-deactivation-container {
+	width: 100%;
+}
+#cn-deactivation-container textarea {
+	width: 100%;
+	min-height: 100px;
+}
+#cn-deactivation-body {
+	padding: 13px 16px;
+}
+#cn-deactivation-footer {
+	padding: 13px 16px;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	border-top: 1px solid #ddd;
+	background: #f3f3f3;
+}
+#cn-deactivation-footer .spinner {
+	float: none;
+}

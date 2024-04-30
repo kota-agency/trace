@@ -6,23 +6,6 @@
     <title><?php wp_title(); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-P2RBSHNF');</script>
-    <!-- End Google Tag Manager -->
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-5740928-1"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-5740928-1');
-    </script>
-
     <!-- Hotjar Tracking Code for Trace Solutions -->
     <script>
         (function(h,o,t,j,a,r){
@@ -42,13 +25,6 @@
         window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-773370370');
     </script>
 
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-TLL3QZN');</script>
-    <!-- End Google Tag Manager -->
 
     <?php if(!isset($_GET['test'])): ?>
         <!-- A1 script -->
@@ -100,16 +76,6 @@
 
 <body <?php body_class(); ?>>
 
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLL3QZN"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2RBSHNF"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
 <?php
 
 $logo = get_field('logo', 'options');
@@ -128,7 +94,7 @@ $logo = get_field('logo', 'options');
             </div>
 
             <div class="col-auto">
-                <nav class="masthead__nav d-none d-lg-block">
+                <nav class="masthead__nav d-nongit re d-lg-block">
                     <?php wp_nav_menu(array('theme_location' => 'header', 'container' => false, 'walker' => new Header_Walker)); ?>
                 </nav>
 
@@ -141,7 +107,7 @@ $logo = get_field('logo', 'options');
 <?php
 
 get_component('mobile-navigation');
-get_component('cookie-banner');
+// get_component('cookie-banner');
 
 ?>
 
