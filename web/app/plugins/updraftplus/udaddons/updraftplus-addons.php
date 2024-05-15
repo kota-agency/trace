@@ -1053,7 +1053,7 @@ class UpdraftPlusAddons2 {
 				return new WP_Error('banned_ip', sprintf(__("UpdraftPlus.com has responded with 'Access Denied'.", 'updraftplus').'<br>'.__("It appears that your web server's IP Address (%s) is blocked.", 'updraftplus').' '.__('This most likely means that you share a webserver with a hacked website that has been used in previous attacks.', 'updraftplus').'<br> <a href="https://updraftplus.com/unblock-ip-address/" target="_blank">'.__('To remove any block, please go here.', 'updraftplus').'</a> ', $matches[1]));
 			} else {
 				if (null === $ser_resp) {
-					return new WP_Error('unknown_response', __('No response data was received. This usually indicates a network connectivity issue (e.g. an outgoing firewall or overloaded network) between this site and UpdraftPlus.com.', 'updraftplus'));
+					return new WP_Error('unknown_response', __('No response data was received.', 'updraftplus').' '.__('This usually indicates a network connectivity issue (e.g. an outgoing firewall or overloaded network) between this site and UpdraftPlus.com.', 'updraftplus'));
 				} else {
 					return new WP_Error('unknown_response', sprintf(__('UpdraftPlus.Com returned a response which we could not understand (data: %s)', 'updraftplus'), $ser_resp));
 				}

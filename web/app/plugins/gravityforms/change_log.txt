@@ -1,3 +1,54 @@
+### 2.8.10 | 2024-05-14
+- Fixed a fatal error when a user submits a form with files attached to the Save & Continue notification.
+- Fixed memory exhaustion and performance issues caused by the Dom_Parser class being loaded on every request.
+- Fixed an issue with ajax-enabled multi-page forms with conditional logic, where fields that should be hidden by conditional logic are visible for a fraction of a second.
+- Fixed an issue where the conditional logic settings for the Address Field are displayed with wrong values if the [`gform_countries`](https://docs.gravityforms.com/gform_countries) filter is used to change the country list to include country codes.
+- API: Added the [`gformIsHidden`](https://docs.gravityforms.com/gformishidden) filter to allow developers to determine if a field is hidden by conditional logic. Credit: The GravityWiz Team.
+- API: Added the [`gform_generic_map_field_choices`](https://docs.gravityforms.com/gform_generic_map_field_choices) filter for options displayed in a Generic Field Map. Credit: The GravityWiz Team.
+
+### 2.8.9 | 2024-04-30
+- Added a new form setting to put field validation messages above inputs.
+- Added the [`gform_bypass_template_library`](https://docs.gravityforms.com/gform_bypass_template_library) filter to bypass the template library and create a blank form.
+- Fixed an issue where an invalid value in a hidden state field causes a fatal error on submission.
+- Fixed an issue where the wrong value populates into the "other" choice input if a Radio field with conditional logic has "other" choice enabled and a default value set.
+- Updated the backwards compatibility of the file upload field if no files are selected.
+
+### 2.8.8 | 2024-04-23
+- Added security enhancements.
+- Fixed a fatal error in WordPress 6.5 when using a 3rd-party add-on without a defined slug.
+- Fixed a PHP notice that is thrown when calling GFForms::get_form() with just the form ID parameter.
+- Fixed an issue where the submit button was blocked by the reCAPTCHA field in IOS devices when using certain themes.
+- Fixed an issue where the `gform_progressbar_start_at_zero` filter is not working with forms that have page conditional logic.
+- Fixed a PHP notice that can be displayed when instantiating the GF_Locking class in certain contexts.
+- Updated status indicator component to use improved markup and styles.
+
+### 2.8.7 | 2024-04-03
+- Fixed a bug where total calculation and post conditional logic events sometimes aren't called when using the `gform_abort_conditional_logic_do_action` filter.
+- Fixed a fatal error that sometimes occurs when deleting entries.
+- Fixed a bug that causes the plugins page to display "Auto-updates disabled" for Gravity Forms when auto-updates are turned on with the `auto_update_plugin` filter.
+- Fixed a bug that prevents the `gform_pre_validation` filter from running when an individual field is validated, such as in a conversational form.
+- Updated JavaScript and CSS from the assets directory to always load minified versions.
+- Updated the minimum WordPress version (for support) on the System Status page to 6.4.
+
+### 2.8.6 | 2024-03-21
+- Added *[gform_custom_merge_tags](https://docs.gravityforms.com/gform_custom_merge_tags/)* JavaScript filter to allow the inclusion of custom merge tags.
+- Added `gform_merge_tags_supported_input_types` JavaScript filter to allow the inclusion of specific input types for merge tags.
+- Added the `gform_pre_post_render` filter to GFFormDisplay::post_render_script() to abort the rendering process.
+- Fixed a bug that prevents the error icon from displaying in the validation summary in the Gravity Forms 2.5 Theme.
+- Fixed the padding of field validation messages in the Gravity Forms 2.5 Theme.
+- Fixed a bug that prevented notification CC and BCC fields from correctly handling comma-separated merge tags.
+- API: Updated the file upload field value in the draft entry from GFFormsModel::create_lead() to contain a JSON encoded array of file details instead of the incorrect file URL.
+- API: Updated the border color of disabled inputs in the Settings API.
+
+### 2.8.5 | 2024-03-06
+- Added security enhancements.
+- Fixed the `gform_required_legend` filter to that the `$form` parameter is passed correctly.
+- Fixed an issue that causes the Entry menu item to appear disabled when on an Entry screen.
+- Fixed an issue where importing a form with Next buttons causes an error.
+- Fixed an issue which causes empty column headers in entry exports for the address field latitude and longitude inputs added by the Geolocation Add-On.
+- Fixed an issue that prevents replacement of the field merge tag when the input ID includes alphanumeric characters like {Address (Latitude):1.geolocation_latitude}.
+- Updated the datepicker to fit on small screens.
+
 ### 2.8.4 | 2024-02-21
 - Fixed an issue that causes fields like the signature field to not render correctly in hidden interfaces such as tabs or modals.
 - Fixed an issue where the merge tag dropdown in the product field shows the incorrect options.

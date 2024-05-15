@@ -1,13 +1,13 @@
 === Hide Admin Bar Based on User Roles ===
-Contributors: ankitmaru, siapanchal
+Contributors: ankitmaru, ankitpanchal
 Tags: admin bar, hide admin bar, hide admin bar, admin bar hide, admin bar hide based on user roles, hide admin bar based on user capabilities, hide admin bar based on user roles
 Plugin URI: https://iamankitpanchal.com
 Author: Ankit Panchal
 Author URI: https://iamankitpanchal.com
-Requires at least: 3.7.1
-Tested up to: 6.4.3
+Requires at least: 5.5
+Tested up to: 6.5
 Requires PHP: 5.6
-Stable tag: 3.7.1
+Stable tag: 3.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -185,6 +185,12 @@ Compatibility tested & Tested with the latest WordPress version.
 
 = 3.7.1 - 06-02-2024 =
 Compatibility tested & Tested with the latest WordPress version.
+
+= 3.7.2 - 03-03-2024 =
+Compatibility tested & Tested with the latest WordPress version.
+
+= 3.8.0 - 15-05-2024 =
+Compatibility tested & Tested with the latest WordPress version & UltimaKit For WP support added.
 
 == Upgrade Notice ==
 Always keep updated. We frequently provide latest updates to run plugin smoothly with all other WordPress plugins and themes.

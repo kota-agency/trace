@@ -2,20 +2,20 @@
 # This file is distributed under the GPL-3.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rank Math SEO 1.0.213\n"
+"Project-Id-Version: Rank Math SEO with AI Best SEO Tools 1.0.218\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/seo-by-rank-math\n"
 "Last-Translator: Rank Math <support@rankmath.com>\n"
 "Language-Team: Rank Math <support@rankmath.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-21T05:15:13+00:00\n"
+"POT-Creation-Date: 2024-05-02T08:50:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: rank-math\n"
 
 #. Plugin Name of the plugin
-msgid "Rank Math SEO"
+msgid "Rank Math SEO with AI Best SEO Tools"
 msgstr ""
 
 #. Plugin URI of the plugin
@@ -44,6 +44,9 @@ msgid "Please enter a valid email address."
 msgstr ""
 
 msgid "Please enter a valid URL."
+msgstr ""
+
+msgid "Rank Math SEO"
 msgstr ""
 
 msgid "Rank Math Dashboard"
@@ -462,6 +465,9 @@ msgstr ""
 msgid "Settings could not be imported: Upload failed."
 msgstr ""
 
+msgid "No items found."
+msgstr ""
+
 #. Translators: placeholder is the post type name.
 msgid "Rank Math has detected a new post type: %1$s. You may want to check the settings of the <a href=\"%2$s\">Titles &amp; Meta page</a>."
 msgstr ""
@@ -632,6 +638,15 @@ msgid "Save Changes"
 msgstr ""
 
 msgid "Reset Options"
+msgstr ""
+
+msgid "$id variable required"
+msgstr ""
+
+msgid "Variable Required"
+msgstr ""
+
+msgid "$title variable required"
 msgstr ""
 
 msgid "SEO Details"
@@ -1399,6 +1414,7 @@ msgid "Choose your Sitemap configuration and select which type of posts or pages
 msgstr ""
 
 #. translators: Link to How to Setup Sitemap KB article
+#. Translators: placeholder is the KB link.
 msgid "Learn more."
 msgstr ""
 
@@ -1603,6 +1619,7 @@ msgstr ""
 msgid "Learn more about the benefits of connecting your account here."
 msgstr ""
 
+#. Translators: placeholder is the KB link.
 msgid "We do not store any of the data from your Google account on our servers, everything is processed & stored on your server. We take your privacy extremely seriously and ensure it is never misused. %s"
 msgstr ""
 
@@ -1839,6 +1856,9 @@ msgstr ""
 msgid "Email:"
 msgstr ""
 
+msgid "Description:"
+msgstr ""
+
 msgid "Page not found"
 msgstr ""
 
@@ -1981,6 +2001,36 @@ msgid "Roadside Assistance"
 msgstr ""
 
 msgid "Package Tracking"
+msgstr ""
+
+msgid "Legal Name"
+msgstr ""
+
+msgid "Founding Date"
+msgstr ""
+
+msgid "ISO 6523 Code"
+msgstr ""
+
+msgid "DUNS"
+msgstr ""
+
+msgid "LEI Code"
+msgstr ""
+
+msgid "NAICS Code"
+msgstr ""
+
+msgid "Global Location Number"
+msgstr ""
+
+msgid "VAT ID"
+msgstr ""
+
+msgid "Tax ID"
+msgstr ""
+
+msgid "Number of Employees"
 msgstr ""
 
 msgid "Worldwide"
@@ -2816,6 +2866,7 @@ msgstr ""
 msgid "Warning:"
 msgstr ""
 
+#. translators: %s is the reconnect link.
 msgid "You have not given the permission to fetch this data. Please <a href=\"%s\">reconnect</a> with all required permissions."
 msgstr ""
 
@@ -2996,6 +3047,9 @@ msgstr ""
 msgid "Write SEO Title & Description with AI"
 msgstr ""
 
+msgid "Write Image Alt Text with AI"
+msgstr ""
+
 msgid "Another bulk editing process is already running. Please try again later after the existing process is complete."
 msgstr ""
 
@@ -3010,6 +3064,22 @@ msgstr[1] ""
 
 #. Translators: placeholder is the number of modified posts.
 msgid "SEO meta successfully updated in %d posts. The process was stopped as you have used all the credits on your site."
+msgstr ""
+
+msgid "Bulk image alt generation started. It might take few minutes to complete the process."
+msgstr ""
+
+#. Translators: placeholder is the number of modified posts.
+msgid "Image alt attributes successfully updated in %d post."
+msgid_plural "Image alt attributes successfully updated in %d posts."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Bulk image alt generation failed."
+msgstr ""
+
+#. Translators: placeholder is the number of modified posts.
+msgid "Image alt attributes successfully updated in %d posts. The process was stopped as you have used all the credits on your site."
 msgstr ""
 
 msgid "Credits Remaining: "
@@ -3486,12 +3556,6 @@ msgstr ""
 msgid "Conversion started. A success message will be shown here once the process completes. You can close this page."
 msgstr ""
 
-msgid "No data found to delete."
-msgstr ""
-
-msgid "Deletion started. A success message will be shown here once the process completes. You can close this page."
-msgstr ""
-
 msgid "Flush SEO Analyzer Data"
 msgstr ""
 
@@ -3580,15 +3644,6 @@ msgid "Are you sure you want to delete all the Redirection Rules? This action is
 msgstr ""
 
 msgid "Delete Redirections"
-msgstr ""
-
-msgid "Delete Old Schema Data"
-msgstr ""
-
-msgid "Delete the schema data from the old format (<1.0.48). Note: This process is irreversible and will delete all the metadata prefixed with rank_math_snippet."
-msgstr ""
-
-msgid "Are you sure you want to delete the old schema data? This action is irreversible."
 msgstr ""
 
 msgid "Update SEO Scores"
@@ -3845,19 +3900,22 @@ msgstr ""
 msgid "Choose whether the site represents a person or an organization."
 msgstr ""
 
+msgid "Provide a detailed description of your organization."
+msgstr ""
+
 msgid "Logo"
 msgstr ""
 
 msgid "<strong>Min Size: 112Χ112px</strong>.<br /> A squared image is preferred by the search engines."
 msgstr ""
 
-msgid "URL of the item."
+msgid "URL of your website or your company’s website."
 msgstr ""
 
 msgid "Email"
 msgstr ""
 
-msgid "Search engines display your email address."
+msgid "Enter the contact email address that could be displayed on search engines."
 msgstr ""
 
 msgid "Phone"
@@ -3929,6 +3987,15 @@ msgstr ""
 msgid "The price range of the business, for example $$$."
 msgstr ""
 
+msgid "Additional Info"
+msgstr ""
+
+msgid "Provide relevant details of your company to include in the Organization Schema."
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
 msgid "Select Page"
 msgstr ""
 
@@ -3998,9 +4065,6 @@ msgid "Add New"
 msgstr ""
 
 msgid "Export Options"
-msgstr ""
-
-msgid "Add"
 msgstr ""
 
 msgid "Update Redirection"
@@ -4621,6 +4685,7 @@ msgstr ""
 msgid "Competitor Analyzer"
 msgstr ""
 
+#. Translators: placeholder is the new Rank Math label.
 msgid "SEO Analyzer %s"
 msgstr ""
 
@@ -6390,6 +6455,9 @@ msgstr ""
 msgid "Image displayed when your homepage is shared on Facebook and other social networks. Use images that are at least 1200 x 630 pixels for the best display on high resolution devices."
 msgstr ""
 
+msgid "URL of the item."
+msgstr ""
+
 msgid "Date Archives"
 msgstr ""
 
@@ -6658,14 +6726,6 @@ msgid "Remove schema data from %s."
 msgstr ""
 
 msgid "Error: Nonce verification failed"
-msgstr ""
-
-#. Translators: placeholders are the opening and closing anchor tags.
-msgid "Thank you for updating Rank Math! We've completely revamped our Analytics module with Google Analytics & Google Search Console integrations. For a seamless experience, please re-authenticate your Google account. %1$sClick here to Connect%2$s"
-msgstr ""
-
-#. Translators: placeholders are the opening and closing anchor tags.
-msgid "Rank Math: Introducing SEO Performance Reports via Email. %1$sClick here to enable it%2$s."
 msgstr ""
 
 #. translators: WordPress Version
@@ -8717,6 +8777,18 @@ msgstr ""
 msgid "Shorten with AI"
 msgstr ""
 
+msgid "Failed to generate alt text."
+msgstr ""
+
+msgid "Image URL is missing."
+msgstr ""
+
+msgid "Generate Alt"
+msgstr ""
+
+msgid "50 Content AI credits will be used to generate the Alt"
+msgstr ""
+
 msgid "Generate With AI"
 msgstr ""
 
@@ -8855,18 +8927,6 @@ msgstr ""
 msgid "Research"
 msgstr ""
 
-msgid "Please connect your account to use this feature."
-msgstr ""
-
-msgid "All credits assigned to this site are used. Please add more credits from {{link1}}My Account{{/link1}} Page or {{link2}}upgrade your plan{{/link2}}."
-msgstr ""
-
-msgid "You don't have any credits left."
-msgstr ""
-
-msgid "Get More Credits"
-msgstr ""
-
 msgid "Credits"
 msgstr ""
 
@@ -8886,6 +8946,9 @@ msgid "Improve your content with a personal Content AI."
 msgstr ""
 
 msgid "Improve Now"
+msgstr ""
+
+msgid "Generate Alt with AI"
 msgstr ""
 
 msgid "You have exhausted your Content AI Credits."

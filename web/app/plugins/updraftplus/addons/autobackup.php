@@ -26,6 +26,10 @@ class UpdraftPlus_Addon_Autobackup {
 
 	private $is_autobackup_core = null;
 
+	private $type = '';
+	
+	private $internaltype = '';
+	
 	/**
 	 * Plugin constructor
 	 */

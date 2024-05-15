@@ -290,7 +290,7 @@ class UpdraftPlus_Addons_RemoteStorage_pcloud extends UpdraftPlus_BackupModule {
 
 		try {
 			$opts = $this->get_options();
-			if (!$this->options_exist($opts)) return new WP_Error('no_settings', sprintf(__('No %s settings were found', 'updraftplus'), $this->description));
+			if (!$this->options_exist($opts)) return new WP_Error('no_settings', sprintf(__('No %s settings were found', 'updraftplus'), 'pCloud'));
 			$pcloud = $this->bootstrap();
 		} catch (Exception $e) {
 			$this->log($e->getMessage() . ' (line: ' . $e->getLine() . ', file: ' . $e->getFile() . ')');

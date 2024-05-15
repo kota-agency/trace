@@ -242,7 +242,7 @@ class UpdraftPlus_Addons_RemoteStorage_sftp extends UpdraftPlus_RemoteStorage_Ad
 				// SCP
 			
 				$rfile = empty($this->path) ? $file : trailingslashit($this->path).$file;
-				if ($sftp->put($rfile, $updraft_dir.'/'.$file, NET_SCP_LOCAL_FILE, array($this, 'sftp_progress_callback'))) {
+				if ($sftp->put($rfile, $updraft_dir.'/'.$file, phpseclib_Net_SCP::SOURCE_LOCAL_FILE, array($this, 'sftp_progress_callback'))) {
 					$updraftplus->uploaded_file($file);
 				} else {
 					$any_failures = true;
@@ -423,7 +423,7 @@ class UpdraftPlus_Addons_RemoteStorage_sftp extends UpdraftPlus_RemoteStorage_Ad
 			if (false === $rsa->loadKey($key)) {
 				if (preg_match('/Encryption: (.+)/i', $key, $matches)) {
 					$encryption = trim($matches[1]);
-					if ('none' !== $encryption) return new WP_Error('no_key_passphrase', __("The key provided is encrypted. You need to provide the unencrypted key (see: https://updraftplus.com/faqs/why-must-i-use-a-non-encrypted-sftp-key/).", 'updraftplus'));
+					if ('none' !== $encryption) return new WP_Error('no_key_passphrase', __("The key provided is encrypted.", 'updraftplus').' '.__("You need to provide the unencrypted key (see: https://updraftplus.com/faqs/why-must-i-use-a-non-encrypted-sftp-key/).", 'updraftplus'));
 				}
 				if (empty($pass)) return new WP_Error('no_load_key', __('The key provided was not in a valid format, or was corrupt.', 'updraftplus'));
 			} else {

@@ -1,14 +1,14 @@
 <?php
 /*
-Plugin Name: Category Order and Taxonomy Terms Order
-Plugin URI: http://www.nsp-code.com
-Description: Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. 
-Version: 1.8
-Author: Nsp-Code
-Author URI: https://www.nsp-code.com
-Author Email: electronice_delphi@yahoo.com
-Text Domain: taxonomy-terms-order
-Domain Path: /languages/ 
+* Plugin Name: Category Order and Taxonomy Terms Order
+* Plugin URI: http://www.nsp-code.com
+* Description: Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. 
+* Version: 1.8.1
+* Author: Nsp-Code
+* Author URI: https://www.nsp-code.com
+* Author Email: electronice_delphi@yahoo.com
+* Text Domain: taxonomy-terms-order
+* Domain Path: /languages/ 
 */
 
 

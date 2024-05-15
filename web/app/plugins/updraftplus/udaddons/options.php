@@ -254,6 +254,11 @@ class UpdraftPlusAddOns_Options2 {
 			echo '<div class="notice inline"><p>'.sprintf(__('Please make sure that %s is not set to "true" in your wp-config file - this ensures UpdraftPlus can connect and update.', 'updraftplus'), '<strong>WP_HTTP_BLOCK_EXTERNAL</strong>').'</p></div>';
 		}
 
+		$wp_http = new WP_Http();
+		if (is_callable(array($wp_http, 'block_request')) && $wp_http->block_request($updraftplus_addons2->url)) {
+			echo '<div class="notice inline"><p>'.sprintf(__('Please list %s in the %s constant.', 'updraftplus'), '<strong>updraftplus.com</strong>', '<strong>WP_ACCESSIBLE_HOSTS</strong>').' '.sprintf(__('This ensures %s can connect and update.', 'updraftplus'), 'UpdraftPlus').'</p></div>';
+		}
+
 		if ($this->connected) {
 			echo '<div class="notice below-h2"><h3>'.__('You are presently <strong class="success">connected</strong> to an UpdraftPlus.Com account.', 'updraftplus').'</h3>';
 

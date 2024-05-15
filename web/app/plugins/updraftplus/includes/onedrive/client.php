@@ -61,6 +61,8 @@ class Client {
 	 */
 	private function _createCurl($path, $options = array()) {
 		$curl = curl_init();
+		$curl_version = curl_version();
+		$curl_version = isset($curl_version['version']) ? $curl_version['version'] : '0';
 
 		$default_options = array(
 			CURLOPT_RETURNTRANSFER => true,
@@ -70,6 +72,9 @@ class Client {
 
 			CURLOPT_AUTOREFERER    => true,
 		);
+
+		if (version_compare($curl_version, '8.0', '<') && version_compare($curl_version, '7.62', '>=')) $default_options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
+		if (defined('UPDRAFTPLUS_ONEDRIVE_CURL_HTTP_VERSION')) $default_options[CURLOPT_HTTP_VERSION] = UPDRAFTPLUS_ONEDRIVE_CURL_HTTP_VERSION;
 
 		if ($this->_sslVerify && $this->_sslCAPath) {
 			$default_options[CURLOPT_CAINFO] = $this->_sslCAPath;
@@ -300,6 +305,8 @@ class Client {
 		$url = $this->token_url;
 
 		$curl = curl_init();
+		$curl_version = curl_version();
+		$curl_version = isset($curl_version['version']) ? $curl_version['version'] : '0';
 
 		$curl_options = array(
 			CURLOPT_RETURNTRANSFER => true,
@@ -317,6 +324,9 @@ class Client {
                 . '&grant_type=authorization_code'
                 . '&code=' . urlencode($code),
 		);
+
+		if (version_compare($curl_version, '8.0', '<') && version_compare($curl_version, '7.62', '>=')) $curl_options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
+		if (defined('UPDRAFTPLUS_ONEDRIVE_CURL_HTTP_VERSION')) $curl_options[CURLOPT_HTTP_VERSION] = UPDRAFTPLUS_ONEDRIVE_CURL_HTTP_VERSION;
 
 		// Prevent misleading PHP notice
 		if (!$this->safeMode) $curl_options[CURLOPT_FOLLOWLOCATION] = true;
@@ -435,8 +445,10 @@ class Client {
 	 *         if unknown. Default: null.
 	 * @param (int) $size - The number of bytes to send. Default: as many as are left in the stream.
 	 * @param (array) $headers - Further headers to send
+	 * @param (boolean) $use_authorization_header - Whether to include authorisation header in the request (it's true by default)
+	 * @return (object|string) The content returned, as an object instance if served a JSON, or as a string if served as anything else.
 	 */
-	public function apiPut($path, $stream, $contentType = null, $size = null, $headers = array()) {
+	public function apiPut($path, $stream, $contentType = null, $size = null, $headers = array(), $use_authorization_header = true) {
 		$api = $this->api_url;
 		
 		$url   = (strpos($path, 'https://') === 0) ? $path : $api . $path;
@@ -447,7 +459,7 @@ class Client {
 			$size = $stats[7];
 		}
 
-		$headers[] = 'Authorization: Bearer ' . $this->_state->token->data->access_token;
+		if ($use_authorization_header) $headers[] = 'Authorization: Bearer ' . $this->_state->token->data->access_token;
 
 		if (null !== $contentType) {
 			$headers[] = 'Content-Type: ' . $contentType;

@@ -349,7 +349,7 @@ class UpdraftPlus_Addons_RemoteStorage_onedrive extends UpdraftPlus_RemoteStorag
 		$empty_object = new stdClass;
 
 		try {
-			$put_chunk = $storage->apiPut($this->onedrive_session->uploadUrl, $fp, null, $upload_size, $headers);
+			$put_chunk = $storage->apiPut($this->onedrive_session->uploadUrl, $fp, null, $upload_size, $headers, false);
 		} catch (Exception $e) {
 			$this->log($this->description." upload: exception (".get_class($e)."): ($file) (".$e->getMessage().") (line: ".$e->getLine().', file: '.$e->getFile().')');
 			

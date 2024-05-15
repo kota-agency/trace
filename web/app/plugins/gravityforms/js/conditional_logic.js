@@ -381,6 +381,8 @@ function gf_do_field_action(formId, action, fieldId, isInit, callback){
 		let abort = gform.applyFilters( 'gform_abort_conditional_logic_do_action', false, action, targetId, conditional_logic[ "animation" ], defaultValues, isInit, formId, do_callback );
 		if ( ! abort ) {
 			gf_do_action( action, targetId, conditional_logic[ "animation" ], defaultValues, isInit, do_callback, formId );
+		} else if ( do_callback ) {
+			do_callback();
 		}
 
 		gform.doAction('gform_post_conditional_logic_field_action', formId, action, targetId, defaultValues, isInit);
@@ -442,12 +444,12 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 					gf_show_button( $target );
 				}
 				$target.slideDown(callback);
+				$target.attr( 'data-conditional-logic', 'visible' );
 			} else if(callback){
 				callback();
 			}
 		}
 		else{
-
 			var display = $target.data('gf_display');
 
 			// set display if previous (saved) display isn't set for any reason
@@ -501,6 +503,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 				gf_hide_button( $target );
 			} else if ( $target.length > 0 && $target.is( ":visible" ) ) {
 				$target.slideUp( callback );
+				$target.attr( 'data-conditional-logic', 'hidden' );
 			} else if ( callback ) {
 				callback();
 			}
@@ -622,7 +625,7 @@ function gf_reset_to_default(targetId, defaultValue){
 
 		//get name of previous input field to see if it is the radio button which goes with the "Other" text box
 		//otherwise field is populated with input field name
-		var radio_button_name = element.prev("input").attr("value");
+		var radio_button_name = element.prevAll("input").first().attr("value");
 		if(radio_button_name == "gf_other_choice"){
 			val = element.attr("value");
 		}
