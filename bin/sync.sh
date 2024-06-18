@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#DEVDIR="web/app/uploads/"
-#DEVSITE="http://trace.test"
+DEVDIR="web/app/uploads/"
+DEVSITE="http://trace.test"
 
 STAGDIR="forge@178.62.99.195:/home/forge/trace.in-beta.link/web/app/uploads/"
 STAGSITE="https://trace.in-beta.link"

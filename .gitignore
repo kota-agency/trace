@@ -1,9 +1,11 @@
 # Application
+web/app/plugins/*
 !web/app/plugins/.gitkeep
 web/app/mu-plugins/*/
 web/app/upgrade
 web/app/uploads/*
 !web/app/uploads/.gitkeep
+web/app/updraft/*
 
 # WordPress
 web/wp
@@ -11,7 +13,6 @@ web/.htaccess
 
 # Logs
 *.log
-web/app/updraft/log.*
 
 # Lock files
 *.lock
@@ -26,5 +27,5 @@ web/app/updraft/log.*
 
 # WP-CLI
 wp-cli.local.yml
-
+.DS_Store
 *.sql
