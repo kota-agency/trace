@@ -50,7 +50,7 @@
     "roots/bedrock-autoloader": "^1.0",
     "roots/wordpress": "^6.5",
     "roots/wp-config": "1.0.0",
-    "roots/wp-password-bcrypt": "1.0.0",
+    "roots/wp-password-bcrypt": "1.1.0",
     "wpackagist-plugin/acf-extended": "^0.9.0",
     "wpackagist-plugin/advanced-custom-fields-font-awesome": "^4.0",
     "satispress/advanced-custom-fields-pro": "^6.3",
