@@ -12,12 +12,12 @@ gsap.registerPlugin(MotionPathPlugin, MotionPathHelper);
 
 
 function General() {
-    
+
     // gsap.set(".family__logo2", { autoAlpha: 1});
 
-    const familyLogoLength =  Array.from(document.querySelectorAll('.family__logo')).length;
+    const familyLogoLength = Array.from(document.querySelectorAll('.family__logo')).length;
     const duration = 30;
-    const startPoint = 1/familyLogoLength;
+    const startPoint = 1 / familyLogoLength;
 
     console.log(startPoint);
 
@@ -31,149 +31,149 @@ function General() {
     const logoSeven = document.querySelector('.family__logo7');
     const logoEight = document.querySelector('.family__logo8');
 
-    const tl = gsap.timeline({defaults: { ease: "none" }})
+    const tl = gsap.timeline({ defaults: { ease: "none" } })
 
     if (logoZero) {
         tl.to(logoZero, {
-            duration: duration, 
+            duration: duration,
             repeat: -1,
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-1',
-              align: '#path-anim-1',
-              alignOrigin: [0.5, 0.5],
-              start: (startPoint*logoZero.dataset.logoIndex),
-              end: 1 + (startPoint*logoZero.dataset.logoIndex),
+                path: '#path-anim-1',
+                align: '#path-anim-1',
+                alignOrigin: [0.5, 0.5],
+                start: (startPoint * logoZero.dataset.logoIndex),
+                end: 1 + (startPoint * logoZero.dataset.logoIndex),
             },
         });
     }
 
     if (logoOne) {
         tl.to(logoOne, {
-            duration: duration, 
+            duration: duration,
             repeat: -1,
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-1',
-              align: '#path-anim-1',
-              alignOrigin: [0.5, 0.5],
-              start: (startPoint*logoOne.dataset.logoIndex),
-              end: 1 + (startPoint*logoOne.dataset.logoIndex),
+                path: '#path-anim-1',
+                align: '#path-anim-1',
+                alignOrigin: [0.5, 0.5],
+                start: (startPoint * logoOne.dataset.logoIndex),
+                end: 1 + (startPoint * logoOne.dataset.logoIndex),
             },
-        },`-=${30*logoOne.dataset.logoIndex}`);
+        }, `-=${30 * logoOne.dataset.logoIndex}`);
     }
 
     if (logoTwo) {
         tl.to(logoTwo, {
-            duration: duration, 
+            duration: duration,
             repeat: -1,
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-1',
-              align: '#path-anim-1',
-              alignOrigin: [0.5, 0.5],
-              start: (startPoint*logoTwo.dataset.logoIndex),
-              end: 1 + (startPoint*logoTwo.dataset.logoIndex),
+                path: '#path-anim-1',
+                align: '#path-anim-1',
+                alignOrigin: [0.5, 0.5],
+                start: (startPoint * logoTwo.dataset.logoIndex),
+                end: 1 + (startPoint * logoTwo.dataset.logoIndex),
             }
-        },`-=${30*logoOne.dataset.logoIndex}`);
+        }, `-=${30 * logoOne.dataset.logoIndex}`);
     }
 
     if (logoThree) {
         tl.to(logoThree, {
-            duration: duration, 
+            duration: duration,
             repeat: -1,
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-1',
-              align: '#path-anim-1',
-              alignOrigin: [0.5, 0.5],
-              start: (startPoint*logoThree.dataset.logoIndex),
-              end: 1 + (startPoint*logoThree.dataset.logoIndex),
+                path: '#path-anim-1',
+                align: '#path-anim-1',
+                alignOrigin: [0.5, 0.5],
+                start: (startPoint * logoThree.dataset.logoIndex),
+                end: 1 + (startPoint * logoThree.dataset.logoIndex),
             }
-        }, `-=${30*logoOne.dataset.logoIndex}`);
+        }, `-=${30 * logoOne.dataset.logoIndex}`);
     }
 
     if (logoFour) {
         tl.to(logoFour, {
-            duration: duration, 
+            duration: duration,
             repeat: -1,
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-1',
-              align: '#path-anim-1',
-              alignOrigin: [0.5, 0.5],
-              start: (startPoint*logoFour.dataset.logoIndex),
-              end: 1 + (startPoint*logoFour.dataset.logoIndex),
+                path: '#path-anim-1',
+                align: '#path-anim-1',
+                alignOrigin: [0.5, 0.5],
+                start: (startPoint * logoFour.dataset.logoIndex),
+                end: 1 + (startPoint * logoFour.dataset.logoIndex),
             }
-        }, `-=${30*logoOne.dataset.logoIndex}`);
+        }, `-=${30 * logoOne.dataset.logoIndex}`);
     }
 
-    if (logoFive) {        
+    if (logoFive) {
         tl.to(logoFive, {
-            duration: duration, 
+            duration: duration,
             repeat: -1,
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-1',
-              align: '#path-anim-1',
-              alignOrigin: [0.5, 0.5],
-              start: (startPoint*logoFive.dataset.logoIndex),
-              end: 1 + (startPoint*logoFive.dataset.logoIndex),
+                path: '#path-anim-1',
+                align: '#path-anim-1',
+                alignOrigin: [0.5, 0.5],
+                start: (startPoint * logoFive.dataset.logoIndex),
+                end: 1 + (startPoint * logoFive.dataset.logoIndex),
             }
-        },`-=${30*logoOne.dataset.logoIndex}`);
+        }, `-=${30 * logoOne.dataset.logoIndex}`);
     }
 
     if (logoSix) {
         tl.to(logoSix, {
-            duration: duration, 
+            duration: duration,
             repeat: -1,
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-1',
-              align: '#path-anim-1',
-              alignOrigin: [0.5, 0.5],
-              start: 0 + (startPoint*logoSix.dataset.logoIndex),
-              end: 1 + (startPoint*logoSix.dataset.logoIndex),
+                path: '#path-anim-1',
+                align: '#path-anim-1',
+                alignOrigin: [0.5, 0.5],
+                start: 0 + (startPoint * logoSix.dataset.logoIndex),
+                end: 1 + (startPoint * logoSix.dataset.logoIndex),
             }
-        },`-=${30*logoOne.dataset.logoIndex}`);
+        }, `-=${30 * logoOne.dataset.logoIndex}`);
     }
 
     if (logoSeven) {
         tl.to(logoSeven, {
-            duration: duration, 
+            duration: duration,
             repeat: -1,
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-1',
-              align: '#path-anim-1',
-              alignOrigin: [0.5, 0.5],
-              start: (startPoint*logoSeven.dataset.logoIndex),
-              end: 1 + (startPoint*logoSeven.dataset.logoIndex),
+                path: '#path-anim-1',
+                align: '#path-anim-1',
+                alignOrigin: [0.5, 0.5],
+                start: (startPoint * logoSeven.dataset.logoIndex),
+                end: 1 + (startPoint * logoSeven.dataset.logoIndex),
             }
-        }, `-=${30*logoOne.dataset.logoIndex}`);
+        }, `-=${30 * logoOne.dataset.logoIndex}`);
     }
 
 
     if (logoEight) {
         tl.to(logoEight, {
-            duration: duration, 
+            duration: duration,
             repeat: -1,
             ease: "none",
             immediateRender: true,
             motionPath: {
-              path: '#path-anim-1',
-              align: '#path-anim-1',
-              alignOrigin: [0.5, 0.5],
-              start: (startPoint*logoEight.dataset.logoIndex),
-              end: 1 + (startPoint*logoEight.dataset.logoIndex),
+                path: '#path-anim-1',
+                align: '#path-anim-1',
+                alignOrigin: [0.5, 0.5],
+                start: (startPoint * logoEight.dataset.logoIndex),
+                end: 1 + (startPoint * logoEight.dataset.logoIndex),
             }
         });
     }
@@ -206,30 +206,33 @@ function General() {
     $('.video').each((index, el) => {
 
         const iframe = $(el).find('iframe').get(0);
-        const player = new Vimeo.Player(iframe);
-        const $image = $(el).find('.video__image');
 
-        $image.on('click', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            const $this = $(e.currentTarget);
+        if (typeof Vimeo !== 'undefined' && typeof Vimeo.Player === 'function') {
+            const player = new Vimeo.Player(iframe);
+            const $image = $(el).find('.video__image');
 
-            $this.addClass('active');
+            $image.on('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                const $this = $(e.currentTarget);
 
-            player.play().then(function () {
-                // the video was played
-            }).catch(function (error) {
-                switch (error.name) {
-                    case 'PasswordError':
-                        break;
-                    case 'PrivacyError':
-                        break;
-                    default:
-                        break;
-                }
+                $this.addClass('active');
+
+                player.play().then(function () {
+                    // the video was played
+                }).catch(function (error) {
+                    switch (error.name) {
+                        case 'PasswordError':
+                            break;
+                        case 'PrivacyError':
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
             });
-
-        });
+        }
     });
 
     $('.milestone').on('click, mouseenter', (e) => {
@@ -294,18 +297,21 @@ function General() {
             $('.video').each((index, el) => {
 
                 const iframe = $(el).find('iframe').get(0);
-                const player = new Vimeo.Player(iframe);
+
+                if (typeof Vimeo !== 'undefined' && typeof Vimeo.Player === 'function') {
+                    const player = new Vimeo.Player(iframe);
 
 
-                player.getPaused().then(function (paused) {
-                    if (!paused) {
-                        if (!inViewport($(el).get(0))) {
-                            player.pause();
+                    player.getPaused().then(function (paused) {
+                        if (!paused) {
+                            if (!inViewport($(el).get(0))) {
+                                player.pause();
+                            }
                         }
-                    }
-                }).catch(function (error) {
-                    // an error occurred
-                });
+                    }).catch(function (error) {
+                        // an error occurred
+                    });
+                }
 
             });
         });
@@ -338,7 +344,7 @@ function General() {
 
         // Check if is external link
         var comp = new RegExp(location.host);
-        if(!comp.test($(e.currentTarget).attr('href'))){
+        if (!comp.test($(e.currentTarget).attr('href'))) {
             return
         }
 
@@ -351,7 +357,7 @@ function General() {
         if (!animating) {
             animating = true;
 
-            
+
             const index = $(e.currentTarget).closest('.split-content__item').index();
 
             $('.modal').fadeOut().promise()
@@ -389,12 +395,12 @@ function General() {
     $('a:not(.gated-file)').on('click', (e) => {
         const $this = $(e.currentTarget);
         const hash = $this.attr('href').substring($this.attr('href').indexOf('#'));
-        if(hash.includes('#')) {
+        if (hash.includes('#')) {
             if ($(hash).length) {
                 $(hash).fadeIn();
             }
         }
-        
+
 
     });
 
@@ -424,42 +430,42 @@ function General() {
 
     $('#acceptCookies').on('click', () => {
         $('.cookie-banner').fadeOut();
-        Cookies.set('trace_cookie_consent', 'on', {expires: 365});
+        Cookies.set('trace_cookie_consent', 'on', { expires: 365 });
     });
 
-    if(Cookies.get('trace_cookie_consent') == 'on') {
+    if (Cookies.get('trace_cookie_consent') == 'on') {
         $('.cookie-banner').css('display', 'none');
     }
 
-    $('.gated-file').on('click', function(e) {
+    $('.gated-file').on('click', function (e) {
         e.preventDefault();
         $('#form_modal').addClass('show')
 
         var gravityFormId = $(this).attr('data-gravity-form');
         var formContent = $('.form-popup__inner');
-        
+
         formContent.html('');
-        $.ajax({  
-            type: 'GET',  
-            url: ajaxurl,  
-            data: { 
-                action : 'get_gravity_form',
+        $.ajax({
+            type: 'GET',
+            url: ajaxurl,
+            data: {
+                action: 'get_gravity_form',
                 gravity_form_id: gravityFormId
-            },  
-            success: function(res){  
+            },
+            success: function (res) {
                 formContent.html(res)
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log(errorThrown);
                 console.log(XMLHttpRequest);
             }
-        });  
+        });
 
     });
 
-    $('.form-popup .close').click(function(e) {
-      e.preventDefault();
-      $('#form_modal').removeClass('show')
+    $('.form-popup .close').click(function (e) {
+        e.preventDefault();
+        $('#form_modal').removeClass('show')
     })
 
 }
