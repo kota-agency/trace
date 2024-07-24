@@ -58,6 +58,7 @@
     "wpackagist-plugin/classic-editor": "^1.6",
     "wpackagist-plugin/duplicate-post": "^4.5",
     "satispress/gravityforms": "^2.8",
+    "wpackagist-plugin/cookiebot": "^4.3.9",
     "wpackagist-plugin/hide-admin-bar-based-on-user-roles": "^3.8",
     "wpackagist-plugin/mailgun": "^1.9",
     "wpackagist-plugin/post-types-order": "^2.2",
