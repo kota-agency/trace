@@ -6,6 +6,9 @@
     <title><?php wp_title(); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
+
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="ed9cc911-dd53-4e50-8066-09f607f6cd82" data-blockingmode="auto" type="text/javascript"></script>
+
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
