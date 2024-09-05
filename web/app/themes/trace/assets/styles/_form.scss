@@ -26,6 +26,18 @@
     margin: 0 ($grid-gutter-width / 2 * -1);
   }
 
+  .ginput_complex {
+    &.gf_name_has_2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 2rem;
+
+      @include media-breakpoint-down(sm) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
   .gchoice {
     margin-bottom: 18px;
   }
@@ -97,7 +109,7 @@
 
   .gfield_radio,
   .gfield_checkbox {
-    > li {
+    >li {
       margin-bottom: 10px;
     }
   }
@@ -120,7 +132,7 @@
   }
 
   .ginput_container_consent {
-    + .gfield_description {
+    +.gfield_description {
       padding-left: 35px;
     }
   }
@@ -221,7 +233,7 @@ input[type="radio"] {
   height: auto;
   appearance: none;
 
-  + label {
+  +label {
     display: block;
     position: relative;
     padding-left: 35px;
@@ -247,7 +259,7 @@ input[type="radio"] {
   }
 
   &:checked {
-    + label {
+    +label {
       &:after {
         content: "";
         display: inline-block;
@@ -272,7 +284,7 @@ input[type="checkbox"] {
   cursor: pointer;
   height: auto;
 
-  + label {
+  +label {
     display: block;
     position: relative;
     padding-left: 35px;
@@ -297,7 +309,7 @@ input[type="checkbox"] {
   }
 
   &:checked {
-    + label {
+    +label {
       &:after {
         content: "";
         display: inline-block;
