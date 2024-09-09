@@ -672,11 +672,11 @@
         },
         {
             "name": "satispress/advanced-custom-fields-pro",
-            "version": "6.3.5",
+            "version": "6.3.6",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/advanced-custom-fields-pro/6.3.5",
-                "shasum": "b12cf5fa86c9e017c55189b753591fce71a5cf4f"
+                "url": "https://satispress.kota.co.uk/satispress/advanced-custom-fields-pro/6.3.6",
+                "shasum": "8901d7718a434cc75bcfaf1bff016b4d626cc983"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1126,15 +1126,15 @@
         },
         {
             "name": "wpackagist-plugin/seo-by-rank-math",
-            "version": "1.0.226",
+            "version": "1.0.227.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/seo-by-rank-math/",
-                "reference": "tags/1.0.226"
+                "reference": "tags/1.0.227.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.226.zip"
+                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.227.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1162,15 +1162,15 @@
         },
         {
             "name": "wpackagist-plugin/taxonomy-terms-order",
-            "version": "1.8.2",
+            "version": "1.8.5",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/taxonomy-terms-order/",
-                "reference": "tags/1.8.2"
+                "reference": "tags/1.8.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/taxonomy-terms-order.1.8.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/taxonomy-terms-order.1.8.5.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
