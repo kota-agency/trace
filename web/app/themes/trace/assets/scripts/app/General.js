@@ -19,8 +19,6 @@ function General() {
     const duration = 30;
     const startPoint = 1 / familyLogoLength;
 
-    console.log(startPoint);
-
     const logoZero = document.querySelector('.family__logo0');
     const logoOne = document.querySelector('.family__logo1');
     const logoTwo = document.querySelector('.family__logo2');
@@ -247,7 +245,6 @@ function General() {
         $inner.each((index, el) => {
 
             const $image = $(el).find('.image-content__image--desktop');
-            console.log($image);
             if ($image.length) {
                 $(el).css('min-height', $image.height());
             }
