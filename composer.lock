@@ -668,11 +668,11 @@
         },
         {
             "name": "satispress/advanced-custom-fields-pro",
-            "version": "6.3.6",
+            "version": "6.3.8",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/advanced-custom-fields-pro/6.3.6",
-                "shasum": "8901d7718a434cc75bcfaf1bff016b4d626cc983"
+                "url": "https://satispress.kota.co.uk/satispress/advanced-custom-fields-pro/6.3.8",
+                "shasum": "d6b73743f58e011dbad8a4630a4ce8740716969d"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -687,11 +687,11 @@
         },
         {
             "name": "satispress/bunnycdn",
-            "version": "2.2.20",
+            "version": "2.2.21",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/bunnycdn/2.2.20",
-                "shasum": "325d5465dbc3f585fdd0f01f4e00fa03c99c2d70"
+                "url": "https://satispress.kota.co.uk/satispress/bunnycdn/2.2.21",
+                "shasum": "21c21274faa57e90e52a66a3d62b03db2143163c"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -706,11 +706,11 @@
         },
         {
             "name": "satispress/gravityforms",
-            "version": "2.8.17",
+            "version": "2.8.18",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/gravityforms/2.8.17",
-                "shasum": "9a02e58ec8b3586a14d9557a444319b97695398d"
+                "url": "https://satispress.kota.co.uk/satispress/gravityforms/2.8.18",
+                "shasum": "8a6af0d036ec8ba8ffccbe9475fac00e84822550"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -744,18 +744,18 @@
         },
         {
             "name": "satispress/updraftplus",
-            "version": "2.24.6.0",
+            "version": "2.24.6.26",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.6.0",
-                "shasum": "cb6bdba5afc84e46309fcd4a87a2c57c77b26c5b"
+                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.6.26",
+                "shasum": "fda9b59f3178a50cb21170a53ae88ac2971fd5a8"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
             },
             "type": "wordpress-plugin",
             "authors": {
-                "name": "UpdraftPlus.Com, DavidAnderson",
+                "name": "TeamUpdraft, DavidAnderson",
                 "homepage": "https://updraftplus.com"
             },
             "description": "Backup and restore: take backups locally, or backup to Amazon S3, Dropbox, Google Drive, Rackspace, (S)FTP, WebDAV & email, on automatic schedules.",
@@ -996,15 +996,15 @@
         },
         {
             "name": "wpackagist-plugin/cookiebot",
-            "version": "4.3.9.1",
+            "version": "4.3.10",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/cookiebot/",
-                "reference": "tags/4.3.9.1"
+                "reference": "tags/4.3.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/cookiebot.4.3.9.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/cookiebot.4.3.10.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1086,15 +1086,15 @@
         },
         {
             "name": "wpackagist-plugin/post-types-order",
-            "version": "2.2.6",
+            "version": "2.3.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/post-types-order/",
-                "reference": "tags/2.2.6"
+                "reference": "tags/2.3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/post-types-order.2.2.6.zip"
+                "url": "https://downloads.wordpress.org/plugin/post-types-order.2.3.2.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1122,15 +1122,15 @@
         },
         {
             "name": "wpackagist-plugin/seo-by-rank-math",
-            "version": "1.0.228",
+            "version": "1.0.229",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/seo-by-rank-math/",
-                "reference": "tags/1.0.228"
+                "reference": "tags/1.0.229"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.228.zip"
+                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.229.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1140,15 +1140,15 @@
         },
         {
             "name": "wpackagist-plugin/tablepress",
-            "version": "2.4.2",
+            "version": "2.4.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/tablepress/",
-                "reference": "tags/2.4.2"
+                "reference": "tags/2.4.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/tablepress.2.4.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/tablepress.2.4.3.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
