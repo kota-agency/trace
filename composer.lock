@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bfe40e7ba2bb4889ef0132d28213f27",
+    "content-hash": "1ad701ff7042d2ed4379c428f8b4ff4c",
     "packages": [
         {
             "name": "composer/installers",
@@ -744,11 +744,11 @@
         },
         {
             "name": "satispress/updraftplus",
-            "version": "2.24.6.26",
+            "version": "2.24.7.0",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.6.26",
-                "shasum": "fda9b59f3178a50cb21170a53ae88ac2971fd5a8"
+                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.7.0",
+                "shasum": "92ef3f20e296dbd83088d05b7f8951516a5a11dc"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -924,15 +924,15 @@
         },
         {
             "name": "wpackagist-plugin/acf-extended",
-            "version": "0.9.0.7",
+            "version": "0.9.0.9",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/acf-extended/",
-                "reference": "tags/0.9.0.7"
+                "reference": "tags/0.9.0.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/acf-extended.0.9.0.7.zip"
+                "url": "https://downloads.wordpress.org/plugin/acf-extended.0.9.0.9.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1032,15 +1032,15 @@
         },
         {
             "name": "wpackagist-plugin/hide-admin-bar-based-on-user-roles",
-            "version": "3.9.1",
+            "version": "4.0.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/hide-admin-bar-based-on-user-roles/",
-                "reference": "tags/3.9.1"
+                "reference": "tags/4.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/hide-admin-bar-based-on-user-roles.3.9.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/hide-admin-bar-based-on-user-roles.4.0.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
