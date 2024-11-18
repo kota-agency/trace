@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bfe40e7ba2bb4889ef0132d28213f27",
+    "content-hash": "1ad701ff7042d2ed4379c428f8b4ff4c",
     "packages": [
         {
             "name": "composer/installers",
@@ -363,7 +363,7 @@
         },
         {
             "name": "roots/wordpress",
-            "version": "6.6.2",
+            "version": "6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/roots/wordpress.git",
@@ -394,7 +394,7 @@
             ],
             "support": {
                 "issues": "https://github.com/roots/wordpress/issues",
-                "source": "https://github.com/roots/wordpress/tree/6.6.2"
+                "source": "https://github.com/roots/wordpress/tree/6.7"
             },
             "funding": [
                 {
@@ -477,22 +477,22 @@
         },
         {
             "name": "roots/wordpress-no-content",
-            "version": "6.6.2",
+            "version": "6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress.git",
-                "reference": "6.6.2"
+                "reference": "6.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/release/wordpress-6.6.2-no-content.zip",
-                "shasum": "b496b8a9bb3c6d20a781344cbe3e189f7fd83871"
+                "url": "https://downloads.wordpress.org/release/wordpress-6.7-no-content.zip",
+                "shasum": "d30558244ed409b6421a5454f9c837d0884317f2"
             },
             "require": {
                 "php": ">= 7.2.24"
             },
             "provide": {
-                "wordpress/core-implementation": "6.6.2"
+                "wordpress/core-implementation": "6.7"
             },
             "suggest": {
                 "ext-curl": "Performs remote request operations.",
@@ -543,7 +543,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2024-09-10T15:25:31+00:00"
+            "time": "2024-11-12T20:51:37+00:00"
         },
         {
             "name": "roots/wp-config",
@@ -668,11 +668,11 @@
         },
         {
             "name": "satispress/advanced-custom-fields-pro",
-            "version": "6.3.10",
+            "version": "6.3.11",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/advanced-custom-fields-pro/6.3.10",
-                "shasum": "119fd738602082bb227b4d1a0e8c92ef3eb612af"
+                "url": "https://satispress.kota.co.uk/satispress/advanced-custom-fields-pro/6.3.11",
+                "shasum": "f269a293bb586118e0d1609fccf088b9f3349e27"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -687,11 +687,11 @@
         },
         {
             "name": "satispress/bunnycdn",
-            "version": "2.2.22",
+            "version": "2.2.24",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/bunnycdn/2.2.22",
-                "shasum": "8be887237d58dfaa9c2d46c7bc4bfefc6de6b18e"
+                "url": "https://satispress.kota.co.uk/satispress/bunnycdn/2.2.24",
+                "shasum": "cc1811ef8cb12f71bc1b28b76748759baabd515e"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -706,11 +706,11 @@
         },
         {
             "name": "satispress/gravityforms",
-            "version": "2.8.18",
+            "version": "2.9.0",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/gravityforms/2.8.18",
-                "shasum": "8a6af0d036ec8ba8ffccbe9475fac00e84822550"
+                "url": "https://satispress.kota.co.uk/satispress/gravityforms/2.9.0",
+                "shasum": "7ec7deb52e3499a10189fb103777c60a7d23b130"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -744,11 +744,11 @@
         },
         {
             "name": "satispress/updraftplus",
-            "version": "2.24.6.26",
+            "version": "2.24.11.0",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.6.26",
-                "shasum": "fda9b59f3178a50cb21170a53ae88ac2971fd5a8"
+                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.11.0",
+                "shasum": "2e823ef4259a8d91c57c59ffdc075fdd38d745a1"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -924,15 +924,15 @@
         },
         {
             "name": "wpackagist-plugin/acf-extended",
-            "version": "0.9.0.7",
+            "version": "0.9.0.9",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/acf-extended/",
-                "reference": "tags/0.9.0.7"
+                "reference": "tags/0.9.0.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/acf-extended.0.9.0.7.zip"
+                "url": "https://downloads.wordpress.org/plugin/acf-extended.0.9.0.9.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1032,15 +1032,15 @@
         },
         {
             "name": "wpackagist-plugin/hide-admin-bar-based-on-user-roles",
-            "version": "3.9.1",
+            "version": "4.0.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/hide-admin-bar-based-on-user-roles/",
-                "reference": "tags/3.9.1"
+                "reference": "tags/4.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/hide-admin-bar-based-on-user-roles.3.9.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/hide-admin-bar-based-on-user-roles.4.0.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1050,15 +1050,15 @@
         },
         {
             "name": "wpackagist-plugin/mailgun",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailgun/",
-                "reference": "tags/2.1.1"
+                "reference": "tags/2.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailgun.2.1.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailgun.2.1.2.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1086,15 +1086,15 @@
         },
         {
             "name": "wpackagist-plugin/post-types-order",
-            "version": "2.3.2",
+            "version": "2.3.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/post-types-order/",
-                "reference": "tags/2.3.2"
+                "reference": "tags/2.3.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/post-types-order.2.3.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/post-types-order.2.3.3.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1122,15 +1122,15 @@
         },
         {
             "name": "wpackagist-plugin/seo-by-rank-math",
-            "version": "1.0.231",
+            "version": "1.0.232",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/seo-by-rank-math/",
-                "reference": "tags/1.0.231"
+                "reference": "tags/1.0.232"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.231.zip"
+                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.232.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1158,15 +1158,15 @@
         },
         {
             "name": "wpackagist-plugin/taxonomy-terms-order",
-            "version": "1.8.6",
+            "version": "1.8.7",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/taxonomy-terms-order/",
-                "reference": "tags/1.8.6"
+                "reference": "tags/1.8.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/taxonomy-terms-order.1.8.6.zip"
+                "url": "https://downloads.wordpress.org/plugin/taxonomy-terms-order.1.8.7.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
