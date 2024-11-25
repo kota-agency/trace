@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bfe40e7ba2bb4889ef0132d28213f27",
+    "content-hash": "e7e6155f4053963d67c6cc5850ea4744",
     "packages": [
         {
             "name": "composer/installers",
@@ -744,11 +744,11 @@
         },
         {
             "name": "satispress/updraftplus",
-            "version": "2.24.6.26",
+            "version": "2.24.11.26",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.6.26",
-                "shasum": "fda9b59f3178a50cb21170a53ae88ac2971fd5a8"
+                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.11.26",
+                "shasum": "8a8e93cec602182507f7003d1b1eadde916f177b"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
