@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df46944a9b56b1c72ec584da32ff8195",
+    "content-hash": "e102d45a1607693d20c84eb1e6a2e56c",
     "packages": [
         {
             "name": "composer/installers",
@@ -1122,15 +1122,15 @@
         },
         {
             "name": "wpackagist-plugin/tablepress",
-            "version": "2.4.4",
+            "version": "3.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/tablepress/",
-                "reference": "tags/2.4.4"
+                "reference": "tags/3.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/tablepress.2.4.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/tablepress.3.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
