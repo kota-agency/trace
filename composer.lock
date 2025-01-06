@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df46944a9b56b1c72ec584da32ff8195",
+    "content-hash": "7a9aa3a99722d91af15f3e0468690706",
     "packages": [
         {
             "name": "composer/installers",
@@ -706,11 +706,11 @@
         },
         {
             "name": "satispress/gravityforms",
-            "version": "2.9.0.1",
+            "version": "2.9.1",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/gravityforms/2.9.0.1",
-                "shasum": "716685ef036362bc77930de9014e9d1bb14b8f29"
+                "url": "https://satispress.kota.co.uk/satispress/gravityforms/2.9.1",
+                "shasum": "7fc86284647bd227f825c4f2a5c30d963e890352"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -744,11 +744,11 @@
         },
         {
             "name": "satispress/updraftplus",
-            "version": "2.24.11.26",
+            "version": "2.24.12.0",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.11.26",
-                "shasum": "8a8e93cec602182507f7003d1b1eadde916f177b"
+                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.12.0",
+                "shasum": "3ab95a548c3c13f7b3047ce825fb806b4c202f6b"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -924,15 +924,15 @@
         },
         {
             "name": "wpackagist-plugin/acf-extended",
-            "version": "0.9.0.9",
+            "version": "0.9.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/acf-extended/",
-                "reference": "tags/0.9.0.9"
+                "reference": "tags/0.9.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/acf-extended.0.9.0.9.zip"
+                "url": "https://downloads.wordpress.org/plugin/acf-extended.0.9.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -978,15 +978,15 @@
         },
         {
             "name": "wpackagist-plugin/classic-editor",
-            "version": "1.6.6",
+            "version": "1.6.7",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/classic-editor/",
-                "reference": "tags/1.6.6"
+                "reference": "tags/1.6.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/classic-editor.1.6.6.zip"
+                "url": "https://downloads.wordpress.org/plugin/classic-editor.1.6.7.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -996,15 +996,15 @@
         },
         {
             "name": "wpackagist-plugin/cookiebot",
-            "version": "4.3.11",
+            "version": "4.3.12",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/cookiebot/",
-                "reference": "tags/4.3.11"
+                "reference": "tags/4.3.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/cookiebot.4.3.11.zip"
+                "url": "https://downloads.wordpress.org/plugin/cookiebot.4.3.12.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1086,15 +1086,15 @@
         },
         {
             "name": "wpackagist-plugin/safe-svg",
-            "version": "2.3.0",
+            "version": "2.3.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/safe-svg/",
-                "reference": "tags/2.3.0"
+                "reference": "tags/2.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/safe-svg.2.3.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/safe-svg.2.3.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1104,15 +1104,15 @@
         },
         {
             "name": "wpackagist-plugin/seo-by-rank-math",
-            "version": "1.0.233",
+            "version": "1.0.235",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/seo-by-rank-math/",
-                "reference": "tags/1.0.233"
+                "reference": "tags/1.0.235"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.233.zip"
+                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.235.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1122,15 +1122,15 @@
         },
         {
             "name": "wpackagist-plugin/tablepress",
-            "version": "2.4.4",
+            "version": "3.0.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/tablepress/",
-                "reference": "tags/2.4.4"
+                "reference": "tags/3.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/tablepress.2.4.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/tablepress.3.0.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
