@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df46944a9b56b1c72ec584da32ff8195",
+    "content-hash": "fd85de4cca33f2be5492cbc56dd940fa",
     "packages": [
         {
             "name": "composer/installers",
@@ -744,11 +744,11 @@
         },
         {
             "name": "satispress/updraftplus",
-            "version": "2.24.11.26",
+            "version": "2.24.12.26",
             "dist": {
                 "type": "zip",
-                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.11.26",
-                "shasum": "8a8e93cec602182507f7003d1b1eadde916f177b"
+                "url": "https://satispress.kota.co.uk/satispress/updraftplus/2.24.12.26",
+                "shasum": "f19a610ea865f27b100561cfd48a8434fdc6f02a"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1122,15 +1122,15 @@
         },
         {
             "name": "wpackagist-plugin/tablepress",
-            "version": "2.4.4",
+            "version": "3.0.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/tablepress/",
-                "reference": "tags/2.4.4"
+                "reference": "tags/3.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/tablepress.2.4.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/tablepress.3.0.2.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"

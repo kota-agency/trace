@@ -63,9 +63,9 @@
     "wpackagist-plugin/post-types-order": "^2.2",
     "wpackagist-plugin/safe-svg": "^2.2",
     "wpackagist-plugin/seo-by-rank-math": "^1.0",
-    "wpackagist-plugin/tablepress": "^2.3",
+    "wpackagist-plugin/tablepress": "^3.0",
     "wpackagist-plugin/taxonomy-terms-order": "^1.8",
-    "satispress/updraftplus": "2.24.11.26",
+    "satispress/updraftplus": "2.24.12.26",
     "satispress/seo-by-rank-math-pro": "^2.10",
     "wpackagist-plugin/nitropack": "^1.15",
     "satispress/bunnycdn": "^2.2"
