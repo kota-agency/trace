@@ -299,3 +299,7 @@ add_action('wp_ajax_nopriv_get_gravity_form', function() {
     echo gravity_form($gravity_id, true, true, false, null, true);
     die;
 });
+
+add_shortcode('current_year', function () {
+    return date('Y');
+});

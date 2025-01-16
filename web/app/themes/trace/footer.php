@@ -10,7 +10,7 @@ get_component('form-modals');
 $logo = get_field('logo', 'options');
 $social = get_field('social', 'options');
 $accreditations = get_field('accreditations', 'options');
-$copyright = get_field('copyright_text', 'options');
+$copyright = do_shortcode(get_field('copyright_text', 'options'));
 $agency_logo = get_field('agency_logo', 'options');
 $agency_link = get_field('agency_link', 'options');
 
