@@ -19,7 +19,8 @@
             }
         }
 
-        &:hover, &:focus {
+        &:hover,
+        &:focus {
             .page-link__overlay {
                 opacity: 1;
                 visibility: visible;
@@ -93,6 +94,7 @@
             }
         }
     }
+
     &:nth-child(2n + 2) {
         .page-link {
             .page-link__overlay {

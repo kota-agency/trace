@@ -75,7 +75,7 @@ $logo = get_field('logo', 'options');
 ?>
 
 <header class="masthead">
-    <div class="container">
+    <div class="container masthead__inner">
         <div class="row align-items-center">
             <div class="col">
                 <?php if ($logo) : ?>

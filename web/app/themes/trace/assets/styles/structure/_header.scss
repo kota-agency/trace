@@ -17,14 +17,24 @@
         transform: translateY(0);
     }
 
+
+    &__inner {
+
+        @include media-breakpoint-up(lg) {
+            background-color: $color-secondary;
+            padding: 1rem 2.25rem 1rem 3.25rem;
+            border-radius: 32px;
+        }
+    }
+
     &__logo {
-        font-size: 2.8rem;
+        font-size: 2rem;
         letter-spacing: -0.027em;
     }
 
     &__logo-link {
         position: relative;
-        top: -5px;
+        // top: -5px;
 
         @include media-breakpoint-down(md) {
             top: 0;
@@ -33,7 +43,7 @@
 
     &__nav {
         display: none;
-        
+
         ul {
             list-style: none;
             padding: 0;
@@ -50,10 +60,46 @@
             font-weight: bold;
             text-transform: uppercase;
 
+            &.nav-login {
+                @include media-breakpoint-up(lg) {
+                    height: 40px;
+                    width: 40px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    padding: 0;
+
+                    i {
+                        margin: 0;
+                        font-size: 13px;
+                        top: -1px;
+                        position: relative;
+                    }
+
+                    .nav-item-title {
+                        display: none;
+                    }
+                }
+            }
+
+            &.nav-book {
+                background-color: $color-quaternary;
+                padding: 1rem;
+                padding-inline: 2rem;
+                border-radius: 2rem;
+                margin-left: 1rem;
+
+                a {
+                    color: $color-secondary;
+                }
+            }
+
             &.menu-item-has-children {
                 position: relative;
 
-                > a {
+                >a {
                     position: relative;
                     z-index: 2;
                     padding-right: 12px;
@@ -89,7 +135,7 @@
                         display: block;
                     }
 
-                    > a {
+                    >a {
                         &:after {
                             transform: translateY(-50%) rotate(-180deg);
                         }
@@ -110,6 +156,7 @@
         }
 
         a {
+
             span,
             i {
                 transition: none;

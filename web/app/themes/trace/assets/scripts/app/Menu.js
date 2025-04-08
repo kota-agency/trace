@@ -71,7 +71,7 @@ function Menu() {
 
         const $this = $(e.currentTarget);
 
-        if($this.parent().parent().parent().hasClass('menu')) {
+        if ($this.parent().parent().parent().hasClass('menu')) {
             $mobileNav.removeClass('sub-open');
             $mobileNav.find('ul').removeClass('current');
             $this.parent().removeClass('active');
@@ -98,7 +98,7 @@ function Menu() {
 
     $mastfoot.find('.menu-item-has-children').on('click', (e) => {
 
-        if(!animating) {
+        if (!animating) {
             animating = true;
             const $this = $(e.currentTarget);
 
@@ -106,7 +106,7 @@ function Menu() {
                 $this.addClass('active');
 
                 $this.children('ul').slideDown(() => {
-                   animating = false;
+                    animating = false;
                 });
             } else {
                 $this.removeClass('active');
@@ -121,7 +121,7 @@ function Menu() {
 
     function menuItemStates($this, type) {
 
-        if(type === 'leave') {
+        if (type === 'leave') {
             $this.removeClass('active');
             $this.find('li').removeClass('active');
         } else {
@@ -138,7 +138,7 @@ function Menu() {
             }
         }
 
-        if($('.masthead .menu-item-has-children.active').length) {
+        if ($('.masthead .menu-item-has-children.active').length) {
             $masthead.addClass('active-hovered');
         } else {
             $masthead.removeClass('active-hovered');
@@ -159,6 +159,8 @@ function Menu() {
         menuItemStates($(e.currentTarget.closest(".menu-item-has-children")), 'leave');
     });
 
+
+    const MOBILE_MAX_WIDTH = 991;
     let lastScrollTop = 0;
 
     const updateScroll = () => {
@@ -168,25 +170,47 @@ function Menu() {
 
         updateScroll._tick = requestAnimationFrame(function () {
             updateScroll._tick = null;
-            let st = $(window).scrollTop();
-            if($(window).scrollTop() > 100) {
-                $masthead.addClass('scrolled');
 
+            if (window.innerWidth <= MOBILE_MAX_WIDTH) {
+                let st = $(window).scrollTop();
 
-                if (st > lastScrollTop){
-                    $masthead.removeClass('in-view');
+                if (st > 100) {
+                    $masthead.addClass('scrolled');
+
+                    if (st > lastScrollTop) {
+                        $masthead.removeClass('in-view');
+                    } else {
+                        $masthead.addClass('in-view');
+                    }
                 } else {
-                    $masthead.addClass('in-view');
+                    $masthead.removeClass('scrolled');
                 }
-            } else {
-                $masthead.removeClass('scrolled');
+
+                lastScrollTop = st;
             }
-            lastScrollTop = st;
         });
     };
 
-    window.addEventListener('scroll', updateScroll);
-    updateScroll();
+    // Add scroll listener if screen is <= MOBILE_MAX_WIDTH
+    if (window.innerWidth <= MOBILE_MAX_WIDTH) {
+        window.addEventListener('scroll', updateScroll);
+        updateScroll._enabled = true;
+        updateScroll();
+    }
+
+    // Optional: handle resize to toggle listener
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= MOBILE_MAX_WIDTH && !updateScroll._enabled) {
+            window.addEventListener('scroll', updateScroll);
+            updateScroll._enabled = true;
+            updateScroll();
+        } else if (window.innerWidth > MOBILE_MAX_WIDTH && updateScroll._enabled) {
+            window.removeEventListener('scroll', updateScroll);
+            updateScroll._enabled = false;
+            $masthead.removeClass('scrolled in-view'); // Optional: cleanup
+        }
+    });
+
 
 }
 
