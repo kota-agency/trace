@@ -22,14 +22,14 @@
     &__heading {
         p {
             line-height: 1;
-            line-height: 1.4;
-            font-size: 8rem;
+            font-size: 7rem;
             font-weight: 900;
             text-transform: uppercase;
 
             @include media-breakpoint-down(md) {
                 font-size: 6rem;
                 text-align: center;
+                line-height: 1.4;
             }
 
             @include media-breakpoint-down(sm) {
@@ -43,6 +43,7 @@
 
         strong {
             color: #ffcb39;
+            font-weight: 900;
         }
     }
 
@@ -143,8 +144,12 @@
                 margin-top: 4rem;
             }
 
-            li::marker {
-                color: $color-quaternary;
+            li {
+                margin-bottom: 0;
+
+                &::marker {
+                    color: $color-quaternary;
+                }
             }
         }
 

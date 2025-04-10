@@ -7,6 +7,7 @@
         position: relative;
         padding-top: 120px;
         padding-bottom: 160px;
+        max-width: 1300px;
 
 
         @include media-breakpoint-down(md) {
@@ -29,14 +30,38 @@
 
     &__items {
         padding-top: 80px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
 
         @include media-breakpoint-down(sm) {
             padding-top: 30px;
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__heading {
+        display: flex;
+        justify-content: space-between;
+        font-size: 30px;
+        margin-bottom: 2rem;
+        gap: 2rem;
+
+        @include media-breakpoint-down(sm) {
+            flex-direction: column-reverse;
+        }
+
+        img {
+            width: 32px;
+            height: auto;
+            object-fit: contain;
         }
     }
 
     &__item {
-        margin-bottom: 40px;
+        padding: 3rem;
+        border: 1px solid #FFF3;
+        border-radius: 22px;
     }
 
     &__graphic {
@@ -73,5 +98,9 @@
             }
 
         }
+    }
+
+    .btn-wrap {
+        margin-top: 3rem;
     }
 }
