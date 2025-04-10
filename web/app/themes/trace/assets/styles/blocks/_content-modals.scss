@@ -30,13 +30,16 @@
 
     &__items {
         padding-top: 80px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 3rem;
 
-        @include media-breakpoint-down(sm) {
-            padding-top: 30px;
-            grid-template-columns: 1fr;
+        &--mojo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+
+            @include media-breakpoint-down(sm) {
+                padding-top: 30px;
+                grid-template-columns: 1fr;
+            }
         }
     }
 
@@ -59,9 +62,14 @@
     }
 
     &__item {
-        padding: 3rem;
-        border: 1px solid #FFF3;
-        border-radius: 22px;
+        margin-bottom: 40px;
+
+        &--mojo {
+            margin-bottom: 0;
+            padding: 3rem;
+            border: 1px solid #FFF3;
+            border-radius: 22px;
+        }
     }
 
     &__graphic {

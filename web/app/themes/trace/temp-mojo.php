@@ -433,7 +433,7 @@ $graphics4 = get_field('content_modals_graphics');
 		<?php endif; ?>
 		<?php if (have_rows('content_modals_items')) : $i = 0;
 			$j = 0; ?>
-			<div class="content-modals__items" data-aos="fade-up">
+			<div class="content-modals__items content-modals__items--mojo" data-aos="fade-up">
 				<?php while (have_rows('content_modals_items')) : the_row(); ?>
 					<?php
 
@@ -442,7 +442,7 @@ $graphics4 = get_field('content_modals_graphics');
 					$icon = get_sub_field('icon');
 
 					?>
-					<div class="content-modals__item" data-item="<?= $i; ?>">
+					<div class="content-modals__item content-modals__item--mojo" data-item="<?= $i; ?>">
 						<?php if ($item_heading) : ?>
 							<div class="content-modals__heading">
 								<span class="d-block font-weight-demi"><?= $item_heading; ?></span>
