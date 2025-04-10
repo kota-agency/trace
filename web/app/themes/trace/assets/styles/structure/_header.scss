@@ -18,7 +18,9 @@
     }
 
     .container {
-        max-width: 1374px;
+        @media (min-width: 1400px) {
+            max-width: 1374px;
+        }
     }
 
 
@@ -94,7 +96,6 @@
                 padding-inline: 2rem;
                 border-radius: 2rem;
                 margin-left: 1rem;
-                padding-bottom: 0.75rem;
 
                 a {
                     color: $color-secondary;
