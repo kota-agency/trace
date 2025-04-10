@@ -5,8 +5,8 @@
 
     .container {
         position: relative;
-        padding-top: 120px;
-        padding-bottom: 160px;
+        padding-top: 190px;
+        padding-bottom: 190px;
         max-width: 1300px;
 
 
@@ -26,6 +26,12 @@
         left: 50%;
         white-space: nowrap;
         transform: translateX(-50%);
+    }
+
+    h2 {
+        @include media-breakpoint-up(md) {
+            font-size: 10rem;
+        }
     }
 
     &__items {
@@ -49,14 +55,16 @@
         font-size: 30px;
         margin-bottom: 2rem;
         gap: 2rem;
+        align-items: center;
 
         @include media-breakpoint-down(sm) {
             flex-direction: column-reverse;
+            align-items: flex-start;
         }
 
         img {
-            width: 32px;
-            height: auto;
+            width: 40px;
+            max-height: 36px;
             object-fit: contain;
         }
     }

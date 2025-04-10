@@ -17,6 +17,10 @@
         transform: translateY(0);
     }
 
+    .container {
+        max-width: 1374px;
+    }
+
 
     &__inner {
 
@@ -28,7 +32,7 @@
     }
 
     &__logo {
-        font-size: 2rem;
+        font-size: 2.25rem;
         letter-spacing: -0.027em;
     }
 
@@ -54,9 +58,9 @@
         li {
             display: inline-block;
             vertical-align: middle;
-            padding: 0 12px;
+            padding: 0 15px;
             margin: 0;
-            font-size: 1.2rem;
+            font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
 
@@ -68,7 +72,7 @@
                     align-items: center;
                     justify-content: center;
                     border-radius: 50%;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border: 1px solid #E2E2E2;
                     padding: 0;
 
                     i {
@@ -90,6 +94,7 @@
                 padding-inline: 2rem;
                 border-radius: 2rem;
                 margin-left: 1rem;
+                padding-bottom: 0.75rem;
 
                 a {
                     color: $color-secondary;

@@ -455,7 +455,7 @@ $items7 = get_field('content_&_video_items');
                     </div>
                 <?php endif; ?>
             </div>
-            <div class="col-lg-6" data-aos="fade">
+            <div class="col-lg-6 pl-lg-6" data-aos="fade">
 
                 <div class="" data-aos="fade">
                     <?php if ($heading7) : ?>

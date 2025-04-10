@@ -22,7 +22,7 @@
     &__heading {
         p {
             line-height: 1;
-            font-size: 7rem;
+            font-size: 6rem;
             font-weight: 900;
             text-transform: uppercase;
 
@@ -136,12 +136,12 @@
         .content-video__list {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
+            gap: 1rem;
             font-weight: 600;
+            margin-top: 4rem;
 
             @include media-breakpoint-down(md) {
                 grid-template-columns: 1fr;
-                margin-top: 4rem;
             }
 
             li {
@@ -156,6 +156,10 @@
         .btn.btn-secondary {
             background-color: transparent;
             border: 1px solid $color-primary;
+        }
+
+        .buttons .btn-wrap {
+            padding-right: 0;
         }
     }
 }
