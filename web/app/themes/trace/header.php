@@ -60,6 +60,12 @@
 
     <!-- <script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=zgfxsijgx8wxzlejxmhpxw" async="true"></script> -->
 
+
+    <!-- START FOUANALYTICS EMBED CODE -->
+    <script src="https://api.fouanalytics.com/api/init-7640vrwx8gqwdgie6d67.js" data-cfasync="false" async></script>
+    <noscript><img src="https://api.fouanalytics.com/api/noscript-7640vrwx8gqwdgie6d67.gif"></noscript>
+    <!-- END FOUANALYTICS EMBED CODE -->
+
 </head>
 
 <body <?php body_class(); ?>>
