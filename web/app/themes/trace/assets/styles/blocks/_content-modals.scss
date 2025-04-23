@@ -28,7 +28,7 @@
         transform: translateX(-50%);
     }
 
-    h2 {
+    h2:not(.background-text) {
         @include media-breakpoint-up(md) {
             font-size: 10rem;
         }
@@ -118,5 +118,9 @@
 
     .btn-wrap {
         margin-top: 3rem;
+
+        .link {
+            color: white;
+        }
     }
 }

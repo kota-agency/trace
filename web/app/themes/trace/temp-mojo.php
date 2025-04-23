@@ -457,7 +457,7 @@ $graphics4 = get_field('content_modals_graphics');
 							</div>
 						<?php endif; ?>
 						<div class="btn-wrap">
-							<span class="btn">
+							<span class="btn link">
 								<?= __('Learn More'); ?>
 							</span>
 						</div>
