@@ -426,134 +426,44 @@ $graphics4 = get_field('content_modals_graphics');
 		<?php endif; ?>
 		<?php if ($heading4) : ?>
 			<div class="row">
-				<div class="col-md-6" data-aos="fade-up">
+				<div class="col-md-12 text-center" data-aos="fade-up">
 					<h2><?= $heading4; ?></h2>
 				</div>
 			</div>
 		<?php endif; ?>
 		<?php if (have_rows('content_modals_items')) : $i = 0;
 			$j = 0; ?>
-			<div class="content-modals__items row" data-aos="fade-up">
-				<div class="content-modals__column col-md-6">
-					<?php while (have_rows('content_modals_items')) : the_row(); ?>
-						<?php if ($i % 2 === 0) : ?>
-							<?php
+			<div class="content-modals__items content-modals__items--mojo" data-aos="fade-up">
+				<?php while (have_rows('content_modals_items')) : the_row(); ?>
+					<?php
 
-							$item_heading = get_sub_field('heading');
-							$snippet = get_sub_field('snippet');
+					$item_heading = get_sub_field('heading');
+					$snippet = get_sub_field('snippet');
+					$icon = get_sub_field('icon');
 
-							?>
-							<div class="content-modals__item" data-item="<?= $i; ?>">
-								<?php if ($item_heading) : ?>
-									<span class="d-block font-weight-demi"><?= $item_heading; ?></span>
-								<?php endif; ?>
-								<?php if ($snippet) : ?>
-									<div class="last-margin">
-										<?= $snippet; ?>
-									</div>
-								<?php endif; ?>
-								<div class="btn-wrap">
-									<span class="link">
-										<?= __('Discover more'); ?>
-										<span class="arrow-link">
-										<svg xmlns="http://www.w3.org/2000/svg" width="11.247" height="10.296" viewBox="0 0 11.247 10.296">
-											<g id="Btn_SecondaryWithArrow" transform="translate(-106.001 3.158)">
-												<g id="Group_250" data-name="Group 250" transform="translate(106.001 -2.451)">
-													<line id="Line_23" data-name="Line 23" x2="9.515" transform="translate(0 4.441)" fill="none" stroke="#ffcb39" stroke-width="2"/>
-													<path id="Path_158" data-name="Path 158" d="M682.556,3376.6l4.441,4.441-4.441,4.441" transform="translate(-677.164 -3376.596)" fill="none" stroke="#ffcb39" stroke-width="2"/>
-												</g>
-											</g>
-										</svg>
-										</span>
-									</span>
-								</div>
-
-							</div>
-						<?php endif; ?>
-						<?php $i++; endwhile; ?>
-				</div>
-				<div class="content-modals__column col-md-6">
-					<?php while (have_rows('content_modals_items')) : the_row(); ?>
-						<?php if ($j % 2 !== 0) : ?>
-							<?php
-
-							$heading = get_sub_field('heading');
-							$snippet = get_sub_field('snippet');
-
-							?>
-							<div class="content-modals__item" data-item="<?= $j; ?>">
-								<?php if ($heading) : ?>
-									<span class="d-block font-weight-demi"><?= $heading; ?></span>
-								<?php endif; ?>
-								<?php if ($snippet) : ?>
-									<div class="last-margin">
-										<?= $snippet; ?>
-									</div>
-								<?php endif; ?>
-								<div class="btn-wrap">
-									<span class="link">
-										<?= __('Discover more'); ?>
-										<span class="arrow-link">
-											<svg xmlns="http://www.w3.org/2000/svg" width="11.247" height="10.296" viewBox="0 0 11.247 10.296">
-												<g id="Btn_SecondaryWithArrow" transform="translate(-106.001 3.158)">
-													<g id="Group_250" data-name="Group 250" transform="translate(106.001 -2.451)">
-														<line id="Line_23" data-name="Line 23" x2="9.515" transform="translate(0 4.441)" fill="none" stroke="#ffcb39" stroke-width="2"/>
-														<path id="Path_158" data-name="Path 158" d="M682.556,3376.6l4.441,4.441-4.441,4.441" transform="translate(-677.164 -3376.596)" fill="none" stroke="#ffcb39" stroke-width="2"/>
-													</g>
-												</g>
-											</svg>
-										</span>
-									</span>
-								</div>
-								<?php
-
-								/**
-								 * Component: Modal
-								 */
-
-
-								$title = get_query_var('data') ? get_query_var('data') : get_mixed_field('heading');
-
-
-								?>
-								<?php if (have_rows('modal')) : ?>
-									<?php while (have_rows('modal')) : the_row(); ?>
-										<?php
-
-										$subtitle = get_sub_field('subtitle');
-
-										?>
-										<div class="modal theme-secondary">
-											<div class="modal__inner">
-												<div class="modal__close"></div>
-												<?php if ($title) : ?>
-													<h3 class="modal__heading"><?= $title; ?></h3>
-												<?php endif; ?>
-												<?php if ($subtitle) : ?>
-													<h5 class="text-tertiary modal__subheading text-uppercase"><?= $subtitle; ?></h5>
-												<?php endif; ?>
-												<?php if (have_rows('columns')) : ?>
-													<div class="row">
-														<?php while (have_rows('columns')) : the_row(); ?>
-															<?php $copy = get_sub_field('copy'); ?>
-															<?php if ($copy) : ?>
-																<div class="col-md-6">
-																	<div>
-																		<?= $copy; ?>
-																	</div>
-																</div>
-															<?php endif; ?>
-														<?php endwhile; ?>
-													</div>
-												<?php endif; ?>
-											</div>
-										</div>
-									<?php endwhile; ?>
+					?>
+					<div class="content-modals__item content-modals__item--mojo" data-item="<?= $i; ?>">
+						<?php if ($item_heading) : ?>
+							<div class="content-modals__heading">
+								<span class="d-block font-weight-demi"><?= $item_heading; ?></span>
+								<?php if($icon): ?>
+									<img src="<?= $icon['url']; ?>" alt="<?= $icon['alt']; ?>">
 								<?php endif; ?>
 							</div>
 						<?php endif; ?>
-						<?php $j++; endwhile; ?>
-				</div>
+						<?php if ($snippet) : ?>
+							<div class="last-margin">
+								<?= $snippet; ?>
+							</div>
+						<?php endif; ?>
+						<div class="btn-wrap">
+							<span class="btn">
+								<?= __('Learn More'); ?>
+							</span>
+						</div>
+
+					</div>
+				<?php endwhile; ?>
 			</div>
 		<?php endif; ?>
 

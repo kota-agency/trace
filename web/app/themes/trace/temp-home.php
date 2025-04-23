@@ -427,31 +427,22 @@ $button_sector_cta = get_field('sectors_button');
  */
 
 
-$classses7 = ['full-width', 'theme-secondary', 'bg-secondary', 'tear-border', padding_classes()];
+$classses7 = ['content-video--mojo', 'full-width', 'theme-secondary', 'bg-secondary', 'tear-border', padding_classes()];
 
 $heading7 = get_field('content_&_video_heading');
-$logo7 = get_field('content_&_video_logo');
+// $logo7 = get_field('content_&_video_logo');
 $video_url7 = get_field('content_&_video_video_url');
 $video_image7 = wp_get_attachment_image_url(get_field('content_&_video_video_image'), 'content_image');
 $graphic7 = get_field('content_&_video_graphic');
 $copy7 = get_field('content_&_video_copy');
+$items7 = get_field('content_&_video_items');
 
 ?>
 
 <section class="content-video <?= implode(' ', $classses7); ?>">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7">
-                <div class="content-video__heading-wrapper" data-aos="fade">
-                    <?php if ($heading7) : ?>
-                        <h2><?= $heading7; ?></h2>
-                    <?php endif; ?>
-                    <?php if ($logo7) : ?>
-                        <div class="content-video__logo">
-                            <img src="<?= $logo7['url']; ?>" alt="<?= $logo7['alt']; ?>">
-                        </div>
-                    <?php endif; ?>
-                </div>
+            <div class="col-lg-6">
 
                 <?php if ($video_image7 && $video_url7) : ?>
                     <div class="content-video__video d-none d-lg-block" data-aos="fade">
@@ -464,7 +455,20 @@ $copy7 = get_field('content_&_video_copy');
                     </div>
                 <?php endif; ?>
             </div>
-            <div class="col-lg-4" data-aos="fade">
+            <div class="col-lg-6 pl-lg-6" data-aos="fade">
+
+                <div class="" data-aos="fade">
+                    <?php if ($heading7) : ?>
+                        <h2 class="content-video__heading"><?= $heading7; ?></h2>
+                    <?php endif; ?>   
+                </div>
+                
+                <?php if ($logo7) : ?>
+                    <div class="content-video__logo">
+                        <img src="<?= $logo7['url']; ?>" alt="<?= $logo7['alt']; ?>">
+                    </div>
+                <?php endif; ?>
+
                 <?php if ($copy7) : ?>
                     <div class="content-video__copy">
                         <?= $copy7; ?>
@@ -480,8 +484,20 @@ $copy7 = get_field('content_&_video_copy');
                         </a>
                     </div>
                 <?php endif; ?>
+
+                <?php if(!empty($items7)): ?>
+                    <ul class="content-video__list">
+                        <?php foreach($items7 as $item): ?>
+                            <li class="content-video__list-item">
+                                <?php echo $item['text']; ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+
                 <?php if (have_rows('links_c_links')) : ?>
                     <div class="buttons">
+                        <?php $button_index = 1; ?>
                         <?php while (have_rows('links_c_links')) : the_row(); ?>
                             <?php
 
@@ -491,9 +507,16 @@ $copy7 = get_field('content_&_video_copy');
                             if ($button) {
                                 switch ($link_type) {
                                     case "Button":
+
+                                        if($button_index == 2) {
+                                            $button['classes'] = 'btn-secondary';
+                                        }
                                         get_component('button', $button);
                                         break;
                                     case "Link":
+                                        if($button_index == 2) {
+                                            $button['classes'] = 'btn-secondary';
+                                        }
                                         get_component('link', $button);
                                         break;
                                     case "Video Link":
@@ -509,6 +532,7 @@ $copy7 = get_field('content_&_video_copy');
                             }
 
                             ?>
+                            <?php $button_index++; ?>
                         <?php endwhile; ?>
                     </div>
                 <?php endif; ?>

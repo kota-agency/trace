@@ -19,6 +19,34 @@
         }
     }
 
+    &__heading {
+        p {
+            line-height: 1;
+            font-size: 6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+
+            @include media-breakpoint-down(md) {
+                font-size: 6rem;
+                text-align: center;
+                line-height: 1.4;
+            }
+
+            @include media-breakpoint-down(sm) {
+                font-size: 4.5rem;
+            }
+
+            @include media-breakpoint-down(xs) {
+                font-size: 3rem;
+            }
+        }
+
+        strong {
+            color: #ffcb39;
+            font-weight: 900;
+        }
+    }
+
     &__logo {
         position: absolute;
         top: 50%;
@@ -38,6 +66,7 @@
         width: 100%;
         max-width: 540px;
         height: 300px;
+
         @include media-breakpoint-down(md) {
             margin: 40px auto 20px;
         }
@@ -80,9 +109,57 @@
 
         @include media-breakpoint-down(xs) {
             bottom: -100px;
+
             img {
                 max-width: 50%;
             }
+        }
+    }
+
+    &--mojo {
+        .content-video__copy {
+            padding-top: 0;
+        }
+
+        .content-video__image {
+            aspect-ratio: 1 / 1;
+            border-radius: 3rem;
+            background-size: cover;
+            width: 100%;
+            height: auto;
+        }
+
+        .content-video__video {
+            height: auto;
+        }
+
+        .content-video__list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            font-weight: 600;
+            margin-top: 4rem;
+
+            @include media-breakpoint-down(md) {
+                grid-template-columns: 1fr;
+            }
+
+            li {
+                margin-bottom: 0;
+
+                &::marker {
+                    color: $color-quaternary;
+                }
+            }
+        }
+
+        .btn.btn-secondary {
+            background-color: transparent;
+            border: 1px solid $color-primary;
+        }
+
+        .buttons .btn-wrap {
+            padding-right: 0;
         }
     }
 }
