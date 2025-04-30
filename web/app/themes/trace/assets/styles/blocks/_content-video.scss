@@ -22,12 +22,12 @@
     &__heading {
         p {
             line-height: 1;
-            font-size: 6rem;
+            font-size: 5rem;
             font-weight: 900;
             text-transform: uppercase;
 
             @include media-breakpoint-down(md) {
-                font-size: 6rem;
+                font-size: 5rem;
                 text-align: center;
                 line-height: 1.4;
             }

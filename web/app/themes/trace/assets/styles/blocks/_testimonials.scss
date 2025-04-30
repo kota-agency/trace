@@ -31,7 +31,7 @@
             padding-top: 20px;
         }
 
-        > * {
+        >* {
             margin: 0 10px;
         }
     }
@@ -43,7 +43,7 @@
             line-height: 0.866;
             max-width: 1200px;
             margin: 0 auto 65px;
-            font-size: 15rem;
+            font-size: 5rem;
             text-align: center;
 
             @include media-breakpoint-down(lg) {

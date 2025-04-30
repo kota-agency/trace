@@ -21,7 +21,7 @@
 
         @include media-breakpoint-up(sm) {
             h1 {
-                font-size: 10.1rem;
+                font-size: 6rem;
             }
         }
     }
@@ -64,6 +64,7 @@
             transform: rotate(-90deg) translateY(-100%) translateX(-15%);
             opacity: 0;
         }
+
         100% {
             opacity: 0.34;
             transform: rotate(-90deg) translateY(-100%) translateX(-8%);
