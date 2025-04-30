@@ -13,7 +13,7 @@
 
     .background-text {
         position: absolute;
-        top: 50%;
+        top: calc(50% + 100px);
         left: 50%;
         transform: translateY(-50%) translateX(-50%);
         z-index: 10;

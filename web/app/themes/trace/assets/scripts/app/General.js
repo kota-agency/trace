@@ -7,174 +7,69 @@ import inViewport from 'in-viewport';
 import { gsap, Linear } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { MotionPathHelper } from "gsap/MotionPathHelper";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(MotionPathPlugin, MotionPathHelper);
+gsap.registerPlugin(MotionPathPlugin, MotionPathHelper, ScrollTrigger);
 
 
 function General() {
 
     // gsap.set(".family__logo2", { autoAlpha: 1});
 
-    const familyLogoLength = Array.from(document.querySelectorAll('.family__logo')).length;
+    const logos = Array.from(document.querySelectorAll('.family__logo'));
     const duration = 30;
-    const startPoint = 1 / familyLogoLength;
+    const startPoint = 1 / logos.length;
 
-    const logoZero = document.querySelector('.family__logo0');
-    const logoOne = document.querySelector('.family__logo1');
-    const logoTwo = document.querySelector('.family__logo2');
-    const logoThree = document.querySelector('.family__logo3');
-    const logoFour = document.querySelector('.family__logo4');
-    const logoFive = document.querySelector('.family__logo5');
-    const logoSix = document.querySelector('.family__logo6');
-    const logoSeven = document.querySelector('.family__logo7');
-    const logoEight = document.querySelector('.family__logo8');
+    gsap.registerPlugin(MotionPathPlugin, ScrollTrigger);
 
-    const tl = gsap.timeline({ defaults: { ease: "none" } })
+    const tl = gsap.timeline({ defaults: { ease: "none" } });
 
-    if (logoZero) {
-        tl.to(logoZero, {
+    logos.forEach((logo, i) => {
+        const index = parseFloat(logo.dataset.logoIndex);
+        tl.to(logo, {
             duration: duration,
             repeat: -1,
-            ease: "none",
             immediateRender: true,
             motionPath: {
                 path: '#path-anim-1',
                 align: '#path-anim-1',
                 alignOrigin: [0.5, 0.5],
-                start: (startPoint * logoZero.dataset.logoIndex),
-                end: 1 + (startPoint * logoZero.dataset.logoIndex),
+                start: startPoint * index,
+                end: 1 + (startPoint * index),
             },
-        });
-    }
+        }, i === 0 ? 0 : `-=${duration * index}`);
+    });
 
-    if (logoOne) {
-        tl.to(logoOne, {
-            duration: duration,
-            repeat: -1,
-            ease: "none",
-            immediateRender: true,
-            motionPath: {
-                path: '#path-anim-1',
-                align: '#path-anim-1',
-                alignOrigin: [0.5, 0.5],
-                start: (startPoint * logoOne.dataset.logoIndex),
-                end: 1 + (startPoint * logoOne.dataset.logoIndex),
-            },
-        }, `-=${30 * logoOne.dataset.logoIndex}`);
-    }
 
-    if (logoTwo) {
-        tl.to(logoTwo, {
-            duration: duration,
-            repeat: -1,
-            ease: "none",
-            immediateRender: true,
-            motionPath: {
-                path: '#path-anim-1',
-                align: '#path-anim-1',
-                alignOrigin: [0.5, 0.5],
-                start: (startPoint * logoTwo.dataset.logoIndex),
-                end: 1 + (startPoint * logoTwo.dataset.logoIndex),
+    logos.forEach((logo, i) => {
+        let maxRotation = 50; // each logo rotates differently (e.g., 180, 160, 140, etc.)
+        gsap.fromTo(logo,
+            { rotation: -maxRotation }, // when logo enters from bottom
+            {
+                rotation: maxRotation,     // when logo exits toward top
+                scrollTrigger: {
+                    trigger: document.querySelector('.family'),
+                    start: "top bottom",     // when logo enters bottom of viewport
+                    end: "bottom top",       // when logo leaves top
+                    scrub: true,
+                }
             }
-        }, `-=${30 * logoOne.dataset.logoIndex}`);
-    }
+        );
+    });
 
-    if (logoThree) {
-        tl.to(logoThree, {
-            duration: duration,
-            repeat: -1,
-            ease: "none",
-            immediateRender: true,
-            motionPath: {
-                path: '#path-anim-1',
-                align: '#path-anim-1',
-                alignOrigin: [0.5, 0.5],
-                start: (startPoint * logoThree.dataset.logoIndex),
-                end: 1 + (startPoint * logoThree.dataset.logoIndex),
-            }
-        }, `-=${30 * logoOne.dataset.logoIndex}`);
-    }
+    const backgroundText = document.querySelector('.family__background-text');
 
-    if (logoFour) {
-        tl.to(logoFour, {
-            duration: duration,
-            repeat: -1,
-            ease: "none",
-            immediateRender: true,
-            motionPath: {
-                path: '#path-anim-1',
-                align: '#path-anim-1',
-                alignOrigin: [0.5, 0.5],
-                start: (startPoint * logoFour.dataset.logoIndex),
-                end: 1 + (startPoint * logoFour.dataset.logoIndex),
-            }
-        }, `-=${30 * logoOne.dataset.logoIndex}`);
-    }
+    gsap.to('.family__background-text', {
+        y: -200, // Move up as user scrolls down
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '.family__background-text', // or use a wrapper section
+            start: 'top bottom',  // when element enters viewport
+            end: 'bottom top',    // when it leaves viewport
+            scrub: true,          // smooth sync with scroll
+        }
+    });
 
-    if (logoFive) {
-        tl.to(logoFive, {
-            duration: duration,
-            repeat: -1,
-            ease: "none",
-            immediateRender: true,
-            motionPath: {
-                path: '#path-anim-1',
-                align: '#path-anim-1',
-                alignOrigin: [0.5, 0.5],
-                start: (startPoint * logoFive.dataset.logoIndex),
-                end: 1 + (startPoint * logoFive.dataset.logoIndex),
-            }
-        }, `-=${30 * logoOne.dataset.logoIndex}`);
-    }
-
-    if (logoSix) {
-        tl.to(logoSix, {
-            duration: duration,
-            repeat: -1,
-            ease: "none",
-            immediateRender: true,
-            motionPath: {
-                path: '#path-anim-1',
-                align: '#path-anim-1',
-                alignOrigin: [0.5, 0.5],
-                start: 0 + (startPoint * logoSix.dataset.logoIndex),
-                end: 1 + (startPoint * logoSix.dataset.logoIndex),
-            }
-        }, `-=${30 * logoOne.dataset.logoIndex}`);
-    }
-
-    if (logoSeven) {
-        tl.to(logoSeven, {
-            duration: duration,
-            repeat: -1,
-            ease: "none",
-            immediateRender: true,
-            motionPath: {
-                path: '#path-anim-1',
-                align: '#path-anim-1',
-                alignOrigin: [0.5, 0.5],
-                start: (startPoint * logoSeven.dataset.logoIndex),
-                end: 1 + (startPoint * logoSeven.dataset.logoIndex),
-            }
-        }, `-=${30 * logoOne.dataset.logoIndex}`);
-    }
-
-
-    if (logoEight) {
-        tl.to(logoEight, {
-            duration: duration,
-            repeat: -1,
-            ease: "none",
-            immediateRender: true,
-            motionPath: {
-                path: '#path-anim-1',
-                align: '#path-anim-1',
-                alignOrigin: [0.5, 0.5],
-                start: (startPoint * logoEight.dataset.logoIndex),
-                end: 1 + (startPoint * logoEight.dataset.logoIndex),
-            }
-        });
-    }
 
     // MotionPathHelper.create(".family__logo2");
 

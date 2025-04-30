@@ -295,7 +295,7 @@ $logos3 = get_field('family_logos');
                 <h2 class="no-margin"><?= $heading3; ?></h2>
             <?php endif; ?>
             <?php if ($background_text3) : ?>
-                <h2 class="background-text background-text--large"><?= $background_text3; ?></h2>
+                <h2 class="family__background-text background-text background-text--large"><?= $background_text3; ?></h2>
             <?php endif; ?>
 
             <?php if ($logos3) : ?>
