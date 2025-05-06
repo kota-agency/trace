@@ -24,40 +24,32 @@ function General() {
 
     const tl = gsap.timeline({ defaults: { ease: "none" } });
 
-    logos.forEach((logo, i) => {
-        const index = parseFloat(logo.dataset.logoIndex);
-        tl.to(logo, {
-            duration: duration,
-            repeat: -1,
-            immediateRender: true,
-            motionPath: {
-                path: '#path-anim-1',
-                align: '#path-anim-1',
-                alignOrigin: [0.5, 0.5],
-                start: startPoint * index,
-                end: 1 + (startPoint * index),
+    // const logos = document.querySelectorAll('[class^="family__logo"]');
+    // const totalScrollDuration = 5000; // pixels of scroll for full loop
+    const count = logos.length;
+
+    logos.forEach((logo, index) => {
+        const offset = index / count;
+
+        gsap.to(logo, {
+            scrollTrigger: {
+                trigger: document.querySelector('.family__path'),
+                start: "top bottom",
+                end: "+=5000", // adjust as needed
+                scrub: 1,
             },
-        }, i === 0 ? 0 : `-=${duration * index}`);
+            motionPath: {
+                path: '#path-anim',
+                align: '#path-anim',
+                alignOrigin: [0.5, 0.5],
+                // autoRotate: true,
+                start: offset,
+                end: offset + 1, // loops along the full path
+            },
+            ease: "none"
+        });
     });
 
-
-    logos.forEach((logo, i) => {
-        let maxRotation = 50; // each logo rotates differently (e.g., 180, 160, 140, etc.)
-        gsap.fromTo(logo,
-            { rotation: -maxRotation }, // when logo enters from bottom
-            {
-                rotation: maxRotation,     // when logo exits toward top
-                scrollTrigger: {
-                    trigger: document.querySelector('.family'),
-                    start: "top bottom",     // when logo enters bottom of viewport
-                    end: "bottom top",       // when logo leaves top
-                    scrub: true,
-                }
-            }
-        );
-    });
-
-    const backgroundText = document.querySelector('.family__background-text');
 
     gsap.to('.family__background-text', {
         y: -200, // Move up as user scrolls down
@@ -73,7 +65,7 @@ function General() {
 
     // MotionPathHelper.create(".family__logo2");
 
-    tl.pause(1)
+    // tl.pause(1)
 
     let animating = false;
 

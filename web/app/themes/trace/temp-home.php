@@ -372,11 +372,12 @@ $logos3 = get_field('family_logos');
                 <path id="path-anim-2" d="M710,18.6c0,0-687.4-11.1-687.3,241.3C22.8,499.2,710,499.6,710,499.6s685.4,15,684.9-239.7
                 C1394.3,1.7,710,18.6,710,18.6z"/>
             </svg>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                 viewBox="0 0 1395.4 553.6" style="enable-background:new 0 0 1395.4 553.6;" xml:space="preserve">
-                <path id="path-anim-3" d="M667.5,32c0,0-644.9-12-644.8,261.4c0.1,259.2,644.8,259.6,644.8,259.6s643,16.3,642.6-259.6
-                    C1309.5,13.7,667.5,32,667.5,32z"/>
-            </svg> -->
+            -->
+            <svg viewBox="0 0 1395.4 500.3">
+            <path id="path-anim" transform="scale(-1,1) translate(-1395.4,0)"
+                d="M698.9,0.7c0,0-698.5-11.5-698.4,250.3c0.1,248.2,698.4,248.6,698.4,248.6s696.5,15.6,696-248.6
+                C1394.3-16.8,698.9,0.7,698.9,0.7z"/>
+            </svg>
 
         </div>
     </div>
