@@ -68,8 +68,8 @@
     "satispress/updraftplus": "2.24.11.26",
     "satispress/seo-by-rank-math-pro": "^2.10",
     "wpackagist-plugin/nitropack": "^1.15",
-    "satispress/bunnycdn": "^2.2",
-    "wpackagist-plugin/wordfence": "^8.0"
+    "wpackagist-plugin/wordfence": "^8.0",
+    "wpackagist-plugin/bunnycdn": "^2.3"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.5.6",

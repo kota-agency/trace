@@ -38,7 +38,7 @@ $image = wp_get_attachment_image(get_field('image'), 'full');
             <div class="hero__image">
                 <div data-aos="fade-left" data-aos-delay="500">
                     <?= $image; ?>
-                    <?php if($video): ?>
+                    <?php if ($video): ?>
                         <a href="<?= $video ?>" data-fancybox>
                             <span class="play"></span>
                         </a>
@@ -159,7 +159,6 @@ if ($wide_heading2) {
                                             default:
                                                 get_component('button', $button);
                                         }
-
                                     }
 
                                     ?>
@@ -188,7 +187,7 @@ $placeholder5 = wp_get_attachment_image_url(get_field('video_placeholder'), 'ful
 
 <?php if ($embed5 && $placeholder5) : ?>
     <section <?= block_id(); ?> class="video <?= implode('', $classes5); ?>" data-aos="trigger" data-aos-delay="1000"
-                                data-aos-offset="500">
+        data-aos-offset="500">
         <div class="container">
             <div class="video__wrapper">
                 <?= $embed5; ?>
@@ -223,7 +222,6 @@ $placeholder5 = wp_get_attachment_image_url(get_field('video_placeholder'), 'ful
                             default:
                                 get_component('button', $button);
                         }
-
                     }
 
                     ?>
@@ -300,7 +298,7 @@ $logos3 = get_field('family_logos');
 
             <?php if ($logos3) : ?>
                 <div class="family__logos">
-                <?php $index = 0; ?>
+                    <?php $index = 0; ?>
                     <?php foreach ($logos3 as $logo_id) : ?>
                         <?php $logo = wp_get_attachment_image($logo_id, 'logo'); ?>
                         <?php if ($logo) : ?>
@@ -325,7 +323,7 @@ $logos3 = get_field('family_logos');
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 1395.4 500.3" xml:space="preserve">
                 <path class="st0" id="path-anim-1" d="M698.9,0.7c0,0-698.5-11.5-698.4,250.3c0.1,248.2,698.4,248.6,698.4,248.6s696.5,15.6,696-248.6
-                C1394.3-16.8,698.9,0.7,698.9,0.7z"/>
+                C1394.3-16.8,698.9,0.7,698.9,0.7z" />
             </svg>
             <!-- <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 1395.4 500.3" xml:space="preserve">
@@ -367,7 +365,7 @@ $logos3 = get_field('family_logos');
                 <path class="st0" id="path-anim-9" d="M698.9,0.7c0,0-698.5-11.5-698.4,250.3c0.1,248.2,698.4,248.6,698.4,248.6s696.5,15.6,696-248.6
                 C1394.3-16.8,698.9,0.7,698.9,0.7z"/>
             </svg> -->
-           <!-- <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            <!-- <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                  viewBox="0 0 1395.4 500.3" style="enable-background:new 0 0 1395.4 500.3;" xml:space="preserve">
                 <path id="path-anim-2" d="M710,18.6c0,0-687.4-11.1-687.3,241.3C22.8,499.2,710,499.6,710,499.6s685.4,15,684.9-239.7
                 C1394.3,1.7,710,18.6,710,18.6z"/>
@@ -412,7 +410,7 @@ $button_sector_cta = get_field('sectors_button');
             </div>
         <?php endif; ?>
         <?php if ($button_sector_cta) : ?>
-            <div class="text-center"  data-aos="fade-up">
+            <div class="text-center" data-aos="fade-up">
                 <?php get_component('button', $button_sector_cta); ?>
             </div>
         <?php endif; ?>
@@ -448,7 +446,7 @@ $items7 = get_field('content_&_video_items');
                     <div class="content-video__video d-none d-lg-block" data-aos="fade">
                         <a href="<?= $video_url7 ?>" data-fancybox>
                             <div class="content-video__image bg-cover"
-                                 style="background-image: url(<?= $video_image7; ?>);">
+                                style="background-image: url(<?= $video_image7; ?>);">
                                 <span class="play"></span>
                             </div>
                         </a>
@@ -460,9 +458,9 @@ $items7 = get_field('content_&_video_items');
                 <div class="" data-aos="fade">
                     <?php if ($heading7) : ?>
                         <h2 class="content-video__heading"><?= $heading7; ?></h2>
-                    <?php endif; ?>   
+                    <?php endif; ?>
                 </div>
-                
+
                 <?php if ($logo7) : ?>
                     <div class="content-video__logo">
                         <img src="<?= $logo7['url']; ?>" alt="<?= $logo7['alt']; ?>">
@@ -478,16 +476,16 @@ $items7 = get_field('content_&_video_items');
                     <div class="content-video__video d-lg-none">
                         <a href="<?= $video_url7 ?>" data-fancybox>
                             <div class="content-video__image bg-cover"
-                                 style="background-image: url(<?= $video_image7; ?>);">
+                                style="background-image: url(<?= $video_image7; ?>);">
                                 <span class="play"></span>
                             </div>
                         </a>
                     </div>
                 <?php endif; ?>
 
-                <?php if(!empty($items7)): ?>
+                <?php if (!empty($items7)): ?>
                     <ul class="content-video__list">
-                        <?php foreach($items7 as $item): ?>
+                        <?php foreach ($items7 as $item): ?>
                             <li class="content-video__list-item">
                                 <?php echo $item['text']; ?>
                             </li>
@@ -508,13 +506,13 @@ $items7 = get_field('content_&_video_items');
                                 switch ($link_type) {
                                     case "Button":
 
-                                        if($button_index == 2) {
+                                        if ($button_index == 2) {
                                             $button['classes'] = 'btn-secondary';
                                         }
                                         get_component('button', $button);
                                         break;
                                     case "Link":
-                                        if($button_index == 2) {
+                                        if ($button_index == 2) {
                                             $button['classes'] = 'btn-secondary';
                                         }
                                         get_component('link', $button);
@@ -528,7 +526,6 @@ $items7 = get_field('content_&_video_items');
                                     default:
                                         get_component('button', $button);
                                 }
-
                             }
 
                             ?>
@@ -658,7 +655,6 @@ if ($wide_heading8) {
                                             default:
                                                 get_component('button', $button);
                                         }
-
                                     }
 
                                     ?>
@@ -752,7 +748,6 @@ if ($larger_text9) {
                             default:
                                 get_component('button', $button);
                         }
-
                     }
 
                     ?>
@@ -827,7 +822,6 @@ if (!$_posts10) {
                                 default:
                                     get_component('button', $button);
                             }
-
                         }
 
                         ?>
@@ -871,7 +865,7 @@ $home_copy_form = get_field('home_copy_form');
 
 <?php
 /** Get in touch component, data comming from site settings tab  **/
-    // get_component('get-in-touch');
+// get_component('get-in-touch');
 ?>
 
 
