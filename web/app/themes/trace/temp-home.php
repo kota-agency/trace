@@ -444,7 +444,7 @@ $items7 = get_field('content_&_video_items');
 
                 <?php if ($video_image7 && $video_url7) : ?>
                     <div class="content-video__video d-none d-lg-block" data-aos="fade">
-                        <a href="<?= $video_url7 ?>" data-fancybox>
+                        <a href="<?= $video_url7 ?>" data-fancybox aria-label="Play video">
                             <div class="content-video__image bg-cover"
                                 style="background-image: url(<?= $video_image7; ?>);">
                                 <span class="play"></span>
@@ -474,7 +474,7 @@ $items7 = get_field('content_&_video_items');
                 <?php endif; ?>
                 <?php if ($video_image7 && $video_url7) : ?>
                     <div class="content-video__video d-lg-none">
-                        <a href="<?= $video_url7 ?>" data-fancybox>
+                        <a href="<?= $video_url7 ?>" data-fancybox aria-label="Play video">
                             <div class="content-video__image bg-cover"
                                 style="background-image: url(<?= $video_image7; ?>);">
                                 <span class="play"></span>

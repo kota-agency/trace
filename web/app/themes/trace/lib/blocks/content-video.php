@@ -33,9 +33,9 @@ $copy = get_sub_field('copy');
 
                 <?php if ($video_image && $video_url) : ?>
                     <div class="content-video__video d-none d-lg-block" data-aos="fade">
-                        <a href="<?= $video_url ?>" data-fancybox>
+                        <a href="<?= $video_url ?>" data-fancybox aria-label="Play video">
                             <div class="content-video__image bg-cover"
-                                 style="background-image: url(<?= $video_image; ?>);">
+                                style="background-image: url(<?= $video_image; ?>);">
                                 <span class="play"></span>
                             </div>
                         </a>
@@ -50,9 +50,9 @@ $copy = get_sub_field('copy');
                 <?php endif; ?>
                 <?php if ($video_image && $video_url) : ?>
                     <div class="content-video__video d-lg-none">
-                        <a href="<?= $video_url ?>" data-fancybox>
+                        <a href="<?= $video_url ?>" data-fancybox aria-label="Play video">
                             <div class="content-video__image bg-cover"
-                                 style="background-image: url(<?= $video_image; ?>);">
+                                style="background-image: url(<?= $video_image; ?>);">
                                 <span class="play"></span>
                             </div>
                         </a>
